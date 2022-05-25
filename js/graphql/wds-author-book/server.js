@@ -28,13 +28,28 @@ const books = [
   { id: 8, name: "Beyond the Shadows", authorId: 3 },
 ];
 
+const AuthorType = new GraphQLObjectType({
+  name: "Author",
+  description: "This represents an author who wrote the book.",
+  fields: () => ({
+    id: { type: GraphQLNonNull(GraphQLInt) },
+    name: { type: GraphQLNonNull(GraphQLString) },
+  }),
+});
+
 const BookType = new GraphQLObjectType({
   name: "Book",
   description: "This represents a book written by an author",
   fields: () => ({
     id: { type: GraphQLNonNull(GraphQLInt) },
     name: { type: GraphQLNonNull(GraphQLString) },
-    authorId: { type: GraphQLNonNull(GraphQLInt) },
+    author: {
+      type: AuthorType,
+      resolve: (book) => {
+        console.log("resolver of author query type is called!");
+        return authors.find((author) => author.id === book.authorId);
+      },
+    },
   }),
 });
 
@@ -45,7 +60,10 @@ const RootQueryType = new GraphQLObjectType({
     books: {
       type: new GraphQLList(BookType),
       description: "List of All Books",
-      resolve: () => books,
+      resolve: () => {
+        console.log("resolver of root query type is called!");
+        return books;
+      },
     },
   }),
 });
