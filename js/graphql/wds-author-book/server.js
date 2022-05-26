@@ -57,6 +57,28 @@ const RootQueryType = new GraphQLObjectType({
   name: "Query",
   description: "Root Query",
   fields: () => ({
+    book: {
+      type: BookType,
+      description: "A single Book",
+      args: {
+        id: {
+          type: GraphQLInt,
+          description: "Id of the Book you want",
+        },
+        name: {
+          type: GraphQLString,
+          description: "Name of the book you want",
+        },
+      },
+      resolve: (parent, args) => {
+        console.log(`args is ${args} and parent is ${parent}`);
+        console.log("resolver of query a single book is called!");
+        return books.find((book) => {
+          return book.id === args.id && book.name.includes(`${args.name}`);
+        });
+      },
+    },
+
     books: {
       type: new GraphQLList(BookType),
       description: "List of All Books",
