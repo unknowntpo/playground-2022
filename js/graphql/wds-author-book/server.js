@@ -7,6 +7,7 @@ const {
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
+  graphql,
 } = require("graphql");
 
 const app = express();
@@ -74,11 +75,10 @@ const RootQueryType = new GraphQLObjectType({
         console.log(`args is ${args} and parent is ${parent}`);
         console.log("resolver of query a single book is called!");
         return books.find((book) => {
-          return book.id === args.id && book.name.includes(`${args.name}`);
+          return book.id === args.id || book.name.includes(`${args.name}`);
         });
       },
     },
-
     books: {
       type: new GraphQLList(BookType),
       description: "List of All Books",
