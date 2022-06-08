@@ -4,10 +4,12 @@
  */
 #include <gtest/gtest.h>
 #include "add.h"
+#include "str.h"
 
 TEST(testCase, test1)
 {
     EXPECT_EQ(myadd(2, 3), 5);
+    EXPECT_EQ(mystrlen("hello"), 5);
 }
 
 int main(int argc, char **argv)
