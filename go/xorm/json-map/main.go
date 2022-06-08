@@ -8,8 +8,6 @@ import (
 	"xorm.io/xorm"
 )
 
-var engine *xorm.Engine
-
 func must(err error) {
 	if err != nil {
 		panic(err)
@@ -44,7 +42,7 @@ func makeAuthors() []Author {
 }
 
 func insertAuthors(e *xorm.Engine, authors []Author) {
-	_, err := engine.Insert(authors)
+	_, err := e.Insert(authors)
 	must(err)
 }
 
@@ -65,5 +63,5 @@ func main() {
 	insertAuthors(engine, authors)
 
 	authorsFromDB := getAuthors(engine)
-	fmt.Println(authorsFromDB)
+	fmt.Println("author from db: ", authorsFromDB)
 }
