@@ -4,6 +4,7 @@
 void foo(int len, double *params);
 void foo_va(int len, ...);
 void print_positive_ints(int, ...);
+void foo_va_no_len(double first, ...);
 
 int main(void)
 {
@@ -26,6 +27,10 @@ int main(void)
     puts("print positive ints");
     print_positive_ints(1, 2, 3, 4, 5, -1);
 
+    puts("va args no len: ");
+
+    foo_va_no_len(6.2, x, y, z, a, b, c);
+
     return 0;
 }
 
@@ -42,6 +47,17 @@ void foo_va(int len, ...)
 
     for (int i = 0; i < len; i++)
         printf("%.1f\n", va_arg(args, double));
+
+    va_end(args);
+}
+
+void foo_va_no_len(double first, ...)
+{
+    va_list args;
+    va_start(args, first);
+
+    for (double arg = first; arg > 0; arg = va_arg(args, double))
+        printf("%.1f\n", arg);
 
     va_end(args);
 }
