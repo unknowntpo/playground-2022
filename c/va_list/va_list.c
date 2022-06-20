@@ -1,4 +1,5 @@
 #include "va_list.h"
+#include <assert.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -32,11 +33,23 @@
 //     return 0;
 // }
 
-buf_t *foo(int len, double *params)
+buf_t *new_buf(int cap)
 {
     buf_t *buf = malloc(sizeof(buf_t));
+    assert(buf);
     buf->len = 0;
-    buf->b = malloc(len * sizeof(double));
+    buf->b = malloc(cap * sizeof(double));
+    assert(buf);
+
+    return buf;
+}
+
+buf_t *foo(int len, double *params)
+{
+    // buf_t *buf = malloc(sizeof(buf_t));
+    // buf->len = 0;
+    // buf->b = malloc(len * sizeof(double));
+    buf_t *buf = new_buf(len);
     for (int i = 0; i < len; i++) {
         printf("%.1f\n", params[i]);
         // append output to buf
