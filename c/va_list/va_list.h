@@ -7,12 +7,15 @@
 
 typedef struct {
     uint32_t len;
-    double *b;
+    int *b;
 } buf_t;
 
-buf_t *foo(int len, double *params);
-void foo_va(int len, ...);
+buf_t *new_buf(int cap);
+void show_buf(buf_t *buf);
+
+buf_t *foo(int len, int *params);
+buf_t *foo_va(int len, ...);
 void print_positive_ints(int, ...);
-void foo_va_no_len(double first, ...);
+void foo_va_no_len(int first, ...);
 
 #endif /* VA_LIST_H */

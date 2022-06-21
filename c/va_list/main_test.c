@@ -1,22 +1,36 @@
+#include <math.h>
 #include "minunit.h"
 #include "va_list.h"
 
 char *test_hello()
 {
-    return NULL;
+    return TEST_PASS;
 }
 
 char *test_foo()
 {
-    double x = 1.1, y = 2.1, z = 3.9;
+    int x = 1, y = 2, z = 3;
     buf_t *buf;
-    buf = foo(3, (double[]){x, y, z});
+    buf = foo(3, (int[]){x, y, z});
     mu_assert(buf->len == 3, "length of buf should be 3");
     mu_assert(buf->b[0] == x, "should be equal");
     mu_assert(buf->b[1] == y, "should be equal");
     mu_assert(buf->b[2] == z, "should be equal");
 
-    return NULL;
+    return TEST_PASS;
+}
+
+char *test_foo_va()
+{
+    int x = 1, y = 2, z = 3;
+    buf_t *buf;
+    buf = foo_va(3, x, y, z);
+    mu_assert(buf->len == 3, "length of buf should be 3");
+    mu_assert(buf->b[0] == x, "should be equal");
+    mu_assert(buf->b[1] == y, "should be equal");
+    mu_assert(buf->b[2] == z, "should be equal");
+
+    return TEST_PASS;
 }
 
 char *all_tests()
@@ -24,7 +38,9 @@ char *all_tests()
     mu_suite_start();
     mu_run_test(test_hello);
     mu_run_test(test_foo);
-    return NULL;
+    mu_run_test(test_foo_va);
+
+    return TEST_PASS;
 }
 
 // int main(void)

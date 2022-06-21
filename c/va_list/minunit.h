@@ -8,6 +8,8 @@
 
 #define mu_suite_start() char *message = NULL
 
+#define TEST_PASS NULL
+
 #define mu_assert(test, message) \
     if (!(test)) {               \
         log_err(message);        \
