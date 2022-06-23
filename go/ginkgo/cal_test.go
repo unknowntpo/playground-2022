@@ -1,24 +1,30 @@
-package cart_test
+package cal
 
 import (
 	"testing"
 
 	"github.com/onsi/ginkgo"
+	"github.com/onsi/ginkgo/extensions/table"
 	"github.com/onsi/gomega"
 )
 
 func TestGinkgo(t *testing.T) {
 	var _ = ginkgo.Describe("Calculator", func() {
+		var cal Calculator
+
 		ginkgo.BeforeEach(func() {
-			return
+			cal = NewCal()
 		})
 
-		ginkgo.Context("1 + 1", func() {
-			ginkgo.It("should be 2", func() {
-				gomega.Expect(1 + 1).To(gomega.Equal(2))
-			})
-		})
+		table.DescribeTable(
+			"calculate integer",
+			func(x, y, expectResult int) {
+				gomega.Expect(cal.Add(x, y)).To(gomega.Equal(expectResult))
+			},
+			table.Entry("1+1 should be 2", 1, 1, 2),
+			table.Entry("2+1 should be 3", 1, 1, 3),
+		)
 	})
 	gomega.RegisterFailHandler(ginkgo.Fail)
-	ginkgo.RunSpecs(t, "Shopping Cart Suite")
+	ginkgo.RunSpecs(t, "Calculator test suites")
 }
