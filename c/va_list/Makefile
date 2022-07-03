@@ -1,22 +1,39 @@
-
-Q = 
+Q = @
 CC = gcc
 VERBOSE =
 
-ifeq ($(VERBOSE), 1)
-	VECHO = @true
+all: out
+
+ifeq ("$(VERBOSE)", "1")
+	$(warning executing VERBOSE)
+	Q :=
+	VECHO := @true
 else
-	Q = @
-	VECHO = @printf
+	Q := @
+	VECHO := @printf
 endif
 
-test: main_test.c va_list.c
-	$(Q)$(CC) -o $@ -g $^
-	$(VECHO) '  CC\t $^\n'
+out: main.o va_list.o 
+	$(warning executing debug target 'out')
+	echo '$(VERBOSE)'
+	echo '$(VECHO)'
+	echo '$(Q)'
+
+	$(VECHO) '  LD\t $^\n'
+	$(Q)$(CC) -o $@ $^
+	
+test: main_test.o va_list.o
+	$(VECHO) '  LD\t $^\n'
+	$(Q)$(CC) -o $@ $^
 	@echo ''
 	@echo 'Running automated tests...'
 	@echo ''
 	@./$@
 
+SUFFIXES: .o .c
+.c.o:
+	$(VECHO) '  CC\t $^\n'
+	$(Q)$(CC) -o $@ -g -c $^
+
 clean: 
-	@-rm test
+	@-rm test out *.o
