@@ -1,24 +1,17 @@
-Q = @
 CC = gcc
-VERBOSE =
+OBJS = main.o va_list.o
+
+ifeq ("$(VERBOSE)", "1")
+	Q :=
+	VECHO = @true
+else
+	Q := @
+	VECHO = @printf
+endif
 
 all: out
 
-ifeq ("$(VERBOSE)", "1")
-	$(warning executing VERBOSE)
-	Q :=
-	VECHO := @true
-else
-	Q := @
-	VECHO := @printf
-endif
-
-out: main.o va_list.o 
-	$(warning executing debug target 'out')
-	echo '$(VERBOSE)'
-	echo '$(VECHO)'
-	echo '$(Q)'
-
+out: $(OBJS)
 	$(VECHO) '  LD\t $^\n'
 	$(Q)$(CC) -o $@ $^
 	
@@ -30,8 +23,7 @@ test: main_test.o va_list.o
 	@echo ''
 	@./$@
 
-SUFFIXES: .o .c
-.c.o:
+%.o: %.c
 	$(VECHO) '  CC\t $^\n'
 	$(Q)$(CC) -o $@ -g -c $^
 
