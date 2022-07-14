@@ -1,0 +1,135 @@
+# Please edit the following configuration for Lima instance "ubuntu"
+# and an empty file will abort the edit.
+
+# This example requires Lima v0.7.0 or later.
+
+# ===================================================================== #
+# BASIC CONFIGURATION
+# ===================================================================== #
+
+# Arch: "default", "x86_64", "aarch64".
+# "default" corresponds to the host architecture.
+arch: "x86_64"
+
+# An image must support systemd and cloud-init.
+# Ubuntu and Fedora are known to work.
+# Image is set to focal (20.04 LTS) for long-term stability
+# Default: none (must be specified)
+images:
+  # Try to use a local image first.
+  - location: "~/Downloads/ubuntu-20.04-server-cloudimg-amd64.img"
+    arch: "x86_64"
+  - location: "~/Downloads/ubuntu-20.04-server-cloudimg-arm64.img"
+    arch: "aarch64"
+
+  # Download the file from the internet when the local file is missing.
+  # Hint: run `limactl prune` to invalidate the "current" cache
+  - location: "https://cloud-images.ubuntu.com/releases/20.04/release/ubuntu-20.04-server-cloudimg-amd64.img"
+    arch: "x86_64"
+  - location: "https://cloud-images.ubuntu.com/releases/20.04/release/ubuntu-20.04-server-cloudimg-arm64.img"
+    arch: "aarch64"
+
+# CPUs: if you see performance issues, try limiting cpus to 1.
+# Default: 4
+cpus: 4
+
+# Memory size
+# Default: "4GiB"
+memory: "8GiB"
+
+# Disk size
+# Default: "100GiB"
+disk: "50GiB"
+
+# Expose host directories to the guest, the mount point might be accessible from all UIDs in the guest
+# Default: none
+mounts:
+  - location: "~"
+    # CAUTION: `writable` SHOULD be false for the home directory.
+    # Setting `writable` to true is possible, but untested and dangerous.
+    writable: true
+  - location: "/tmp/lima"
+    writable: true
+
+ssh:
+  # A localhost port of the host. Forwarded to port 22 of the guest.
+  # Default: 0 (automatically assigned to a free port)
+  localPort: 0
+  # Load ~/.ssh/*.pub in addition to $LIMA_HOME/_config/user.pub .
+  # This option is useful when you want to use other SSH-based
+  # applications such as rsync with the Lima instance.
+  # If you have an insecure key under ~/.ssh, do not use this option.
+  # Default: true
+  loadDotSSHPubKeys: true
+  # Forward ssh agent into the instance.
+  # Default: false
+  forwardAgent: false
+
+# containerd is managed by k3s, not by Lima, so the values are set to false here.
+containerd:
+  system: false
+  user: false
+
+provision:
+- mode: system
+  script: |
+    #!/bin/bash
+
+    # Set Color
+    RED='\033[0;31m'
+    NC='\033[0m' # No Color
+
+    set -e -x -u
+    export DEBIAN_FRONTEND=noninteractive
+    #change the source.list
+    sudo apt-get update
+    sudo apt-get install -y vim git cmake build-essential tcpdump tig jq socat bash-completion yamllint shellcheck
+
+    # Install Docker
+    echo "${RED}Installing Docker${NC}\n"
+    export DOCKER_VERSION="5:19.03.5~3-0~ubuntu-bionic"
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update
+    sudo apt-get install -y docker-ce=${DOCKER_VERSION}
+    sudo usermod -aG docker $USER
+    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+    bash ~/.bash_it/install.sh -s
+
+    #Disable swap
+    echo "${RED}Disable SWAP${NC}\n"
+
+    #https://github.com/kubernetes/kubernetes/issues/53533
+    # sudo swapoff -a && sudo sysctl -w vm.swappiness=0
+    # sudo sed '/vagrant--vg-swap/d' -i /etc/fstab
+
+    # Clone Repo
+    echo "${RED}Clone Repo${NC}\n"
+    git clone https://github.com/hwchiu/hiskio-course.git
+
+    sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee --append /etc/apt/sources.list.d/kubernetes.list
+    sudo apt-get update
+    sudo apt-get install -y kubectl
+    echo 'source <(kubectl completion bash)' >> ~/.bashrc
+
+    # Install kind
+    echo "${RED}Install kind${NC}\n"
+    curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64"
+    chmod a+x ./kind
+    sudo mv ./kind /usr/local/bin/kind
+    sudo kind create cluster --config hiskio-course/vagrant/kind.yaml
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    set -x; cd "$(mktemp -d)" &&
+
+    # Install krew
+    echo "${RED}Install krew${NC}\n"
+    curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/download/v0.4.2/krew-linux_amd64.tar.gz"
+    tar zxvf krew-linux_amd64.tar.gz &&
+    ./krew-linux_amd64 install krew
+    echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
+
+    # Install ebpf
+    echo "${RED}Install ebpf${NC}\n"
+    sudo apt-get install -y bpftrace
