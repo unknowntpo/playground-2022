@@ -12,21 +12,19 @@
 arch: "x86_64"
 
 # An image must support systemd and cloud-init.
-# Ubuntu and Fedora are known to work.
-# Image is set to focal (20.04 LTS) for long-term stability
-# Default: none (must be specified)
+# Use 18.04
 images:
   # Try to use a local image first.
-  - location: "~/Downloads/ubuntu-20.04-server-cloudimg-amd64.img"
+  - location: "~/Downloads/ubuntu-18.04-server-cloudimg-amd64.img"
     arch: "x86_64"
-  - location: "~/Downloads/ubuntu-20.04-server-cloudimg-arm64.img"
+  - location: "~/Downloads/ubuntu-18.04-server-cloudimg-arm64.img"
     arch: "aarch64"
 
   # Download the file from the internet when the local file is missing.
   # Hint: run `limactl prune` to invalidate the "current" cache
-  - location: "https://cloud-images.ubuntu.com/releases/20.04/release/ubuntu-20.04-server-cloudimg-amd64.img"
+  - location: "https://cloud-images.ubuntu.com/releases/18.04/release/ubuntu-18.04-server-cloudimg-amd64.img"
     arch: "x86_64"
-  - location: "https://cloud-images.ubuntu.com/releases/20.04/release/ubuntu-20.04-server-cloudimg-arm64.img"
+  - location: "https://cloud-images.ubuntu.com/releases/18.04/release/ubuntu-18.04-server-cloudimg-arm64.img"
     arch: "aarch64"
 
 # CPUs: if you see performance issues, try limiting cpus to 1.
@@ -71,6 +69,14 @@ containerd:
   user: false
 
 provision:
+- mode: user
+  script: |
+    #!/bin/bash
+    echo ${USER}
+    echo {{.USER}}
+    echo {{env.USER}}
+    sudo usermod -aG docker ${USER}
+
 - mode: system
   script: |
     #!/bin/bash
@@ -92,7 +98,7 @@ provision:
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     sudo apt-get update
     sudo apt-get install -y docker-ce=${DOCKER_VERSION}
-    sudo usermod -aG docker $USER
+
     git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
     bash ~/.bash_it/install.sh -s
 
