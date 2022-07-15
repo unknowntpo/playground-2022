@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
+	"reflect"
 
 	_ "github.com/mattn/go-sqlite3"
 	"xorm.io/xorm"
@@ -46,9 +48,42 @@ func insertAuthors(e *xorm.Engine, authors []Author) {
 	must(err)
 }
 
-func getAuthors(e *xorm.Engine) []Author {
-	authors := []Author{}
-	must(e.Find(&authors))
+func getAuthors(e *xorm.Engine) []*Author {
+	authors := []*Author{}
+	// must(e.Find(&authors))
+
+	sql := "SELECT COUNT(*) OVER() AS totalCount, * FROM author"
+	rows, err := e.SQL(sql).Rows(&Author{})
+	must(err)
+	// SELECT * FROM author
+	defer rows.Close()
+
+	var totalCount int64
+	_ = totalCount
+	for rows.Next() {
+		author := &Author{}
+		// author := new(Author)
+		fieldPtrs := []interface{}{}
+
+		fieldPtrs = append(fieldPtrs, &totalCount)
+
+		val := reflect.Indirect(reflect.ValueOf(author))
+
+		fmt.Println("val can address", val.CanAddr())
+		for i := 0; i < val.NumField(); i++ {
+			fieldVal := val.Field(i)
+			fmt.Println("can address", fieldVal.CanAddr())
+
+			fieldPtrs = append(fieldPtrs, val.Field(i).Addr().Interface())
+		}
+
+		must(rows.Scan(fieldPtrs...))
+
+		// must(rows.Scan(&totalCount, fieldPtrs...))
+		// must(rows.Scan(&author))
+		authors = append(authors, author)
+	}
+	fmt.Println("totalCount", totalCount)
 	return authors
 }
 
@@ -63,5 +98,10 @@ func main() {
 	insertAuthors(engine, authors)
 
 	authorsFromDB := getAuthors(engine)
-	fmt.Println("author from db: ", authorsFromDB)
+	fmt.Println("author from db: ", showContent(authorsFromDB))
+}
+
+func showContent(v interface{}) string {
+	b, _ := json.MarshalIndent(v, "", "\t")
+	return string(b)
 }
