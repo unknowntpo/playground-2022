@@ -95,7 +95,21 @@ provision:
     export DEBIAN_FRONTEND=noninteractive
     #change the source.list
 
+    # https://docs.docker.com/engine/install/linux-postinstall/
+    # activate 
+
+    # because we have do docker login, so we don't have .docker dir.   
+    # create it manually.
+    mkdir ~/.docker
+    # sudo groupadd docker
     sudo usermod -aG docker ${USER}
+    # sudo reboot
+    newgrp docker
+    docker run hello-world
+    if [$? -ne 0]; then
+      echo 'failed to add user ${USER} to docker user group'
+      exit 1;
+    fi
  
     # bash it
 
