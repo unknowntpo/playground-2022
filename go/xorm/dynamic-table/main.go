@@ -36,11 +36,10 @@ func getRandName() string {
 }
 
 func makeAuthors() []interface{} {
-	authors := []interface{}
-	dAuthorVal := reflect.ValueOf(DAuthor)
-
+	authors := []interface{}{}
 	for i := 0; i < 10; i++ {
-		authors = append(authors, Author{Name: getRandName()})
+		// dAuthor := BuildAuthor()
+		authors = append(authors, DAuthor)
 	}
 
 	return authors
