@@ -69,21 +69,9 @@ containerd:
   user: false
 
 provision:
-- mode: user
-  script: |
-    #!/bin/bash
-    echo ${USER}
-    echo {{.USER}}
-    echo {{env.USER}}
-    sudo usermod -aG docker ${USER}
-
 - mode: system
   script: |
     #!/bin/bash
-
-    # Set Color
-    RED='\033[0;31m'
-    NC='\033[0m' # No Color
 
     set -e -x -u
     export DEBIAN_FRONTEND=noninteractive
@@ -92,25 +80,48 @@ provision:
     sudo apt-get install -y vim git cmake build-essential tcpdump tig jq socat bash-completion yamllint shellcheck
 
     # Install Docker
-    echo "${RED}Installing Docker${NC}\n"
+    echo "Installing Docker\n"
     export DOCKER_VERSION="5:19.03.5~3-0~ubuntu-bionic"
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     sudo apt-get update
     sudo apt-get install -y docker-ce=${DOCKER_VERSION}
 
-    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
-    bash ~/.bash_it/install.sh -s
+- mode: user
+  script: |
+    #!/bin/bash
 
-    #Disable swap
-    echo "${RED}Disable SWAP${NC}\n"
+    set -e -x -u
+    export DEBIAN_FRONTEND=noninteractive
+    #change the source.list
+
+    # https://docs.docker.com/engine/install/linux-postinstall/
+    # activate 
+
+    # because we have do docker login, so we don't have .docker dir.   
+    # create it manually.
+    mkdir ~/.docker
+    # sudo groupadd docker
+    sudo usermod -aG docker ${USER}
+    # sudo reboot
+    newgrp docker
+    docker run hello-world
+    if [$? -ne 0]; then
+      echo 'failed to add user ${USER} to docker user group'
+      exit 1;
+    fi
+ 
+    # bash it
+
+    # git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+    # bash ~/.bash_it/install.sh -s
 
     #https://github.com/kubernetes/kubernetes/issues/53533
     # sudo swapoff -a && sudo sysctl -w vm.swappiness=0
     # sudo sed '/vagrant--vg-swap/d' -i /etc/fstab
 
     # Clone Repo
-    echo "${RED}Clone Repo${NC}\n"
+    echo "Clone Repo\n"
     git clone https://github.com/hwchiu/hiskio-course.git
 
     sudo apt-get update && sudo apt-get install -y apt-transport-https curl
@@ -121,21 +132,30 @@ provision:
     echo 'source <(kubectl completion bash)' >> ~/.bashrc
 
     # Install kind
-    echo "${RED}Install kind${NC}\n"
+    echo "Install kind\n"
     curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64"
     chmod a+x ./kind
     sudo mv ./kind /usr/local/bin/kind
     sudo kind create cluster --config hiskio-course/vagrant/kind.yaml
-    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    # https://stackoverflow.com/a/2013589
+    sudo chown $(id -u):$(id -g) ${HOME:-/root}/.kube/config
     set -x; cd "$(mktemp -d)" &&
 
     # Install krew
-    echo "${RED}Install krew${NC}\n"
+    echo "Install krew\n"
     curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/download/v0.4.2/krew-linux_amd64.tar.gz"
     tar zxvf krew-linux_amd64.tar.gz &&
     ./krew-linux_amd64 install krew
     echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 
     # Install ebpf
-    echo "${RED}Install ebpf${NC}\n"
-    sudo apt-get install -y bpftrace
+    echo 'Installing ebpf...'
+    # https://gist.github.com/nitingupta910/520f5218074e355ee9107aadae52e4d5
+    sudo apt-get install -y bison cmake flex g++ git libelf-dev zlib1g-dev libfl-dev systemtap-sdt-dev binutils-dev \
+    llvm-7-dev llvm-7-runtime libclang-7-dev clang-7
+
+    git clone https://github.com/iovisor/bpftrace
+    mkdir bpftrace/build; cd bpftrace/build;
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    make -j16
+    sudo make install
