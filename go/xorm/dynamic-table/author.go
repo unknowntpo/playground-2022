@@ -3,14 +3,44 @@ package main
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	dstruct "github.com/goldeneggg/structil/dynamicstruct"
 )
 
-func BuildAuthor() interface{} {
+type TableContainer struct {
+	Table interface{}
+}
+
+func (t *TableContainer) TableName() string {
+	fmt.Println("in tableName", reflect.ValueOf(t.Table))
+	fmt.Printf("tCon inside TableName: %#v\n", t)
+	return reflect.ValueOf(t.Table).Elem().FieldByName("TableName").String()
+}
+
+func InitTableContainer(tableName string, tableStruct interface{}) TableContainer {
+	tCon := TableContainer{Table: tableStruct}
+	// reflect.Indirect(reflect.ValueOf(tCon.Table)).
+
+	reflect.ValueOf(tCon.Table).Elem().
+		FieldByName("TableName").
+		Set(reflect.ValueOf(tableName))
+	// fmt.Printf("%#v\n", tCon.Table)
+	// fmt.Printf("tCon.Table%#v\n", tCon.Table)
+	fmt.Printf("inside InitTableContainer, call tCon.TableName(): %v\n", tCon.TableName())
+
+	fmt.Printf("tCon inside initTableCOntainer: %#v\n", tCon)
+
+	return tCon
+}
+
+var DAuthor = BuildAuthor()
+
+func BuildAuthor() TableContainer {
 	// Add fields using Builder with AddXXX method chain
 	b := dstruct.NewBuilder().
-		AddStringWithTag("Name", `xorm:"pk incr 'name'"`)
+		AddStringWithTag("Name", `xorm:"pk incr 'name'"`).
+		AddStringWithTag("TableName", `json:"-"`)
 
 	// SetStructName sets the name of DynamicStruct
 	// Note: Default struct name is "DynamicStruct"
@@ -22,6 +52,8 @@ func BuildAuthor() interface{} {
 		panic(err)
 	}
 
+	fmt.Println("isPtr:", ds.IsPtr())
+
 	// Print struct definition with Definition method
 	// Struct fields are automatically orderd by field name
 	fmt.Println(ds.Definition())
@@ -29,10 +61,7 @@ func BuildAuthor() interface{} {
 	fmt.Printf("dsInt: %#v\n", dsInt)
 
 	fmt.Printf("dsInt type: %v\n", reflect.TypeOf(dsInt))
-	a := dsInt.(*Author)
-	fmt.Println(a)
 
 	// fmt.Printf("dsInt method: %v\n", reflect.ValueOf(dsInt).Method(0))
-	return dsInt
-	// return reflect.New(reflect.TypeOf(dsInt))
+	return InitTableContainer(strings.ToLower("Author"), dsInt)
 }

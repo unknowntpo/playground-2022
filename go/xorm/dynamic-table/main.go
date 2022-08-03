@@ -35,56 +35,61 @@ func getRandName() string {
 	return randSeq(3)
 }
 
-func makeAuthors() []Author {
-	authors := []Author{}
+func makeAuthors() []interface{} {
+	authors := []interface{}{}
 	for i := 0; i < 10; i++ {
-		authors = append(authors, Author{Name: getRandName()})
+		// dAuthor := BuildAuthor()
+		authors = append(authors, DAuthor)
 	}
 
 	return authors
 }
 
-func insertAuthors(e *xorm.Engine, authors []Author) {
+func insertAuthors(e *xorm.Engine, authors []interface{}) {
 	_, err := e.Insert(authors)
 	must(err)
 }
 
-func getAuthors(e *xorm.Engine) []*Author {
-	authors := []*Author{}
+func getAuthors(e *xorm.Engine) interface{} {
+	// authors := []*Author{}
+	dAuthorVal := reflect.ValueOf(DAuthor)
+	authors := reflect.MakeSlice(dAuthorVal.Type(), 0, 0).Interface()
+
 	// must(e.Find(&authors))
 
 	sql := "SELECT COUNT(*) OVER() AS totalCount, * FROM author"
-	rows, err := e.SQL(sql).Rows(&Author{})
-	must(err)
-	// SELECT * FROM author
-	defer rows.Close()
+	must(e.SQL(sql).Find(authors))
+	// rows, err := e.SQL(sql).Rows(&Author{})
+	// must(err)
+	// // SELECT * FROM author
+	// defer rows.Close()
 
-	var totalCount int64
-	_ = totalCount
-	for rows.Next() {
-		author := &Author{}
-		// author := new(Author)
-		fieldPtrs := []interface{}{}
+	// var totalCount int64
+	// _ = totalCount
+	// for rows.Next() {
+	// 	author := &Author{}
+	// 	// author := new(Author)
+	// 	fieldPtrs := []interface{}{}
 
-		fieldPtrs = append(fieldPtrs, &totalCount)
+	// 	fieldPtrs = append(fieldPtrs, &totalCount)
 
-		val := reflect.Indirect(reflect.ValueOf(author))
+	// 	val := reflect.Indirect(reflect.ValueOf(author))
 
-		fmt.Println("val can address", val.CanAddr())
-		for i := 0; i < val.NumField(); i++ {
-			fieldVal := val.Field(i)
-			fmt.Println("can address", fieldVal.CanAddr())
+	// 	fmt.Println("val can address", val.CanAddr())
+	// 	for i := 0; i < val.NumField(); i++ {
+	// 		fieldVal := val.Field(i)
+	// 		fmt.Println("can address", fieldVal.CanAddr())
 
-			fieldPtrs = append(fieldPtrs, val.Field(i).Addr().Interface())
-		}
+	// 		fieldPtrs = append(fieldPtrs, val.Field(i).Addr().Interface())
+	// 	}
 
-		must(rows.Scan(fieldPtrs...))
+	// 	must(rows.Scan(fieldPtrs...))
 
-		// must(rows.Scan(&totalCount, fieldPtrs...))
-		// must(rows.Scan(&author))
-		authors = append(authors, author)
-	}
-	fmt.Println("totalCount", totalCount)
+	// 	// must(rows.Scan(&totalCount, fieldPtrs...))
+	// 	// must(rows.Scan(&author))
+	// 	authors = append(authors, author)
+	// }
+	// fmt.Println("totalCount", totalCount)
 	return authors
 }
 
@@ -95,7 +100,11 @@ func main() {
 
 	DAuthor := BuildAuthor()
 
-	must(engine.Sync(new(Author), DAuthor))
+	fmt.Printf(">>>DAuthor: %#v\n", DAuthor)
+
+	fmt.Printf(">>>DAuthor: %#v\n", DAuthor.TableName())
+
+	must(engine.Sync(&DAuthor))
 
 	authors := makeAuthors()
 	fmt.Println("before insert", authors)
