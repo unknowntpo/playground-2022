@@ -43,9 +43,12 @@ func main() {
 	ib.Cols(cards[0].Cols()...)
 	ib = fillValues(ib, cards)
 
-	sql, args := ib.Build()
+	sql, args := ib.BuildWithFlavor(builder.PostgreSQL)
 	fmt.Println(sql)
 	fmt.Println(args)
+	query, err := builder.PostgreSQL.Interpolate(sql, args)
+	must(err)
+	fmt.Println(query)
 }
 
 func must(err error) {
