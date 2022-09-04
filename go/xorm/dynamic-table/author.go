@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"reflect"
-	"strings"
 
 	dstruct "github.com/goldeneggg/structil/dynamicstruct"
 )
@@ -12,11 +11,11 @@ type TableContainer struct {
 	Table interface{}
 }
 
-func (t *TableContainer) TableName() string {
-	fmt.Println("in tableName", reflect.ValueOf(t.Table))
-	fmt.Printf("tCon inside TableName: %#v\n", t)
-	return reflect.ValueOf(t.Table).Elem().FieldByName("TableName").String()
-}
+// func (t *TableContainer) TableName() string {
+// 	fmt.Println("in tableName", reflect.ValueOf(t.Table))
+// 	fmt.Printf("tCon inside TableName: %#v\n", t)
+// 	return reflect.ValueOf(t.Table).Elem().FieldByName("TableName").String()
+// }
 
 func InitTableContainer(tableName string, tableStruct interface{}) TableContainer {
 	tCon := TableContainer{Table: tableStruct}
@@ -27,24 +26,24 @@ func InitTableContainer(tableName string, tableStruct interface{}) TableContaine
 		Set(reflect.ValueOf(tableName))
 	// fmt.Printf("%#v\n", tCon.Table)
 	// fmt.Printf("tCon.Table%#v\n", tCon.Table)
-	fmt.Printf("inside InitTableContainer, call tCon.TableName(): %v\n", tCon.TableName())
+	// fmt.Printf("inside InitTableContainer, call tCon.TableName(): %v\n", tCon.TableName())
 
 	fmt.Printf("tCon inside initTableCOntainer: %#v\n", tCon)
 
 	return tCon
 }
 
-var DAuthor = BuildAuthor()
+// var DAuthor = BuildAuthor()
 
-func BuildAuthor() TableContainer {
+func BuildAuthor() interface{} {
 	// Add fields using Builder with AddXXX method chain
 	b := dstruct.NewBuilder().
-		AddStringWithTag("Name", `xorm:"pk incr 'name'"`).
-		AddStringWithTag("TableName", `json:"-"`)
+		AddIntWithTag("ID", `xorm:"pk autoincr 'id'" json:"id,omitempty"`).
+		AddStringWithTag("Name", `xorm:"'name'"`)
 
 	// SetStructName sets the name of DynamicStruct
 	// Note: Default struct name is "DynamicStruct"
-	b.SetStructName("Author")
+	b.SetStructName("author")
 
 	// Build returns a DynamicStruct
 	ds, err := b.Build()
@@ -52,16 +51,13 @@ func BuildAuthor() TableContainer {
 		panic(err)
 	}
 
-	fmt.Println("isPtr:", ds.IsPtr())
+	// fmt.Println("isPtr:", ds.IsPtr())
 
 	// Print struct definition with Definition method
 	// Struct fields are automatically orderd by field name
-	fmt.Println(ds.Definition())
+	// fmt.Println(ds.Definition())
 	dsInt := ds.NewInterface()
-	fmt.Printf("dsInt: %#v\n", dsInt)
+	// fmt.Printf("dsInt: %#v\n", dsInt)
 
-	fmt.Printf("dsInt type: %v\n", reflect.TypeOf(dsInt))
-
-	// fmt.Printf("dsInt method: %v\n", reflect.ValueOf(dsInt).Method(0))
-	return InitTableContainer(strings.ToLower("Author"), dsInt)
+	return dsInt
 }

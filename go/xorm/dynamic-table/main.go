@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"reflect"
 
 	_ "github.com/mattn/go-sqlite3"
 
@@ -35,45 +34,50 @@ func getRandName() string {
 	return randSeq(3)
 }
 
-func makeAuthors() []interface{} {
+func makeAuthors(needInit bool) []interface{} {
+	d := `{"name": "hello"}`
 	authors := []interface{}{}
 	for i := 0; i < 10; i++ {
-		// dAuthor := BuildAuthor()
-		authors = append(authors, DAuthor)
-	}
+		author := BuildAuthor()
+		if needInit {
+			must(json.Unmarshal([]byte(d), author))
+		}
 
+		fmt.Println("author:", showContent(author))
+		authors = append(authors, author)
+	}
+	showContent(authors)
+	// s, _ := json.MarshalIndent(authors, "", "\t")
+	// fmt.Println(string(s))
 	return authors
 }
 
 func insertAuthors(e *xorm.Engine, authors []interface{}) {
-	_, err := e.Insert(authors)
+	_, err := e.Table("author").Insert(&authors)
 	must(err)
 }
 
 func getAuthors(e *xorm.Engine) interface{} {
 	// authors := []*Author{}
-	dAuthorVal := reflect.ValueOf(DAuthor)
-	authors := reflect.MakeSlice(dAuthorVal.Type(), 0, 0).Interface()
+	// dAuthorVal := reflect.ValueOf(BuildAuthor())
+	// authors := reflect.MakeSlice(dAuthorVal.Type(), 0, 0).Interface()
+	// authors := makeAuthors(false)
+	authors := []interface{}{}
 
 	// must(e.Find(&authors))
 
 	sql := "SELECT COUNT(*) OVER() AS totalCount, * FROM author"
-	must(e.SQL(sql).Find(authors))
-	// rows, err := e.SQL(sql).Rows(&Author{})
-	// must(err)
-	// // SELECT * FROM author
-	// defer rows.Close()
+	rows, err := e.SQL(sql).Rows(BuildAuthor())
+	must(err)
+	defer rows.Close()
 
-	// var totalCount int64
-	// _ = totalCount
-	// for rows.Next() {
-	// 	author := &Author{}
-	// 	// author := new(Author)
-	// 	fieldPtrs := []interface{}{}
-
-	// 	fieldPtrs = append(fieldPtrs, &totalCount)
-
-	// 	val := reflect.Indirect(reflect.ValueOf(author))
+	var totalCount int64
+	_ = totalCount
+	for rows.Next() {
+		a := BuildAuthor()
+		must(rows.Scan(a))
+		authors = append(authors, a)
+	}
 
 	// 	fmt.Println("val can address", val.CanAddr())
 	// 	for i := 0; i < val.NumField(); i++ {
@@ -98,15 +102,18 @@ func main() {
 	must(err)
 	engine.ShowSQL(true)
 
-	DAuthor := BuildAuthor()
+	_, err = engine.Exec("CREATE TABLE author (id integer primary key autoincrement, name varchar(255));")
+	must(err)
 
-	fmt.Printf(">>>DAuthor: %#v\n", DAuthor)
+	// DAuthor := BuildAuthor()
 
-	fmt.Printf(">>>DAuthor: %#v\n", DAuthor.TableName())
+	// fmt.Printf(">>>DAuthor: %#v\n", DAuthor)
 
-	must(engine.Sync(&DAuthor))
+	// fmt.Printf(">>>DAuthor: %#v\n", DAuthor.TableName())
 
-	authors := makeAuthors()
+	// must(engine.Sync(&DAuthor))
+
+	authors := makeAuthors(true)
 	fmt.Println("before insert", authors)
 	insertAuthors(engine, authors)
 
