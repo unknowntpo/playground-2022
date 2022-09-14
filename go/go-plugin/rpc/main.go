@@ -8,7 +8,7 @@ import (
 
 	hclog "github.com/hashicorp/go-hclog"
 	plugin "github.com/hashicorp/go-plugin"
-	example "github.com/hashicorp/go-plugin/examples/basic/commons"
+	commons "github.com/unknowntpo/playground-2022/go/go-plugin/rpc/commons"
 )
 
 func main() {
@@ -19,11 +19,46 @@ func main() {
 		Level:  hclog.Debug,
 	})
 
+	greet(logger)
+	add(logger)
+}
+
+func add(logger hclog.Logger) {
 	// We're a host! Start by launching the plugin process.
 	client := plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig: handshakeConfig,
 		Plugins:         pluginMap,
-		Cmd:             exec.Command("./plugin/greeter"),
+		Cmd:             exec.Command("./plugin/adder/adder"),
+		Logger:          logger,
+	})
+	defer client.Kill()
+
+	// Connect via RPC
+	rpcClient, err := client.Client()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Request the plugin
+	raw, err := rpcClient.Dispense("adder")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// We should have a Greeter now! This feels like a normal interface
+	// implementation but is in fact over an RPC connection.
+	greeter := raw.(commons.Adder)
+	args := commons.AddArgs{A: 2, B: 1}
+	var res int
+	fmt.Println(greeter.Add(args, &res))
+}
+
+func greet(logger hclog.Logger) {
+	// We're a host! Start by launching the plugin process.
+	client := plugin.NewClient(&plugin.ClientConfig{
+		HandshakeConfig: handshakeConfig,
+		Plugins:         pluginMap,
+		Cmd:             exec.Command("./plugin/greeter/greeter"),
 		Logger:          logger,
 	})
 	defer client.Kill()
@@ -42,7 +77,7 @@ func main() {
 
 	// We should have a Greeter now! This feels like a normal interface
 	// implementation but is in fact over an RPC connection.
-	greeter := raw.(example.Greeter)
+	greeter := raw.(commons.Greeter)
 	fmt.Println(greeter.Greet())
 }
 
@@ -58,7 +93,6 @@ var handshakeConfig = plugin.HandshakeConfig{
 
 // pluginMap is the map of plugins we can dispense.
 var pluginMap = map[string]plugin.Plugin{
-	"greeter": &example.GreeterPlugin{},
-	// "adder":   &example.AdderPlugin{},
-	"adder": &example.AdderPlugin{},
+	"greeter": &commons.GreeterPlugin{},
+	"adder":   &commons.AdderPlugin{},
 }
