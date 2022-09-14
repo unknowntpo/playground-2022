@@ -9,35 +9,39 @@ import (
 
 // Adder is the interface that we're exposing as a plugin.
 type Adder interface {
-	Add(x, y int) (int, error)
+	Add(AddArgs, *int) error
+}
+
+type AddArgs struct {
+	A, B int
 }
 
 // Here is an implementation that talks over RPC
 type AdderRPC struct{ client *rpc.Client }
 
-func (g *AdderRPC) Add(x, y int) (int, error) {
+func (g *AdderRPC) Add(args AddArgs, reply *int) error {
 	var resp int
-	var req rpc.Server.Args
-	err := g.client.Call("Plugin.Greet", x, y, &resp)
+	err := g.client.Call("Plugin.Greet", args, &resp)
 	if err != nil {
 		// You usually want your interfaces to return errors. If they don't,
 		// there isn't much other choice here.
 		// panic(err)
 		return fmt.Errorf("failed on rpc call Plugin.Add: %v", err)
 	}
-
-	return resp, nil
+	return nil
 }
 
 // Here is the RPC server that GreeterRPC talks to, conforming to
 // the requirements of net/rpc
-type GreeterRPCServer struct {
+type AdderRPCServer struct {
 	// This is the real implementation
-	Impl Greeter
+	Impl Adder
 }
 
-func (s *GreeterRPCServer) Greet(args interface{}, resp *string) error {
-	*resp = s.Impl.Greet()
+func (s *AdderRPCServer) Add(args AddArgs, resp *int) error {
+	if err := s.Impl.Add(args, resp); err != nil {
+		return fmt.Errorf("failed on s.Impl.Add: %v", err)
+	}
 	return nil
 }
 
@@ -51,15 +55,15 @@ func (s *GreeterRPCServer) Greet(args interface{}, resp *string) error {
 //
 // Ignore MuxBroker. That is used to create more multiplexed streams on our
 // plugin connection and is a more advanced use case.
-type GreeterPlugin struct {
+type AdderPlugin struct {
 	// Impl Injection
-	Impl Greeter
+	Impl Adder
 }
 
-func (p *GreeterPlugin) Server(*plugin.MuxBroker) (interface{}, error) {
-	return &GreeterRPCServer{Impl: p.Impl}, nil
+func (p *AdderPlugin) Server(*plugin.MuxBroker) (interface{}, error) {
+	return &AdderRPCServer{Impl: p.Impl}, nil
 }
 
-func (GreeterPlugin) Client(b *plugin.MuxBroker, c *rpc.Client) (interface{}, error) {
-	return &GreeterRPC{client: c}, nil
+func (AdderPlugin) Client(b *plugin.MuxBroker, c *rpc.Client) (interface{}, error) {
+	return &AdderRPC{client: c}, nil
 }

@@ -13,7 +13,7 @@ type GreeterHello struct {
 	logger hclog.Logger
 }
 
-func (g *GreeterHello) Greet() string {
+func (g *AdderImpl) Greet() string {
 	g.logger.Debug("message from GreeterHello.Greet by unknowntpo")
 	return "Hello!"
 }
@@ -35,7 +35,7 @@ func main() {
 		JSONFormat: true,
 	})
 
-	greeter := &GreeterHello{
+	greeter := &AdderImpl{
 		logger: logger,
 	}
 	// pluginMap is the map of plugins we can dispense.

@@ -59,5 +59,6 @@ var handshakeConfig = plugin.HandshakeConfig{
 // pluginMap is the map of plugins we can dispense.
 var pluginMap = map[string]plugin.Plugin{
 	"greeter": &example.GreeterPlugin{},
-	"adder":   &example.AdderPlugin{},
+	// "adder":   &example.AdderPlugin{},
+	"adder": &example.AdderPlugin{},
 }
