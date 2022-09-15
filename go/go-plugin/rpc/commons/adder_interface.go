@@ -20,8 +20,7 @@ type AddArgs struct {
 type AdderRPC struct{ client *rpc.Client }
 
 func (g *AdderRPC) Add(args AddArgs, reply *int) error {
-	var resp int
-	err := g.client.Call("Plugin.Add", args, &resp)
+	err := g.client.Call("Plugin.Add", args, &reply)
 	if err != nil {
 		// You usually want your interfaces to return errors. If they don't,
 		// there isn't much other choice here.
@@ -31,7 +30,7 @@ func (g *AdderRPC) Add(args AddArgs, reply *int) error {
 	return nil
 }
 
-// Here is the RPC server that GreeterRPC talks to, conforming to
+// Here is the RPC server that AdderRPC talks to, conforming to
 // the requirements of net/rpc
 type AdderRPCServer struct {
 	// This is the real implementation
