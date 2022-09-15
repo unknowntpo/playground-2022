@@ -21,7 +21,7 @@ type AdderRPC struct{ client *rpc.Client }
 
 func (g *AdderRPC) Add(args AddArgs, reply *int) error {
 	var resp int
-	err := g.client.Call("Plugin.Greet", args, &resp)
+	err := g.client.Call("Plugin.Add", args, &resp)
 	if err != nil {
 		// You usually want your interfaces to return errors. If they don't,
 		// there isn't much other choice here.

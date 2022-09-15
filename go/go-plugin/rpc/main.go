@@ -47,10 +47,17 @@ func add(logger hclog.Logger) {
 
 	// We should have a Greeter now! This feels like a normal interface
 	// implementation but is in fact over an RPC connection.
-	greeter := raw.(commons.Adder)
+	adder := raw.(commons.Adder)
 	args := commons.AddArgs{A: 2, B: 1}
 	var res int
-	fmt.Println(greeter.Add(args, &res))
+	must(adder.Add(args, &res))
+	fmt.Println("result from adder: ", res)
+}
+
+func must(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
 
 func greet(logger hclog.Logger) {

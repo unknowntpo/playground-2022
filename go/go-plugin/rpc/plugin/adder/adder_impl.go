@@ -15,6 +15,7 @@ type AdderImpl struct {
 
 func (g *AdderImpl) Add(args commons.AddArgs, resp *int) error {
 	g.logger.Debug("message from AdderImpl.Add by unknowntpo")
+	*resp = args.A + args.B
 	return nil
 }
 
@@ -24,7 +25,7 @@ func (g *AdderImpl) Add(args commons.AddArgs, resp *int) error {
 // directory. It is a UX feature, not a security feature.
 var handshakeConfig = plugin.HandshakeConfig{
 	ProtocolVersion:  1,
-	MagicCookieKey:   "basic_plugin",
+	MagicCookieKey:   "BASIC_PLUGIN",
 	MagicCookieValue: "hello",
 }
 
