@@ -1,4 +1,4 @@
-class Car(
+class Car{ 
     constructor(x,y,width, height) {
         this.x = x;
         this.y = y;
@@ -16,4 +16,4 @@ class Car(
         );
         ctx.fill();
     }
-)
+ }
