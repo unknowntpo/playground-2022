@@ -1,0 +1,7 @@
+virtualmachines:
+  hosts:
+    aws:
+      # ansible_host: 3.0.181.46
+      ansible_host: kube.unknowntpo.net
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: ~/aws-keys/aws-key.cer
