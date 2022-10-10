@@ -1,7 +1,10 @@
 virtualmachines:
   hosts:
-    aws:
-      # ansible_host: 3.0.181.46
-      ansible_host: kube.unknowntpo.net
-      ansible_user: ubuntu
-      ansible_ssh_private_key_file: ~/aws-keys/aws-key.cer
+    # aws:
+    #   # ansible_host: 3.0.181.46
+    #   ansible_host: kube.unknowntpo.net
+    #   ansible_user: ubuntu
+    #   ansible_ssh_private_key_file: ~/aws-keys/aws-key.cer
+    vagrant:
+      ansible_host: k8s
+      ansible_ssh_common_args: '-F /Users/unknowntpo/repo/unknowntpo/hiskio-course/vagrant/kind/vagrant-ssh'
