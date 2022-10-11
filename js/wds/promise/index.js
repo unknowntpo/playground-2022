@@ -8,9 +8,14 @@ function promise() {
     });
 }
 
-promise()
-    .then((success) => {
-        console.log(success);
-    }, (fail) => {
-        console.log(fail);
-    })
+
+const arr = [1, 2, 3, 4, 5]
+
+arr.forEach(e => {
+    promise()
+        .then((success) => {
+            console.log(success);
+        }, (fail) => {
+            console.log(fail);
+        })
+})
