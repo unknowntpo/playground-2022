@@ -8,7 +8,6 @@ import (
 	"os"
 	"runtime/pprof"
 	"strconv"
-	"strings"
 	"testing"
 )
 
@@ -25,7 +24,7 @@ func foo(n int) string {
 	var b []byte
 	for i := 0; i < int(sum[0]); i++ {
 		x := sum[(i*7+1)%len(sum)] ^ sum[(i*5+3)%len(sum)]
-		c := strings.Repeat("abcdefghijklmnopqrstuvwxyz", 10)[x]
+		c := "abcdefghijklmnopqrstuvwxyz"[x%26]
 		b = append(b, c)
 	}
 	return string(b)
