@@ -21,7 +21,7 @@ func foo(n int) string {
 	}
 	sum := sha256.Sum256(buf.Bytes())
 
-	var b []byte
+	b := make([]byte, 0, int(sum[0]))
 	for i := 0; i < int(sum[0]); i++ {
 		x := sum[(i*7+1)%len(sum)] ^ sum[(i*5+3)%len(sum)]
 		c := "abcdefghijklmnopqrstuvwxyz"[x%26]
