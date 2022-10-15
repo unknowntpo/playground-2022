@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"sync"
 
 	"xorm.io/xorm"
@@ -21,6 +22,13 @@ func GetAuthorByID(e xorm.Interface, id int64) (*Author, error) {
 
 func GetAllAuthors(e xorm.Interface, slice *[]Author) {
 	err := e.Find(slice)
+	must(err)
+}
+
+func GetAllAuthorsStrSlice(e xorm.Interface, slice *[][]string) {
+	obj := Author{}
+	tableName := reflect.ValueOf(obj).Type().Name()
+	err := e.Table(tableName).Find(slice)
 	must(err)
 }
 

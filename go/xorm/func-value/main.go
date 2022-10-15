@@ -21,7 +21,7 @@ func main() {
 	must(engine.Sync(new(Author)))
 
 	authors := makeAuthors()
-	fmt.Println("before insert", authors)
+	// fmt.Println("before insert", authors)
 	insertAuthors(engine, authors)
 
 	// get author by id
@@ -32,6 +32,12 @@ func main() {
 	authorBob, err := GetAuthorByName(engine, "Bob")
 	must(err)
 	fmt.Println("author bob: ", showContent(authorBob))
+
+	strSlice := [][]string{}
+	GetAllAuthorsStrSlice(engine, &strSlice)
+	must(err)
+	fmt.Println("authors: ", showContent(strSlice))
+
 }
 
 func showContent(v interface{}) string {
