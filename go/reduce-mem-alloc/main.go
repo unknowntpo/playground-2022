@@ -14,8 +14,11 @@ import (
 
 func foo(n int) string {
 	var buf bytes.Buffer
+
+	// Pre-compute x to avoid lots of memory allocation about string
+	x := strconv.Itoa(n)
 	for i := 0; i < 100000; i++ {
-		buf.WriteString(strconv.Itoa(n))
+		buf.WriteString(x)
 	}
 	sum := sha256.Sum256(buf.Bytes())
 
