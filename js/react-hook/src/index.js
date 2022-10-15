@@ -49,7 +49,7 @@ function Car() {
     )
 }
 
-function Example() {
+function Clicker() {
     // Declare a new state variable, which we'll call "count"
     const [count, setCount] = useState(0);
 
@@ -63,5 +63,21 @@ function Example() {
     );
 }
 
+function Switch() {
+    const [sw, setSwitch] = useState(0);
+
+    return (
+        <div>
+            <button onClick={() => {
+                setSwitch(!sw);
+                console.log("current sw", sw);
+            }}>
+                OnOff
+            </button>
+        </div >
+    );
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Example />);
+// root.render(<Clicker />);
+root.render(<Switch />);
