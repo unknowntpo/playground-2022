@@ -45,8 +45,45 @@ func BenchmarkInsertAuthors(b *testing.B) {
 	b.Run("with pool", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			authors := authorsPool.Get().([]Author)
-			defer authorsPool.Put(authors)
+			reset(&authors)
 			GetAllAuthors(engine, &authors)
+			authorsPool.Put(authors)
 		}
 	})
+}
+
+func BenchmarkInsertAuthorsWithPool(b *testing.B) {
+	b.ReportAllocs()
+
+	engine := setup()
+
+	authorsToBeInserted := makeAuthors()
+	insertAuthors(engine, authorsToBeInserted)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		authors := authorsPool.Get().([]Author)
+		reset(&authors)
+		GetAllAuthors(engine, &authors)
+		authorsPool.Put(authors)
+	}
+}
+
+func BenchmarkInsertAuthorsNoPool(b *testing.B) {
+	b.ReportAllocs()
+
+	engine := setup()
+
+	authorsToBeInserted := makeAuthors()
+	insertAuthors(engine, authorsToBeInserted)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		authors := []Author{}
+		GetAllAuthors(engine, &authors)
+	}
+}
+
+func reset(as *[]Author) {
+	for i := 0; i < len(*as); i++ {
+		(*as)[i] = Author{}
+	}
 }

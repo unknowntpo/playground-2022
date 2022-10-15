@@ -64,6 +64,15 @@ func insertAuthors(e *xorm.Engine, authors []Author) {
 var authorsPool = sync.Pool{
 	New: func() interface{} {
 		fmt.Println("New is called")
-		return []Author{}
+		// slice := make([]Author, 0, num)
+		// return &slice
+		return make([]Author, 0, num)
+	},
+}
+
+var authorPool = sync.Pool{
+	New: func() interface{} {
+		fmt.Println("New is called")
+		return new(Author)
 	},
 }
