@@ -8,3 +8,7 @@ virtualmachines:
     vagrant:
       ansible_host: k8s
       ansible_ssh_common_args: '-F /Users/unknowntpo/repo/unknowntpo/hiskio-course/vagrant/kind/vagrant-ssh'
+    vagrant-docker:
+      ansible_host: default
+      ansible_ssh_common_args: '-F /Users/unknowntpo/repo/unknowntpo/playground-2022/vagrant/docker/vagrant-ssh'
+        
