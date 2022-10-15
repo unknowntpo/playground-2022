@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 
 	"xorm.io/xorm"
 )
@@ -16,6 +17,11 @@ func GetAuthorByID(e xorm.Interface, id int64) (*Author, error) {
 		return &Author{ID: id}
 	}
 	return getAuthor(e, f)
+}
+
+func GetAllAuthors(e xorm.Interface, slice *[]Author) {
+	err := e.Find(slice)
+	must(err)
 }
 
 func GetAuthorByName(e xorm.Interface, name string) (*Author, error) {
@@ -38,11 +44,13 @@ func getAuthor(e xorm.Interface, optFn func() *Author) (*Author, error) {
 	return a, nil
 }
 
+const num = 10000
+
 func makeAuthors() []Author {
 	authors := []Author{}
 	names := []string{"Alice", "Bob", "Ally"}
-	for i := 0; i < 3; i++ {
-		authors = append(authors, Author{Name: names[i]})
+	for i := 0; i < num; i++ {
+		authors = append(authors, Author{Name: names[i%3]})
 	}
 
 	return authors
@@ -51,4 +59,11 @@ func makeAuthors() []Author {
 func insertAuthors(e *xorm.Engine, authors []Author) {
 	_, err := e.Insert(authors)
 	must(err)
+}
+
+var authorsPool = sync.Pool{
+	New: func() interface{} {
+		fmt.Println("New is called")
+		return []Author{}
+	},
 }
