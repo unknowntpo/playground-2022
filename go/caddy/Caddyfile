@@ -1,6 +1,0 @@
-{
-  order hello_world last
-}
-localhost:8080 {
-  hello_world
-}
