@@ -1,0 +1,38 @@
+- name: Setup AWS ec2 
+  hosts: aws
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Hello world
+    - name: Install docker
+      include_tasks: ./subtasks/install-docker.yml
+    - name: Install bpftrace
+      include_tasks: ./subtasks/install-bpftrace.yml
+
+- name: Setup vagrant
+  hosts: vagrant
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Hello world
+    - name: Install docker
+      include_tasks: ./subtasks/install-docker.yml
+    - name: Install bpftrace
+      include_tasks: ./subtasks/install-bpftrace.yml
+
+- name: Setup vagrant docker
+  hosts: vagrant-docker
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Hello world
+    - name: Install docker
+      include_tasks: ./subtasks/install-docker.yml
+    - name: Install bpftrace
+      include_tasks: ./subtasks/install-bpftrace.yml

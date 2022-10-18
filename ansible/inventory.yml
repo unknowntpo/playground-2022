@@ -11,4 +11,10 @@ virtualmachines:
     vagrant-docker:
       ansible_host: default
       ansible_ssh_common_args: '-F /Users/unknowntpo/repo/unknowntpo/playground-2022/vagrant/docker/vagrant-ssh'
+    droplet:
+      ansible_host: 139.59.247.127
+      ansible_user: root
+
+
+
         
