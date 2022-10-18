@@ -1,6 +1,10 @@
 {
+  order calculator first
   order hello_world last
 }
 localhost:8080 {
   hello_world
+}
+localhost:9000 {
+  calculator
 }
