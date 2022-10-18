@@ -10,6 +10,13 @@ fetch(baseURL)
     })
 
 function displayData(data) {
-    data.forEach((e) => console.log(e.title))
-    document.querySelector("pre").innerHTML = JSON.stringify(data, null, 2);
+    const menu = document.querySelector("#menu")
+
+    // https://www.javascripttutorial.net/javascript-dom/javascript-appendchild/
+    data.forEach((e) => {
+        console.log(e.title)
+        let ul = document.createElement("ul")
+        ul.innerText = e.title
+        menu.appendChild(ul)
+    })
 }
