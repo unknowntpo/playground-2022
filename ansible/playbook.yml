@@ -49,3 +49,5 @@
       include_tasks: ./subtasks/install-docker.yml
     - name: Install bpftrace
       include_tasks: ./subtasks/install-bpftrace.yml
+    - name: Install golang v1.19.2
+      include_tasks: ./subtasks/install-golang.yml
