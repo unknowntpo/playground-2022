@@ -1,0 +1,19 @@
+- name: Download tar file
+  shell:
+    wget https://go.dev/dl/go1.19.2.linux-amd64.tar.gz
+- name: Extract tar file
+  shell:
+    rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.2.linux-amd64.tar.gz
+- name: Setup env variable
+  shell:
+    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+- name: reset ssh connection to make env var take effect
+  meta: reset_connection
+# Ref: https://serverfault.com/a/695798
+# FIXME: Why not work ?
+# - name: Check Golang version
+#   command: go version
+#   register: goVersion
+# - name: Print version
+#   debug:
+#     msg: "Go Version: {{ goVersion.stdout }}"
