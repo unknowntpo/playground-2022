@@ -1,0 +1,8 @@
+uprobe:./adder:main.add
+{
+    printf("arg1:%s - %d, %d, %d, %d\n", func, sarg0, sarg1, sarg2, sarg3);
+}
+ur:./adder:main.add
+{
+    printf("retval:%d\n", retval);
+}
