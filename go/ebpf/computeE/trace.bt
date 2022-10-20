@@ -1,0 +1,10 @@
+#include <uapi/linux/ptrace.h>
+
+BPF_PERF_OUTPUT(trace);
+
+inline int computeECalled(struct pt_regs *ctx) {
+  // The input argument is stored in ax.
+  long val = ctx->ax;
+  trace.perf_submit(ctx, &val, sizeof(val));
+  return 0;
+}
