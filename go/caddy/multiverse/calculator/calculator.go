@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	add "github.com/unknowntpo/playground-2022/go/caddy/multiverse/calculator/add"
+
 	caddy "github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile"
 	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
@@ -14,8 +16,11 @@ import (
 
 type Calculator struct {
 	Text        string          `json:"text,omitempty"`
-	OperandsRaw caddy.ModuleMap `json:"certificates,omitempty" caddy:"namespace=http.handlers.calculator"`
+	OperandsRaw caddy.ModuleMap `json:"operands,omitempty" caddy:"namespace=calculator.operands"`
+	Operands    []Operand
 }
+
+type Operand interface{}
 
 func (c Calculator) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
@@ -46,17 +51,15 @@ func (c *Calculator) Provision(ctx caddy.Context) error {
 	// 	t.certificateLoaders = append(t.certificateLoaders, modIface.(CertificateLoader))
 	// }
 	for modName, modIface := range val.(map[string]any) {
-		if modName == "automate" {
+		if modName == "add" {
 			// special case; these will be loaded in later using our automation facilities,
 			// which we want to avoid doing during provisioning
-			if automateNames, ok := modIface.(*AutomateLoader); ok && automateNames != nil {
-				t.automateNames = []string(*automateNames)
+			if _, ok := modIface.(*add.Add); ok {
 			} else {
-				return fmt.Errorf("loading certificates with 'automate' requires array of strings, got: %T", modIface)
+				return fmt.Errorf("modIface is not %T, got %T", &add.Add{}, modIface)
 			}
-			continue
 		}
-		t.certificateLoaders = append(t.certificateLoaders, modIface.(CertificateLoader))
+		c.Operands = append(c.Operands, modIface.(add.Add))
 	}
 
 	return nil
