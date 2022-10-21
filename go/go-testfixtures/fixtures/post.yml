@@ -1,0 +1,5 @@
+{{range $post := .}}
+- id:
+  title: {{$post.Title}}
+  text: {{$post.Text}}
+{{end}}
