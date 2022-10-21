@@ -3,6 +3,7 @@ package calculator
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -12,7 +13,8 @@ import (
 )
 
 type Calculator struct {
-	Text string `json:"text,omitempty"`
+	Text        string          `json:"text,omitempty"`
+	OperandsRaw caddy.ModuleMap `json:"certificates,omitempty" caddy:"namespace=http.handlers.calculator"`
 }
 
 func (c Calculator) CaddyModule() caddy.ModuleInfo {
@@ -25,6 +27,38 @@ func (c Calculator) CaddyModule() caddy.ModuleInfo {
 func (c *Calculator) Provision(ctx caddy.Context) error {
 	c.Text = "Hello Calculator"
 	// May use LoadModule to load module
+	val, err := ctx.LoadModule(c, "OperandsRaw")
+	if err != nil {
+		return fmt.Errorf("loading certificate loader modules: %s", err)
+	}
+	// from tls.go
+	// for modName, modIface := range val.(map[string]any) {
+	// 	if modName == "automate" {
+	// 		// special case; these will be loaded in later using our automation facilities,
+	// 		// which we want to avoid doing during provisioning
+	// 		if automateNames, ok := modIface.(*AutomateLoader); ok && automateNames != nil {
+	// 			t.automateNames = []string(*automateNames)
+	// 		} else {
+	// 			return fmt.Errorf("loading certificates with 'automate' requires array of strings, got: %T", modIface)
+	// 		}
+	// 		continue
+	// 	}
+	// 	t.certificateLoaders = append(t.certificateLoaders, modIface.(CertificateLoader))
+	// }
+	for modName, modIface := range val.(map[string]any) {
+		if modName == "automate" {
+			// special case; these will be loaded in later using our automation facilities,
+			// which we want to avoid doing during provisioning
+			if automateNames, ok := modIface.(*AutomateLoader); ok && automateNames != nil {
+				t.automateNames = []string(*automateNames)
+			} else {
+				return fmt.Errorf("loading certificates with 'automate' requires array of strings, got: %T", modIface)
+			}
+			continue
+		}
+		t.certificateLoaders = append(t.certificateLoaders, modIface.(CertificateLoader))
+	}
+
 	return nil
 }
 
