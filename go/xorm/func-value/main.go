@@ -33,11 +33,17 @@ func main() {
 	must(err)
 	fmt.Println("author bob: ", showContent(authorBob))
 
-	strSlice := [][]string{}
-	GetAllAuthorsStrSlice(engine, &strSlice)
-	must(err)
-	fmt.Println("authors: ", showContent(strSlice))
+	sess := engine.NewSession()
+	defer sess.Close()
+	must(sess.Begin())
 
+	round := 10
+	for i := 0; i < round; i++ {
+		con := GetAllAuthorsStrSliceStdSQL(sess)
+		must(err)
+		fmt.Println("authors: ", showContent(con))
+		PutUnifyContainer(con)
+	}
 }
 
 func showContent(v interface{}) string {

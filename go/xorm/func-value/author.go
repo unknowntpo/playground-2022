@@ -6,11 +6,17 @@ import (
 	"sync"
 
 	"xorm.io/xorm"
+
+	"xorm.io/builder"
 )
 
 type Author struct {
-	ID   int64 `xorm:"pk autoincr"`
+	ID   int64 `xorm:"id pk autoincr"`
 	Name string
+}
+
+func (a Author) TableName() string {
+	return "author"
 }
 
 func GetAuthorByID(e xorm.Interface, id int64) (*Author, error) {
@@ -25,11 +31,52 @@ func GetAllAuthors(e xorm.Interface, slice *[]Author) {
 	must(err)
 }
 
-func GetAllAuthorsStrSlice(e xorm.Interface, slice *[][]string) {
+func GetAllAuthorsStrSliceStdSQL(e xorm.Interface) [][]string {
+	sess := e.(*xorm.Session)
+	b := builder.Dialect("sqlite3").Select("*").From("author")
+	sql, err := b.ToBoundSQL()
+
+	// rows, err := e.SQL(b).Rows()
+	// must(err)
+	rows, err := sess.Tx().Query(sql)
+	must(err)
+	// rows, err := sess.SQL(b).Query()
+	// must(err)
+	con := NewUnifyContainer()
+	for rows.Next() {
+		conRow := NewUnifyContainerRow()
+		// append to len equal to fields num in Author
+		authorFieldNum := 2
+		for i := 0; i < authorFieldNum; i++ {
+			conRow = append(conRow, "")
+		}
+
+		// conRowIntSlice := strSliceToInterfaceSlice(conRow)
+		conRowPtrSlice := getPtrSliceFromStrSlice(conRow)
+		must(rows.Scan(conRowPtrSlice...))
+		con = append(con, conRow)
+	}
+
+	return con
+}
+
+func GetAllAuthorsStrSliceXorm(e xorm.Interface, slice *[][]string) [][]string {
 	obj := Author{}
 	tableName := reflect.ValueOf(obj).Type().Name()
-	err := e.Table(tableName).Find(slice)
+	b := builder.Dialect("sqlite3").Select("*").From(tableName)
+
+	rows, err := e.SQL(b).Rows(&obj)
 	must(err)
+	// rows, err := sess.SQL(b).Query()
+	// must(err)
+	con := NewUnifyContainer()
+	for rows.Next() {
+		conRow := NewUnifyContainerRow()
+		must(rows.Scan(&conRow))
+		con = append(con, conRow)
+	}
+
+	return con
 }
 
 func GetAuthorByName(e xorm.Interface, name string) (*Author, error) {
@@ -52,7 +99,7 @@ func getAuthor(e xorm.Interface, optFn func() *Author) (*Author, error) {
 	return a, nil
 }
 
-const num = 10000
+const num = 10
 
 func makeAuthors() []Author {
 	authors := []Author{}
