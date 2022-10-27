@@ -65,18 +65,10 @@ func GetAllAuthorsStrSliceXorm(e xorm.Interface, slice *[][]string) [][]string {
 	tableName := reflect.ValueOf(obj).Type().Name()
 	b := builder.Dialect("sqlite3").Select("*").From(tableName)
 
-	rows, err := e.SQL(b).Rows(&obj)
+	err := e.SQL(b).Find(slice)
 	must(err)
-	// rows, err := sess.SQL(b).Query()
-	// must(err)
-	con := NewUnifyContainer()
-	for rows.Next() {
-		conRow := NewUnifyContainerRow()
-		must(rows.Scan(&conRow))
-		con = append(con, conRow)
-	}
 
-	return con
+	return *slice
 }
 
 func GetAuthorByName(e xorm.Interface, name string) (*Author, error) {
@@ -99,7 +91,7 @@ func getAuthor(e xorm.Interface, optFn func() *Author) (*Author, error) {
 	return a, nil
 }
 
-const num = 10
+const num = 10000
 
 func makeAuthors() []Author {
 	authors := []Author{}

@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"runtime/pprof"
 
 	_ "github.com/mattn/go-sqlite3"
 	"xorm.io/xorm"
@@ -15,6 +17,17 @@ func must(err error) {
 }
 
 func main() {
+	cpuF, err := os.Create("cpu.prof")
+	defer cpuF.Close()
+	must(err)
+
+	pprof.StartCPUProfile(cpuF)
+	defer pprof.StopCPUProfile()
+
+	heapF, err := os.Create("heap.prof")
+	defer heapF.Close()
+	pprof.WriteHeapProfile(heapF)
+
 	engine, err := xorm.NewEngine("sqlite3", ":memory:")
 	must(err)
 
