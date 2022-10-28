@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 
 	"xorm.io/xorm"
@@ -14,17 +13,11 @@ func BenchmarkContainer(b *testing.B) {
 	must(engine.Sync(new(Author)))
 
 	authors := makeAuthors()
-	// fmt.Println("before insert", authors)
-	insertAuthors(engine, authors)
 
-	// get author by id
-	author3, err := GetAuthorByID(engine, int64(3))
-	must(err)
-	fmt.Println("author 3: ", showContent(author3))
-
-	authorBob, err := GetAuthorByName(engine, "Bob")
-	must(err)
-	fmt.Println("author bob: ", showContent(authorBob))
+	batchNum := 1000
+	for i := 0; i < batchNum; i++ {
+		insertAuthors(engine, authors)
+	}
 
 	b.Run("withPool", func(b *testing.B) {
 		sess := engine.NewSession()
