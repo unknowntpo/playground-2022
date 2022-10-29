@@ -1,6 +1,7 @@
 reset 
 set style fill solid
-# set xtics offset 0, graph 0
+set xtics out offset 0, -0.5
+set xtics rotate by -45
 set size 1, 1
 set ylabel 'ns/op' font 'Verdana, 8'
 set key left top
