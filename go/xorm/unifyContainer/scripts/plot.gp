@@ -1,8 +1,9 @@
 reset 
 set style fill solid
+# set xtics offset 0, graph 0
+set size 1, 1
 set ylabel 'ns/op' font 'Verdana, 8'
 set key left top
-set style histogram clustered gap 1 title offset 0.1,0.25
 set term svg
 set output 'perf.svg'
 

@@ -1,0 +1,8 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/unknowntpo/playground-2022/go/xorm/unifyContainer
+BenchmarkContainer/StructureBinding-8         	       1	13432809167 ns/op	7401474072 B/op	250000000 allocs/op
+BenchmarkContainer/UnifyContainerWithPool-8   	       2	7197919980 ns/op	3820417972 B/op	137722629 allocs/op
+BenchmarkContainer/UnifyContainerNoPool-8     	       2	9929608292 ns/op	4883022268 B/op	209999792 allocs/op
+PASS
+ok  	github.com/unknowntpo/playground-2022/go/xorm/unifyContainer	75.771s

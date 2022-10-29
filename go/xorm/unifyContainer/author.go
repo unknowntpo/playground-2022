@@ -71,6 +71,16 @@ func GetAllAuthorsStrSliceXorm(e xorm.Interface, slice *[][]string) [][]string {
 	return *slice
 }
 
+func GetAllAuthorsStructXorm(e xorm.Interface) []Author {
+	objs := []Author{}
+	b := builder.Dialect("sqlite3").Select("*").From(Author{}.TableName())
+
+	err := e.SQL(b).Find(&objs)
+	must(err)
+
+	return objs
+}
+
 func GetAuthorByName(e xorm.Interface, name string) (*Author, error) {
 	f := func() *Author {
 		return &Author{Name: name}

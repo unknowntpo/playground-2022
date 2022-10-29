@@ -19,7 +19,20 @@ func BenchmarkContainer(b *testing.B) {
 		insertAuthors(engine, authors)
 	}
 
-	b.Run("withPool", func(b *testing.B) {
+	b.Run("StructureBinding", func(b *testing.B) {
+		sess := engine.NewSession()
+		defer sess.Close()
+		must(sess.Begin())
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			con := GetAllAuthorsStructXorm(sess)
+			must(err)
+			_ = con
+		}
+	})
+
+	b.Run("UnifyContainerWithPool", func(b *testing.B) {
 		sess := engine.NewSession()
 		defer sess.Close()
 		must(sess.Begin())
@@ -34,7 +47,7 @@ func BenchmarkContainer(b *testing.B) {
 		}
 	})
 
-	b.Run("noPool", func(b *testing.B) {
+	b.Run("UnifyContainerNoPool", func(b *testing.B) {
 		sess := engine.NewSession()
 		defer sess.Close()
 		must(sess.Begin())
