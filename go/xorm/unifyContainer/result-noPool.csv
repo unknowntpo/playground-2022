@@ -1,0 +1,5 @@
+name                                                    ns/op   
+
+StructureBinding-8                  13432809167 
+UnifyContainerWithPool-8            7197919980  
+UnifyContainerNoPool-8              9929608292  
