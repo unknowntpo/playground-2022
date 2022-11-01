@@ -101,9 +101,9 @@ func getAuthor(e xorm.Interface, optFn func() *Author) (*Author, error) {
 	return a, nil
 }
 
-const num = 10000
+// const num = 10000
 
-func makeAuthors() []Author {
+func makeAuthors(num int) []Author {
 	authors := []Author{}
 	names := []string{"Alice", "Bob", "Ally"}
 	for i := 0; i < num; i++ {
@@ -123,7 +123,7 @@ var authorsPool = sync.Pool{
 		fmt.Println("New is called")
 		// slice := make([]Author, 0, num)
 		// return &slice
-		return make([]Author, 0, num)
+		return make([]Author, 0, 10000)
 	},
 }
 

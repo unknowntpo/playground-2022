@@ -33,7 +33,7 @@ func main() {
 
 	must(engine.Sync(new(Author)))
 
-	authors := makeAuthors()
+	authors := makeAuthors(10000)
 	// fmt.Println("before insert", authors)
 	insertAuthors(engine, authors)
 

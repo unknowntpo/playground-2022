@@ -27,6 +27,8 @@ bench/all:
 
 genData/all:
 	@sed -n -E 's/BenchmarkContainer\/(.*)/\1/p' data/result_noPool.txt | column -t -s ',' > data/result-noPool.csv 
+	# from make bench/all > bench_result.txt
+	# sed -n -E 's/.*StructureBinding-(.*)-([0-9]+)/\1/p' bench_result.txt | column -t -s ' ' > data/structure_binding.csv
 
 plot:
 	gnuplot -c scripts/plot.gp
