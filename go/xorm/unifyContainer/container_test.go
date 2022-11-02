@@ -13,7 +13,7 @@ func BenchmarkContainer(b *testing.B) {
 
 	must(engine.Sync(new(Author)))
 
-	rowNums := []int{1000, 10000, 100000, 1000000}
+	rowNums := []int{1000, 10000, 100000, 200000, 500000, 1000000}
 
 	for _, rowNum := range rowNums {
 		authors := makeAuthors(rowNum)

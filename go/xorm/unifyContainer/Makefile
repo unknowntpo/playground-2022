@@ -28,9 +28,9 @@ bench/all:
 genData/all:
 	# @sed -n -E 's/BenchmarkContainer\/(.*)/\1/p' data/result_noPool.txt | column -t -s ',' > data/result-noPool.csv 
 	# from make bench/all > bench_result.txt
-	sed -n -E 's/.*StructureBinding-(.*)-([0-9]+)/\1/p' bench_result.txt | column -t -s ' ' > data/structBinding.csv
-	sed -n -E 's/.*UnifyContainerWithPool-(.*)-([0-9]+)/\1/p' bench_result.txt | column -t -s ' ' > data/unifyCon_withPool.csv
-	sed -n -E 's/.*UnifyContainerNoPool-(.*)-([0-9]+)/\1/p' bench_result.txt | column -t -s ' ' > data/unifyCon_noPool.csv
+	sed -n -E 's/.*StructureBinding-(.*)-([0-9]+)/\1/p' data/result_all.txt | column -t -s ' ' > data/structBinding.csv
+	sed -n -E 's/.*UnifyContainerWithPool-(.*)-([0-9]+)/\1/p' data/result_all.txt | column -t -s ' ' > data/unifyCon_withPool.csv
+	sed -n -E 's/.*UnifyContainerNoPool-(.*)-([0-9]+)/\1/p' data/result_all.txt | column -t -s ' ' > data/unifyCon_noPool.csv
 
 
 
