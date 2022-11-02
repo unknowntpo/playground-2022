@@ -13,6 +13,15 @@ import (
 type Author struct {
 	ID   int64 `xorm:"id pk autoincr"`
 	Name string
+	Col0 string
+	Col1 string
+	Col2 string
+	Col3 string
+	Col4 string
+	Col5 string
+	Col6 string
+	Col7 string
+	Col8 string
 }
 
 func (a Author) TableName() string {
@@ -46,7 +55,7 @@ func GetAllAuthorsStrSliceStdSQL(e xorm.Interface) [][]string {
 	for rows.Next() {
 		conRow := NewUnifyContainerRow()
 		// append to len equal to fields num in Author
-		authorFieldNum := 2
+		authorFieldNum := reflect.ValueOf(Author{}).NumField()
 		for i := 0; i < authorFieldNum; i++ {
 			conRow = append(conRow, "")
 		}
@@ -107,7 +116,18 @@ func makeAuthors(num int) []Author {
 	authors := []Author{}
 	names := []string{"Alice", "Bob", "Ally"}
 	for i := 0; i < num; i++ {
-		authors = append(authors, Author{Name: names[i%3]})
+		authors = append(authors, Author{
+			Name: names[i%3],
+			Col0: names[i%3],
+			Col1: names[i%3],
+			Col2: names[i%3],
+			Col3: names[i%3],
+			Col4: names[i%3],
+			Col5: names[i%3],
+			Col6: names[i%3],
+			Col7: names[i%3],
+			Col8: names[i%3],
+		})
 	}
 
 	return authors

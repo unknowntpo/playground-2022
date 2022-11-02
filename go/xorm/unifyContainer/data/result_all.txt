@@ -1,23 +1,23 @@
 goos: darwin
 goarch: arm64
 pkg: github.com/unknowntpo/playground-2022/go/xorm/unifyContainer
-BenchmarkContainer/StructureBinding-1000-8         	    1106	   1098660 ns/op	  587155 B/op	   24839 allocs/op
-BenchmarkContainer/UnifyContainerWithPool-1000-8   	     597	   6832354 ns/op	12288851 B/op	  237941 allocs/op
-BenchmarkContainer/UnifyContainerNoPool-1000-8     	    1314	    943704 ns/op	  421195 B/op	   20724 allocs/op
-BenchmarkContainer/StructureBinding-10000-8        	     169	   8050277 ns/op	 3840552 B/op	  149853 allocs/op
-BenchmarkContainer/UnifyContainerWithPool-10000-8  	     100	  14696531 ns/op	16778097 B/op	  374729 allocs/op
-BenchmarkContainer/UnifyContainerNoPool-10000-8    	     216	   5502213 ns/op	 2740197 B/op	  125734 allocs/op
-BenchmarkContainer/StructureBinding-100000-8       	      16	  68053018 ns/op	39526885 B/op	 1399874 allocs/op
-BenchmarkContainer/UnifyContainerWithPool-100000-8 	      31	  57750082 ns/op	58279060 B/op	 1515750 allocs/op
-BenchmarkContainer/UnifyContainerNoPool-100000-8   	      24	  52875422 ns/op	25707623 B/op	 1175745 allocs/op
-BenchmarkContainer/StructureBinding-200000-8       	       6	 185827319 ns/op	110089900 B/op	 3899885 allocs/op
-BenchmarkContainer/UnifyContainerWithPool-200000-8 	      10	 120580117 ns/op	90731856 B/op	 2754943 allocs/op
-BenchmarkContainer/UnifyContainerNoPool-200000-8   	       8	 148867375 ns/op	74017733 B/op	 3275752 allocs/op
-BenchmarkContainer/StructureBinding-500000-8       	       3	 486671194 ns/op	280926085 B/op	10149897 allocs/op
-BenchmarkContainer/UnifyContainerWithPool-500000-8 	       4	 317648729 ns/op	223899232 B/op	 6838580 allocs/op
-BenchmarkContainer/UnifyContainerNoPool-500000-8   	       3	 413290945 ns/op	189948592 B/op	 8525759 allocs/op
-BenchmarkContainer/StructureBinding-1000000-8      	       1	1103893916 ns/op	653280080 B/op	22649915 allocs/op
-BenchmarkContainer/UnifyContainerWithPool-1000000-8         	       2	 617956188 ns/op	360010576 B/op	12745896 allocs/op
-BenchmarkContainer/UnifyContainerNoPool-1000000-8           	       2	 853571333 ns/op	435101852 B/op	19025765 allocs/op
+BenchmarkContainer/StructureBinding-1000-8         	    2055	   5945488 ns/op	 2870657 B/op	   98003 allocs/op
+BenchmarkContainer/UnifyContainerWithPool-1000-8   	    2866	  18448843 ns/op	30672717 B/op	  619468 allocs/op
+BenchmarkContainer/UnifyContainerNoPool-1000-8     	    3270	   3642470 ns/op	 1511930 B/op	   74825 allocs/op
+BenchmarkContainer/StructureBinding-10000-8        	     336	  35622057 ns/op	18570775 B/op	  588324 allocs/op
+BenchmarkContainer/UnifyContainerWithPool-10000-8  	     480	  56689925 ns/op	79306545 B/op	 1784842 allocs/op
+BenchmarkContainer/UnifyContainerNoPool-10000-8    	     549	  21819366 ns/op	 9270526 B/op	  449834 allocs/op
+BenchmarkContainer/StructureBinding-100000-8       	      34	 326233495 ns/op	179328442 B/op	 5491455 allocs/op
+BenchmarkContainer/UnifyContainerWithPool-100000-8 	      68	 205318629 ns/op	150809037 B/op	 5130273 allocs/op
+BenchmarkContainer/UnifyContainerNoPool-100000-8   	      60	 199921878 ns/op	86641192 B/op	 4199844 allocs/op
+BenchmarkContainer/StructureBinding-200000-8       	      12	 917685771 ns/op	514535320 B/op	15297584 allocs/op
+BenchmarkContainer/UnifyContainerWithPool-200000-8 	      25	 474945102 ns/op	259696793 B/op	10979584 allocs/op
+BenchmarkContainer/UnifyContainerNoPool-200000-8   	      20	 554415652 ns/op	243749161 B/op	11699850 allocs/op
+BenchmarkContainer/StructureBinding-500000-8       	       5	2372695758 ns/op	1318100043 B/op	39813178 allocs/op
+BenchmarkContainer/UnifyContainerWithPool-500000-8 	       9	1174852931 ns/op	537060356 B/op	25483652 allocs/op
+BenchmarkContainer/UnifyContainerNoPool-500000-8   	       8	1429538438 ns/op	631677712 B/op	30449857 allocs/op
+BenchmarkContainer/StructureBinding-1000000-8      	       2	5333646854 ns/op	3035703156 B/op	88843839 allocs/op
+BenchmarkContainer/UnifyContainerWithPool-1000000-8         	       4	2617609802 ns/op	1200240596 B/op	55721095 allocs/op
+BenchmarkContainer/UnifyContainerNoPool-1000000-8           	       4	3169802021 ns/op	1420834820 B/op	67949866 allocs/op
 PASS
-ok  	github.com/unknowntpo/playground-2022/go/xorm/unifyContainer	36.100s
+ok  	github.com/unknowntpo/playground-2022/go/xorm/unifyContainer	339.474s

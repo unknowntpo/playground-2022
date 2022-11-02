@@ -1,5 +1,5 @@
 BENCHTIME?=10s
-all: bench
+all: bench/all genData/all plot
 
 bench/StructureBinding:
 	go test -benchmem -gcflags="-m" -benchtime=$(BENCHTIME) \

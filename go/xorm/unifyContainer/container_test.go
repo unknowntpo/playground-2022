@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"testing"
 
 	"xorm.io/xorm"
@@ -36,6 +37,7 @@ func BenchmarkContainer(b *testing.B) {
 				must(err)
 				_ = con
 			}
+			runtime.GC()
 		})
 
 		b.Run(fmt.Sprintf("UnifyContainerWithPool-%v", rowNum), func(b *testing.B) {
@@ -51,6 +53,7 @@ func BenchmarkContainer(b *testing.B) {
 				// fmt.Println("authors: ", showContent(con))
 				PutUnifyContainer(con)
 			}
+			runtime.GC()
 		})
 
 		b.Run(fmt.Sprintf("UnifyContainerNoPool-%v", rowNum), func(b *testing.B) {
@@ -66,6 +69,7 @@ func BenchmarkContainer(b *testing.B) {
 				_ = con
 				// fmt.Println(len(con))
 			}
+			runtime.GC()
 		})
 	}
 }
