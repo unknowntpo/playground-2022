@@ -8,7 +8,7 @@ set xtics rotate by -45
 
 set size ratio 2 1, 1
 # set size 3, 0.5
-set key right top
+set key left top
 set key font ",10"
 set term svg size 1000, 700
 
@@ -19,6 +19,8 @@ set multiplot layout 1, 3 title 'Container Performance Comparison' font 'Verdana
 set title 'cpu time per operation'
 set xlabel 'number of rows'
 set ylabel 'ns/op'
+
+set logscale y 10
 
 plot 'data/structBinding.csv' u 3:xtic(1) w linespoints title 'struct Binding', \
 'data/unifyCon_noPool.csv' u 3:xtic(1) w linespoints title 'unifyCon noPool', \
