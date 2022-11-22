@@ -40,41 +40,57 @@ locals {
 }
 
 provider "digitalocean" {
-    token = var.DO_TOKEN
+  token = var.DO_TOKEN
 }
 
-resource "digitalocean_droplet" "droplet" {
-  image     = "ubuntu-20-04-x64"
-  name      = "kube01"
-  region    = local.regions.singapore
-  size      = local.sizes.nano
-  tags      = [digitalocean_tag.kube.id]
-#   user_data = <<EOF
-# #cloud-config
-# groups:
-#   - ubuntu: [root,sys]
-# # Add users to the system. Users are added after groups are added.
-# users:
-#   - default
-#   - name: kube
-#     gecos: kube
-#     shell: /bin/bash
-#     primary_group: kube
-#     sudo: ALL=(ALL) NOPASSWD:ALL
-#     groups: users, admin, docker
-#     lock_passwd: false
-#     ssh_authorized_keys:
-#       - ssh-rsa 
-  
-# runcmd:
-#   - sudo apt-get -y update
-#   - sudo apt -y install apt-transport-https ca-certificates curl software-properties-common net-tools
-#   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-#   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-#   - sudo apt -y update
-#   - sudo apt-cache policy docker-ce && apt-get -y install docker-ce
-#   - sudo usermod -aG docker lesha
-# EOF
+resource "digitalocean_droplet" "droplet01" {
+  image  = "ubuntu-20-04-x64"
+  name   = "kube01"
+  region = local.regions.singapore
+  size   = local.sizes.nano
+  tags   = [digitalocean_tag.kube.id]
+  #   user_data = <<EOF
+  # #cloud-config
+  # groups:
+  #   - ubuntu: [root,sys]
+  # # Add users to the system. Users are added after groups are added.
+  # users:
+  #   - default
+  #   - name: kube
+  #     gecos: kube
+  #     shell: /bin/bash
+  #     primary_group: kube
+  #     sudo: ALL=(ALL) NOPASSWD:ALL
+  #     groups: users, admin, docker
+  #     lock_passwd: false
+  #     ssh_authorized_keys:
+  #       - ssh-rsa 
+
+  # runcmd:
+  #   - sudo apt-get -y update
+  #   - sudo apt -y install apt-transport-https ca-certificates curl software-properties-common net-tools
+  #   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  #   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+  #   - sudo apt -y update
+  #   - sudo apt-cache policy docker-ce && apt-get -y install docker-ce
+  #   - sudo usermod -aG docker lesha
+  # EOF
+}
+
+resource "digitalocean_droplet" "droplet02" {
+  image  = "ubuntu-20-04-x64"
+  name   = "kube02"
+  region = local.regions.singapore
+  size   = local.sizes.nano
+  tags   = [digitalocean_tag.kube.id]
+}
+
+resource "digitalocean_droplet" "droplet03" {
+  image  = "ubuntu-20-04-x64"
+  name   = "kube03"
+  region = local.regions.singapore
+  size   = local.sizes.nano
+  tags   = [digitalocean_tag.kube.id]
 }
 
 # Create a new tag
@@ -85,6 +101,6 @@ resource "digitalocean_tag" "kube" {
 #output
 
 output "ip_address" {
-  value       = digitalocean_droplet.droplet.ipv4_address
+  value       = digitalocean_droplet.droplet01.ipv4_address
   description = "The public IP address of your droplet."
 }
