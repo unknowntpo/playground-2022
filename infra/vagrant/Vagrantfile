@@ -1,0 +1,15 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "jeffnoxon/ubuntu-20.04-arm64"
+  # config.vm.box = "bento/ubuntu-18.04"
+  config.vm.hostname = 'k8s-dev'
+  config.vm.define vm_name = 'k8s'
+
+  config.vm.network :private_network, ip: "172.17.8.111"
+  config.vm.provider "parallels" do |v|
+    v.memory = 8192
+    v.cpus = 4
+  end
+end

@@ -1,0 +1,4 @@
+.vagrant/
+.terraform/
+# ignore .tfstate https://ithelp.ithome.com.tw/articles/10259586
+.tfstate
