@@ -13,7 +13,7 @@ virtualmachines:
       ansible_ssh_common_args: '-F /Users/unknowntpo/repo/unknowntpo/playground-2022/vagrant/docker/vagrant-ssh'
     droplet:
       ansible_host: kube.unknowntpo.com
-      ansible_user: root
+      ansible_user: kube
 
 
 

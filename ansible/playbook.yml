@@ -51,3 +51,10 @@
       include_tasks: ./subtasks/install-bpftrace.yml
     - name: Install golang v1.19.2
       include_tasks: ./subtasks/install-golang.yml
+
+- name: Install minikube
+  hosts: droplet
+  tasks:
+    - name: Download and Install
+      include_tasks: ./subtasks/install-minikube.yml
+
