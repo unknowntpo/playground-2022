@@ -43,12 +43,26 @@ provider "digitalocean" {
   token = var.DO_TOKEN
 }
 
-resource "digitalocean_droplet" "droplet01" {
-  image  = "ubuntu-20-04-x64"
-  name   = "kube01"
-  region = local.regions.singapore
-  size   = local.sizes.nano
-  tags   = [digitalocean_tag.kube.id]
+# https://nickolasfisher.com/blog/How-to-Create-a-Digital-Ocean-Droplet-using-Terraform
+data "digitalocean_ssh_key" "my_ssh_key" {
+  name = "MacBook"
+}
+
+data "digitalocean_ssh_keys" "keys" {
+  sort {
+    key       = "name"
+    direction = "asc"
+  }
+}
+
+resource "digitalocean_droplet" "droplets" {
+  count    = 3
+  image    = "ubuntu-20-04-x64"
+  name     = "kube${count.index}"
+  region   = local.regions.singapore
+  size     = local.sizes.nano
+  tags     = [digitalocean_tag.kube.id]
+  ssh_keys = [data.digitalocean_ssh_key.my_ssh_key.id]
   #   user_data = <<EOF
   # #cloud-config
   # groups:
@@ -77,30 +91,7 @@ resource "digitalocean_droplet" "droplet01" {
   # EOF
 }
 
-resource "digitalocean_droplet" "droplet02" {
-  image  = "ubuntu-20-04-x64"
-  name   = "kube02"
-  region = local.regions.singapore
-  size   = local.sizes.nano
-  tags   = [digitalocean_tag.kube.id]
-}
-
-resource "digitalocean_droplet" "droplet03" {
-  image  = "ubuntu-20-04-x64"
-  name   = "kube03"
-  region = local.regions.singapore
-  size   = local.sizes.nano
-  tags   = [digitalocean_tag.kube.id]
-}
-
 # Create a new tag
 resource "digitalocean_tag" "kube" {
   name = "kube"
-}
-
-#output
-
-output "ip_address" {
-  value       = digitalocean_droplet.droplet01.ipv4_address
-  description = "The public IP address of your droplet."
 }
