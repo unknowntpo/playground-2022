@@ -44,8 +44,12 @@ provider "digitalocean" {
 }
 
 # https://nickolasfisher.com/blog/How-to-Create-a-Digital-Ocean-Droplet-using-Terraform
-data "digitalocean_ssh_key" "my_ssh_key" {
+data "digitalocean_ssh_key" "ssh_key_macbook" {
   name = "MacBook"
+}
+
+data "digitalocean_ssh_key" "ssh_key_mtk_mac_mini" {
+  name = "MTK_Mac_Mini"
 }
 
 data "digitalocean_ssh_keys" "keys" {
@@ -62,7 +66,7 @@ resource "digitalocean_droplet" "droplets" {
   region   = local.regions.singapore
   size     = local.sizes.nano
   tags     = [digitalocean_tag.kube.id]
-  ssh_keys = [data.digitalocean_ssh_key.my_ssh_key.id]
+  ssh_keys = [data.digitalocean_ssh_key.ssh_key_macbook.id, data.digitalocean_ssh_key.ssh_key_mtk_mac_mini.id]
   #   user_data = <<EOF
   # #cloud-config
   # groups:
