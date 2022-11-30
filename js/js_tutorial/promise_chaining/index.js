@@ -1,3 +1,6 @@
+
+// Ref: https://www.javascripttutorial.net/es6/promise-chaining/
+
 function getUser(userId) {
     return new Promise((resolve, reject) => {
         console.log('Get user from the database')
