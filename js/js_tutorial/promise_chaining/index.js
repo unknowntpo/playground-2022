@@ -35,3 +35,16 @@ getUser(100)
     .then(getServices)
     .then(getServiceCost)
     .then(console.log);
+
+function fakePromise(value) {
+    return new Promise((resolve, reject) => {
+        resolve(value)
+    })
+}
+
+fakePromise(30).then((value) => {
+    console.log(`value in first promise: ${value}`)
+    return value + 1
+}).then((value) => {
+    console.log(`value in second promise: ${value}`)
+})
