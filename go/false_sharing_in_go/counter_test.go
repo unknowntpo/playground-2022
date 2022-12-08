@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-const NCPU = 4
-const INCREMENT_TIME = 10000
+const NCPU = 8
+const INCREMENT_TIME = 1000
 
 func testIncrementAll(c Counter) {
 
@@ -15,7 +15,9 @@ func testIncrementAll(c Counter) {
 	for cpu := 0; cpu < NCPU; cpu++ {
 		go func(i int) {
 			for j := 0; j < INCREMENT_TIME; j++ {
-				c.Increment()
+				for k := 0; k < INCREMENT_TIME; k++ {
+					c.Increment()
+				}
 			}
 			wg.Done()
 		}(cpu)

@@ -1,6 +1,6 @@
-all: pad/nopad false_sharing
+all: pad_nopad false_sharing
 
-pad/nopad:
+pad_nopad:
 	go test -v ./... -bench="Benchmark(No|)Pad"
 
 false_sharing:
