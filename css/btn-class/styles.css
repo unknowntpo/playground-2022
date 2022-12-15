@@ -1,0 +1,20 @@
+.btn {
+    color: red;
+    margin: 30px;
+    border: 30px;
+    border-color: blue;
+    padding: 30px;
+    background-color: gray;
+}
+
+.btn1 {
+    color: blue
+}
+
+/* CSS combination why we cant use .btn2.btn3 
+  Ref: https://css-tricks.com/multiple-class-id-selectors/
+  ? */
+.btn2,
+.btn3 {
+    color: white
+}
