@@ -1,0 +1,17 @@
+#box1 {
+    border: 1px solid;
+    height: 50px;
+    width: 50px;
+    background-color: skyblue;
+    position: relative;
+}
+
+#box2 {
+    /* border: 0px solid; */
+    height: 30px;
+    width: 30px;
+    background-color: tomato;
+    position: absolute;
+    margin-right: auto;
+    margin-left: auto;
+}
