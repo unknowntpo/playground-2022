@@ -1,0 +1,18 @@
+.parent {
+    background-color: #48B2F9;
+}
+
+.child-one {
+    background-color: #48F98B;
+    position: relative;
+    top: 10px;
+    left: 10px;
+}
+
+.child-two {
+    background-color: #F19797;
+}
+
+.child-three {
+    background-color: #FD9BF1;
+}
