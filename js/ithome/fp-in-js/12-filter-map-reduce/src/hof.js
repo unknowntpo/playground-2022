@@ -20,13 +20,12 @@ var taskList = [
 
 function Filter(array, fn) {
     let filterTask = []
-
-    for (let i = 0; i < array.length; i++) {
+    array.forEach((e, i) => {
         ifTrue(
             fn(array[i]),
             () => filterTask.push(array[i])
         )
-    }
+    })
     return filterTask
 }
 
