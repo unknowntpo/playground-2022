@@ -22,11 +22,18 @@ function Filter(array, fn) {
     let filterTask = []
 
     for (let i = 0; i < array.length; i++) {
-        if (fn(array[i])) {
-            filterTask.push(array[i])
-        }
+        ifTrue(
+            fn(array[i]),
+            () => filterTask.push(array[i])
+        )
     }
     return filterTask
+}
+
+function ifTrue(isTrue, fn) {
+    if (isTrue) {
+        fn()
+    }
 }
 
 const filterPending = Filter(taskList, list =>
