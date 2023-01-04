@@ -74,11 +74,19 @@ describe("Map", () => {
     })
 })
 
-const count = Map([1, 2, 3], (x) => x + 1)
-
-console.log(count) // => [2, 3, 4]
-
-module.exports = {
-    filterPending,
-    filterIDis1,
+function Reduce(array, fn, initValue) {
+    let acc = initValue
+    array.forEach((e) => {
+        acc = fn(acc, e)
+    })
+    return acc
 }
+
+describe("Reduce", () => {
+    test("apply Reduce to [1,2,3,4] to get sum", () => {
+        input = [1, 2, 3, 4]
+        expect(
+            Reduce(input, (acc, e) => acc + e, 0)
+        ).toEqual(input.reduce((acc, e) => acc + e, 0))
+    })
+})
