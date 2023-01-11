@@ -20,6 +20,6 @@ def cache():
 
 
 def test_cache(cache):
-    lru_cache = cache.lru_cache_new(10, C.free)
+    lru_cache = cache.queue_new(10, C.free)
     assert lru_cache
-    cache.lru_cache__destroy(lru_cache)
+    cache.queue__destroy(lru_cache)
