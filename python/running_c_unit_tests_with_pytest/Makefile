@@ -14,3 +14,6 @@ endif
 test: build
 	pytest $(VERBOSE_FLAG)
 
+test/in_the_wild: 
+	cd in_the_wild && pytest $(VERBOSE_FLAG) ./tests/cunit
+

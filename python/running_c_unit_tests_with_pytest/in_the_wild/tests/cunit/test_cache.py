@@ -3,7 +3,13 @@ from ctypes import CDLL
 import pytest
 from tests.cunit import SRC, compile
 
-C = CDLL("libc.so.6")
+
+import platform
+if platform.system() == "Linux":
+    C = CDLL("libc.so.6")
+else:
+    # For MacOS
+    C = CDLL("/usr/lib/libc.dylib")
 
 
 @pytest.fixture
