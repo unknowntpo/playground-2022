@@ -20,4 +20,9 @@ setup:
 ## build: build binaries.
 build:
 	meson compile -C $(BUILDDIR)
+
+## test: run all tests.
+test:
+	meson test -C $(BUILDDIR)
 	
+.PHONY: help setup build test
