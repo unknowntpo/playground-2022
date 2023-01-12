@@ -17,7 +17,8 @@ func must(err error) {
 }
 
 type Author struct {
-	Name string
+	ID   int64  `xorm:"id pk autoincr" json:"id,omitempty"`
+	Name string `xorm:"name text" json:"name,omitempty"`
 }
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
