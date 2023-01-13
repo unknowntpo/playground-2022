@@ -17,6 +17,11 @@ BUILDDIR ?= build
 setup:
 	meson setup $(BUILDDIR)
 
+## setup/reconfigure: reconfigure a build directory for meson.
+setup/reconfigure:
+	meson setup --reconfigure $(BUILDDIR)
+
+
 ## build: build binaries.
 build:
 	meson compile -C $(BUILDDIR)
@@ -24,5 +29,9 @@ build:
 ## test: run all tests.
 test:
 	meson test -C $(BUILDDIR)
+
+## clean: clean all artefacts.
+clean:
+	-rm -rf build
 	
-.PHONY: help setup build test
+.PHONY: help setup build test clean
