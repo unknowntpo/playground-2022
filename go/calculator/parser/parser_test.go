@@ -1,10 +1,8 @@
-package parser_test
+package parser
 
 import (
 	"fmt"
 	"testing"
-
-	"github.com/unknowntpo/playground-2022/go/calculator/parser"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -17,20 +15,40 @@ func TestParser(t *testing.T) {
 
 var _ = Describe("parser", func() {
 	var (
-		p   *parser.Parser
-		res *parser.Result
+		p   *Parser
+		res *Result
 	)
 	When("parser.Parse is called", func() {
 		BeforeEach(func() {
-			p = parser.NewParser()
+			p = NewParser()
 			res = p.Parse()
 		})
 
 		It("Should return correct parse tree", func() {
 			fmt.Println(res)
-			_ = res
-			Expect(res.String()).To(Equal(""))
 
+			want := &Result{
+				Root: &Node{
+					Token: Token{
+						Type:    ADD,
+						Literal: "+",
+					},
+					Left: &Node{
+						Token: Token{
+							Type:    NUM,
+							Literal: "1",
+						},
+					},
+					Right: &Node{
+						Token: Token{
+							Type:    NUM,
+							Literal: "2",
+						},
+					},
+				},
+			}
+
+			Expect(res).To(Equal(want))
 		})
 	})
 })
