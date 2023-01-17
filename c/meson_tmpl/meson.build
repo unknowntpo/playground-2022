@@ -6,7 +6,7 @@ project('cdemo', 'c', 'cpp',
 
 # Demo module sources
 module_sources = [
-    'module/add.c'
+    'add/add.c'
 ]
 
 # Dependencies
