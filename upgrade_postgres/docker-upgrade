@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+echo 'PGDATAOLD: $PGDATAOLD'
+echo 'PGDATANEW: $PGDATANEW'
+
+mkdir -p "$PGDATAOLD" "$PGDATANEW"
+chmod 700 "$PGDATAOLD" "$PGDATANEW"
+chown postgres .
+chown -R postgres "$PGDATAOLD" "$PGDATANEW"
+exec gosu postgres "$BASH_SOURCE" "$@"

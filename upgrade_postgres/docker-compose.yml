@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:9.6
+    restart: always
+    ports:
+      - "5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: testdb
+      POSTGRES_PASSWORD: postgres
+  upgrade:
+    image: pg_upgrade_9.6_14
+    restart: always
+    ports:
+      - "5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+volumes:
+  pg-data:
