@@ -1,4 +1,4 @@
-sources = ['main.c', 'module/add.c']
+sources = ['main.c', 'add/add.c']
 
 sources += module_sources
 

@@ -18,7 +18,18 @@ func (r *Result) String() string {
 	return string(b)
 }
 
-func (p *Parser) Parse() *Result {
+func forEach[T any](collections []T, iterFn func(e T, idx int)) {
+	for i, e := range collections {
+		iterFn(e, i)
+	}
+}
+
+func (p *Parser) Parse(tokens []Token) *Result {
+	// Do some parse things
+	// tree := &Result{}
+	forEach(tokens, func(e Token, idx int) {
+		//	e.BuildTree()
+	})
 	return &Result{
 		Root: &Node{
 			Token: Token{
