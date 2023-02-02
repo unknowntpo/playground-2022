@@ -8,10 +8,12 @@ services:
       - "5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
+      - old_bin:/usr/lib/postgresql/9.6/bin
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: testdb
       POSTGRES_PASSWORD: postgres
+
   upgrade:
     image: pg_upgrade_9.6_14
     restart: always
@@ -19,5 +21,7 @@ services:
       - "5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
+      - old_bin:/usr/lib/postgresql/9.6/bin
 volumes:
   pg-data:
+  old_bin:

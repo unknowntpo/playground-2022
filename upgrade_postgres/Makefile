@@ -12,12 +12,24 @@ IMG ?= pg_upgrade_9.6_14
 build/image:
 	docker build -t $(IMG) . --target=final
 
+## db/setup: start original 9.6 postgres instance and add dummy data
+db/setup: db/init db/adddata
+	@echo 'db setup complete'
+
 ## db/init: start original 9.6 postgres instance
 db/init:
 	docker-compose up -d db
 
+## db/stop: start original 9.6 postgres instance
+db/stop:
+	docker-compose stop db
+
+## db/check: check if postgres is availabe 
+db/check:
+	./wait.sh
+
 ## db/adddata: add some data to postgres instance
-db/adddata:
+db/adddata: db/check
 	docker-compose exec db psql -U postgres -d postgres -c 'select generate_series(1,100) into foo;'
 ## db/connect: connect to postgres instanct
 db/connect:
@@ -33,7 +45,14 @@ upgrade/connect:
 db/upgrade:
 	docker-compose up -d upgrade
 	docker-compose exec upgrade gosu postgres bash -c 'cd /home/postgres && echo hello'
-	 docker-compose exec upgrade gosu postgres bash -c 'cd /home/postgres && \
+
+  # Init new version of db
+	docker-compose exec upgrade gosu postgres bash -c 'cd /home/postgres && \
+		$$PGBINNEW/pg_ctl \
+		init -D $$PGDATANEW'
+
+  # Do actual upgrade
+	docker-compose exec upgrade gosu postgres bash -c 'cd /home/postgres && \
 		$$PGBINNEW/pg_upgrade \
 		--old-bindir=$$PGBINOLD/ \
 		--new-bindir=$$PGBINGNEW/ \
@@ -44,5 +63,5 @@ db/upgrade:
 ## clean: clean artifects 
 clean:
 	-rm -rf ./postgresql
-	docker-compose rm -f upgrade db
+	docker-compose down -v
 
