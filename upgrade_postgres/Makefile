@@ -26,7 +26,7 @@ db/stop:
 
 ## db/check: check if postgres is availabe 
 db/check:
-	./wait.sh
+	./wait.sh	
 
 ## db/adddata: add some data to postgres instance
 db/adddata: db/check
