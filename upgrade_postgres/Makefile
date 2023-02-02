@@ -56,8 +56,8 @@ db/upgrade:
 		$$PGBINNEW/pg_upgrade \
 		--old-bindir=$$PGBINOLD/ \
 		--new-bindir=$$PGBINGNEW/ \
-		--old-datadir=$$PGBINOLD \
-		--new-datadir=$$PGDATANEW --check'
+		--old-datadir=$$PGDATAOLD \
+		--new-datadir=$$PGDATANEW'
  
 
 ## clean: clean artifects 
