@@ -1,5 +1,5 @@
 comment = 'Simple extension that logs query planner decisions'
 default_version = '1.0'
-module_pathname = '/opt/homebrew/share/postgresql@14/extension/plannerlog--1.0.sql'
+module_pathname = '/opt/homebrew/share/postgresql@14/extension'
 relocatable = false
 schema = public

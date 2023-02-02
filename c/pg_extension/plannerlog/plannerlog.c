@@ -1,24 +1,43 @@
 #include "postgres.h"
-#include "nodes/execnodes.h"
+#include "fmgr.h"
+#include "funcapi.h"
+#include "access/reloptions.h"
+#include "catalog/pg_type.h"
 #include "optimizer/planner.h"
-#include "optimizer/planmain.h"
-#include "utils/elog.h"
-#include "executor/spi.h"
+#include "utils/rel.h"
 
+PG_MODULE_MAGIC;
+
+/* The hook function */
 static PlannedStmt *
 plannerlog_hook(Query *parse, int cursorOptions, ParamListInfo boundParams)
 {
-    PlannedStmt *result;
+    PlannedStmt *stmt;
 
-    result = standard_planner(parse, cursorOptions, boundParams);
+    /* Call the previous hook */
+    stmt = standard_planner(parse, cursorOptions, boundParams);
 
-    /* Log the decision made by the query planner here */
-    ereport(NOTICE, (errmsg("Query planner decision: %s", decision_str)));
+    /* Log the statement */
+    elog(LOG, "Executing statement: %s", nodeToString(stmt));
 
-    return result;
+    return stmt;
 }
 
-void _PG_init(void)
+/* Install the hook */
+void
+_PG_init(void)
 {
+    /* Save the previous hook function */
+    prev_planner_hook = planner_hook;
+
+    /* Install the hook function */
     planner_hook = plannerlog_hook;
+}
+
+/* Uninstall the hook */
+void
+_PG_fini(void)
+{
+    /* Restore the previous hook function */
+    planner_hook = prev_planner_hook;
 }
