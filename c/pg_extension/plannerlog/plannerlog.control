@@ -1,5 +1,5 @@
-comment = 'Simple extension that logs query planner decisions'
+# hello_fdw extension
+comment = 'example foreign data wrapper for PostgreSQL!'
 default_version = '1.0'
-module_pathname = '/opt/homebrew/share/postgresql@14/extension/plannerlog--1.0.sql'
+module_pathname = '$libdir/plannerlog'
 relocatable = false
-schema = public
