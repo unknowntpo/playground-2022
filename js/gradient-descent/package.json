@@ -1,0 +1,12 @@
+{
+  "name": "gradient-descent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node gd.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
