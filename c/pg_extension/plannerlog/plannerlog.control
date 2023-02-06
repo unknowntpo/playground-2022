@@ -1,4 +1,4 @@
-# hello_fdw extension
+# plannerlog extension
 comment = 'example foreign data wrapper for PostgreSQL!'
 default_version = '1.0'
 module_pathname = '$libdir/plannerlog'
