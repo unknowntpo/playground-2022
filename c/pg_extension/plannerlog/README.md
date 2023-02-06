@@ -13,7 +13,7 @@ shared_preload_libraries = 'plannerlog.so'	# (change requires restart)
 To find the location of `postgres.conf`, use this command in `psql`:
 
 ```
-xxx=# show config_file;
+unknowntpo=# show config_file;
                 config_file                 
 --------------------------------------------
  /opt/homebrew/var/postgres/postgresql.conf
