@@ -9,8 +9,6 @@
 
 PG_MODULE_MAGIC;
 
-PG_FUNCTION_INFO_V1(query_histogram);
-
 PlannedStmt *
 plannerlog_hook(Query *parse, const char *query_string,
 				int cursorOptions,
@@ -24,27 +22,19 @@ plannerlog_hook(Query *parse, const char *query_string,
 {
 	PlannedStmt *stmt;
 
-	pg_usleep(1000000L);
+	// pg_usleep(1000000L);
 
 	/* Call the previous hook */
-	// extern PlannedStmt *standard_planner(Query *parse, const char *query_string,
-	// 									 int cursorOptions,
-	// 									 ParamListInfo boundParams);
-
-	fprintf(stderr, "hello error: %d\n", 1);
+	extern PlannedStmt *standard_planner(Query * parse, const char *query_string,
+										 int cursorOptions,
+										 ParamListInfo boundParams);
 
 	stmt = standard_planner(parse, query_string, cursorOptions, boundParams);
 
 	/* Log the statement */
-	ereport(ERROR, "Executing statement: %s", nodeToString(stmt));
+	ereport(NOTICE, errmsg("Executing statement: %s", nodeToString(stmt)));
 
-	ereport(FATAL,
-			(errcode(ERRCODE_UNIQUE_VIOLATION)));
-
-	errbacktrace();
-
-	return NULL;
-	// return stmt;
+	return stmt;
 }
 
 PGDLLIMPORT planner_hook_type prev_planner_hook;

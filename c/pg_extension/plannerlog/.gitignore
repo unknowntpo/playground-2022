@@ -1,2 +1,2 @@
-hello_fdw.so
-hello_fdw.o
+*.so
+*.o
