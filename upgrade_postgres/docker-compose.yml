@@ -8,7 +8,8 @@ services:
       - "5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
-      - old_bin:/usr/lib/postgresql/9.6/bin
+      - old_bin:/usr/lib/postgresql/9.6
+      - old_share:/usr/share/postgresql/9.6
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: testdb
@@ -21,7 +22,9 @@ services:
       - "5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
-      - old_bin:/usr/lib/postgresql/9.6/bin
+      - old_bin:/usr/lib/postgresql/9.6
+      - old_share:/usr/share/postgresql/9.6
 volumes:
   pg-data:
   old_bin:
+  old_share:
