@@ -8,8 +8,8 @@ package main
 
 // Injectors from wire.go:
 
-func InitializeEvent() Event {
-	message := NewMessage()
+func InitializeEvent(msg string) Event {
+	message := NewMessage(msg)
 	greeter := NewGreeter(message)
 	event := NewEvent(greeter)
 	return event

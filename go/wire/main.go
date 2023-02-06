@@ -4,8 +4,8 @@ import "fmt"
 
 type Message string
 
-func NewMessage() Message {
-	return Message("Hi there!")
+func NewMessage(msg string) Message {
+	return Message(msg)
 }
 
 func NewGreeter(m Message) Greeter {
@@ -34,6 +34,6 @@ func (e Event) Start() {
 }
 
 func main() {
-	e := InitializeEvent()
+	e := InitializeEvent("Hello, wire")
 	e.Start()
 }
