@@ -51,11 +51,13 @@ db/upgrade:
 		$$PGBINNEW/pg_ctl \
 		init -D $$PGDATANEW'
 
+	docker-compose stop db
+
   # Do actual upgrade
 	docker-compose exec upgrade gosu postgres bash -c 'cd /home/postgres && \
 		$$PGBINNEW/pg_upgrade \
-		--old-bindir=$$PGBINOLD/ \
-		--new-bindir=$$PGBINGNEW/ \
+		--old-bindir=$$PGBINOLD \
+		--new-bindir=$$PGBINGNEW \
 		--old-datadir=$$PGDATAOLD \
 		--new-datadir=$$PGDATANEW'
  

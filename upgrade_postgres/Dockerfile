@@ -17,6 +17,9 @@ ENV PGDATANEW /var/lib/postgresql/14/data
 RUN mkdir -p "$PGDATAOLD" "$PGDATANEW" && \
 	chown -R postgres:postgres /var/lib/postgresql/*
 
+# RUN chown -R postgres:postgres $PGBINOLD/*
+RUN chown -R postgres:postgres $PGBINNEW/*
+
 RUN mkdir -p /home/postgres && \
 	chown -R postgres:postgres /home/postgres
 
