@@ -1,0 +1,14 @@
+# Use the Go base image
+FROM golang:1.20-buster
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the source code
+COPY . .
+
+# Build the worker service
+RUN go build -o worker ./worker
+
+# Start the worker service
+CMD ["./worker"]
