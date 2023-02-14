@@ -13,7 +13,7 @@ import (
 func BenchmarkContainer(b *testing.B) {
 	// 8 worker do 16 jobs
 	var workerNum = runtime.NumCPU()
-	var jobNum = workerNum * 1
+	var jobNum = workerNum * 4
 
 	jobChan := make(chan func(b *testing.B), jobNum)
 	doneChan := make(chan struct{}, jobNum)
@@ -40,7 +40,9 @@ func BenchmarkContainer(b *testing.B) {
 
 	must(engine.Sync(new(Author)))
 
-	rowNums := []int{1000, 3000, 5000, 7000, 9000, 11000, 13000, 15000, 17000, 19000, 21000}
+	// rowNums := []int{1000, 3000, 5000, 7000, 9000, 11000, 13000, 15000, 17000, 19000, 21000}
+
+	rowNums := []int{1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000}
 
 	for _, rowNum := range rowNums {
 		resetDB(engine)

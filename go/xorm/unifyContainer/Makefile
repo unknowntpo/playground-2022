@@ -1,4 +1,4 @@
-BENCHTIME?=10s
+BENCHTIME?=1s
 all: bench/all genData/all plot
 
 bench/StructureBinding:
