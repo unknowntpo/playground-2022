@@ -44,6 +44,7 @@ func GetAllAuthorsStrSliceStdSQL(e xorm.Interface) [][]string {
 	sess := e.(*xorm.Session)
 	b := builder.Dialect("sqlite3").Select("*").From("author")
 	sql, err := b.ToBoundSQL()
+	must(err)
 
 	// rows, err := e.SQL(b).Rows()
 	// must(err)
@@ -52,6 +53,9 @@ func GetAllAuthorsStrSliceStdSQL(e xorm.Interface) [][]string {
 	// rows, err := sess.SQL(b).Query()
 	// must(err)
 	con := NewUnifyContainer()
+
+	fmt.Println("conLen", len(con), "conCap", cap(con))
+
 	for rows.Next() {
 		conRow := NewUnifyContainerRow()
 		// append to len equal to fields num in Author

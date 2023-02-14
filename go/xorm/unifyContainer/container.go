@@ -21,7 +21,7 @@ var unifyContainerRowPool = sync.Pool{
 
 func NewUnifyContainer() [][]string {
 	con := unifyContainerPool.Get().([][]string)
-	return con
+	return con[:0]
 }
 
 func PutUnifyContainer(con [][]string) {
