@@ -1,4 +1,4 @@
-BENCHTIME?=10s
+BENCHTIME?=1s
 all: bench/all genData/all plot
 
 bench/StructureBinding:
@@ -21,9 +21,8 @@ bench/UnifyContainerNoPool:
 
 bench/all:
 	go test -benchmem -benchtime=$(BENCHTIME) \
-		-bench=BenchmarkContainer \
-		-cpuprofile=data/all_cpu.prof \
-		-memprofile=data/alL_mem.prof | tee data/result_all.txt
+		-bench=. \
+		| tee data/result_all.txt
 
 genData/all:
 	# @sed -n -E 's/BenchmarkContainer\/(.*)/\1/p' data/result_noPool.txt | column -t -s ',' > data/result-noPool.csv 

@@ -20,7 +20,7 @@ set title 'cpu time per operation'
 set xlabel 'number of rows'
 set ylabel 'ns/op'
 
-set logscale y 10
+# set logscale y 10
 
 plot 'data/structBinding.csv' u 3:xtic(1) w linespoints title 'struct Binding', \
 'data/unifyCon_noPool.csv' u 3:xtic(1) w linespoints title 'unifyCon noPool', \
