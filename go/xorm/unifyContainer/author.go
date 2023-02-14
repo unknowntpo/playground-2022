@@ -54,8 +54,6 @@ func GetAllAuthorsStrSliceStdSQL(e xorm.Interface) [][]string {
 	// must(err)
 	con := NewUnifyContainer()
 
-	fmt.Println("conLen", len(con), "conCap", cap(con))
-
 	for rows.Next() {
 		conRow := NewUnifyContainerRow()
 		// append to len equal to fields num in Author
