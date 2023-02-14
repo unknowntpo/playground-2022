@@ -40,20 +40,17 @@ func BenchmarkContainer(b *testing.B) {
 
 	must(engine.Sync(new(Author)))
 
-	// if we use file db, we need to make sure that author table is empty
-	resetDB(engine)
-
 	rowNums := []int{1000, 10000, 100000, 200000, 500000, 1000000}
 
 	for _, rowNum := range rowNums {
+		resetDB(engine)
+
 		authors := makeAuthors(rowNum)
 
 		// avoid max arg limit
 		step := 1000
 		for i := 0; i < rowNum; i += step {
 			insertAuthors(engine, authors[i:i+step])
-			fmt.Println("row num:", rowNum, "steps", step)
-			i += step
 		}
 
 		b.Run(fmt.Sprintf("StructureBinding-%v", rowNum), func(b *testing.B) {
@@ -126,7 +123,6 @@ func BenchmarkContainer(b *testing.B) {
 			}
 			runtime.GC()
 		})
-		resetDB(engine)
 	}
 }
 
