@@ -17,20 +17,25 @@ updateReq:
 
 VENV=./venv
 
-## activate: activate new venv
-activate:
+## venv/activate: activate new venv
+venv/activate:
 	source $(VENV)/bin/activate
 
-## deactivate: deactive venv
-deactivate:
+## venv/deactivate: deactive venv
+venv/deactivate:
 	deactivate
 
-## install: install required deps
-install:
+## venv/init: init new venv
+venv/init:
 	virtualenv $(VENV)
 	# https://stackoverflow.com/a/24736236/13919518
 	source $(VENV)/bin/activate; \
 	pip3 install -r requirements.txt; \
+
+## run/manager: run manager
+run/manager:
+	python3 manager.py
+
 
 ## clean: cleanup venv
 clean:
