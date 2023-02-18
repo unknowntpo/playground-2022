@@ -25,13 +25,13 @@ func (r *Ring[T]) Push(item T) {
 
 	r.buf[r.head] = item
 
-	lastIdx := len(r.buf) - 1
-	if int(r.head) < lastIdx {
-		r.head++
-	} else {
+	isLastIdx := int(r.head) == len(r.buf)-1
+	if isLastIdx {
 		r.head = 0
+	} else {
+		r.head++
+		r.size += 1
 	}
-	r.size += 1
 }
 
 func (r *Ring[T]) Pop() T {
