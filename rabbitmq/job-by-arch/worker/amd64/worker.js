@@ -5,7 +5,7 @@ var channel, connection;
 var channel, connection;  //global variables
 async function connectQueue() {
     try {
-        connection = await amqp.connect("amqp://localhost:5672");
+        connection = await amqp.connect("amqp://127.0.0.1:5672");
         channel = await connection.createChannel()
 
         await channel.assertQueue("test-queue")
@@ -17,7 +17,7 @@ async function connectQueue() {
 
 async function receiveFromQueue(queueuName) {
     try {
-        const connection = await amqp.connect("amqp://localhost:5672");
+        const connection = await amqp.connect("amqp://127.0.0.1:5672");
 
         console.log(`connection established`);
 
@@ -41,9 +41,9 @@ async function receiveFromQueue(queueuName) {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 function main() {
-    connectQueue()
+  // connectQueue()
     // while (true) {
-    // receiveFromQueue("amd64")
+    receiveFromQueue("amd64")
     // delay(1000)
     // }
 }
