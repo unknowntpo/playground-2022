@@ -15,7 +15,7 @@ async function connectQueue() {
     }
 }
 
-async function receiveFromQueue(queueuName) {
+async function receiveFromQueue(queueName) {
     try {
         const connection = await amqp.connect("amqp://127.0.0.1:5672");
 
@@ -25,9 +25,9 @@ async function receiveFromQueue(queueuName) {
 
         console.log(`channel created`);
 
-        await channel.assertQueue(queueuName);
+        await channel.checkQueue(queueName);
 
-        console.log(`queue existed`);
+        console.log(`queue exist`);
 
         channel.consume(queueName, (message) => {
             console.log(`Receive message: ${message.content.toString()}`);
@@ -41,7 +41,7 @@ async function receiveFromQueue(queueuName) {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 function main() {
-  // connectQueue()
+    // connectQueue()
     // while (true) {
     receiveFromQueue("amd64")
     // delay(1000)
