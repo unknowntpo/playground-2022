@@ -38,11 +38,13 @@ var isAnagramMap = function (s, t) {
         alphabetMap[getAlphaIdx(e)]--
     }
 
-    alphabetMap.forEach((refCnt) => {
+    for (const refCnt of alphabetMap) {
         if (refCnt != 0) {
             return false
         }
-    })
+    }
+    console.log("map", alphabetMap)
+
     return true
 };
 
