@@ -1,6 +1,7 @@
 import pika
 import sys
 import os
+import time
 
 exc_name = 'route_job'
 
@@ -46,7 +47,10 @@ def main():
     cfg = environ()
     publisher = PikaPublisher(
         host=cfg.host, port=cfg.port, exchange_name=exc_name)
-    publisher.publish('fib(30)', 'aarch64')
+
+    while 1:
+        publisher.publish('fib(30)', 'aarch64')
+        time.sleep(1)
     publisher.close()
 
 
