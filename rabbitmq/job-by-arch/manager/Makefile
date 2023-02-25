@@ -11,31 +11,32 @@ help:
 	@echo 'Usage:'
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
-## updateReq: update requirement.txt
-updateReq:
+## deps/update: update requirement.txt
+deps/update:
 	pipreqs . --force
 
-VENV=./venv
-
-## venv/activate: activate new venv
-venv/activate:
-	source $(VENV)/bin/activate
-
-## venv/deactivate: deactive venv
-venv/deactivate:
-	deactivate
-
-## venv/init: init new venv
-venv/init:
-	virtualenv $(VENV)
-	# https://stackoverflow.com/a/24736236/13919518
-	source $(VENV)/bin/activate; \
-	pip3 install -r requirements.txt; \
+## deps/install: install requirement.txt
+deps/install:
+	pip3 install -r requirements.txt
 
 ## run/manager: run manager
 run/manager:
 	python3 manager.py
 
+## image/build/manager: build the docker image for manager
+.PHONY: image/build/manager
+image/build/manager:
+	@DOCKER_BUILDKIT=1 docker build \
+	    --file Dockerfile \
+	    --build-arg VERSION=${git_description} \
+	    --build-arg BUILDKIT_INLINE_CACHE=1 \
+	    --network host \
+	    --tag unknowntpo/job-manager:latest .
+
+## image/push/manager: push the manager image to dockerhub
+.PHONY: image/push/manager
+image/push/manager:
+	@docker push unknowntpo/job-manager:latest
 
 ## clean: cleanup venv
 clean:
