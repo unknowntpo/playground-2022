@@ -1,4 +1,4 @@
-import {describe, expect, test,it} from '@jest/globals';
+import { describe, expect, test, it } from '@jest/globals';
 
 
 
@@ -39,9 +39,9 @@ import {describe, expect, test,it} from '@jest/globals';
 class ListNode {
   val: number
   next: ListNode | null
-  constructor(val?: number, next?:ListNode | null) {
-    this.val = (val===undefined ? 0 : val)
-    this.next = (next===undefined? null: next)
+  constructor(val?: number, next?: ListNode | null) {
+    this.val = (val === undefined ? 0 : val)
+    this.next = (next === undefined ? null : next)
   }
   toString(): string {
     let nums: number[] = []
@@ -50,15 +50,15 @@ class ListNode {
       nums.push(cur.val)
       cur = cur.next
     }
-    return "["+nums.join(",")+"]"
+    return "[" + nums.join(",") + "]"
   }
 }
 
 function makeList(nums: number[]): ListNode | null {
-  if ( nums.length === 0 ) {
+  if (nums.length === 0) {
     return null
   }
-  let head : ListNode = new ListNode(nums[0])
+  let head: ListNode = new ListNode(nums[0])
   let cur: ListNode = head;
   for (let i = 1; i < nums.length; i++) {
     cur.next = new ListNode(nums[i])
@@ -67,10 +67,35 @@ function makeList(nums: number[]): ListNode | null {
   return head
 }
 
+// t:= 1
+
+
+
+// c
+// [d 1, 2, 6, 3, 4, 5, 6]
 
 function removeElements(head: ListNode | null, val: number): ListNode | null {
-  return null
+  let dummyHead: ListNode = new ListNode(-1)
+
+  // let input: ListNode | null = makeList([1, 2, 6, 3, 4, 5, 6])
+  // for from dummyHead.next until null
+  // // pre = dummyHead
+  // // if target match
+  // // // then re-reroute
+  let pre: ListNode | null = dummyHead
+  for (let cur = dummyHead.next; cur !== null; cur = cur?.next, pre = pre?.next) {
+    if (targetMatch()) {
+      reRoute()
+    }
+  }
+  return dummyHead.next
 };
+
+
+const targetMatch = (): boolean => { return true }
+
+const reRoute = () => { }
+
 
 // Input: head = [1,2,6,3,4,5,6], val = 6
 // Output: [1,2,3,4,5]
@@ -82,11 +107,11 @@ function removeElements(head: ListNode | null, val: number): ListNode | null {
 
 // Input: head = [7,7,7,7], val = 7
 // Output: []
-describe("203-remove-linked-list-elements",()=>{
-  test("head = [1,2,6,3,4,5,6], val = 6",()=>{
-    let input: ListNode | null = makeList([1,2,6,3,4,5,6])
+describe("203-remove-linked-list-elements", () => {
+  test("head = [1,2,6,3,4,5,6], val = 6", () => {
+    let input: ListNode | null = makeList([1, 2, 6, 3, 4, 5, 6])
     console.log(input?.toString())
     expect(input?.toString()).toEqual("[1,2,6,3,4,5,6]")
-    expect(1+1).toEqual(2)
+    expect(1 + 1).toEqual(2)
   })
 })
