@@ -19,6 +19,12 @@ tf/aws/plan: tf/aws/refresh
 
 ## tf/aws/apply: apply the plan
 tf/aws/apply: tf/aws/plan
-		TF_LOG=WARN terraform plan \
+		TF_LOG=WARN terraform apply \
+			-var='aws_access_key=${AWS_ACCESS_KEY}' \
+			-var='aws_secret_key=${AWS_SECRET_KEY}'
+
+## tf/aws/destroy: apply the plan
+tf/aws/destroy: tf/aws/refresh
+		TF_LOG=WARN terraform destroy \
 			-var='aws_access_key=${AWS_ACCESS_KEY}' \
 			-var='aws_secret_key=${AWS_SECRET_KEY}'

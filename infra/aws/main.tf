@@ -17,7 +17,7 @@ variable "aws_secret_key" {
 
 # Define the EC2 instance resource.
 resource "aws_instance" "example" {
-  ami           = "ami-00eeedc4036573771" # Ubuntu 22.04.1 LTS (GNU/Linux 5.15.0-1028-aws x86_64)
+  ami           = "ami-0b828c1c5ac3f13ee" # Ubuntu 22.04.1 LTS (GNU/Linux 5.15.0-1028-aws x86_64)
   instance_type = "t2.micro"              # Specify the instance type.
 
   # Define the connection information to connect to the EC2 instance.
