@@ -1,5 +1,7 @@
 import { describe, expect, test, it } from '@jest/globals';
 
+import { ListNode, makeList } from './list';
+
 
 
 // https://leetcode.com/problems/remove-element/
@@ -36,36 +38,36 @@ import { describe, expect, test, it } from '@jest/globals';
  * }
  */
 
-class ListNode {
-  val: number
-  next: ListNode | null
-  constructor(val?: number, next?: ListNode | null) {
-    this.val = (val === undefined ? 0 : val)
-    this.next = (next === undefined ? null : next)
-  }
-  toString(): string {
-    let nums: number[] = []
-    let cur: ListNode | null = this
-    while (cur !== null) {
-      nums.push(cur.val)
-      cur = cur.next
-    }
-    return "[" + nums.join(",") + "]"
-  }
-}
+// class ListNode {
+//   val: number
+//   next: ListNode | null
+//   constructor(val?: number, next?: ListNode | null) {
+//     this.val = (val === undefined ? 0 : val)
+//     this.next = (next === undefined ? null : next)
+//   }
+//   toString(): string {
+//     let nums: number[] = []
+//     let cur: ListNode | null = this
+//     while (cur !== null) {
+//       nums.push(cur.val)
+//       cur = cur.next
+//     }
+//     return "[" + nums.join(",") + "]"
+//   }
+// }
 
-function makeList(nums: number[]): ListNode | null {
-  if (nums.length === 0) {
-    return null
-  }
-  let head: ListNode = new ListNode(nums[0])
-  let cur: ListNode = head;
-  for (let i = 1; i < nums.length; i++) {
-    cur.next = new ListNode(nums[i])
-    cur = cur.next
-  }
-  return head
-}
+// function makeList(nums: number[]): ListNode | null {
+//   if (nums.length === 0) {
+//     return null
+//   }
+//   let head: ListNode = new ListNode(nums[0])
+//   let cur: ListNode = head;
+//   for (let i = 1; i < nums.length; i++) {
+//     cur.next = new ListNode(nums[i])
+//     cur = cur.next
+//   }
+//   return head
+// }
 
 // t:= 1
 
@@ -82,12 +84,12 @@ function removeElements(head: ListNode | null, val: number): ListNode | null {
   // // pre = dummyHead
   // // if target match
   // // // then re-reroute
-  let pre: ListNode | null = dummyHead
-  for (let cur = dummyHead.next; cur !== null; cur = cur?.next, pre = pre?.next) {
-    if (targetMatch()) {
-      reRoute()
-    }
-  }
+  // let pre: ListNode | null = dummyHead
+  // for (let cur = dummyHead.next; cur !== null; cur = cur?.next, pre = pre?.next) {
+  //   if (targetMatch()) {
+  //     reRoute()
+  //   }
+  // }
   return dummyHead.next
 };
 
