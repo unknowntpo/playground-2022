@@ -6,6 +6,16 @@ fn combine(n: i32, k: i32) -> Vec<Vec<i32>> {
     return vec![vec![n, k]];
 }
 
+fn dp(n: i32, k: i32, start: i32, res: Vec<Vec<i32>>) {
+    if start == k {
+        return;
+    }
+    for i in 0..n {
+        dp(n, k - 1, i + 1, res)
+    }
+    return;
+}
+
 #[cfg(test)]
 mod combinations {
     use super::*;
