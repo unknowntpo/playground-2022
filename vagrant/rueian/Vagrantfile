@@ -1,0 +1,3 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "rueian/ubuntu20-m1"
+end
