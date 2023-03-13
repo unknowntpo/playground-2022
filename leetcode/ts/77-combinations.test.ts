@@ -11,8 +11,23 @@ import { ListNode, makeList } from './list';
 
 // [1, 2], [1, 3][1, 4][2, 3]
 
+// pick(1, 2, [])
+//   start = 1 
+//   combo = [1]
+//   pick(1+1, 2, [1])
+//   pick(2+1, 2, [2])
+//     start = 2
+// .   combo = [2]
+//     pick(2+1, 2, [2])
+//     pick(3+1, 2, [2])
+//   pick(3+1, 2, [3])
+//   pick(4+1, 2, [4])
+
+// [1], [1, 2], [1, 3], [1, 4]
+// [2]
 function combine(n: number, k: number): number[][] {
   let res: number[][] = []
+  // pick picks integer numbers starts from `start` and until combo.length = k 
   function pick(start: number, k: number, combo: number[]) {
     // end condition
     if (combo.length == k) {
@@ -22,7 +37,7 @@ function combine(n: number, k: number): number[][] {
 
     for (let i = start; i <= n; i++) {
       // current level of all possible result
-      const comb = combo.concat([start])
+      const comb = combo.concat([i])
 
       // append possible number to com
       pick(i + 1, k, comb)
