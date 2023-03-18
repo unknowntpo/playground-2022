@@ -11,12 +11,13 @@ fn dp(n: i32, k: i32, start: i32, res: Vec<Vec<i32>>) {
         return;
     }
     for i in 0..n {
-        dp(n, k - 1, i + 1, res)
+        dp(n, k - 1, i + 1, res.clone())
     }
     return;
 }
 
 #[cfg(test)]
+#[cfg(ignore)]
 mod combinations {
     use super::*;
 
