@@ -1,6 +1,7 @@
 package ring_test
 
 import (
+	"sync"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -67,3 +68,32 @@ var _ = Describe("Ring", func() {
 		})
 	})
 })
+
+func BenchmarkRingBuffer(b *testing.B) {
+	b.Run("test push and pop", func(b *testing.B) {
+		cap := 100000
+		r := ring.NewBuffer[int](cap)
+		pushFn := func(wg *sync.WaitGroup) {
+			defer wg.Done()
+			for i := 0; i < cap; i++ {
+				r.Push(3)
+			}
+		}
+
+		popFn := func(wg *sync.WaitGroup) {
+			defer wg.Done()
+			for i := 0; i < cap; i++ {
+				r.Pop()
+			}
+		}
+
+		for i := 0; i < b.N; i++ {
+			var wg sync.WaitGroup
+			wg.Add(2)
+
+			go pushFn(&wg)
+			go popFn(&wg)
+			wg.Wait()
+		}
+	})
+}
