@@ -47,7 +47,9 @@ build {
     inline = [
       "sudo apt-get update -y",
       "curl -sfL https://get.k3s.io | sh -",
-      "sudo apt install -y bpftrace"
+      "sudo apt install -y bpftrace",
+      "curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh",
+      "sudo usermod -aG docker $USER",
     ]
   }
 }
