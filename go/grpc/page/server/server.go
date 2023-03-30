@@ -3,24 +3,26 @@ package main
 import (
 	"io"
 	"log"
+
+	"github.com/unknowntpo/playground-2022/go/grpc/page/page"
 )
 
 type pageService struct{}
 
-func (s *pageService) GetHead(req *GetHeadRequest, stream PageService_GetHeadServer) error {
+func (s *pageService) GetHead(req *page.GetHeadRequest, stream page.PageService_GetHeadServer) error {
 	// TODO: Implement the logic to get the head page key
 	// For example:
 	pageKey := "123"
 
 	// Send the page key through the stream
-	if err := stream.Send(&PageKey{Key: pageKey}); err != nil {
+	if err := stream.Send(&page.PageKey{Key: pageKey}); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *pageService) GetPage(stream PageService_GetPageServer) error {
+func (s *pageService) GetPage(stream page.PageService_GetPageServer) error {
 	// Receive the page keys from the stream and send the corresponding pages
 	for {
 		pageKey, err := stream.Recv()
@@ -31,12 +33,13 @@ func (s *pageService) GetPage(stream PageService_GetPageServer) error {
 			return err
 		}
 
+		_ = pageKey
+
 		// TODO: Implement the logic to get the page
 		// For example:
-		page := &Page{
+		page := &page.Page{
 			Title:   "Page Title",
 			Content: "Page Content",
-			Key:     pageKey.Key,
 		}
 
 		// Send the page through the stream
@@ -46,10 +49,10 @@ func (s *pageService) GetPage(stream PageService_GetPageServer) error {
 	}
 }
 
-func (s *pageService) SetPage(stream PageService_SetPageServer) error {
+func (s *pageService) SetPage(stream page.PageService_SetPageServer) error {
 	// Receive the pages from the stream and set them
 	for {
-		page, err := stream.Recv()
+		pg, err := stream.Recv()
 		if err == io.EOF {
 			return nil
 		}
@@ -59,10 +62,11 @@ func (s *pageService) SetPage(stream PageService_SetPageServer) error {
 
 		// TODO: Implement the logic to set the page
 		// For example:
-		log.Printf("Setting page %s: %s", page.Key, page.Content)
+		pageKey := "ABC"
+		log.Printf("Setting page %s: %s", pageKey, pg.Content)
 
 		// Send the page key through the stream
-		if err := stream.Send(&PageKey{Key: page.Key}); err != nil {
+		if err := stream.SendAndClose(&page.PageKey{Key: pageKey}); err != nil {
 			return err
 		}
 	}

@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/unknowntpo/playground-2022/go/grpc/page"
+	page "github.com/unknowntpo/playground-2022/go/grpc/page/page"
 
 	"google.golang.org/grpc"
 )
@@ -42,16 +42,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to get pages: %v", err)
 	}
-	if err := getPageStream.Send(&PageKey{Key: "123"}); err != nil {
+	if err := getPageStream.Send(&page.PageKey{Key: "123"}); err != nil {
 		log.Fatalf("Failed to send page key: %v", err)
 	}
-	page, err := getPageStream.Recv()
+	pg, err := getPageStream.Recv()
 	if err == io.EOF {
 		log.Println("No page received")
 	} else if err != nil {
 		log.Fatalf("Failed to receive page: %v", err)
 	} else {
-		log.Printf("Received page: %s - %s", page.Title, page.Content)
+		log.Printf("Received page: %s - %s", pg.Title, pg.Content)
 	}
 
 	// Call SetPage to set a page
@@ -59,14 +59,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to set page: %v", err)
 	}
-	if err := setPageStream.Send(&Page{
+
+	newPage := page.Page{
 		Title:   "New Page",
 		Content: "New Page Content",
-		Key:     "456",
-	}); err != nil {
+	}
+
+	if err := setPageStream.Send(&newPage); err != nil {
 		log.Fatalf("Failed to send page: %v", err)
 	}
-	setPageKey, err := setPageStream.Recv()
+	setPageKey, err := setPageStream.CloseAndRecv()
 	if err == io.EOF {
 		log.Println("No page key received")
 	} else if err != nil {
