@@ -1,28 +1,36 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
+	"net"
 
-	"github.com/unknowntpo/playground-2022/go/grpc/page/page"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+
+	pb "github.com/unknowntpo/playground-2022/go/grpc/page/page"
 )
 
-type pageService struct{}
+type pageServer struct {
+	pb.UnimplementedPageServiceServer
+	pages map[string]*pb.Page
+}
 
-func (s *pageService) GetHead(req *page.GetHeadRequest, stream page.PageService_GetHeadServer) error {
+func (s *pageServer) GetHead(req *pb.GetHeadRequest, stream pb.PageService_GetHeadServer) error {
 	// TODO: Implement the logic to get the head page key
 	// For example:
 	pageKey := "123"
 
 	// Send the page key through the stream
-	if err := stream.Send(&page.PageKey{Key: pageKey}); err != nil {
+	if err := stream.Send(&pb.PageKey{Key: pageKey}); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *pageService) GetPage(stream page.PageService_GetPageServer) error {
+func (s *pageServer) GetPage(stream pb.PageService_GetPageServer) error {
 	// Receive the page keys from the stream and send the corresponding pages
 	for {
 		pageKey, err := stream.Recv()
@@ -33,11 +41,11 @@ func (s *pageService) GetPage(stream page.PageService_GetPageServer) error {
 			return err
 		}
 
-		_ = pageKey
+		log.Println("got pageKey: ", pageKey)
 
 		// TODO: Implement the logic to get the page
 		// For example:
-		page := &page.Page{
+		page := &pb.Page{
 			Title:   "Page Title",
 			Content: "Page Content",
 		}
@@ -49,7 +57,7 @@ func (s *pageService) GetPage(stream page.PageService_GetPageServer) error {
 	}
 }
 
-func (s *pageService) SetPage(stream page.PageService_SetPageServer) error {
+func (s *pageServer) SetPage(stream pb.PageService_SetPageServer) error {
 	// Receive the pages from the stream and set them
 	for {
 		pg, err := stream.Recv()
@@ -66,8 +74,21 @@ func (s *pageService) SetPage(stream page.PageService_SetPageServer) error {
 		log.Printf("Setting page %s: %s", pageKey, pg.Content)
 
 		// Send the page key through the stream
-		if err := stream.SendAndClose(&page.PageKey{Key: pageKey}); err != nil {
+		if err := stream.SendAndClose(&pb.PageKey{Key: pageKey}); err != nil {
 			return err
 		}
 	}
+}
+
+func main() {
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:4000"))
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	var opts []grpc.ServerOption
+
+	grpcServer := grpc.NewServer(opts...)
+	reflection.Register(grpcServer)
+	pb.RegisterPageServiceServer(grpcServer, &pageServer{})
+	grpcServer.Serve(lis)
 }
