@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	"math/rand"
 	"strconv"
 	"sync"
 	"time"
@@ -16,12 +16,16 @@ type Data struct {
 	Age  int    `json:"age"`
 }
 
+const SortedSetKey = "zset"
+
 func main() {
 	client := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
+
+	client.ZAdd(context.Background(), SortedSetKey, redis.Z{Score: 0.0, Member: "initMember"})
 
 	// Create a wait group to synchronize the workers
 	wg := &sync.WaitGroup{}
@@ -34,66 +38,60 @@ func main() {
 
 	// Wait for all workers to complete
 	wg.Wait()
+
+	// Retrieve the members of the sorted set
+	members, err := client.ZRange(context.Background(), SortedSetKey, 0, -1).Result()
+	if err != nil {
+		panic(err)
+	}
+	for _, member := range members {
+		score, _ := strconv.ParseInt(member, 10, 64)
+		fmt.Printf("Member: %s, Score: %s\n", member, time.Unix(0, score).String())
+	}
 }
 
 func worker(client *redis.Client, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	// Watch the sorted set
-	watch := func(tx *redis.Tx) error {
-		_, err := tx.Pipelined(context.Background(), func(pipe redis.Pipeliner) error {
-			pipe.ZRange(context.Background(), "my_sorted_set", 0, -1)
-			return nil
-		})
+	// Create a Lua script to get the max score and add a new value
+	script := redis.NewScript(`
+		local maxScore = redis.call("ZREVRANGE", KEYS[1], 0, 0, "WITHSCORES")
+		local newScore = tonumber(maxScore[2]) + 1
+		local result = redis.call("ZADD", KEYS[1], newScore, ARGV[1])
+		if result ~= 0 then
+			return {err = "error message goes here"}
+		end
+		return newScore
+	`)
+
+	// Use WATCH/MULTI/EXEC to ensure that the script is run in a transaction
+	value := fmt.Sprintf("new-value-%s", GenerateRandomString(3))
+	err := client.Watch(context.Background(), func(tx *redis.Tx) error {
+		// Get the max score and add the new value
+		result, err := script.Run(context.Background(), tx, []string{SortedSetKey}, value).Result()
 		if err != nil {
 			return err
 		}
+
+		// Print the result
+		fmt.Printf("Added value %q with score %v\n", value, result)
+
 		return nil
-	}
+	}, SortedSetKey)
 
-	// Start a transaction with pipeline
-	tx := client.TxPipeline()
-
-	// Add hash as value and current timestamp as score to sorted set
-	score := float64(time.Now().UnixNano())
-	data := Data{Name: "Alice", Age: 25}
-	jsonData, err := json.Marshal(data)
 	if err != nil {
-		panic(err)
+		fmt.Println("Transaction failed:", err)
 	}
-	hash := "my_hash"
-	if _, err := tx.ZAdd(context.Background(), "my_sorted_set", redis.Z{Score: score, Member: hash}).Result(); err != nil {
-		panic(err)
-	}
+}
 
-	// Use SET to set hash as key and some JSON string data as value
-	if _, err := tx.Set(context.Background(), hash, jsonData, 0).Result(); err != nil {
-		panic(err)
-	}
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-	// Commit the transaction
-	if err := client.Watch(context.Background(), watch, "my_sorted_set"); err != nil {
-		panic(err)
-	}
+func GenerateRandomString(length int) string {
+	rand.Seed(time.Now().UnixNano())
 
-	if _, err := tx.Exec(context.Background()); err != nil {
-		panic(err)
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
-
-	// Retrieve the value from Redis to ensure that it was set correctly
-	val, err := client.Get(context.Background(), hash).Result()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(val)
-
-	// Retrieve the members of the sorted set
-	members, err := client.ZRange(context.Background(), "my_sorted_set", 0, -1).Result()
-	if err != nil {
-		panic(err)
-	}
-	for _, member := range members {
-		score, _ := strconv.ParseFloat(member, 64)
-		fmt.Printf("Member: %s, Score: %f\n", member, score)
-	}
+	return string(b)
 }
