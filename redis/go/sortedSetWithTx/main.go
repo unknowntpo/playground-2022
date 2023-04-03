@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
-	"strconv"
 	"sync"
 	"time"
 
@@ -40,13 +39,12 @@ func main() {
 	wg.Wait()
 
 	// Retrieve the members of the sorted set
-	members, err := client.ZRange(context.Background(), SortedSetKey, 0, -1).Result()
+	members, err := client.ZRangeWithScores(context.Background(), SortedSetKey, 0, -1).Result()
 	if err != nil {
 		panic(err)
 	}
 	for _, member := range members {
-		score, _ := strconv.ParseInt(member, 10, 64)
-		fmt.Printf("Member: %s, Score: %s\n", member, time.Unix(0, score).String())
+		fmt.Printf("Member: %v, Score: %f\n", member.Member, member.Score)
 	}
 }
 
@@ -55,12 +53,17 @@ func worker(client *redis.Client, wg *sync.WaitGroup) {
 
 	// Create a Lua script to get the max score and add a new value
 	script := redis.NewScript(`
+		redis.log(redis.LOG_NOTICE, "gotValue", ARGV[1])
+
 		local maxScore = redis.call("ZREVRANGE", KEYS[1], 0, 0, "WITHSCORES")
 		local newScore = tonumber(maxScore[2]) + 1
 		local result = redis.call("ZADD", KEYS[1], newScore, ARGV[1])
-		if result ~= 0 then
-			return {err = "error message goes here"}
+		if result ~= 1 then
+			return {err = "ZADD failed"}
 		end
+
+		redis.log(redis.LOG_NOTICE, "doneWithValue", ARGV[1])
+
 		return newScore
 	`)
 
