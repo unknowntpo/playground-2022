@@ -40,6 +40,8 @@ func main() {
 		// reference userv1.UserServiceName and groupv1.GroupServiceName.
 	)
 	mux.Handle(grpcreflect.NewHandlerV1(reflector))
+	mux.Handle(grpcreflect.NewHandlerV1Alpha(reflector))
+
 	path, handler := greetv1connect.NewGreetServiceHandler(greeter)
 	mux.Handle(path, handler)
 	http.ListenAndServe(
