@@ -19,7 +19,7 @@ db/up:
 ## db/connect: connect to scylladb
 db/connect/%:
 	echo '$*'
-	docker exec -it carepet-scylla$* bash
+	docker exec -it helloworld-scylla$* bash
 
 ## db/down: teardown db
 db/down:
