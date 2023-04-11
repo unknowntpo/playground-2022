@@ -16,9 +16,8 @@ db/up:
 	# docker run -d -p 9042:9042 --name scylla-helloworld scylladb/scylla
 	docker-compose up -d
 
-## db/connect: connect to scylladb
+## db/connect/{nodeID}: connect to specific node of scylladb
 db/connect/%:
-	echo '$*'
 	docker exec -it helloworld-scylla$* bash
 
 ## db/down: teardown db
