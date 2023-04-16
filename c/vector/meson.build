@@ -6,7 +6,8 @@ project('cdemo', 'c', 'cpp',
 
 # Demo module sources
 module_sources = [
-    'add/add.c'
+    'add/add.c',
+    'vector/vector.c'
 ]
 
 # Dependencies
@@ -16,7 +17,8 @@ shared_dependencies = [
 
 includes_dir = include_directories([
     'include',
-    'include/add'
+    'include/add',
+    'include/vector'
 ])
 
 gtest = subproject('gtest')
