@@ -25,8 +25,19 @@ gtest_vector = executable('test_vector', [test_sources, 'vector/gtest_vector.cpp
     include_directories: [includes_dir]
 )
 
+# TODO: Add new package
+# follow the format of gtest_<vector> package name
+# gtest_vector = executable('test_vector', [test_sources, 'vector/gtest_vector.cpp'],
+#    dependencies : [shared_dependencies, gtest_dep, thread_dep],
+#    override_options: ['cpp_std=c++11'],
+#    include_directories: [includes_dir]
+# )
+
 test('Gtest Test Valid', gtest_module)
 test('Test Vector', gtest_vector)
+
+# TODO: Add new package
+# test('Test Vector', gtest_vector)
 
 
 

@@ -8,6 +8,7 @@ project('cdemo', 'c', 'cpp',
 module_sources = [
     'add/add.c',
     'vector/vector.c'
+    # TODO: Add new package
 ]
 
 # Dependencies
@@ -19,6 +20,7 @@ includes_dir = include_directories([
     'include',
     'include/add',
     'include/vector'
+    # TODO: Add new package
 ])
 
 gtest = subproject('gtest')
