@@ -26,9 +26,9 @@ setup/reconfigure:
 build:
 	meson compile -C $(BUILDDIR)
 
-## test: run all tests.
+## test: run all tests, use VERBOSE=1 to show more result
 test:
-	meson test -C $(BUILDDIR)
+	meson test -C $(BUILDDIR) $(if $(VERBOSE), -v)
 
 ## clean: clean all artefacts.
 clean:

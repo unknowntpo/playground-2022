@@ -9,6 +9,10 @@ extern "C" {
 
 int vector_add(int a, int b);
 
+typedef struct vector vector;
+
+vector *vector_new(int length);
+
 #ifdef __cplusplus
 }
 #endif
