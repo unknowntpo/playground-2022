@@ -11,7 +11,7 @@ int vector_add(int a, int b);
 
 typedef struct vector vector;
 
-vector *vector_new(int length);
+vector *vector_new(int length, int cap);
 
 #ifdef __cplusplus
 }

@@ -8,7 +8,7 @@
 
 TEST(testCase, test1) { EXPECT_EQ(vector_add(2, 3), 5); }
 
-TEST(testCase, vector) { EXPECT_EQ(vector_new(1), (vector *)(NULL)); }
+TEST(testCase, vector) { EXPECT_EQ(vector_new(1, 2), (vector *)(NULL)); }
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
