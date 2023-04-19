@@ -12,6 +12,7 @@ int vector_add(int a, int b);
 typedef struct vector vector;
 
 vector *vector_new(int length, int cap);
+void vector_append(vector *vector, int element);
 
 #ifdef __cplusplus
 }

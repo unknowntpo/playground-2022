@@ -35,3 +35,15 @@ vector *vector_new(int length, int cap) {
 
   return new;
 }
+
+void vector_append(vector *vec, int element) {
+  // TODO: if cap > len then append
+  // else maloc new slice then append
+  // return
+  //
+  assert(vec);
+  if (vec->len < vec->cap) {
+    vec->arr[vec->len++] = element;
+    return;
+  }
+}
