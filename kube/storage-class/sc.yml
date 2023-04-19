@@ -1,23 +1,46 @@
+# ref: https://kubernetes.io/blog/2019/04/04/kubernetes-1.14-local-persistent-volumes-ga/
+
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: disk
+  name: local-storage
 provisioner: kubernetes.io/no-provisioner
-parameters:
-  type: pd-standard
+volumeBindingMode: WaitForFirstConsumer
 
 ---
 
-apiVersion: v1
-kind: PersistentVolumeClaim
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
-  name: claim1
+  name: local-test
 spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: disk
-  resources:
-    requests:
-      storage: 3Gi
-
-
+  serviceName: "local-service"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: local-test
+  template:
+    metadata:
+      labels:
+        app: local-test
+    spec:
+      containers:
+      - name: test-container
+        image: registry.k8s.io/busybox # updated after publication (previously used k8s.gcr.io/busybox)
+        command:
+        - "/bin/sh"
+        args:
+        - "-c"
+        - "sleep 100000"
+        volumeMounts:
+        - name: local-vol
+          mountPath: /usr/test-pod
+  volumeClaimTemplates:
+  - metadata:
+      name: local-vol
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "local-storage"
+      resources:
+        requests:
+          storage: 1Gi
