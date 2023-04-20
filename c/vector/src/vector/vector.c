@@ -36,6 +36,9 @@ vector *vector_new(int length, int cap) {
   return new;
 }
 
+int vector_len(vector *vec) { return vec->len; }
+int vector_cap(vector *vec) { return vec->cap; }
+
 void vector_append(vector *vec, int element) {
   // TODO: if cap > len then append
   // else maloc new slice then append
