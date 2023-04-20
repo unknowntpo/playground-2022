@@ -11,7 +11,7 @@ import (
 // Define the Pet struct to hold the data
 type Page struct {
 	UserID  int
-	ListKey gocql.UUID
+	ListKey string
 	PageKey gocql.UUID
 	Time    time.Time
 }
@@ -43,11 +43,11 @@ func main() {
 	// Create the pets table if it doesn't exist
 	if err := sess.Query(`
         CREATE TABLE IF NOT EXISTS page.page (
-          user_id int,
-          list_key uuid,
-          page_key uuid,
+          user_id INT,
+          list_key TEXT,
+          page_key TIMEUUID,
           time timestamp,
-          PRIMARY KEY ((user_id, list_key), page_key, time)
+          PRIMARY KEY ((user_id, list_key), time, page_key)
         ) WITH compaction = {
             'class': 'TimeWindowCompactionStrategy',
             'compaction_window_size': '1',
@@ -57,14 +57,16 @@ func main() {
 		panic(err)
 	}
 
+	listKey := "popular"
+
 	// Insert some dummy data into the page table
 	pages := []Page{
-		{1, gocql.TimeUUID(), gocql.TimeUUID(), time.Now()},
-		{1, gocql.TimeUUID(), gocql.TimeUUID(), time.Now().Add(1 * time.Hour)},
-		{1, gocql.TimeUUID(), gocql.TimeUUID(), time.Now().Add(2 * time.Hour)},
-		{2, gocql.TimeUUID(), gocql.TimeUUID(), time.Now().Add(-1 * time.Hour)},
-		{2, gocql.TimeUUID(), gocql.TimeUUID(), time.Now()},
-		{2, gocql.TimeUUID(), gocql.TimeUUID(), time.Now().Add(1 * time.Hour)},
+		{1, listKey, gocql.TimeUUID(), time.Now()},
+		{1, listKey, gocql.TimeUUID(), time.Now().Add(1 * time.Hour)},
+		{1, listKey, gocql.TimeUUID(), time.Now().Add(2 * time.Hour)},
+		{2, listKey, gocql.TimeUUID(), time.Now().Add(-1 * time.Hour)},
+		{2, listKey, gocql.TimeUUID(), time.Now()},
+		{2, listKey, gocql.TimeUUID(), time.Now().Add(1 * time.Hour)},
 	}
 
 	for _, page := range pages {
@@ -75,46 +77,32 @@ func main() {
 		}
 	}
 
-	// Select the pages that match the provided userID and list_key
+	startTime := time.Now().AddDate(0, 0, -1)
+	endTime := time.Now().AddDate(0, 0, 1)
+
+	// Select the head of pages today
 	var gotPages []Page
 	iter := sess.Query(`
     SELECT user_id, list_key, page_key, time
     FROM page.page
     WHERE user_id = ? AND list_key = ?
+    AND time >= ? AND time < ?
     ORDER BY time ASC
-`, 1, pages[0].ListKey).Iter()
+    LIMIT 1
+`, 1, listKey, startTime, endTime).Iter()
+
 	for {
 		page := Page{}
 		if !iter.Scan(&page.UserID, &page.ListKey, &page.PageKey, &page.Time) {
 			break
 		}
-		pages = append(gotPages, page)
+		gotPages = append(gotPages, page)
 	}
 	if err := iter.Close(); err != nil {
 		panic(err)
 	}
 
 	fmt.Println("gotPages", debug(gotPages))
-
-	// // Query the pets table and print the results
-	// var id gocql.UUID
-	// var name string
-	// var age int
-	// iter := sess.Query("SELECT id, name, age FROM carepet.pets").Iter()
-	//
-	//	for iter.Scan(&id, &name, &age) {
-	//		fmt.Printf("ID: %v, Name: %s, Age: %d\n", id, name, age)
-	//	}
-	//
-	//	if err := iter.Close(); err != nil {
-	//		panic(err)
-	//	}
-}
-
-type Pet struct {
-	ID   gocql.UUID
-	Name string
-	Age  int
 }
 
 func createKeyspace(sess *gocql.Session) error {
