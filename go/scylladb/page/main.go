@@ -57,6 +57,10 @@ func main() {
 		panic(err)
 	}
 
+	if err := sess.Query(`CREATE INDEX IF NOT EXISTS ON page.page (page_key);`).Exec(); err != nil {
+		panic(err)
+	}
+
 	listKey := "popular"
 
 	// Insert some dummy data into the page table
@@ -71,7 +75,7 @@ func main() {
 
 	for _, page := range pages {
 		if err := sess.Query(`
-            INSERT INTO page.page (user_id, list_key, page_key, time) VALUES (?, ?, ?, ?)
+            INSERT INTO page.page (user_id, list_key, page_key, time) VALUES (?, ?, ?, ?) USING TTL 86400;
         `, page.UserID, page.ListKey, page.PageKey, page.Time).Exec(); err != nil {
 			panic(err)
 		}
