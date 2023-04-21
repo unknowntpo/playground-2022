@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: redis
-  serviceName: redis-cluster
+  serviceName: redis-headless
   template:
     metadata:
       labels:
@@ -33,12 +33,29 @@ spec:
         persistentVolumeClaim:
           claimName: redis-data
 ---
+
+# ClusterIP Service
 apiVersion: v1
 kind: Service
 metadata:
   name: redis
 spec:
   type: ClusterIP
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+
+---
+
+# Headless Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-headless
+spec:
+  clusterIP: None
   selector:
     app: redis
   ports:
