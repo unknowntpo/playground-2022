@@ -35,3 +35,43 @@ func TestLRUCache(t *testing.T) {
 		assert.Equal(t, 4, c.Get(3))  // return 4
 	})
 }
+
+type Node[T any] struct {
+	Val  T
+	prev *Node[T]
+	next *Node[T]
+}
+
+type List[T any] struct {
+	head *Node[T]
+	tail *Node[T]
+}
+
+func NewList[T any]() *List[T] {
+	return &List[T]{}
+}
+
+func (l *List[T]) IsEmpty() bool {
+	return l.head == nil
+}
+
+func (l *List[T]) PushFront(val T) error {
+	if l.IsEmpty() {
+		l.head = &Node[T]{Val: val}
+		l.tail = l.head
+		l.head.next = l.head
+	}
+	return nil
+}
+
+func (l *List[T]) PushBack() error {
+	return nil
+}
+
+func (l *List[T]) PopHead() error {
+	return nil
+}
+
+func (l *List[T]) Delete(val T) error {
+	return nil
+}
