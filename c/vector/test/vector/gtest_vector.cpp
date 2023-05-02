@@ -4,7 +4,7 @@
  */
 #include "./vector.h"
 #include "stddef.h"
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 TEST(testCase, test1) { EXPECT_EQ(vector_add(2, 3), 5); }
 
@@ -23,10 +23,12 @@ TEST(testCase, vector_append_normal) {
   EXPECT_EQ(vector_len(vec), cap);
   EXPECT_EQ(vector_cap(vec), cap);
 
-  // for (int i = 0; i < cap; i++) {
-  //   EXPECT_EQ(vec, i);
-  // }
+  for (int i = 0; i < cap; i++) {
+    EXPECT_EQ(vector_get(vec, i), i);
+  }
 }
+
+// TODO: test append when len >= cap
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);

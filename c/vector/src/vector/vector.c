@@ -13,7 +13,7 @@ struct vector {
 int vector_add(int a, int b) { return a + b; }
 
 vector *vector_new(int length, int cap) {
-  if (cap < length) {
+  if (length > cap) {
     perror("cap should be greater or equal than length");
     return NULL;
   }
@@ -39,13 +39,18 @@ vector *vector_new(int length, int cap) {
 int vector_len(vector *vec) { return vec->len; }
 int vector_cap(vector *vec) { return vec->cap; }
 
+int vector_get(vector *vec, int idx) {
+  assert(idx < vec->len);
+  return vec->arr[idx];
+}
+
 void vector_append(vector *vec, int element) {
   // TODO: if cap > len then append
   // else maloc new slice then append
   // return
   //
   assert(vec);
-  if (vec->len < vec->cap) {
+  if (vec->len <= vec->cap) {
     vec->arr[vec->len++] = element;
     return;
   }

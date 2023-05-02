@@ -15,7 +15,7 @@ vector *vector_new(int length, int cap);
 void vector_append(vector *vector, int element);
 int vector_len(vector *vec);
 int vector_cap(vector *vec);
-
+int vector_get(vector *vec, int idx);
 #ifdef __cplusplus
 }
 #endif
