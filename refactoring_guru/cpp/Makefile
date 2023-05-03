@@ -1,14 +1,7 @@
-include common.mk
+.PHONY: all clean
 
-TARGET = main
+all:
+	$(MAKE) -C abstract-factory
 
-## build: build binary
-.PHONY: build
-build:
-	g++ -std=c++11 main.cc -o $(TARGET)
-
-## clean: clean target
-.PHONY: clean
 clean:
-	-rm -rf $(TARGET)
-
+	$(MAKE) -C abstract-factory clean
