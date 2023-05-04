@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
+	"strings"
 	"testing"
 )
 
@@ -36,15 +38,33 @@ func TestLRUCache(t *testing.T) {
 	})
 }
 
+func TestList(t *testing.T) {
+	t.Run("PushBack", func(t *testing.T) {
+		l := NewList[int]()
+		l.PushBack(1)
+		l.PushBack(2)
+		l.PushBack(3)
+
+		assert.Equal(t, 1, l.head.Val)
+		assert.Equal(t, 3, l.tail.Val)
+		assert.Equal(t, "[1,2,3]", l.String())
+	})
+}
+
 type Node[T any] struct {
 	Val  T
 	prev *Node[T]
 	next *Node[T]
 }
 
+func (n *Node[T]) String() string {
+	return fmt.Sprint(n.Val)
+}
+
 type List[T any] struct {
 	head *Node[T]
 	tail *Node[T]
+	len  int
 }
 
 func NewList[T any]() *List[T] {
@@ -52,19 +72,38 @@ func NewList[T any]() *List[T] {
 }
 
 func (l *List[T]) IsEmpty() bool {
-	return l.head == nil
+	return l.len == 0
 }
 
-func (l *List[T]) PushFront(val T) error {
+func (l *List[T]) PushBack(val T) error {
 	if l.IsEmpty() {
-		l.head = &Node[T]{Val: val}
-		l.tail = l.head
-		l.head.next = l.head
+		n := &Node[T]{Val: val}
+		n.next = nil
+		n.prev = nil
+		l.head = n
+		l.tail = n
+		l.len += 1
+		return nil
 	}
+	n := &Node[T]{Val: val}
+	n.prev = l.tail
+	n.next = nil
+	// connect to tail of list
+	l.tail.next = n
+	l.len += 1
 	return nil
 }
 
-func (l *List[T]) PushBack() error {
+func (l *List[T]) String() string {
+	out := make([]string, 0, l.len)
+
+	for lp := &l.head; *lp != nil; lp = &(*lp).next {
+		out = append(out, (*lp).String())
+	}
+	return fmt.Sprintf("[%s]", strings.Join(out, ","))
+}
+
+func (l *List[T]) PushHead() error {
 	return nil
 }
 
