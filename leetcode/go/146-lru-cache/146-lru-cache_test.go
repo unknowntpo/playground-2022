@@ -90,6 +90,7 @@ func (l *List[T]) PushBack(val T) error {
 	n.next = nil
 	// connect to tail of list
 	l.tail.next = n
+	l.tail = n
 	l.len += 1
 	return nil
 }
