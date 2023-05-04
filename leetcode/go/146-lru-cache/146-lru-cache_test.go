@@ -76,22 +76,16 @@ func (l *List[T]) IsEmpty() bool {
 }
 
 func (l *List[T]) PushBack(val T) error {
-	if l.IsEmpty() {
-		n := &Node[T]{Val: val}
-		n.next = nil
-		n.prev = nil
-		l.head = n
-		l.tail = n
-		l.len += 1
-		return nil
-	}
 	n := &Node[T]{Val: val}
-	n.prev = l.tail
 	n.next = nil
-	// connect to tail of list
-	l.tail.next = n
-	l.tail = n
-	l.len += 1
+	if l.IsEmpty() {
+		l.head = n
+	} else {
+		l.tail.next = n
+	}
+	n.prev = l.tail
+	l.tail = n // ok
+	l.len += 1 // ok
 	return nil
 }
 
