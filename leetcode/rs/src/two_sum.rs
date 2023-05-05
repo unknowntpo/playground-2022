@@ -24,7 +24,7 @@ fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
 
     for (i, v) in nums.iter().enumerate() {
         if map.contains_key(&(target - v)) {
-            return vec![i, map[key]];
+            return vec![i as i32, map[v]];
         }
     }
     return vec![1, 2, 3];

@@ -3,21 +3,46 @@
 #[allow(dead_code)]
 fn combine(n: i32, k: i32) -> Vec<Vec<i32>> {
     // Your implementation here
-    return vec![vec![n, k]];
+    //return vec![vec![n, k]];
+    let mut out: Vec<Vec<i32>> = Vec::new();
+    let acc = vec![];
+    dp(1, n, k, acc, &mut out);
+
+    return out;
 }
 
-fn dp(n: i32, k: i32, start: i32, res: Vec<Vec<i32>>) {
-    if start == k {
+/*
+
+[1 2 3 4]
+
+[1] - [1, 2], [1, 3], [1, 4]
+[2] - [2, 3], [2, 4]
+[3] - [3, 4]
+
+*/
+
+// dp(n, k, acc)
+
+fn dp(start: i32, end: i32, expect_len: i32, acc: Vec<i32>, out: &mut Vec<Vec<i32>>) {
+    // if len(acc) == expectLen
+    // // append out then return
+    // for i from start to end;
+    // // v := acc.append(i)
+    // // dp(i, end, v)
+
+    if acc.len() == (expect_len as usize) {
+        out.push(acc);
         return;
     }
-    for i in 0..n {
-        dp(n, k - 1, i + 1, res.clone())
+
+    for i in start..=end {
+        let mut v = acc.clone();
+        v.push(i);
+        dp(i + 1, end, expect_len, v, out);
     }
-    return;
 }
 
 #[cfg(test)]
-#[cfg(ignore)]
 mod combinations {
     use super::*;
 
