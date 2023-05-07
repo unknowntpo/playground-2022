@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -49,10 +50,13 @@ func TestList(t *testing.T) {
 		assert.Equal(t, 3, l.tail.Val)
 		assert.Equal(t, "[1,2,3]", l.String())
 	})
+	l := list.New()
+	_ = l
 }
 
 type Node[T any] struct {
 	Val  T
+	list *List[T]
 	prev *Node[T]
 	next *Node[T]
 }
@@ -61,14 +65,31 @@ func (n *Node[T]) String() string {
 	return fmt.Sprint(n.Val)
 }
 
+func (n *Node[T]) Next() *Node {
+	if p := n.next; n.next != nil && p != &n.l.root {
+		return p
+	}
+	return nil
+}
+
+func (n *Node[T]) Prev() *Node {
+	return nil
+}
+
 type List[T any] struct {
-	head *Node[T]
-	tail *Node[T]
+	root Node[T]
 	len  int
 }
 
+func (l *List[T]) NewNode(val T) *Node[T] {
+	return &Node[T]{Val: val, list: l}
+}
+
 func NewList[T any]() *List[T] {
-	return &List[T]{}
+	r := &Node[T]{}
+	r.next = r
+	r.prev = r
+	return &List[T]{root: r}
 }
 
 func (l *List[T]) IsEmpty() bool {
@@ -77,24 +98,28 @@ func (l *List[T]) IsEmpty() bool {
 
 func (l *List[T]) PushBack(val T) error {
 	n := &Node[T]{Val: val}
-	n.next = nil
 	if l.IsEmpty() {
-		l.head = n
-	} else {
-		l.tail.next = n
+		l.root.next = n
+		l.root.prev = n
+		l.len++
+		return nil
 	}
-	n.prev = l.tail
-	l.tail = n // ok
-	l.len += 1 // ok
+
+	n.next = &l.root
+	n.prev = &l.root.prev
+	l.root.prev = n
+	l.len++
+
 	return nil
 }
 
 func (l *List[T]) String() string {
 	out := make([]string, 0, l.len)
 
-	for lp := &l.head; *lp != nil; lp = &(*lp).next {
-		out = append(out, (*lp).String())
+	for cur := l.root; cur != cur.next; cur = cur.next {
+		out = append(out, cur.String())
 	}
+
 	return fmt.Sprintf("[%s]", strings.Join(out, ","))
 }
 
