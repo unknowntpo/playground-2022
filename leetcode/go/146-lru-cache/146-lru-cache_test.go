@@ -1,11 +1,11 @@
 package main
 
 import (
-	"container/list"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type LRUCache struct {
@@ -42,16 +42,23 @@ func TestLRUCache(t *testing.T) {
 func TestList(t *testing.T) {
 	t.Run("PushBack", func(t *testing.T) {
 		l := NewList[int]()
-		l.PushBack(1)
-		l.PushBack(2)
-		l.PushBack(3)
 
-		assert.Equal(t, 1, l.head.Val)
-		assert.Equal(t, 3, l.tail.Val)
-		assert.Equal(t, "[1,2,3]", l.String())
+		length := 3
+		for i := 0; i < length; i++ {
+			l.PushBack(i)
+		}
+
+		assert.Equal(t, length, l.Len(), "length should be expected")
+		assert.Equal(t, 0, l.Front().Val, "Front should be expected")
+		assert.Equal(t, length-1, l.Back().Val, "Back should be expected")
+
+		i := 0
+		for e := l.Front(); e != nil; e = e.Next() {
+			assert.Equal(t, i, e.Val)
+			i++
+		}
+		assert.Equal(t, "[1,2,3]", l.String(), "l.String() should return correct result")
 	})
-	l := list.New()
-	_ = l
 }
 
 type Node[T any] struct {
@@ -65,14 +72,14 @@ func (n *Node[T]) String() string {
 	return fmt.Sprint(n.Val)
 }
 
-func (n *Node[T]) Next() *Node {
-	if p := n.next; n.next != nil && p != &n.l.root {
+func (n *Node[T]) Next() *Node[T] {
+	if p := n.next; n.next != nil && p != &n.list.root {
 		return p
 	}
 	return nil
 }
 
-func (n *Node[T]) Prev() *Node {
+func (n *Node[T]) Prev() *Node[T] {
 	return nil
 }
 
@@ -86,10 +93,10 @@ func (l *List[T]) NewNode(val T) *Node[T] {
 }
 
 func NewList[T any]() *List[T] {
-	r := &Node[T]{}
-	r.next = r
-	r.prev = r
-	return &List[T]{root: r}
+	l := &List[T]{}
+	l.root.next = &l.root
+	l.root.prev = &l.root
+	return l
 }
 
 func (l *List[T]) IsEmpty() bool {
@@ -97,29 +104,41 @@ func (l *List[T]) IsEmpty() bool {
 }
 
 func (l *List[T]) PushBack(val T) error {
-	n := &Node[T]{Val: val}
+	n := l.NewNode(val)
 	if l.IsEmpty() {
 		l.root.next = n
-		l.root.prev = n
-		l.len++
+	}
+	n.prev = l.root.prev
+	l.root.prev = n
+	n.next = &l.root
+	l.len++
+	return nil
+}
+
+func (l *List[T]) Front() *Node[T] {
+	if l.len == 0 {
 		return nil
 	}
+	return l.root.next
+}
 
-	n.next = &l.root
-	n.prev = &l.root.prev
-	l.root.prev = n
-	l.len++
+func (l *List[T]) Back() *Node[T] {
+	if l.len == 0 {
+		return nil
+	}
+	return l.root.prev
+}
 
-	return nil
+func (l *List[T]) Len() int {
+	return l.len
 }
 
 func (l *List[T]) String() string {
 	out := make([]string, 0, l.len)
 
-	for cur := l.root; cur != cur.next; cur = cur.next {
-		out = append(out, cur.String())
+	for e := l.Front(); e != nil; e = e.Next() {
+		out = append(out, e.String())
 	}
-
 	return fmt.Sprintf("[%s]", strings.Join(out, ","))
 }
 
