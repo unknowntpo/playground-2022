@@ -78,7 +78,7 @@ func (n *Node[T]) String() string {
 */
 
 func (n *Node[T]) Next() *Node[T] {
-	if p := n.next; n.next != nil && p != &n.list.root {
+	if p := n.next; p != &n.list.root {
 		return p
 	}
 	return nil
