@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 type LRUCache struct {
@@ -49,15 +48,13 @@ func TestList(t *testing.T) {
 		}
 
 		assert.Equal(t, length, l.Len(), "length should be expected")
-		assert.Equal(t, 0, l.Front().Val, "Front should be expected")
-		assert.Equal(t, length-1, l.Back().Val, "Back should be expected")
 
 		i := 0
 		for e := l.Front(); e != nil; e = e.Next() {
 			assert.Equal(t, i, e.Val)
 			i++
 		}
-		assert.Equal(t, "[1,2,3]", l.String(), "l.String() should return correct result")
+		assert.Equal(t, "[0,1,2]", l.String(), "l.String() should return correct result")
 	})
 }
 
@@ -71,6 +68,14 @@ type Node[T any] struct {
 func (n *Node[T]) String() string {
 	return fmt.Sprint(n.Val)
 }
+
+/*
+[&0 r &0]
+
+[&r 0 &0]
+
+[&0 1 &r]
+*/
 
 func (n *Node[T]) Next() *Node[T] {
 	if p := n.next; n.next != nil && p != &n.list.root {
@@ -103,12 +108,34 @@ func (l *List[T]) IsEmpty() bool {
 	return l.len == 0
 }
 
+/*
+[&1 r &0]
+
+[&r 0 &0]
+
+[&0 1 &r]
+
+--
+
+[&1 r &0]
+
+[&r 0 &1]
+
+[&0 1 &r]
+
+---
+
+[&r r &0]
+
+[&r 0 x]
+*/
 func (l *List[T]) PushBack(val T) error {
 	n := l.NewNode(val)
 	if l.IsEmpty() {
 		l.root.next = n
 	}
 	n.prev = l.root.prev
+	l.root.prev.next = n
 	l.root.prev = n
 	n.next = &l.root
 	l.len++
@@ -120,13 +147,6 @@ func (l *List[T]) Front() *Node[T] {
 		return nil
 	}
 	return l.root.next
-}
-
-func (l *List[T]) Back() *Node[T] {
-	if l.len == 0 {
-		return nil
-	}
-	return l.root.prev
 }
 
 func (l *List[T]) Len() int {
