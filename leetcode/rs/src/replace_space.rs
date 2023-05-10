@@ -5,28 +5,38 @@ fn replace_space(s: String) -> String {
     // Phase 1: append sufficient space
     // new_length = s.len() + num_of_white_space * 2
 
-    let num_of_space = count_white_space(s);
+    let num_of_space = count_white_space(&s);
     let new_str_len = s.len() + (num_of_space as usize) * 2;
 
-    let new_vec = Vec::with_capacity(new_str_len).extend_from_slice(&s.into_bytes());
+    let mut new_vec: Vec<char> = Vec::with_capacity(new_str_len);
+    new_vec.extend(s.chars());
 
     // Phase 2: replace space from back to front
 
     // left points to the last element of old string
-    let left = s.len() - 1;
+    let mut left = s.len() - 1;
 
     // right points to the last element of string
-    let right = new_str_len - 1;
-    /*
+    let mut right = new_str_len - 1;
     while left < right {
-        if new_vec[right] ;
-
-
+        if new_vec[left] == ' ' {
+            new_vec[right] = '0';
+            new_vec[right - 1] = '2';
+            new_vec[right - 2] = '%';
+            right -= 3;
+            left -= 1;
+        } else {
+            new_vec[right] = new_vec[left];
+            right -= 1;
+            left -= 1;
+        }
     }
-    */
+
+    let out: String = new_vec.into_iter().collect();
+    out
 }
 
-fn count_white_space(s: String) -> i32 {
+fn count_white_space(s: &str) -> i32 {
     let mut cnt = 0;
     for c in s.chars() {
         if c == ' ' {
