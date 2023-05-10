@@ -4,6 +4,10 @@
 fn replace_space(s: String) -> String {
     // Phase 1: append sufficient space
     // new_length = s.len() + num_of_white_space * 2
+    //
+    if s.len() == 0 {
+        return s;
+    }
 
     let num_of_space = count_white_space(&s);
     let new_str_len = s.len() + (num_of_space as usize) * 2;
@@ -58,10 +62,15 @@ mod replace_space {
 
     #[test]
     fn test_replace_space() {
-        let test_cases = [(
-            String::from("We are happy."),
-            String::from("We%20are%20happy."),
-        )];
+        let test_cases = [
+            (
+                String::from("We are happy."),
+                String::from("We%20are%20happy."),
+            ),
+            (String::from("a b c "), String::from("a%20b%20c%20")),
+            (String::from(" "), String::from("%20")),
+            (String::from(""), String::from("")),
+        ];
         for (input, expected) in test_cases {
             let result = replace_space(input);
             assert_eq!(result, expected);
