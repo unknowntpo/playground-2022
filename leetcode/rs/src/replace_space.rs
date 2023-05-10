@@ -9,7 +9,13 @@ fn replace_space(s: String) -> String {
     let new_str_len = s.len() + (num_of_space as usize) * 2;
 
     let mut new_vec: Vec<char> = Vec::with_capacity(new_str_len);
+
     new_vec.extend(s.chars());
+
+    // fill with white space
+    for _ in new_vec.len()..new_vec.capacity() {
+        new_vec.push(' ');
+    }
 
     // Phase 2: replace space from back to front
 
@@ -58,6 +64,18 @@ mod replace_space {
         )];
         for (input, expected) in test_cases {
             let result = replace_space(input);
+            assert_eq!(result, expected);
+        }
+    }
+
+    #[test]
+    fn test_count_white_space() {
+        let test_cases = [
+            (String::from("We are happy."), 2),
+            (String::from("a b c d. "), 4),
+        ];
+        for (input, expected) in test_cases {
+            let result = count_white_space(&input);
             assert_eq!(result, expected);
         }
     }
