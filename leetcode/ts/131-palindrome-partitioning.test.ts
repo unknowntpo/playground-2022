@@ -10,8 +10,10 @@ function partition(s: string): string[][] {
 
 function dp(s: string, startIdx: number, out: string[][]) {
   if (s.length == 0) return
-  if (s.slice(0, startIdx).split("").reverse().join("") !== s) return
+
   for (let i = startIdx; i < s.length; i++) {
+    if (s.slice(startIdx, i).split("").reverse().join("") !== s) return
+    out.push(s.slice(startIdx, i))
     dp(s.slice(0, i), i, out)
   }
 }
