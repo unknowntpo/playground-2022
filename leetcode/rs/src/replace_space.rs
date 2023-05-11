@@ -21,6 +21,8 @@ fn replace_space(s: String) -> String {
         new_vec.push(' ');
     }
 
+    new_vec.resize(new_str_len, ' ');
+
     // Phase 2: replace space from back to front
 
     // left points to the last element of old string
