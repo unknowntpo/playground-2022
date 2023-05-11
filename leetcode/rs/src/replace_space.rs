@@ -12,15 +12,7 @@ fn replace_space(s: String) -> String {
     let num_of_space = count_white_space(&s);
     let new_str_len = s.len() + (num_of_space as usize) * 2;
 
-    let mut new_vec: Vec<char> = Vec::with_capacity(new_str_len);
-
-    new_vec.extend(s.chars());
-
-    // fill with white space
-    for _ in new_vec.len()..new_vec.capacity() {
-        new_vec.push(' ');
-    }
-
+    let mut new_vec: Vec<_> = s.chars().collect();
     new_vec.resize(new_str_len, ' ');
 
     // Phase 2: replace space from back to front
