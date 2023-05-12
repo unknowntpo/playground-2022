@@ -3,42 +3,52 @@ import { describe, expect, test, it } from '@jest/globals';
 
 // https://leetcode.com/problems/palindrome-partitioning/
 function partition(s: string): string[][] {
-  let out: string[][] = [[]]
-  dp(s, 0, out)
+  let out: string[][] = []
+  let acc: string[] = []
+  backtrack(s, 0, acc, out)
   return out
 };
 
-function dp(s: string, startIdx: number, out: string[][]) {
-  if (s.length == 0) return
-
-  for (let i = startIdx; i < s.length; i++) {
-    if (s.slice(startIdx, i).split("").reverse().join("") !== s) return
-    out.push(s.slice(startIdx, i))
-    dp(s.slice(0, i), i, out)
+function backtrack(s: string, startIdx: number, acc: string[], out: string[][]) {
+  if (startIdx === s.length) {
+    console.log("acc: ", acc)
+    // FIXME: Why need acc.slice() ?
+    out.push(acc.slice())
+    console.log("out: ", out)
+    return
   }
+  for (let i = startIdx; i < s.length; i++) {
+    if (isPalimdrome(s.slice(startIdx, i + 1))) {
+      acc.push(s.slice(startIdx, i + 1))
+      backtrack(s, i + 1, acc, out)
+      acc.pop()
+    }
+  }
+};
+
+function isPalimdrome(str: string): boolean {
+  return [...str].reverse().join("") === str
 }
+
+// aab
+// sub: a
+// []
+
+
+
+
+
+
 /*
-aab
+    r
+ a aa aab
+        (x)
+
+   b
+
+a ab(x)
 
 a
-a
-b
-
-aa
-aab (x
-
-aab
-
-(x)
-
-aa
-
-
-aab
-
-a 
-  aa 
-  
 
 */
 
