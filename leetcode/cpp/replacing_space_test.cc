@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-use namespace std;
+using namespace std;
 
 class Solution {
 public:

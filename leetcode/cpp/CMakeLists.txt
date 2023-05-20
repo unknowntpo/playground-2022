@@ -15,14 +15,22 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+# TODO: Use foreach stuff to avoid do this everytime
+
 add_executable(
   hello_test
   hello_test.cc
+)
+target_link_libraries(
+  hello_test
+  GTest::gtest_main
+)
+
+add_executable(
   replacing_space_test
   replacing_space_test.cc
 )
 target_link_libraries(
-  hello_test
   replacing_space_test
   GTest::gtest_main
 )
