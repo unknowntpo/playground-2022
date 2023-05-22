@@ -11,14 +11,18 @@ class LeaderBoard {
     this.key = key
   }
 
-  addUser(username: string, score: number) {
-    client.zadd([this.key, score, username], (err: error, replies: number) => {
-      console.log(`User ${username} added to the leaderboard`)
-    })
+  async addUser(username: string, score: number) {
+    try {
+      await client.zAdd(this.key, { score: score, value: username, })
+    } catch (err) {
+      console.log(err)
+      return
+    }
+    console.log(`User ${username} with score ${score} added to the leaderboard`)
   }
 
   removeUser(username: string) {
-    client.zrem()
+    // client.zrem()
   }
 }
 
@@ -88,7 +92,18 @@ async function main() {
 
   await client.set('key', 'value');
   const value = await client.get('key');
-  console.log(`Get Value: ${value}`)
+  console.log(`Get Value: ${value} `)
+
+  let leaderBoard = new LeaderBoard("game-score")
+  await leaderBoard.addUser("Arthur", 70);
+  await leaderBoard.addUser("KC", 20);
+  await leaderBoard.addUser("Maxwell", 10);
+  await leaderBoard.addUser("Patrik", 30);
+  await leaderBoard.addUser("Ana", 60);
+  await leaderBoard.addUser("Felipe", 40);
+  await leaderBoard.addUser("Renata", 50);
+  await leaderBoard.addUser("Hugo", 80);
+
   await client.disconnect();
 }
 
