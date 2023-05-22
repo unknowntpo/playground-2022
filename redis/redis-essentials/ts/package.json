@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "ts-node index.ts"
+    "start": "ts-node index.ts",
+    "zset": "ts-node zset.ts"
   },
   "keywords": [],
   "author": "",
