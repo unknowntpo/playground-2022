@@ -32,12 +32,21 @@ class LeaderBoard {
   }
 
   async getUserScoreAndRank(username: string) {
-    await client.zScore(this.key, username)
-      .catch((err) => console.error(err))
-      .then((res) => console.log(`The score of ${username} is ${res}`))
-    // TODO: How to get both score and rank? 
+    await Promise.all([
+      client.zScore(this.key, username)
+        .catch((err) => console.error(err))
+        .then((res) => console.log(`The score of ${username} is ${res}`)),
+      // TODO: How to get both score and rank? 
+      client.zRevRank(this.key, username)
+        .catch((err) => console.error(err))
+        .then((res) => {
+          if (res !== null) {
+            console.log(`The rank of ${username} is ${res}`)
+          }
+        }
+        )
+    ])
   }
-
 }
 
 /*
