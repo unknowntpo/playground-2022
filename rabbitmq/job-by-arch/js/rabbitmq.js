@@ -5,12 +5,12 @@ const url = 'amqp://127.0.0.1'
 const queue = 'my_queue';
 
 async function produce(producerName) {
-  while (1) {
+  for (i = 0; i < 10; i++) {
     try {
       const connection = await amqp.connect(url);
       const channel = await connection.createChannel()
 
-      const message = 'Hello, RabbitMQ'
+      const message = `Hello, RabbitMQ ${i}`
 
       await channel.assertQueue(queue)
       await channel.sendToQueue(queue, Buffer.from(message))
@@ -39,9 +39,12 @@ async function consume(consumerName) {
       await channel.assertQueue(queue);
       await channel.consume(queue, (message) => {
         console.log(`Consummer ${consumerName} received message:`, message.content.toString());
-        channel.ack(message);
+        if (Math.random() > 0.5) {
+          channel.ack(message);
+        } else {
+          channel.nack(message);
+        }
       });
-      console.log(`${consumerName}: Waiting for messages...`);
     } catch (error) {
       console.error(`${consumerName} error:`, error);
     }
