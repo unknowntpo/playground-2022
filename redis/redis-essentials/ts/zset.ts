@@ -21,26 +21,26 @@ class LeaderBoard {
     console.log(`User ${username} with score ${score} added to the leaderboard`)
   }
 
-  removeUser(username: string) {
-    // client.zrem()
+  async removeUser(username: string) {
+    try {
+      await client.zRem(this.key, username)
+    } catch (err) {
+      console.log(err)
+      return
+    }
+    console.log(`user ${username} removed successfully.`)
   }
+
+  async getUserScoreAndRank(username: string) {
+    await client.zScore(this.key, username)
+      .catch((err) => console.error(err))
+      .then((res) => console.log(`The score of ${username} is ${res}`))
+    // TODO: How to get both score and rank? 
+  }
+
 }
 
-
 /*
-
-LeaderBoard.prototype.addUser = function(username, score) { // 1 
-  client.zadd([this.key, score, username], function(err, replies) { // 2
-    console.log("User", username,"added to the leaderboard!"); // 3 
-  });
-};
-
-LeaderBoard.prototype.removeUser = function(username) { // 1 
-  client.zrem(this.key, username, function(err, replies) { // 2
-    console.log("User", username, "removed successfully!"); // 3 
-  });
-};
-
 LeaderBoard.prototype.getUserScoreAndRank = function(username) { // 1 
   var leaderboardKey = this.key; // 2
   client.zscore(leaderboardKey, username, function(err, zscoreReply) { // 3
@@ -103,6 +103,8 @@ async function main() {
   await leaderBoard.addUser("Felipe", 40);
   await leaderBoard.addUser("Renata", 50);
   await leaderBoard.addUser("Hugo", 80);
+
+  await leaderBoard.getUserScoreAndRank("Arthur")
 
   await client.disconnect();
 }
