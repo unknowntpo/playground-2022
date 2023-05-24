@@ -48,7 +48,7 @@ class LeaderBoard {
     ])
   }
   async showTopUsers(quantity: number) {
-    await client.zRange(this.key, 0, "+inf",
+    await client.zRange(this.key, "+inf", 0,
       {
         BY: 'SCORE',
         REV: true,
