@@ -17,11 +17,11 @@ func TestLexer(t *testing.T) {
 			name:  "basic case",
 			input: `{"hello": "world"}`,
 			want: []Token{
-				{TokenLeftBrace, "{"},
+				{TokenLeftBracket, "{"},
 				{TokenString, "hello"},
 				{TokenColon, ":"},
 				{TokenString, "world"},
-				{TokenRightBrace, "}"},
+				{TokenRightBracket, "}"},
 			},
 		},
 	}
@@ -33,6 +33,7 @@ func TestLexer(t *testing.T) {
 			got := []Token{}
 			for token := range l.TokenChan {
 				got = append(got, token)
+				t.Log("got token", token)
 			}
 			assert.Equal(t, got, tt.want, "got should be equal to want")
 		})
