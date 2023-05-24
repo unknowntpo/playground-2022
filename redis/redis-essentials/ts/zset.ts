@@ -47,19 +47,21 @@ class LeaderBoard {
         )
     ])
   }
+  async showTopUsers(quantity: number) {
+    await client.zRange(this.key, 0, "+inf",
+      {
+        BY: 'SCORE',
+        REV: true,
+        LIMIT: { offset: 0, count: quantity },
+      },
+    ).catch((err) => console.error(err))
+      .then((res) =>
+        console.log(`The top ${quantity} of users are ${res}`)
+      )
+  }
 }
 
 /*
-LeaderBoard.prototype.getUserScoreAndRank = function(username) { // 1 
-  var leaderboardKey = this.key; // 2
-  client.zscore(leaderboardKey, username, function(err, zscoreReply) { // 3
-    client.zrevrank(leaderboardKey, username, function( err, zrevrankReply) { // 4
-      console.log("\nDetails of " + username + ":"); 
-      console.log("Score:", zscoreReply + ", Rank: #" + (zrevrankReply + 1)); // 5 
-    });
-  }); 
-};
-
 LeaderBoard.prototype.showTopUsers = function(quantity) { // 1 
   client.zrevrange([this.key, 0, quantity - 1, "WITHSCORES"], function(err, reply) { // 2
     console.log("\nTop", quantity, "users:");
@@ -113,7 +115,10 @@ async function main() {
   await leaderBoard.addUser("Renata", 50);
   await leaderBoard.addUser("Hugo", 80);
 
+
   await leaderBoard.getUserScoreAndRank("Arthur")
+
+  await leaderBoard.showTopUsers(3);
 
   await client.disconnect();
 }
