@@ -17,6 +17,7 @@ enable_testing()
 
 # TODO: Use foreach stuff to avoid do this everytime
 
+# Hello
 add_executable(
   hello_test
   hello_test.cc
@@ -26,6 +27,7 @@ target_link_libraries(
   GTest::gtest_main
 )
 
+# replacing_space
 add_executable(
   replacing_space_test
   replacing_space_test.cc
@@ -35,6 +37,17 @@ target_link_libraries(
   GTest::gtest_main
 )
 
+# reverse_linked_list
+add_executable(
+  reverse_linked_list
+  reverse_linked_list_test.cc
+)
+target_link_libraries(
+  reverse_linked_list
+  GTest::gtest_main
+)
+
 include(GoogleTest)
 gtest_discover_tests(hello_test)
 gtest_discover_tests(replacing_space_test)
+gtest_discover_tests(reverse_linked_list)
