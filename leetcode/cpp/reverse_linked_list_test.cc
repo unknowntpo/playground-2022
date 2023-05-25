@@ -35,8 +35,10 @@ public:
   }
   vector<int> listToVector(ListNode *head) {
     vector<int> out;
-    while (head != NULL) {
-      out.push_back(head->val);
+    ListNode *cur = head;
+    while (cur != NULL) {
+      out.push_back(cur->val);
+      cur = cur->next;
     }
     return out;
   }
