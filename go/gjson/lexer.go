@@ -14,23 +14,23 @@ type Lexer struct {
 
 type Token struct {
 	Type  TokenType
-	value string
+	Value string
 }
 
-type TokenType int
+type TokenType string
 
 const (
-	TokenError TokenType = iota
-	TokenEOF
-	TokenString
-	TokenNumber
-	TokenTrue
-	TokenFalse
-	TokenNull
-	TokenLeftBracket
-	TokenRightBracket
-	TokenColon
-	TokenComma
+	TokenError        TokenType = "ERROR"
+	TokenEOF                    = "EOF"
+	TokenString                 = "STRING"
+	TokenNumber                 = "STRING"
+	TokenTrue                   = "TRUE"
+	TokenFalse                  = "FALSE"
+	TokenNull                   = "NULL"
+	TokenLeftBracket            = "LEFT_BRACKET"
+	TokenRightBracket           = "RIGHT_BRACKET"
+	TokenColon                  = "COLON"
+	TokenComma                  = "COMMA"
 )
 
 func NewLexer(input string) *Lexer {
@@ -44,16 +44,25 @@ type stateFn func(l *Lexer) stateFn
 func lexJSON(l *Lexer) stateFn {
 	switch r := l.next(); {
 	case r == '{':
-		l.TokenChan <- Token{Type: TokenLeftBracket}
+		l.TokenChan <- Token{Type: TokenLeftBracket, Value: "{"}
 		return lexJSON
 	case string(r) == `'` || string(r) == `"`:
 		return lexString
+	case string(r) == `:`:
+		l.TokenChan <- Token{Type: TokenColon, Value: ":"}
+		return lexJSON
 	}
 	return l.errorf("unreachable")
 }
 
 func lexString(l *Lexer) stateFn {
-	return l.errorf("lexString unimplemented")
+	cur := l.pos
+	for string(l.input[cur]) != `"` && string(l.input[cur]) != `'` {
+		cur++
+	}
+	l.TokenChan <- Token{TokenString, string(l.input[l.pos:cur])}
+	l.pos = cur
+	return lexJSON
 }
 
 const EOF = rune(0)
