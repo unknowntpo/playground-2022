@@ -2,7 +2,6 @@ import Redis from "ioredis"
 
 const redis = new Redis()
 
-
 class LeaderBoard {
   private key: string
 
@@ -27,23 +26,39 @@ class LeaderBoard {
   }
 
   async getUserScoreAndRank(username: string) {
-    await redis.zrank(this.key, username, "WITHSCORE") ?
-
-      await Promise.all([
-        client.zScore(this.key, username)
-          .catch((err) => console.error(err))
-          .then((res) => console.log(`The score of ${username} is ${res}`)),
-        // TODO: How to get both score and rank? 
-        client.zRevRank(this.key, username)
+    await Promise.all(
+      [
+        redis.zrank(this.key, username)
           .catch((err) => console.error(err))
           .then((res) => {
             if (res !== null) {
               console.log(`The rank of ${username} is ${res}`)
             }
-          }
-          )
-      ])
+          }),
+        redis.zscore(this.key, username)
+          .then((res) => console.log(`The score of ${username} is ${res}`))
+          .catch((err) => console.error(err))
+      ]
+    )
   }
+
+  /*
+  await Promise.all([
+    client.zScore(this.key, username)
+      .catch((err) => console.error(err))
+      .then((res) => console.log(`The score of ${username} is ${res}`)),
+    // TODO: How to get both score and rank? 
+    client.zRevRank(this.key, username)
+      .catch((err) => console.error(err))
+      .then((res) => {
+        if (res !== null) {
+          console.log(`The rank of ${username} is ${res}`)
+        }
+      }
+      )
+  ])
+  */
+  /*
   async showTopUsers(quantity: number) {
     await client.zRange(this.key, "+inf", 0,
       {
@@ -56,17 +71,18 @@ class LeaderBoard {
         console.log(`The top ${quantity} of users are ${res}`)
       )
   }
+  */
 }
 
 
 async function main() {
-  client.on('error', err => console.log('Redis Client Error', err));
+  //  client.on('error', err => console.log('Redis Client Error', err));
 
-  await client.connect();
+  //  await redis.connect();
 
-  await client.set('key', 'value');
-  const value = await client.get('key');
-  console.log(`Get Value: ${value} `)
+  // await client.set('key', 'value');
+  //  const value = await client.get('key');
+  // console.log(`Get Value: ${value} `)
 
   let leaderBoard = new LeaderBoard("game-score")
   await leaderBoard.addUser("Arthur", 70);
@@ -81,7 +97,9 @@ async function main() {
 
   await leaderBoard.getUserScoreAndRank("Arthur")
 
-  await leaderBoard.showTopUsers(3);
+  // await leaderBoard.showTopUsers(3);
 
-  await client.disconnect();
+  //await client.disconnect();
 }
+
+main()
