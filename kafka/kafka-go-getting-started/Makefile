@@ -9,3 +9,22 @@ kafka/topic/new/%:
     --bootstrap-server localhost:9092 \
     --replication-factor 1 \
     --partitions 1
+
+## build/producer: build producer binary
+build/producer:
+	go build -o out/producer util.go producer.go
+
+## build/consumer: build consumer binary
+build/consumer:
+	go build -o out/consumer util.go consumer.go
+
+## run/producer: run producer
+run/producer: build/producer
+	./out/producer getting-started.properties
+
+
+## run/consumer: run consumer
+run/consumer: build/consumer
+	./out/consumer getting-started.properties
+
+
