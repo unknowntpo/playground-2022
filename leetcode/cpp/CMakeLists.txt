@@ -51,3 +51,20 @@ include(GoogleTest)
 gtest_discover_tests(hello_test)
 gtest_discover_tests(replacing_space_test)
 gtest_discover_tests(reverse_linked_list)
+
+
+set(TESTS
+  a
+  b
+  c
+)
+
+# Create an empty list for the cropped file names
+set(TEST_FILES "")
+foreach(T ${TESTS})
+  message(STATUS "test: ${T}")
+  set(TEST_FILE ${T}_test.cc)
+  list(APPEND TEST_FILES ${TEST_FILE})
+endforeach()
+
+message(STATUS " test files: ${TEST_FILES}")
