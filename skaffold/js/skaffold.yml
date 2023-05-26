@@ -1,0 +1,19 @@
+apiVersion: skaffold/v2beta18
+kind: Config
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      artifacts:
+      - image: node-app
+        context: .
+        sync:
+          manual:
+          - src: 'src/**/*.js'
+            dest: .
+deploy:
+  kubectl:
+    manifests:
+      - k8s/*.yml
