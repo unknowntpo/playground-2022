@@ -26,20 +26,32 @@ class LeaderBoard {
   }
 
   async getUserScoreAndRank(username: string) {
+    let score: string | null = null;
+    let rank: number | void | null = null;
     await Promise.all(
       [
         redis.zrank(this.key, username)
           .catch((err) => console.error(err))
           .then((res) => {
-            if (res !== null) {
-              console.log(`The rank of ${username} is ${res}`)
-            }
+            rank = res
           }),
         redis.zscore(this.key, username)
-          .then((res) => console.log(`The score of ${username} is ${res}`))
+          .then((res) => score = res)
           .catch((err) => console.error(err))
       ]
     )
+    console.log(`The rank of ${username} is ${rank}, score is ${score}`)
+  }
+
+  async showTopUsers(quantity: number) {
+    // zrange game-score  +inf 0 byscore rev limit 0 3 withscores
+
+    let users: string[] = [];
+    await redis.zrevrangebyscore(this.key, "+inf", 0, 'WITHSCORES', 'LIMIT', 0, quantity)
+      .then((res) => users = res)
+      .catch((err) => console.error(err))
+
+    console.log(`Top ${quantity} users: ${users}`)
   }
 
   /*
@@ -83,6 +95,8 @@ async function main() {
   // await client.set('key', 'value');
   //  const value = await client.get('key');
   // console.log(`Get Value: ${value} `)
+  //
+  await redis.flushall()
 
   let leaderBoard = new LeaderBoard("game-score")
   await leaderBoard.addUser("Arthur", 70);
@@ -97,7 +111,7 @@ async function main() {
 
   await leaderBoard.getUserScoreAndRank("Arthur")
 
-  // await leaderBoard.showTopUsers(3);
+  await leaderBoard.showTopUsers(3);
 
   //await client.disconnect();
 }
