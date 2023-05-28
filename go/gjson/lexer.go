@@ -56,6 +56,7 @@ func lexJSON(l *Lexer) stateFn {
 }
 
 func lexString(l *Lexer) stateFn {
+	l.backup()
 	cur := l.pos
 	for string(l.input[cur]) != `"` && string(l.input[cur]) != `'` {
 		cur++
@@ -66,6 +67,14 @@ func lexString(l *Lexer) stateFn {
 }
 
 const EOF = rune(0)
+
+// backup rewind lexer by 1 position
+func (l *Lexer) backup() {
+	if int(l.pos) == 0 {
+		return
+	}
+	l.pos = l.pos - 1
+}
 
 func (l *Lexer) next() rune {
 	if int(l.pos) >= len(l.input) {
