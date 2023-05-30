@@ -60,6 +60,8 @@ fn main() {
     let client = redis::Client::open("redis://127.0.0.1/").unwrap();
     let mut con: Connection = client.get_connection().unwrap();
 
+    flushall(&mut con).unwrap();
+
     let deal_ids = vec!["deal:1".to_string(), "deal:2".to_string()];
     let user_ids = vec![
         "user:1".to_string(),
@@ -81,6 +83,11 @@ fn main() {
     show_users_that_received_all_deals(&mut con, &deal_ids).unwrap();
     show_users_that_received_at_least_one_of_the_deals(&mut con, &deal_ids).unwrap();
     println!("{}", fetch_an_integer(client).unwrap());
+}
+
+fn flushall(con: &mut Connection) -> RedisResult<()> {
+    redis::cmd("FLUSHALL").query(con)?;
+    Ok(())
 }
 
 fn mark_deal_as_sent(con: &mut Connection, deal_id: &str, user_id: &str) -> RedisResult<()> {
