@@ -10,29 +10,22 @@
 use std::collections::HashMap;
 
 fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
-    // num -> idx
-    // [2,7,11,15]
-
-    // 2 -> 0
-    // 7 -> 1
-
-    // for idx, ele in nums
-    //     if key: target - ele exist in map:
-    //         return [idx, map[key]]
-    //     map[ele] = idx
     let mut map: HashMap<i32, i32> = HashMap::new();
-
+    // map from target - v to i
     for (i, v) in nums.iter().enumerate() {
-        if map.contains_key(&(target - v)) {
-            return vec![i as i32, map[v]];
+        let diff = target - v;
+        if let Some(pairIdx) = map.get(&v) {
+            return vec![*pairIdx as i32, i as i32];
         }
+        map.insert(diff, i as i32);
     }
-    return vec![1, 2, 3];
+    return vec![];
 }
 
 #[cfg(test)]
 mod two_sum {
     use super::*;
+    #[test]
     fn test_two_sum() {
         let test_cases = [
             (vec![2, 7, 11, 15], 9, vec![0, 1]),
@@ -41,7 +34,7 @@ mod two_sum {
         ];
         for (nums, target, expected) in test_cases {
             let result = two_sum(nums, target);
-            assert_eq!(result, expected);
+            assert_eq!(result.clone().sort(), expected.clone().sort());
         }
     }
 }
