@@ -15,55 +15,26 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-# TODO: Use foreach stuff to avoid do this everytime
-
-# Hello
-add_executable(
-  hello_test
-  hello_test.cc
-)
-target_link_libraries(
-  hello_test
-  GTest::gtest_main
-)
-
-# replacing_space
-add_executable(
-  replacing_space_test
-  replacing_space_test.cc
-)
-target_link_libraries(
-  replacing_space_test
-  GTest::gtest_main
-)
-
-# reverse_linked_list
-add_executable(
-  reverse_linked_list
-  reverse_linked_list_test.cc
-)
-target_link_libraries(
-  reverse_linked_list
-  GTest::gtest_main
-)
-
-include(GoogleTest)
-gtest_discover_tests(hello_test)
-gtest_discover_tests(replacing_space_test)
-gtest_discover_tests(reverse_linked_list)
-
-
 set(TESTS
-  a
-  b
-  c
+  hello
+  replacing_space
+  reverse_linked_list
 )
 
 # Create an empty list for the cropped file names
 set(TEST_FILES "")
+include(GoogleTest)
+
 foreach(T ${TESTS})
   message(STATUS "test: ${T}")
   set(TEST_FILE ${T}_test.cc)
+  add_executable(${T} ${TEST_FILE})
+  target_link_libraries(
+    ${T}
+    GTest::gtest_main
+  ) 
+  message(STATUS "TEST_FILE", ${TEST_FILE})
+  gtest_discover_tests(${T})
   list(APPEND TEST_FILES ${TEST_FILE})
 endforeach()
 
