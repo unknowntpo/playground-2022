@@ -42,11 +42,16 @@ func NewLexer(input string) *Lexer {
 type stateFn func(l *Lexer) stateFn
 
 func lexJSON(l *Lexer) stateFn {
-	switch r := l.next(); {
+	var r rune
+	switch r = l.next(); {
 	case r == '{':
 		l.TokenChan <- Token{Type: TokenLeftBracket, Value: "{"}
 		return lexJSON
+	case r == '}':
+		l.TokenChan <- Token{Type: TokenRightBracket, Value: "}"}
+		return lexJSON
 	case string(r) == `'` || string(r) == `"`:
+		l.backup()
 		return lexString
 	case string(r) == `:`:
 		l.TokenChan <- Token{Type: TokenColon, Value: ":"}
@@ -56,27 +61,55 @@ func lexJSON(l *Lexer) stateFn {
 }
 
 func lexString(l *Lexer) stateFn {
-	l.backup()
+	r := l.next()
+	t := string(r)
+	if t != `"` && t != `'` {
+		return l.errorf(`unexpected token, got %v, want " or '`, l.pos)
+	}
 	cur := l.pos
-	for string(l.input[cur]) != `"` && string(l.input[cur]) != `'` {
+
+	// find another pair
+	for rune(l.input[cur]) != r {
 		cur++
 	}
 	l.TokenChan <- Token{TokenString, string(l.input[l.pos:cur])}
-	l.pos = cur
+	// +1 because we need to skip trailing " or '
+	l.pos = cur + 1
 	return lexJSON
 }
 
 const EOF = rune(0)
 
-// backup rewind lexer by 1 position
+// l.Lexer rewind l.pos for 1 step.
 func (l *Lexer) backup() {
-	if int(l.pos) == 0 {
-		return
+	if !l.atEOF && l.pos > 0 {
+		_, w := utf8.DecodeLastRuneInString(l.input[:l.pos])
+		l.pos -= w
 	}
-	l.pos = l.pos - 1
+}
+
+// 1 2 3 4
+// x y 1 y
+
+// l.Lexer rewind l.pos for 1 step.
+func (l *Lexer) dump() {
+	cPerLine := 6
+	for i, c := range l.input {
+		fmt.Printf("input[%d]: %s", i, string(c))
+		if i%cPerLine == cPerLine-1 {
+			fmt.Println()
+		}
+	}
+}
+
+func (l *Lexer) skipWhiteSpace() {
+	for l.pos < len(l.input) && l.input[l.pos] == ' ' {
+		l.pos++
+	}
 }
 
 func (l *Lexer) next() rune {
+	l.skipWhiteSpace()
 	if int(l.pos) >= len(l.input) {
 		l.atEOF = true
 		return EOF

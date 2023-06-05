@@ -30,6 +30,8 @@ func TestLexer(t *testing.T) {
 			l := NewLexer(tt.input)
 			go l.Run()
 
+			l.dump()
+
 			got := []Token{}
 			for token := range l.TokenChan {
 				got = append(got, token)
