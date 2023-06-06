@@ -44,6 +44,8 @@ type stateFn func(l *Lexer) stateFn
 func lexJSON(l *Lexer) stateFn {
 	var r rune
 	switch r = l.next(); {
+	case r == EOF:
+		return nil
 	case r == '{':
 		l.TokenChan <- Token{Type: TokenLeftBracket, Value: "{"}
 		return lexJSON
@@ -93,13 +95,21 @@ func (l *Lexer) backup() {
 
 // l.Lexer rewind l.pos for 1 step.
 func (l *Lexer) dump() {
+	fmt.Println("=======DUMP========")
+	pChar := 0
 	cPerLine := 6
-	for i, c := range l.input {
-		fmt.Printf("input[%d]: %s", i, string(c))
-		if i%cPerLine == cPerLine-1 {
-			fmt.Println()
+
+	for pIdx := range l.input {
+		fmt.Printf("%d\t", pIdx)
+		if pIdx%cPerLine == cPerLine-1 {
+			fmt.Printf("\n")
+			for ; pChar <= pIdx; pChar++ {
+				fmt.Printf("%s\t", string(l.input[pChar]))
+			}
+			fmt.Printf("\n")
 		}
 	}
+	fmt.Println("=======DUMP========")
 }
 
 func (l *Lexer) skipWhiteSpace() {
@@ -124,6 +134,7 @@ func (l *Lexer) Run() {
 	for state != nil {
 		state = state(l)
 	}
+	close(l.TokenChan)
 }
 
 func (l *Lexer) errorf(format string, args ...interface{}) stateFn {
