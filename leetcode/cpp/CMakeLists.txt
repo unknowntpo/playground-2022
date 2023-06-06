@@ -19,6 +19,7 @@ set(TESTS
   hello
   replacing_space
   reverse_linked_list
+  lru_cache
 )
 
 # Create an empty list for the cropped file names
