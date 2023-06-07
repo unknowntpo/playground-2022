@@ -8,5 +8,13 @@ int main() {
   for (auto &n : um) {
     cout << "n: " << n.first << ": " << n.second << endl;
   }
+
+  cout << um.find("Tom")->first << endl;
+
+  // Use it == um.end() to check if this key exists or not
+  auto it = um.find("Kevin");
+  cout << (it == um.end()) << endl;
+
+  //  cout << um.find("Tom").first << end;
   return 0;
 }
