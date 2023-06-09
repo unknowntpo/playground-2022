@@ -11,25 +11,35 @@ class LRUCache<K, V> {
   list: Array<KeyValue<K, V>>
   cap: number
   constructor() {
-    this.map = new Map<K, V>()
+    this.map = new Map<K, number>()
+    this.list = []
   }
 
   get(key: K): V | undefined {
+    if (this.map.has(key)) {
+      let idx: number = this.map.get(key)!
+      this.moveToFront(idx)
+      return this.list[0].value
+    }
     return undefined
   }
 
-  put(key: K, value: V) {
-    if keyExist() {
-      // find the index of the key in list, move it to back of list  
+  moveToFront(idx: number) {
+    let kv = this.list.splice(idx, 1)[0]
+    this.list.unshift(kv)
+  }
 
+  put(key: K, value: V) {
+    if (this.map.has(key)) {
+      // find the index of the key in list, move it to back of list  
+      let idx: number = this.map.get(key)!
+      this.moveToFront(idx)
     } else {
       // try to append to list
-      if (list.length == cap) {
+      if (this.list.length == this.cap) {
         // got head
-        head = gotHeadFromList(list)
-        deleteFromMap(map, head)
-        // trim frist element of list
-        this.list.shift()
+        let head = this.list.shift()
+        this.map.delete(head!.key)
       } else {
         this.list.push({ key: key, value: value })
       }
