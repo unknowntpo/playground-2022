@@ -23,24 +23,21 @@ TEST(testCase, vector_append_normal) {
 }
 
 TEST(testCase, vector_append_resize) {
-  int cap = 3;
+  size_t cap = 3;
+  size_t wantLen = cap + 1;
   vector *vec = vector_new(cap);
   EXPECT_NE(vec, (vector *)(NULL));
-  for (int i = 0; i < cap + 1; i++) {
+  for (int i = 0; i < wantLen; i++) {
     vector_append(vec, i);
   }
 
-  for (int i = 0; i < cap; i++) {
-    EXPECT_EQ(vector_get(vec, i), i);
-  }
-
-  EXPECT_EQ(vector_len(vec), cap + 1);
+  EXPECT_EQ(vector_len(vec), wantLen);
   // Resize strategry: new_cap = old_cap * 2
   EXPECT_EQ(vector_cap(vec), cap * 2);
 
   // GTEST_LOG_(INFO) << "len" << vec->len << std::endl;
 
-  for (int i = 0; i < cap; i++) {
+  for (int i = 0; i < wantLen; i++) {
     EXPECT_EQ(vector_get(vec, i), i);
   }
 }
