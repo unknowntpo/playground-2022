@@ -2,8 +2,8 @@
  * Ref: https://shengyu7697.github.io/googletest/
  * google test
  */
-#include "./vector.h"
 #include "stddef.h"
+#include "vector/vector.h"
 #include "gtest/gtest.h"
 
 TEST(testCase, vector_append_normal) {

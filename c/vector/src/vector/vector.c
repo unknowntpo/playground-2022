@@ -1,11 +1,12 @@
-#include "./vector.h"
+#include "vector/vector.h"
 #include "stddef.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-struct vector {
+struct vector
+{
   int len;
   int cap;
   int *arr;

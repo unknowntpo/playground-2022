@@ -18,8 +18,8 @@ shared_dependencies = [
 
 includes_dir = include_directories([
     'include',
-    'include/add',
-    'include/vector'
+    #    'include/add',
+    #'include/vector'
     # TODO: Add new package
 ])
 
