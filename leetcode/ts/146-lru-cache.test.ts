@@ -1,8 +1,15 @@
 import { describe, expect, test, it } from '@jest/globals';
 
+interface KeyValue<K, V> {
+  key: K
+  value: V
+}
 
 class LRUCache<K, V> {
-  map: Map<K, V>
+  // map from key to index
+  map: Map<K, number>
+  list: Array<KeyValue<K, V>>
+  cap: number
   constructor() {
     this.map = new Map<K, V>()
   }
@@ -12,7 +19,21 @@ class LRUCache<K, V> {
   }
 
   put(key: K, value: V) {
+    if keyExist() {
+      // find the index of the key in list, move it to back of list  
 
+    } else {
+      // try to append to list
+      if (list.length == cap) {
+        // got head
+        head = gotHeadFromList(list)
+        deleteFromMap(map, head)
+        // trim frist element of list
+        this.list.shift()
+      } else {
+        this.list.push({ key: key, value: value })
+      }
+    }
   }
 }
 
