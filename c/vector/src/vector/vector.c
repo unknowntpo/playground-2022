@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct vector {
   int len;
@@ -12,11 +13,7 @@ struct vector {
 
 int vector_add(int a, int b) { return a + b; }
 
-vector *vector_new(int length, int cap) {
-  if (length > cap) {
-    perror("cap should be greater or equal than length");
-    return NULL;
-  }
+vector *vector_new(int cap) {
   int *arr = malloc(cap * sizeof(int));
   if (!arr) {
     perror("failed on malloc on arr");
@@ -29,7 +26,7 @@ vector *vector_new(int length, int cap) {
     return NULL;
   }
 
-  new->len = length;
+  new->len = 0;
   new->cap = cap;
   new->arr = arr;
 
@@ -54,4 +51,19 @@ void vector_append(vector *vec, int element) {
     vec->arr[vec->len++] = element;
     return;
   }
+
+  printf("old cap: %d", vec->cap);
+  printf("old len: %d", vec->len);
+
+  // need resize
+  // Resize strategry: new_cap = old_cap * 2
+  size_t new_cap = vec->cap * 2;
+  int *new_arr = malloc(new_cap * sizeof(*vec->arr));
+  memcpy(new_arr, vec->arr, new_cap * sizeof(*vec->arr));
+  free(vec->arr);
+  vec->arr = new_arr;
+  vec->cap = new_cap;
+
+  printf("new cap: %d", vec->cap);
+  printf("new len: %d", vec->len);
 }
