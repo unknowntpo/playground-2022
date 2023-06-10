@@ -1,17 +1,20 @@
 // https://sharegpt.com/c/dJ4K7NY
 
-fn divide(dividend: i32, divisor: i32) -> Result<i32, String> {
-    if divisor == 0 {
-        return Err(String::from("Cannot divide by zero"));
+fn divide(x: i32, y: i32) -> Result<i32, String>{
+    if y == 0 {
+        return Err("divided by zero".to_string())
     }
-    Ok(dividend / divisor)
+    Ok(x / y)
 }
-fn main() {
-    let dividend = 10;
-    let divisor = 0;
 
-    match divide(dividend, divisor) {
-        Ok(value) => println!("Result: {}", value),
-        Err(error) => println!("Result: {}", error),
+fn main()  {
+    match  divide(1, 0) {
+        Ok(value) => println!("got result {}", value),
+        Err(error) => println!("got error {}", error),
+    }
+    match  divide(1, 3) {
+        Ok(value) => println!("got result {}", value),
+        Err(error) => println!("got error {}", error),
     }
 }
+
