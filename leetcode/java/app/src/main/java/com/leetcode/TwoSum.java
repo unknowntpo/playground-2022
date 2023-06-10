@@ -1,10 +1,10 @@
-package leetcode;
+package com.leetcode;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class TwoSum {
-  public int[] TwoSum(int[] nums,  int target) {
+  public int[] twoSum(int[] nums,  int target) {
     Map<Integer, Integer> numToIndexMap = new HashMap<>();
 
     for (int i = 0; i < nums.length;i++) {
