@@ -41,6 +41,16 @@ removeWhiteSpaceTestCases = [
         "input": "  hello world",
         "want": "hello world",
     },
+    {
+        "name": "has trailing space",
+        "input": "hello world  ",
+        "want": "hello world",
+    },
+    {
+        "name": "has trailing space",
+        "input": "h ",
+        "want": "h",
+    },
 ]
 
 
@@ -51,8 +61,42 @@ def test_removeWhiteSpace(testCase):
     assert removeWhiteSpacePrefix(input) == want
 
 
-def removeWhiteSpacePrefix(s: str) -> str:
+def removeWhiteSpacePrefix(input: str) -> str:
+    s = list(input)
     i = 0
-    while (s[i] == " "):
+    # trim precending white space
+    while s[i] == ' ':
         i += 1
-    return s[i:]
+
+    s = s[i:]
+    for j in range(i, len(s)):
+        if s[j] != ' ' or (s[j] == ' ' and s[j-1] != ' '):
+            s[i] = s[j]
+            i += 1
+
+    # trim trailing white space
+    if s[i-1] == ' ' and s[i-2] != ' ':
+        i -= 1
+
+    return ''.join(s[:i])
+
+
+"""
+i: hold the correct answer
+
+j: fetch the word
+
+i
+  j
+__ab__b_c_
+
+  i
+    j
+abab__b_c_
+
+      i
+         j
+ab_b_c__c_
+
+
+"""
