@@ -26,28 +26,63 @@ func (h *MaxHeap) maxHeapifyUp(index int) {
 	}
 }
 
+/*
+*
+*[2, 3, 2, 1]
+*[3, 2, 2, 1]
+*
+* l: 3
+* r: 4
+* can: 4
+*[1, 3, 2, 5, 1]
+* [3 2 1]
+* [1,3,2,1]
+* cur: 1
+* l: 1 *2+1= 3 o
+* r: 1 *2+2= 4 x
+* can = l = 3
+* [3,1,2,1]
+* cur: 1
+ */
+
 func (h *MaxHeap) maxHeapifyDown(index int) {
-	lastIndex := len(h.array) - 1
-	l, r := left(index), right(index)
-	childToCompare := 0
-
-	for l <= lastIndex {
-		if l == lastIndex { //when left child is the only child
-			childToCompare = l
-		} else if h.array[l] > h.array[r] { // when left child is larger
-			childToCompare = l
-		} else { // when right child is larger
-			childToCompare = r
-		}
-
-		if h.array[index] < h.array[childToCompare] {
-			h.swap(index, childToCompare)
-			index = childToCompare
-			l, r = left(index), right(index)
+	curIdx := index
+	for h.isValidIdx(curIdx) {
+		fmt.Println("curIdx", curIdx, "arr", h.array)
+		l := left(curIdx)
+		r := right(curIdx)
+		var candidate int
+		if !h.isValidIdx(l) {
+			// l out of bound, ie: r is also out of bound
+			return
+		} else if !h.isValidIdx(r) {
+			// l is valid, but r out of bound
+			candidate = l
 		} else {
+			// both of them are valid, get max value
+			candidate = h.getMaxValueOfIdx(l, r)
+		}
+		if h.array[curIdx] < h.array[candidate] {
+			h.array[curIdx], h.array[candidate] = h.array[candidate], h.array[curIdx]
+			curIdx = candidate
+		} else {
+			// not need to compare
 			return
 		}
 	}
+}
+
+// given index, find out max value by given index
+func (h *MaxHeap) getMaxValueOfIdx(l, r int) int {
+	if h.array[l] >= h.array[r] {
+		return l
+	} else {
+		return r
+	}
+}
+
+func (h *MaxHeap) isValidIdx(idx int) bool {
+	return 0 <= idx && idx < len(h.array)
 }
 
 func (h *MaxHeap) Extract() (int, bool) {
