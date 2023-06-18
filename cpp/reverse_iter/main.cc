@@ -8,8 +8,13 @@ int main(int argc, char *argv[]) {
   std::list<int> l;
 
   for (int i = 0; i < 6; i++) {
+    /*
     l.push_back(i);
-    um[i] = l.rbegin().base();
+    um[i] = (l.rbegin()).base();
+    */
+    // no problem with push_front
+    l.push_front(i);
+    um[i] = (l.begin());
   }
 
   for (const auto &n : l) {
