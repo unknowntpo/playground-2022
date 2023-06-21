@@ -15,6 +15,12 @@ int main() {
   auto it = um.find("Kevin");
   cout << (it == um.end()) << endl;
 
+  um.erase("Tom");
+
+  for (auto &n : um) {
+    cout << "n: " << n.first << ": " << n.second << endl;
+  }
+
   //  cout << um.find("Tom").first << end;
   return 0;
 }
