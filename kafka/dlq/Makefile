@@ -18,6 +18,14 @@ kafka/topic/new/%:
     --replication-factor 1 \
     --partitions 1
 
+## kafka/topic/list: list topics
+kafka/topic/list:
+	docker compose exec broker \
+  kafka-topics --list \
+    --bootstrap-server localhost:9092
+
+
+
 ## build/producer: build producer binary
 build/producer:
 	go build -o out/producer util.go producer.go
