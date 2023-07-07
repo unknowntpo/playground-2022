@@ -8,7 +8,8 @@ int main() {
   auto now = system_clock::now();
 
   // Convert the time point to Unix timestamp with nanosecond precision
-  auto timestamp = time_point_cast<nanoseconds>(now).time_since_epoch().count();
+  long long int timestamp =
+      time_point_cast<nanoseconds>(now).time_since_epoch().count();
 
   // Print the timestamp
   std::cout << "Unix timestamp (nanoseconds): " << timestamp << std::endl;

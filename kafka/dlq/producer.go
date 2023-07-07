@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
@@ -20,7 +19,6 @@ func main() {
 
 	topic := "order"
 	p, err := kafka.NewProducer(&conf)
-
 	if err != nil {
 		fmt.Printf("Failed to create producer: %s", err)
 		os.Exit(1)
@@ -42,16 +40,12 @@ func main() {
 		}
 	}()
 
-	users := [...]string{"eabara", "jsmith", "sgarcia", "jbernard", "htanaka", "awalther"}
-	items := [...]string{"book", "alarm clock", "t-shirts", "gift card", "batteries"}
-
 	for n := 0; n < 10; n++ {
-		key := users[rand.Intn(len(users))]
-		data := items[rand.Intn(len(items))]
+		order := CreateOrderData()
 		p.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-			Key:            []byte(key),
-			Value:          []byte(data),
+			Key:            []byte(order.Name),
+			Value:          Marshal(order),
 		}, nil)
 	}
 

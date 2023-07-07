@@ -28,11 +28,11 @@ kafka/topic/list:
 
 ## build/producer: build producer binary
 build/producer:
-	go build -o out/producer util.go producer.go
+	go build -o out/producer util.go producer.go order.go
 
 ## build/consumer: build consumer binary
 build/consumer:
-	go build -o out/consumer util.go consumer.go
+	go build -o out/consumer util.go consumer.go order.go
 
 ## run/producer: run producer
 run/producer: build/producer
