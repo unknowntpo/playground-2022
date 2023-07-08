@@ -13,7 +13,7 @@ import (
 )
 
 const ORDER_TOPIC = "order"
-const RETRY_LIMIT = 10
+const RETRY_LIMIT = 2
 const ORDER_DLQ_TOPIC = "order_dlq"
 
 func main() {
@@ -45,7 +45,7 @@ func main() {
 	}
 
 	topics := []string{ORDER_TOPIC}
-	topics = getRetryTopicNames(RETRY_LIMIT)
+	topics = append(topics, getRetryTopicNames(RETRY_LIMIT)...)
 	topics = append(topics, ORDER_DLQ_TOPIC)
 	err = c.SubscribeTopics(topics, nil)
 	// Set up a channel for handling Ctrl-C, etc
@@ -73,15 +73,16 @@ func main() {
 			fmt.Printf("Consumed event from topic %s: key = %-10s value = %+v\n",
 				*ev.TopicPartition.Topic, string(ev.Key), order)
 
-			randNum := rand.Intn(2)
-			if randNum == 0 {
+			randNum := rand.Intn(10)
+			if randNum < 3 {
 				// Success
 				fmt.Printf("SUCCESS\n")
 			} else {
 				fmt.Printf("FAIL\n")
 				// goto retry queue
 				if order.Retry < RETRY_LIMIT {
-					retryTopic := getRetryTopicName(order.Retry + 1)
+					order.Retry++
+					retryTopic := getRetryTopicName(order.Retry)
 					p.Produce(&kafka.Message{
 						TopicPartition: kafka.TopicPartition{
 							Topic:     &retryTopic,
