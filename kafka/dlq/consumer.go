@@ -70,8 +70,8 @@ func main() {
 			var order Order
 			Unmarshal(ev.Value, &order)
 
-			fmt.Printf("Consumed event from topic %s: key = %-10s value = %+v\n",
-				*ev.TopicPartition.Topic, string(ev.Key), order)
+			fmt.Printf("Consumed event from topic %s, offset %s, key = %-10s value = %+v\n",
+				*ev.TopicPartition.Topic, ev.TopicPartition.Offset.String(), string(ev.Key), order)
 
 			randNum := rand.Intn(10)
 			if randNum < 3 {
@@ -91,17 +91,22 @@ func main() {
 						Key:   []byte(order.Name),
 						Value: Marshal(order),
 					}, nil)
+
+					fmt.Printf("Published message %+v to %v\n", debug(order), retryTopic)
 				} else {
 					// dlq
+					order.Retry++
+
+					fmt.Printf("Publish message %+v to dlq\n", debug(order))
 					dlqTopic := ORDER_DLQ_TOPIC
-					p.Produce(&kafka.Message{
+					must(p.Produce(&kafka.Message{
 						TopicPartition: kafka.TopicPartition{
 							Topic:     &dlqTopic,
 							Partition: kafka.PartitionAny,
 						},
 						Key:   []byte(order.Name),
 						Value: Marshal(order),
-					}, nil)
+					}, nil))
 				}
 			}
 		}
@@ -116,7 +121,7 @@ func getRetryTopicName(retry int) string {
 
 func getRetryTopicNames(retry int) []string {
 	out := make([]string, 0, retry)
-	for i := 0; i < retry; i++ {
+	for i := 1; i <= retry; i++ {
 		out = append(out, getRetryTopicName(i))
 	}
 	return out

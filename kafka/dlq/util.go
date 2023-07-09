@@ -51,6 +51,10 @@ func must(err error) {
 	}
 }
 
+func debug(v any) string {
+	return string(Marshal(v))
+}
+
 func Unmarshal(b []byte, v any) {
 	must(json.Unmarshal(b, v))
 }
