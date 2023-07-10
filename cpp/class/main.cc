@@ -1,25 +1,15 @@
+#include "main.h"
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-class Toy {
-private:
-  string name;
-  int price;
-
-public:
-  Toy(string name, int price) {
-    name = name;
-    price = price;
-  }
-  string Show();
-};
+Toy::Toy(string name, int price) : name_(name), price_(price) {}
 
 string Toy::Show() {
-  string a = "hello";
-  string b = "world";
-  return a + b;
+  string left = "hello";
+  string right = "world";
+  return left + right;
 }
 
 int main(int argc, char *argv[]) {
