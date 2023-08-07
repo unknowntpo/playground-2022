@@ -1,0 +1,8 @@
+ apiVersion: example.org/v1
+ kind: Fruit
+ metadata:
+   name: banana
+ spec:
+   sweet: true
+   weight: 80
+   comment: just bought

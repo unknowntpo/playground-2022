@@ -1,0 +1,8 @@
+apiVersion: example.org/v1
+kind: Fruit
+metadata:
+  name: apple
+spec:
+  sweet: false
+  weight: 100
+  comment: An apple a day keeps doctor away. 
