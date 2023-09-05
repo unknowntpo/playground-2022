@@ -1,7 +1,8 @@
 
-#include <format>
 #include <iostream>
 #include <vector>
+
+#define DEBUG 1
 
 using namespace std;
 
@@ -11,7 +12,10 @@ int solve(vector<vector<int>> &grid, int colsNum) {
 
   for (int i = 1; i < 3; i++) {
     for (int j = 1; j <= colsNum; j++) {
-      if (grid[i][j] == 1 && (i != 1 && j != 1)) {
+      if (i == 1 && j == 1)
+        continue;
+      if (grid[i][j] == 1) {
+        grid[i][j] = 0;
         continue;
       } else {
         grid[i][j] = grid[i - 1][j] + grid[i][j - 1] + grid[i - 1][j - 1];
@@ -32,7 +36,7 @@ int main() {
 
   for (int t = 1; t <= tc; t++) {
     cout << "Case #" << t << ": ";
-    vector<vector<int>> grid = vector(3, vector(colsNum + 1, 0));
+    vector<vector<int>> grid(3, vector<int>(colsNum + 1, 0));
 
     for (int i = 1; i < 3; i++) {
       string in;
@@ -43,15 +47,17 @@ int main() {
         grid[i][j++] = num;
       }
     }
-    solve(grid, colsNum);
-
-    // cout << format("grid {}", grid);
-    //     // display
-    for (int i = 1; i < 3; i++) {
-      for (int j = 1; j <= colsNum; j++) {
-        cout << grid[i][j];
+    int res = solve(grid, colsNum);
+    if (DEBUG) {
+      // cout << format("grid {}", grid);
+      //     // display
+      cout << "--------Solution------" << endl;
+      for (int i = 1; i < 3; i++) {
+        for (int j = 1; j <= colsNum; j++) {
+          cout << grid[i][j];
+        }
+        cout << endl;
       }
-      cout << endl;
     }
   }
 }
