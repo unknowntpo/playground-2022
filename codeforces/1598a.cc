@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-#define DEBUG 1
+#define DEBUG 0
 
 using namespace std;
 
@@ -12,6 +12,7 @@ int solve(vector<vector<int>> &grid, int colsNum) {
 
   for (int i = 1; i < 3; i++) {
     for (int j = 1; j <= colsNum; j++) {
+      // cout << "i: " << i << " j: " << j << endl;
       if (i == 1 && j == 1)
         continue;
       if (grid[i][j] == 1) {
@@ -31,11 +32,10 @@ int main() {
   cout.tie(0);
   int tc = 1;
   cin >> tc;
-  int colsNum = 0;
-  cin >> colsNum;
-
   for (int t = 1; t <= tc; t++) {
     cout << "Case #" << t << ": ";
+    int colsNum = 0;
+    cin >> colsNum;
     vector<vector<int>> grid(3, vector<int>(colsNum + 1, 0));
 
     for (int i = 1; i < 3; i++) {
@@ -49,15 +49,26 @@ int main() {
     }
     int res = solve(grid, colsNum);
     if (DEBUG) {
+      cout << "result: " << res << endl;
+    }
+    string out = "";
+    if (res > 0) {
+      out = "YES";
+    } else {
+      out = "NO";
+    }
+    cout << out << endl;
+    if (DEBUG) {
       // cout << format("grid {}", grid);
       //     // display
-      cout << "--------Solution------" << endl;
+      cout << "--------DEBUG------" << endl;
       for (int i = 1; i < 3; i++) {
         for (int j = 1; j <= colsNum; j++) {
           cout << grid[i][j];
         }
         cout << endl;
       }
+      cout << "--------DEBUG END------" << endl;
     }
   }
 }
