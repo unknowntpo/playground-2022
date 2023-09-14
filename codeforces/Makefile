@@ -4,14 +4,19 @@ LDFLAGS = -fsanitize=undefined -fsanitize=address
 
 TARGET = 1598a
 
-all: 1598a
+all: 1598a 400b
 
 1598a: 1598a.cc
 	$(CC) $(STD) $(LDFLAGS) -o $@ $^
 
+400b: 400b.cc
+	$(CC) $(STD) $(LDFLAGS) -o $@ $^
+
+
+
 .PHONY: run
-run: $(RUN)
-	cat $(RUN).cmd | $(RUN)
+run/%: 
+	cat $*.cmd | $*
 
 .PHONY: clean
 clean:
