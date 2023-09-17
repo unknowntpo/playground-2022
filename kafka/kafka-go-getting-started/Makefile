@@ -18,17 +18,30 @@ kafka/topic/new/%:
     --replication-factor 1 \
     --partitions 1
 
+CGO=CGO_ENABLED=1
+# https://github.com/confluentinc/confluent-kafka-go/issues/898#issuecomment-1313054432
+TAGS=-tags musl
 ## build/producer: build producer binary
 build/producer:
-	go build -o out/producer util.go producer.go
+	$(CGO) go build -o out/producer $(TAGS) util.go producer.go
 
 ## build/consumer: build consumer binary
 build/consumer:
-	go build -o out/consumer util.go consumer.go
+	$(CGO) go build -o out/consumer $(TAGS) util.go consumer.go
 
 ## run/producer: run producer
 run/producer: build/producer
 	./out/producer getting-started.properties
+
+PLATFORM=--platform arm
+## image/build/producer: build producer image
+image/build/producer:
+	DOCKER_BUILDKIT=1 docker build $(PLATFORM) --target producer .
+
+## image/build/consumer: build consumer image
+image/build/consumer:
+	DOCKER_BUILDKIT=1 docker build $(PLATFORM) --target consumer .
+
 
 
 ## run/consumer: run consumer

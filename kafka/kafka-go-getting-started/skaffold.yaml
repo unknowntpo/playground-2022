@@ -1,0 +1,18 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: go
+build:
+  # platforms: ["linux/arm64"]
+  artifacts:
+    - image: producer
+      custom:
+        buildCommand: |
+          make image/build/producer
+    - image: consumer
+      custom:
+        buildCommand: |
+          make image/build/consumer
+manifests:
+  rawYaml:
+    - k8s/*.yml
