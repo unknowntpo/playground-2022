@@ -1,37 +1,31 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
-	"time"
 
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	kafka "github.com/segmentio/kafka-go"
 )
 
 func main() {
+	brokers := strings.Split(os.Getenv("KAFKA_BROKERS"), ",")
+	groupID := "kafka-go-getting-started"
 
-	if len(os.Args) != 2 {
-		fmt.Fprintf(os.Stderr, "Usage: %s <config-file-path>\n",
-			os.Args[0])
-		os.Exit(1)
-	}
+	r := kafka.NewReader(kafka.ReaderConfig{
+		Brokers:  brokers,
+		GroupID:  groupID,
+		Topic:    "purchases",
+		MinBytes: 10e3, // 10KB
+		MaxBytes: 10e6, // 10MB
+		// Set other configuration options as needed
+	})
 
-	configFile := os.Args[1]
-	conf := ReadConfig(configFile)
-	conf["group.id"] = "kafka-go-getting-started"
-	conf["auto.offset.reset"] = "earliest"
+	defer r.Close()
 
-	c, err := kafka.NewConsumer(&conf)
-
-	if err != nil {
-		fmt.Printf("Failed to create consumer: %s", err)
-		os.Exit(1)
-	}
-
-	topic := "purchases"
-	err = c.SubscribeTopics([]string{topic}, nil)
 	// Set up a channel for handling Ctrl-C, etc
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
@@ -44,15 +38,13 @@ func main() {
 			fmt.Printf("Caught signal %v: terminating\n", sig)
 			run = false
 		default:
-			ev, err := c.ReadMessage(100 * time.Millisecond)
+			msg, err := r.ReadMessage(context.Background())
 			if err != nil {
 				// Errors are informational and automatically handled by the consumer
 				continue
 			}
 			fmt.Printf("Consumed event from topic %s: key = %-10s value = %s\n",
-				*ev.TopicPartition.Topic, string(ev.Key), string(ev.Value))
+				msg.Topic, string(msg.Key), string(msg.Value))
 		}
 	}
-
-	c.Close()
 }

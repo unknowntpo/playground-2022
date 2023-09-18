@@ -1,61 +1,55 @@
 package main
 
 import (
-    "fmt"
-    "math/rand"
-    "os"
+	"context"
+	"fmt"
+	"math/rand"
+	"os"
+	"strings"
+	"time"
 
-    "github.com/confluentinc/confluent-kafka-go/kafka"
+	kafka "github.com/segmentio/kafka-go"
 )
 
 func main() {
+	brokers := strings.Split(os.Getenv("KAFKA_BROKERS"), ",")
 
-    if len(os.Args) != 2 {
-        fmt.Fprintf(os.Stderr, "Usage: %s <config-file-path>\n",
-            os.Args[0])
-        os.Exit(1)
-    }
-    configFile := os.Args[1]
-    conf := ReadConfig(configFile)
+	topic := "purchases"
+	writer := kafka.NewWriter(kafka.WriterConfig{
+		Brokers:  brokers,
+		Topic:    topic,
+		Balancer: &kafka.LeastBytes{},
+	})
 
-    topic := "purchases"
-    p, err := kafka.NewProducer(&conf)
+	defer writer.Close()
 
-    if err != nil {
-        fmt.Printf("Failed to create producer: %s", err)
-        os.Exit(1)
-    }
+	users := [...]string{"eabara", "jsmith", "sgarcia", "jbernard", "htanaka", "awalther"}
+	items := [...]string{"book", "alarm clock", "t-shirts", "gift card", "batteries"}
 
-    // Go-routine to handle message delivery reports and
-    // possibly other event types (errors, stats, etc)
-    go func() {
-        for e := range p.Events() {
-            switch ev := e.(type) {
-            case *kafka.Message:
-                if ev.TopicPartition.Error != nil {
-                    fmt.Printf("Failed to deliver message: %v\n", ev.TopicPartition)
-                } else {
-                    fmt.Printf("Produced event to topic %s: key = %-10s value = %s\n",
-                        *ev.TopicPartition.Topic, string(ev.Key), string(ev.Value))
-                }
-            }
-        }
-    }()
+	for n := 0; n < 10; n++ {
+		key := users[rand.Intn(len(users))]
+		data := items[rand.Intn(len(items))]
 
-    users := [...]string{"eabara", "jsmith", "sgarcia", "jbernard", "htanaka", "awalther"}
-    items := [...]string{"book", "alarm clock", "t-shirts", "gift card", "batteries"}
+		msg := kafka.Message{
+			Key:   []byte(key),
+			Value: []byte(data),
+		}
 
-    for n := 0; n < 10; n++ {
-        key := users[rand.Intn(len(users))]
-        data := items[rand.Intn(len(items))]
-        p.Produce(&kafka.Message{
-            TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-            Key:            []byte(key),
-            Value:          []byte(data),
-        }, nil)
-    }
+		err := writer.WriteMessages(context.Background(), msg)
+		if err != nil {
+			fmt.Printf("Failed to produce message: %s\n", err)
+		} else {
+			fmt.Printf("Produced event to topic %s: key = %-10s value = %s\n",
+				topic, string(msg.Key), string(msg.Value))
+		}
 
-    // Wait for all messages to be delivered
-    p.Flush(15 * 1000)
-    p.Close()
+		// Sleep for a short duration to simulate message production delay
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+
+// Define KafkaConfig as per your configuration structure.
+type KafkaConfig struct {
+	Brokers []string
+	// Add other configuration parameters as needed
 }

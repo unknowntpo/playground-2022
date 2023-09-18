@@ -8,10 +8,6 @@ WORKDIR /app
 
 COPY . .
 
-# https://github.com/confluentinc/confluent-kafka-go/issues/461#issuecomment-617591791
-ENV GOOS=linux
-ENV GOARCH=amd64
-
 RUN go mod download
 
 RUN make build/producer
