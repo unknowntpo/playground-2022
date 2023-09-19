@@ -48,7 +48,7 @@ image/build/consumer:
 
 ## run/consumer: run consumer
 run/consumer: build/consumer
-	./out/consumer getting-started.properties
+	./out/consumer
 
 ## skaffold: run skaffold
 skaffold:
