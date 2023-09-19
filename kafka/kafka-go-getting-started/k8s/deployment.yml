@@ -25,6 +25,12 @@ spec:
               cpu: "1"
           ports:
             - containerPort: 4000
+          env:
+            - name: KAFKA_BROKERS # Notice that the case is different here
+              valueFrom:
+                configMapKeyRef:
+                  name: kafka-client-config
+                  key: KAFKA_BROKERS # The key to fetch.
 
 apiVersion: apps/v1
 kind: Deployment
@@ -53,3 +59,9 @@ spec:
               cpu: "1"
           ports:
             - containerPort: 4000
+          env:
+            - name: KAFKA_BROKERS # Notice that the case is different here
+              valueFrom:
+                configMapKeyRef:
+                  name: kafka-client-config
+                  key: KAFKA_BROKERS # The key to fetch.

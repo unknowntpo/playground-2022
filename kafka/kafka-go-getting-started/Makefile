@@ -8,6 +8,10 @@ kafka/up:
 kafka/down:
 	docker-compose down -v
 
+## kafka/helm/install: install kafka helm chart
+kafka/helm/install:
+	helm install kafka oci://registry-1.docker.io/bitnamicharts/kafka
+
 ## kafka/topic/new/$1: create new topic named $1
 kafka/topic/new/%:
 	echo '$*'
