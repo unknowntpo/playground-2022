@@ -10,6 +10,7 @@ kafka/down:
 
 ## kafka/helm/install: install kafka helm chart
 kafka/helm/install:
+	helm repo add strimzi https://strimzi.io/charts/
 	helm install kafka strimzi/strimzi-kafka-operator
 
 ## kafka/resources/install: install kafka svc
