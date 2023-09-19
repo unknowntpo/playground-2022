@@ -10,7 +10,11 @@ kafka/down:
 
 ## kafka/helm/install: install kafka helm chart
 kafka/helm/install:
-	helm install kafka oci://registry-1.docker.io/bitnamicharts/kafka
+	helm install kafka strimzi/strimzi-kafka-operator
+
+## kafka/resources/install: install kafka svc
+kafka/resources/install:
+	kc apply -f ./k8s/kafka-resources.yml
 
 ## kafka/topic/new/$1: create new topic named $1
 kafka/topic/new/%:

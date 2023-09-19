@@ -7,44 +7,86 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
-	kafka "github.com/segmentio/kafka-go"
+	"github.com/Shopify/sarama"
 )
 
 func main() {
 	brokers := strings.Split(os.Getenv("KAFKA_BROKERS"), ",")
 	groupID := "kafka-go-getting-started"
 
-	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:  brokers,
-		GroupID:  groupID,
-		Topic:    "purchases",
-		MinBytes: 10e3, // 10KB
-		MaxBytes: 10e6, // 10MB
-		// Set other configuration options as needed
-	})
+	config := sarama.NewConfig()
+	config.Version = sarama.V0_10_2_0
+	config.Consumer.Group.Rebalance.Strategy = sarama.BalanceStrategyRoundRobin
+	config.Consumer.Offsets.Initial = sarama.OffsetOldest
 
-	defer r.Close()
+	var consumer sarama.ConsumerGroup
+	retry := 10
+	for retry != 0 {
+		var err error
+		consumer, err = sarama.NewConsumerGroup(brokers, "purchases-group1", config)
+		if err == nil {
+			break
+		}
+		if retry > 0 {
+			time.Sleep(1 * time.Second)
+			retry--
+			fmt.Printf("Error creating Kafka producer, retrying ...: %v\n", err)
+		} else {
+			fmt.Printf("Error creating Kafka producer: %v\n", err)
+			return
+		}
+	}
+
+	defer consumer.Close()
+
+	topic := "purchases"
 
 	// Set up a channel for handling Ctrl-C, etc
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	// Process messages
-	run := true
-	for run {
+	// Subscribe to the topic
+	consumerGroup, err := sarama.NewConsumerGroup(brokers, groupID, config)
+	if err != nil {
+		fmt.Printf("Error creating Kafka consumer group: %v\n", err)
+		return
+	}
+	defer func() {
+		if err := consumerGroup.Close(); err != nil {
+			fmt.Printf("Error closing Kafka consumer group: %v\n", err)
+		}
+	}()
+
+	// Define a handler for consuming messages
+	handler := &ConsumerHandler{}
+
+	// Consume messages
+	for {
 		select {
 		case sig := <-sigchan:
 			fmt.Printf("Caught signal %v: terminating\n", sig)
-			run = false
+			return
 		default:
-			msg, err := r.ReadMessage(context.Background())
-			if err != nil {
-				// Errors are informational and automatically handled by the consumer
-				continue
+			if err := consumerGroup.Consume(context.Background(), []string{topic}, handler); err != nil {
+				fmt.Printf("Error consuming message: %v\n", err)
 			}
-			fmt.Printf("Consumed event from topic %s: key = %-10s value = %s\n",
-				msg.Topic, string(msg.Key), string(msg.Value))
 		}
 	}
+}
+
+// ConsumerHandler implements sarama.ConsumerGroupHandler
+type ConsumerHandler struct{}
+
+func (h *ConsumerHandler) Setup(session sarama.ConsumerGroupSession) error   { return nil }
+func (h *ConsumerHandler) Cleanup(session sarama.ConsumerGroupSession) error { return nil }
+
+func (h *ConsumerHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+	for message := range claim.Messages() {
+		fmt.Printf("Consumed event from topic %s: key = %-10s value = %s\n",
+			message.Topic, string(message.Key), string(message.Value))
+		session.MarkMessage(message, "")
+	}
+	return nil
 }

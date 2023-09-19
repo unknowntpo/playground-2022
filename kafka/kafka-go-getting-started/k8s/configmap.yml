@@ -3,4 +3,9 @@ kind: ConfigMap
 metadata:
   name: kafka-client-config
 data:
-  KAFKA_BROKERS: "kafka.default.svc.cluster.local:9092"
+  # KAFKA_BROKERS: "kafka.default.svc.cluster.local:9092"
+  KAFKA_BROKERS: "my-cluster-kafka-bootstrap:9092"
+  # KAFKA_BROKERS: "kafka"
+  # KAFKA_BROKERS: "kafka-controller-headless-0.kafka-headless.default.svc.cluster.local:9092"
+  # KAFKA_BROKERS: "kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092,kafka-controller-1.kafka-controller-headless.default.svc.cluster.local:9092"
+  # KAFKA_BROKERS: "kafka-0:9092"
