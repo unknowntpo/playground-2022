@@ -5,7 +5,7 @@ metadata:
   labels:
     app: app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: app
@@ -32,6 +32,8 @@ spec:
                   name: kafka-client-config
                   key: KAFKA_BROKERS # The key to fetch.
 
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,7 +41,7 @@ metadata:
   labels:
     app: app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: app

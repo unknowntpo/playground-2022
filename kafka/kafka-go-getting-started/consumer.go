@@ -19,45 +19,49 @@ func main() {
 	config := sarama.NewConfig()
 	config.Version = sarama.V0_10_2_0
 	config.Consumer.Group.Rebalance.Strategy = sarama.BalanceStrategyRoundRobin
+	config.Consumer.Return.Errors = true
+
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest
+
+	client, err := sarama.NewClient(brokers, config)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("brokers: ", client.Brokers())
 
 	var consumer sarama.ConsumerGroup
 	retry := 10
 	for retry != 0 {
 		var err error
-		consumer, err = sarama.NewConsumerGroup(brokers, "purchases-group1", config)
+		consumer, err = sarama.NewConsumerGroupFromClient(groupID, client)
 		if err == nil {
 			break
 		}
 		if retry > 0 {
 			time.Sleep(1 * time.Second)
 			retry--
-			fmt.Printf("Error creating Kafka producer, retrying ...: %v\n", err)
+			fmt.Printf("Error creating Kafka consumer, retrying ...: %v\n", err)
 		} else {
-			fmt.Printf("Error creating Kafka producer: %v\n", err)
+			fmt.Printf("Error creating Kafka consumer: %v\n", err)
 			return
 		}
 	}
 
 	defer consumer.Close()
 
+	// track errors
+	go func() {
+		for err := range consumer.Errors() {
+			fmt.Println("ERROR", err)
+		}
+	}()
+
 	topic := "purchases"
 
 	// Set up a channel for handling Ctrl-C, etc
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
-
-	// Subscribe to the topic
-	consumerGroup, err := sarama.NewConsumerGroup(brokers, groupID, config)
-	if err != nil {
-		fmt.Printf("Error creating Kafka consumer group: %v\n", err)
-		return
-	}
-	defer func() {
-		if err := consumerGroup.Close(); err != nil {
-			fmt.Printf("Error closing Kafka consumer group: %v\n", err)
-		}
-	}()
 
 	// Define a handler for consuming messages
 	handler := &ConsumerHandler{}
@@ -69,7 +73,7 @@ func main() {
 			fmt.Printf("Caught signal %v: terminating\n", sig)
 			return
 		default:
-			if err := consumerGroup.Consume(context.Background(), []string{topic}, handler); err != nil {
+			if err := consumer.Consume(context.Background(), []string{topic}, handler); err != nil {
 				fmt.Printf("Error consuming message: %v\n", err)
 			}
 		}
