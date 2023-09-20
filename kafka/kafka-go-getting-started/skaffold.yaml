@@ -13,6 +13,10 @@ build:
       custom:
         buildCommand: |
           make image/build/consumer
+    - image: consumer-py
+      sync:
+        infer:
+          - 'python/*.py'
 manifests:
   rawYaml:
     - k8s/deployment.yml

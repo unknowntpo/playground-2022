@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: producer
   labels:
-    app: app
+    app: producer
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: app
+      app: producer
   template:
     metadata:
       labels:
-        app: app
+        app: producer
     spec:
       containers:
         - name: producer
@@ -39,22 +39,58 @@ kind: Deployment
 metadata:
   name: consumer
   labels:
-    app: app
+    app: consumer
 spec:
-  replicas: 3
+  replicas: 0
   selector:
     matchLabels:
-      app: app
+      app: consumer
   template:
     metadata:
       labels:
-        app: app
+        app: consumer
     spec:
       containers:
         - name: consumer
           # TODO: replace to image name in Dockerfile 
           # image: golang:1.20.4-alpine3.18
           image: consumer
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+          ports:
+            - containerPort: 4000
+          env:
+            - name: KAFKA_BROKERS # Notice that the case is different here
+              valueFrom:
+                configMapKeyRef:
+                  name: kafka-client-config
+                  key: KAFKA_BROKERS # The key to fetch.
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer-py
+  labels:
+    app: consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      containers:
+        - name: consumer-py
+          # TODO: replace to image name in Dockerfile 
+          # image: golang:1.20.4-alpine3.18
+          image: consumer-py
           resources:
             limits:
               memory: 512Mi

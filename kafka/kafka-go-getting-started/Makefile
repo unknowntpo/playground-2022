@@ -20,7 +20,7 @@ kafka/resources/install:
 ## kafka/topic/new/$1: create new topic named $1
 kafka/topic/new/%:
 	echo '$*'
-	docker compose exec broker \
+	docker compose exec kafka1 \
   kafka-topics --create \
     --topic $* \
     --bootstrap-server localhost:9092 \
