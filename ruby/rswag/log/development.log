@@ -1,0 +1,31 @@
+Started GET "/" for ::1 at 2023-09-25 14:43:13 +0800
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /opt/homebrew/lib/ruby/gems/3.2.0/gems/railties-7.0.8/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /opt/homebrew/lib/ruby/gems/3.2.0/gems/railties-7.0.8/lib/rails/templates/rails/welcome/index.html.erb (Duration: 1.2ms | Allocations: 633)
+Completed 200 OK in 13ms (Views: 3.9ms | ActiveRecord: 0.0ms | Allocations: 7139)
+
+
+Started GET "/api-doc" for ::1 at 2023-09-25 14:43:17 +0800
+  
+ActionController::RoutingError (No route matches [GET] "/api-doc"):
+  
+Started GET "/favicon.ico" for ::1 at 2023-09-25 14:43:17 +0800
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/api-docs" for ::1 at 2023-09-25 14:43:28 +0800
+Started GET "/api-docs/index.html" for ::1 at 2023-09-25 14:43:28 +0800
+Started GET "/api-docs/swagger-ui.css" for ::1 at 2023-09-25 14:43:28 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js" for ::1 at 2023-09-25 14:43:28 +0800
+Started GET "/api-docs/swagger-ui-bundle.js" for ::1 at 2023-09-25 14:43:28 +0800
+Started GET "/api-docs/v1/swagger.yaml" for ::1 at 2023-09-25 14:43:28 +0800
+  
+ActionController::RoutingError (No route matches [GET] "/api-docs/v1/swagger.yaml"):
+  
+Started GET "/api-docs/favicon-32x32.png" for ::1 at 2023-09-25 14:43:28 +0800
+Started GET "/api-docs/index.html" for ::1 at 2023-09-25 14:55:14 +0800
+Started GET "/api-docs/swagger-ui.css" for ::1 at 2023-09-25 14:55:14 +0800
+Started GET "/api-docs/swagger-ui-bundle.js" for ::1 at 2023-09-25 14:55:14 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js" for ::1 at 2023-09-25 14:55:14 +0800
+Started GET "/api-docs/v1/swagger.yaml" for ::1 at 2023-09-25 14:55:15 +0800
+Started GET "/api-docs/favicon-32x32.png" for ::1 at 2023-09-25 14:55:15 +0800
