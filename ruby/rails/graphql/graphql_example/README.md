@@ -22,3 +22,4 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+Ref: https://www.honeybadger.io/blog/graphql-apis-for-rails/
