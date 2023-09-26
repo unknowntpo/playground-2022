@@ -15,5 +15,9 @@ module Types
     def movies_count
       object.movies.size
     end
+
+    def movies
+      object.movies
+    end
   end
 end

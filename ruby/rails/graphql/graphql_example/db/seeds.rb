@@ -7,11 +7,21 @@
 #   Character.create(name: "Luke", movie: movies.first)
 #
 #
-require 'Faker'
+require 'faker'
 
 10.times do
-  User.create(email: "#{Faker::Name.name}@gmail.com", first_name: Faker::Name.first_name,
-              last_name: Faker::Name.last_name)
+  user = User.create(
+    email: Faker::Internet.email,
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name
+  )
+
+  Movie.create(
+    user:,
+    title: Faker::Movie.title,
+    year: Faker::Date.between(from: '2000-01-01', to: '2021-01-01').year,
+    genre: Faker::Book.genre
+  )
 end
 
 # 10.times do
