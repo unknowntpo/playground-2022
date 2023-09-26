@@ -29,3 +29,61 @@ Started GET "/api-docs/swagger-ui-bundle.js" for ::1 at 2023-09-25 14:55:14 +080
 Started GET "/api-docs/swagger-ui-standalone-preset.js" for ::1 at 2023-09-25 14:55:14 +0800
 Started GET "/api-docs/v1/swagger.yaml" for ::1 at 2023-09-25 14:55:15 +0800
 Started GET "/api-docs/favicon-32x32.png" for ::1 at 2023-09-25 14:55:15 +0800
+Started GET "/api-docs/index.html" for ::1 at 2023-09-26 08:53:09 +0800
+Started GET "/api-docs/swagger-ui-bundle.js" for ::1 at 2023-09-26 08:53:09 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js" for ::1 at 2023-09-26 08:53:09 +0800
+Started GET "/api-docs/swagger-ui.css" for ::1 at 2023-09-26 08:53:09 +0800
+Started GET "/api-docs/v1/swagger.yaml" for ::1 at 2023-09-26 08:53:10 +0800
+Started GET "/api-docs/favicon-32x32.png" for ::1 at 2023-09-26 08:53:10 +0800
+Started GET "/api-docs/swagger-ui.css" for ::1 at 2023-09-26 08:53:35 +0800
+Started GET "/api-docs/swagger-ui-bundle.js.map" for ::1 at 2023-09-26 08:53:35 +0800
+Started GET "/api-docs/swagger-ui.css.map" for ::1 at 2023-09-26 08:53:35 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js.map" for ::1 at 2023-09-26 08:53:35 +0800
+Started GET "/api-docs/index.html" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/swagger-ui.css" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/swagger-ui-bundle.js" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/swagger-ui.css.map" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/swagger-ui-bundle.js.map" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js.map" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/v1/swagger.yaml" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/favicon-32x32.png" for ::1 at 2023-09-26 08:55:24 +0800
+Started GET "/api-docs/index.html" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/swagger-ui.css" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/swagger-ui-bundle.js" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/swagger-ui-bundle.js.map" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/swagger-ui.css.map" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js.map" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/v1/swagger.yaml" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/favicon-32x32.png" for ::1 at 2023-09-26 08:56:13 +0800
+Started GET "/api-docs/index.html" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/swagger-ui.css" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/swagger-ui-bundle.js" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/swagger-ui.css.map" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/swagger-ui-bundle.js.map" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js.map" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/v1/swagger.yaml" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/favicon-32x32.png" for ::1 at 2023-09-26 08:56:15 +0800
+Started GET "/api-docs/index.html" for ::1 at 2023-09-26 08:56:25 +0800
+Started GET "/api-docs/swagger-ui.css" for ::1 at 2023-09-26 08:56:25 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js" for ::1 at 2023-09-26 08:56:25 +0800
+Started GET "/api-docs/swagger-ui-bundle.js" for ::1 at 2023-09-26 08:56:25 +0800
+Started GET "/api-docs/swagger-ui.css.map" for ::1 at 2023-09-26 08:56:26 +0800
+Started GET "/api-docs/swagger-ui-bundle.js.map" for ::1 at 2023-09-26 08:56:26 +0800
+Started GET "/api-docs/swagger-ui-standalone-preset.js.map" for ::1 at 2023-09-26 08:56:26 +0800
+Started GET "/api-docs/v1/swagger.yaml" for ::1 at 2023-09-26 08:56:26 +0800
+Started GET "/api-docs/favicon-32x32.png" for ::1 at 2023-09-26 08:56:26 +0800
+Started GET "/blogs/1" for ::1 at 2023-09-26 08:56:32 +0800
+  
+ActionController::RoutingError (No route matches [GET] "/blogs/1"):
+  
+Started POST "/blogs" for ::1 at 2023-09-26 08:56:54 +0800
+  
+ActionController::RoutingError (No route matches [POST] "/blogs"):
+  
+Started POST "/blogs" for ::1 at 2023-09-26 08:57:00 +0800
+  
+ActionController::RoutingError (No route matches [POST] "/blogs"):
+  

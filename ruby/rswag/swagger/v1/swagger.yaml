@@ -77,7 +77,7 @@ paths:
         '406':
           description: unsupported accept header
 servers:
-- url: https://{defaultHost}
+- url: http://{defaultHost}
   variables:
     defaultHost:
-      default: www.example.com
+      default: localhost:3000
