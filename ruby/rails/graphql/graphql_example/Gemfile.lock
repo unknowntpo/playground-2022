@@ -179,6 +179,10 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     rspec-support (3.12.1)
+    search_object (1.2.5)
+    search_object_graphql (1.0.5)
+      graphql (> 1.8)
+      search_object (~> 1.2.5)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -210,6 +214,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.8)
   rspec-rails (~> 6.0.0)
+  search_object_graphql
   sqlite3 (~> 1.4)
   tzinfo-data
 

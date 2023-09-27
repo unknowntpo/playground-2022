@@ -31,5 +31,12 @@ module Types
     def user(id:)
       User.find(id)
     end
+
+    field :movies, Types::MovieType.connection_type, null: false
+    def movies
+      Movie.all
+    end
+
+    # field :movies, Types::MoviesConnection, null: false, connection: true
   end
 end
