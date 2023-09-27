@@ -1,10 +1,14 @@
 require 'rails_helper'
 
 module Queries
-  RSpec.describe MoviesConnection, type: :request do
+  RSpec.describe 'users', type: :request do
     describe '.resolve' do
-      it 'returns all movies with pagination' do
-        user = create(:user)
+      it 'returns all users with pagination' do
+        first_name = 'John'
+        last_name = 'Doe'
+        email = 'johndoe@example.com'
+
+        user = FactoryBot.create(:user, first_name:, last_name:, email:)
         FactoryBot.create(:movie, user:, title: 'Hero', year: 1984, genre: 'Horror')
         FactoryBot.create(:movie, user:, title: 'Gifted', year: 1988, genre: 'Thriller')
         FactoryBot.create(:movie, user:, title: 'It', year: 1986, genre: 'Horror')
@@ -12,9 +16,9 @@ module Queries
         post '/graphql', params: { query: }
 
         json = JSON.parse(response.body)
-        puts "json: #{json.inspect}"
-        page_info = json['data']['moviesConnection']['pageInfo']
-        edges = json['data']['moviesConnection']['edges']
+        puts "json: #{JSON.generate(json)}"
+        page_info = json['data']['movies']['pageInfo']
+        edges = json['data']['movies']['edges']
 
         expect(page_info).to eq(
           'startCursor' => 'MQ',
@@ -27,14 +31,18 @@ module Queries
             'cursor' => 'MQ',
             'node' => hash_including(
               'title' => 'Hero',
-              'author' => { 'id' => author.id.to_s }
+              'userId' => user.id,
+              'year' => 1984,
+              'genre' => 'Horror'
             )
           },
           {
             'cursor' => 'Mg',
             'node' => hash_including(
               'title' => 'Gifted',
-              'author' => { 'id' => author.id.to_s }
+              'userId' => user.id,
+              'year' => 1988,
+              'genre' => 'Thriller'
             )
           }
         ]
@@ -44,7 +52,7 @@ module Queries
     def query
       <<~GQL
         query {
-          moviesConnection(first: 2) {
+          movies(first: 2) {
             pageInfo {
               endCursor
               startCursor
@@ -55,9 +63,9 @@ module Queries
               cursor
               node {
                 title
-                user {
-                  id
-                }
+                userId
+                year
+                genre
               }
             }
           }
