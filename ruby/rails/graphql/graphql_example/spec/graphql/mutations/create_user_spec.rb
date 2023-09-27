@@ -15,6 +15,7 @@ module Mutations
 
         post '/graphql', params: { query: _query(first_name, last_name, email, movies) }
         body = JSON.parse(response.body)
+        puts "body: #{body.inspect}"
         data = body['data']['createUser']['user']
 
         new_user = ::User.last
@@ -38,13 +39,15 @@ module Mutations
         "{ title: \"#{movie[:title]}\", year: #{movie[:year]}, genre: \"#{movie[:genre]}\" }"
       end.join(', ')
 
+      puts "movies_input: #{movies_input.inspect}"
+
       <<~GQL
         mutation {
           createUser(input: {
             firstName: "#{first_name}",
             lastName: "#{last_name}",
-            email: "#{email}"
-            movies: #{movies_input}
+            email: "#{email}",
+            movies: [#{movies_input}]
           }) {
             user {
               id

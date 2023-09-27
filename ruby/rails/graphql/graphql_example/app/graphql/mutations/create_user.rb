@@ -12,7 +12,9 @@ module Mutations
       user = ::User.new(first_name:, last_name:, email:)
       return { user: nil, errors: user.errors.full_messages } unless user.valid?
 
-      puts "movies: #{movies.inspect}"
+      user.movies.build(movies.map(&:to_h))
+
+      puts "movies: #{user.inspect}"
 
       if user.save
         puts "#{user.inspect} issaved"
