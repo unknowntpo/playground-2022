@@ -4,7 +4,10 @@ LDFLAGS = -fsanitize=undefined -fsanitize=address
 
 TARGET = 1598a
 
-all: 1598a 400b
+all: 1598a 400b 1862b
+
+1862b: 1862b.cc
+	$(CC) $(STD) $(LDFLAGS) -o $@ $^
 
 1598a: 1598a.cc
 	$(CC) $(STD) $(LDFLAGS) -o $@ $^
