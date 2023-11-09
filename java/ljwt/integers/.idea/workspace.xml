@@ -5,25 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e24cf4f2-9a89-4716-9cec-f82efcb51ede" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../di/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../di/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../di/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../di/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../di/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../di/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../di/src/main/java/org/example/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../di/src/main/java/org/example/Greeter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../di/src/test/java/org/example/GreeterTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../spring/cards/.idea/cards.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../ruby/hanami/bookshelf/.idea/bookshelf.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../ruby/hanami/bookshelf/lib/bookshelf/.idea/bookshelf.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../ruby/rails/graphql/graphql_example/.idea/graphql_example.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../di/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../di/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../di/src/main/java/org/example/Greeter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../di/src/main/java/org/example/Greeter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../di/src/test/java/org/example/GreeterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../di/src/test/java/org/example/GreeterTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +157,7 @@
       <updated>1699356356261</updated>
       <workItem from="1699356357306" duration="2147000" />
       <workItem from="1699445351792" duration="80000" />
-      <workItem from="1699445440546" duration="984000" />
+      <workItem from="1699445440546" duration="2061000" />
     </task>
     <servers />
   </component>

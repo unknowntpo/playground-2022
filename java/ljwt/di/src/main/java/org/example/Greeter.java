@@ -1,5 +1,7 @@
 package org.example;
 
 public class Greeter {
-    public string
+    public String greet(String name) {
+        return "Hello, " + name;
+    }
 }
