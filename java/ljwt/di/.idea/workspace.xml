@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e30e82e-7ce2-4cb9-a168-17d109c53b1c" name="Changes" comment="" />
+    <list default="true" id="6e30e82e-7ce2-4cb9-a168-17d109c53b1c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Greeter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Greeter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/GreeterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/GreeterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../integers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../integers/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +18,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="JUnit5 Test Class" />
+        <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -54,7 +60,7 @@
       <recent name="org.example" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GreeterTest">
+  <component name="RunManager" selected="JUnit.GreeterTest.testGreet">
     <configuration name="GreeterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="di" />
       <extension name="coverage">
@@ -88,8 +94,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.GreeterTest" />
         <item itemvalue="JUnit.GreeterTest.testGreet" />
+        <item itemvalue="JUnit.GreeterTest" />
       </list>
     </recent_temporary>
   </component>
@@ -102,7 +108,7 @@
       <option name="presentableId" value="Default" />
       <updated>1699445341530</updated>
       <workItem from="1699445342623" duration="89000" />
-      <workItem from="1699445438570" duration="2697000" />
+      <workItem from="1699445438570" duration="4940000" />
     </task>
     <servers />
   </component>
