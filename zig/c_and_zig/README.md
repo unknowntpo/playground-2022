@@ -1,0 +1,1 @@
+zig test src/main.zig -I c/
