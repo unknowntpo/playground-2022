@@ -1,6 +1,7 @@
 package org.example;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -97,7 +98,7 @@ public class Journey {
         // Match to a TourGroup
         TourGroup tourGroup = matchTourGroup(adventurer);
         tourGroup.add(adventurer);
-        System.out.printf("[Journey]: Adventurer %s joined Journey %s -> Matched to TourGroup %s",
+        System.out.printf("[Journey]: Adventurer %s joined Journey %s -> Matched to TourGroup %s\n",
                 student.getAccount(),
                 getName(),
                 tourGroup.getNumber()
@@ -110,7 +111,7 @@ public class Journey {
         if (!tourGroups.isEmpty()) {
             return tourGroups.get((int) (Math.random() * tourGroups.size()));
         }
-        return new TourGroup(1, Collections.singletonList(adventurer));
+        return new TourGroup(1, new ArrayList<>(List.of(adventurer)));
     }
 
     private Mission getFirstMission() {

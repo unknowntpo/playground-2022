@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77ca409e-588f-44ec-942a-2d4841e742f8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../ljwt/di/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../ljwt/di/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Chapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Chapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Journey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Journey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Mission.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Mission.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/MissionCarryOn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/MissionCarryOn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/TourGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/TourGroup.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../zig/c_and_zig/build.zig" beforeDir="false" afterPath="$PROJECT_DIR$/../../../zig/c_and_zig/build.zig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../zig/c_and_zig/src/main.zig" beforeDir="false" afterPath="$PROJECT_DIR$/../../../zig/c_and_zig/src/main.zig" afterDir="false" />
     </list>
@@ -87,11 +84,26 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1699943445561</updated>
-      <workItem from="1699943446731" duration="10135000" />
+      <workItem from="1699943446731" duration="12154000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/TourGroup.java</url>
+          <line>36</line>
+          <properties class="org.example.TourGroup" method="add">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
