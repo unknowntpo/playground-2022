@@ -1,19 +1,54 @@
 package org.example;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import org.example.ValidationUtils.*;
 
 public class Journey {
-    public Journey(String name, String description, BigDecimal price) {
-        setName(name);
-        setDescription(description);
-        setPrice(price);
-    }
 
     private String name;
     private String description;
     private BigDecimal price;
+    private List<Chapter> chapters;
+
+    private List<Adventurer> adventurers;
+
+    public List<TourGroup> getTourGroups() {
+        return tourGroups;
+    }
+
+    public void setTourGroups(List<TourGroup> tourGroups) {
+        this.tourGroups = Objects.requireNonNull(tourGroups);
+    }
+
+    private List<TourGroup> tourGroups;
+
+    public List<Chapter> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
+    }
+
+    public Journey(
+            String name,
+            String description,
+            BigDecimal price,
+            List<Chapter> chapters,
+            List<Adventurer> adventurers,
+            List<TourGroup> tourGroups
+    ) {
+        setChapters(chapters);
+        setName(name);
+        setDescription(description);
+        setPrice(price);
+        setAdventurers(adventurers);
+        setTourGroups(tourGroups);
+    }
 
     public String getName() {
         return name;
@@ -37,5 +72,48 @@ public class Journey {
 
     public void setPrice(BigDecimal price) {
         this.price = ValidationUtils.shouldBeBiggerThan(price, 1);
+    }
+
+    public List<Adventurer> getAdventurers() {
+        return adventurers;
+    }
+
+    public void setAdventurers(List<Adventurer> adventurers) {
+        this.adventurers = Objects.requireNonNull(adventurers);
+    }
+
+    public Adventurer join(Student student) {
+        int number = adventurers.size() + 1;
+
+        // Establish dual relation between adventurer and student
+        Adventurer adventurer = new Adventurer(number, student, this);
+        adventurers.add(adventurer);
+        student.getAdventurers().add(adventurer);
+
+        // Start first mission
+        Mission firstMission = getFirstMission();
+        adventurer.carryOn(firstMission);
+
+        // Match to a TourGroup
+        TourGroup tourGroup = matchTourGroup(adventurer);
+        tourGroup.add(adventurer);
+        System.out.printf("[Journey]: Adventurer %s joined Journey %s -> Matched to TourGroup %s",
+                student.getAccount(),
+                getName(),
+                tourGroup.getNumber()
+        );
+
+        return adventurer;
+    }
+
+    private TourGroup matchTourGroup(Adventurer adventurer) {
+        if (!tourGroups.isEmpty()) {
+            return tourGroups.get((int) (Math.random() * tourGroups.size()));
+        }
+        return new TourGroup(1, Collections.singletonList(adventurer));
+    }
+
+    private Mission getFirstMission() {
+        return getChapters().get(0).getFirstMission();
     }
 }
