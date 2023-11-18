@@ -1,5 +1,13 @@
 const std = @import("std");
 
+const c_flags = [_][]const u8{
+    "-Wall",
+    "-std=c99",
+    "-pedantic",
+    // prevent sigill
+    "-fno-sanitize=undefined",
+};
+
 // Although this function looks imperative, note that its job is to
 // declaratively construct a build graph that will be executed by an external
 // runner.
@@ -24,6 +32,10 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    lib.addIncludePath(.{ .path = "c" });
+    lib.addCSourceFile(.{ .file = .{ .path = "c/add.c" }, .flags = &c_flags });
+    lib.linkLibC();
+
     // This declares intent for the library to be installed into the standard
     // location when the user invokes the "install" step (the default step when
     // running `zig build`).
@@ -36,6 +48,17 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+
+    // main_tests.linkSystemLibrary("c");
+    // main_tests.addIncludePath(.{ .path = "c/" });
+    // main_tests.addCSourceFile(.{ .file = .{ .path = "c/add.c" }, .flags = &c_flags });
+    // main_tests.addCSourceFile(.{ .file = .{ .path = "c/add.h" }, .flags = &c_flags });
+
+    main_tests.addIncludePath(.{ .path = "c" });
+    main_tests.addCSourceFile(.{ .file = .{ .path = "c/add.c" }, .flags = &c_flags });
+    main_tests.linkLibC();
+
+    main_tests.linkLibC();
 
     const run_main_tests = b.addRunArtifact(main_tests);
 
