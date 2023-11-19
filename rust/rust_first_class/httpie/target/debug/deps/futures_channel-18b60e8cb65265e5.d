@@ -1,0 +1,9 @@
+/Users/unknowntpo/repo/unknowntpo/playground-2022/rust/rust_first_class/httpie/target/debug/deps/futures_channel-18b60e8cb65265e5.rmeta: /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/lib.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/lock.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/mpsc/mod.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/mpsc/queue.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/oneshot.rs
+
+/Users/unknowntpo/repo/unknowntpo/playground-2022/rust/rust_first_class/httpie/target/debug/deps/futures_channel-18b60e8cb65265e5.d: /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/lib.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/lock.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/mpsc/mod.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/mpsc/queue.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/oneshot.rs
+
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/lib.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/lock.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/mpsc/mod.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/mpsc/queue.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.29/src/oneshot.rs:

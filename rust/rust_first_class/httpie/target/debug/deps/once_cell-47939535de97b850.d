@@ -1,0 +1,9 @@
+/Users/unknowntpo/repo/unknowntpo/playground-2022/rust/rust_first_class/httpie/target/debug/deps/once_cell-47939535de97b850.rmeta: /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/lib.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/imp_std.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/race.rs
+
+/Users/unknowntpo/repo/unknowntpo/playground-2022/rust/rust_first_class/httpie/target/debug/deps/libonce_cell-47939535de97b850.rlib: /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/lib.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/imp_std.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/race.rs
+
+/Users/unknowntpo/repo/unknowntpo/playground-2022/rust/rust_first_class/httpie/target/debug/deps/once_cell-47939535de97b850.d: /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/lib.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/imp_std.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/race.rs
+
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/lib.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/imp_std.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.18.0/src/race.rs:

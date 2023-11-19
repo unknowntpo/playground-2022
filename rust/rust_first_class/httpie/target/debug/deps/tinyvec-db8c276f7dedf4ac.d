@@ -1,0 +1,11 @@
+/Users/unknowntpo/repo/unknowntpo/playground-2022/rust/rust_first_class/httpie/target/debug/deps/tinyvec-db8c276f7dedf4ac.rmeta: /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/lib.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array/generated_impl.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec_drain.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/slicevec.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/tinyvec.rs
+
+/Users/unknowntpo/repo/unknowntpo/playground-2022/rust/rust_first_class/httpie/target/debug/deps/tinyvec-db8c276f7dedf4ac.d: /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/lib.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array/generated_impl.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec_drain.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/slicevec.rs /Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/tinyvec.rs
+
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/lib.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array/generated_impl.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec_drain.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/slicevec.rs:
+/Users/unknowntpo/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/tinyvec.rs:
