@@ -71,6 +71,9 @@ func RandStringRunes(n int) string {
 	return string(b)
 }
 
+// a writer writes req data by sending data to writeCh
+// and queue itself to waitQueue to wait for response
+// reader waits for response
 func main() {
 	ch := dataGen()
 	buf := bytes.NewBuffer([]byte{})

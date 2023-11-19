@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77ca409e-588f-44ec-942a-2d4841e742f8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../../go/bufio/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../../go/bufio/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../ljwt/di/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../ljwt/di/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../zig/c_and_zig/build.zig" beforeDir="false" afterPath="$PROJECT_DIR$/../../../zig/c_and_zig/build.zig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../zig/c_and_zig/src/main.zig" beforeDir="false" afterPath="$PROJECT_DIR$/../../../zig/c_and_zig/src/main.zig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
