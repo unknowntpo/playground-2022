@@ -1,7 +1,7 @@
 use clap::Parser;
-use std::str::FromStr;
 use anyhow::{anyhow, Result};
-use reqwest::Url;
+use reqwest::{header, Client, Response, Url};
+use std::{collections::HashMap, str::FromStr};
 
 // Ref: https://github.com/tyrchen/geektime-rust/blob/master/04_httpie/src/main.rs
 
@@ -20,6 +20,7 @@ enum SubCommand {
 
 #[derive(Parser, Debug)]
 struct Get {
+    #[clap(parse(try_from_str = parse_url))]
     url: String,
 }
 
@@ -27,7 +28,7 @@ struct Get {
 struct Post {
     #[clap(parse(try_from_str = parse_url))]
     url: String,
-    #[clap(parse(try_from_str=parse_kv_pair))]
+    #[clap(parse(try_from_str = parse_kv_pair))]
     body: Vec<KvPair>,
 }
 
@@ -59,7 +60,32 @@ fn parse_url(s: &str) -> Result<String> {
     Ok(s.into())
 }
 
-fn main() {
+async fn get(client: Client, args: &Get) -> Result<()> {
+    let resp = client.get(&args.url).send().await?;
+    println!("{:?}", resp.text().await?);
+    Ok(())
+}
+
+async fn post(client: Client, args: &Post) -> Result<()> {
+    let mut body = HashMap::new();
+    for pair in args.body.iter() {
+        body.insert(&pair.k, &pair.v);
+    }
+    let resp = client.post(&args.url).json(&body).send().await?;
+    println!("{:?}", resp.text().await?);
+    Ok(())
+}
+
+
+
+
+#[tokio::main]
+async fn main() -> Result<()> {
     let opts: Opts = Opts::parse();
-    println!("{:?}", opts);
+    let client = Client::new();
+    let result = match opts.subcmd {
+        SubCommand::Get(ref args) => get(client, args).await?,
+        SubCommand::Post(ref args)=> post(client, args).await?,
+    };
+    Ok(result)
 }
