@@ -64,15 +64,24 @@ func newNode(val int, left *Node, right *Node) *Node {
 func traversal(r *Node) {
 	q := []*Node{r}
 	for len(q) > 0 {
-		n := q[0]
-		q = q[1:]
-		fmt.Println(n.val)
-		if n.Left != nil {
-			q = append(q, n.Left)
+		levelSize := len(q)
+		// print out every element in same level
+		for i := 0; i < levelSize; i++ {
+			n := q[0]
+			q = q[1:]
+			fmt.Print(n.val)
+			// print comma
+			if i < levelSize-1 {
+				fmt.Print(", ")
+			}
+			if n.Left != nil {
+				q = append(q, n.Left)
+			}
+			if n.Right != nil {
+				q = append(q, n.Right)
+			}
 		}
-		if n.Right != nil {
-			q = append(q, n.Right)
-		}
+		fmt.Println()
 	}
 }
 
