@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: echosvc1-svc
+spec:
+  type: NodePort
+  selector:
+    app: echosvc1
+  ports:
+  - port: 3000
+    targetPort: 4000

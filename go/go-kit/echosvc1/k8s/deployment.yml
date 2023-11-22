@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: echosvc1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echosvc1
+  template:
+    metadata:
+      labels:
+        app: echosvc1
+    spec:
+      containers:
+        - name: echosvc1
+          image: docker.io/unknowntpo/echosvc1
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+          ports:
+            - containerPort: 4000
