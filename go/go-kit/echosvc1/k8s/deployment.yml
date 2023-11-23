@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: app
   labels:
-    app: echosvc1
+    app: echosvc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: echosvc1
+      app: echosvc
   template:
     metadata:
       labels:
-        app: echosvc1
+        app: echosvc
     spec:
       containers:
         - name: echosvc1
