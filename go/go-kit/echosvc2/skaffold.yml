@@ -1,0 +1,12 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: go
+build:
+  artifacts:
+    - image: docker.io/unknowntpo/echosvc2
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - k8s/*.yml
