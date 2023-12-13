@@ -18,9 +18,11 @@ type echoResponse struct {
 }
 
 func makeEchoEndpoint(svc EchoService) endpoint.Endpoint {
-	return func(_ context.Context, request any) (any, error) {
+	return func(ctx context.Context, request any) (any, error) {
+		ctx, span := tracer.Start(ctx, "echo-span")
+		defer span.End()
 		req := request.(echoRequest)
-		v, err := svc.Echo(req.S)
+		v, err := svc.Echo(ctx, req.S)
 		if err != nil {
 			return echoResponse{v, err.Error()}, nil
 		}

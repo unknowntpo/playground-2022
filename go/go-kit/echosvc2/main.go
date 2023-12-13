@@ -1,12 +1,13 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"os"
 
-	"github.com/go-kit/kit/log"
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/go-kit/log"
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -40,9 +41,18 @@ func main() {
 		encodeEchoResponse,
 	)
 
+	tp, err := initTracer()
+	defer func() {
+		tp.Shutdown(context.Background())
+	}()
+	must(err)
+	tracer = tp.Tracer("echosvc2")
+
 	http.Handle("/echo", echoHandler)
 	http.Handle("/metrics", promhttp.Handler())
 
 	logger.Log("msg", "HTTP", "addr", ":4000")
 	logger.Log(http.ListenAndServe(":4000", nil))
 }
+
+// https://github.com/wavefrontHQ/opentelemetry-examples/tree/master/go-example
