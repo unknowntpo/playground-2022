@@ -40,6 +40,8 @@ func (s *OrderService) onOrderCreated(ctx context.Context) {
 			s.paymentReqChan <- req
 		case <-ctx.Done():
 			return
+			// Make this goroutine spin to prevent deadlock
+		default:
 		}
 	}
 }
