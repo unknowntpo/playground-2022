@@ -1,0 +1,32 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "runtimeVersion": "18",
+            "request": "launch",
+            "name": "Run Task",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "env": {
+                // "DEBUG": "spiderman:*",
+                // "NODE_ENV": "development"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "runtimeExecutable": "yarn",
+            "runtimeArgs": [
+                "start",
+                // "run",
+                // "${input:taskName}",
+                // "${input:option1}",
+                // "${input:option2}"
+            ],
+            "console": "internalConsole",
+            "outputCapture": "std"
+        }
+    ]
+}

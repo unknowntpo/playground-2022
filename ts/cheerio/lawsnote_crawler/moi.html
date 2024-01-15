@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- 響應式網頁設定：若後端設定不開啟響應式網頁效果，則不顯示以下這一行 -->
+    <meta id="ctl00_RWDSetup" name="viewport" content="width=590" /><title>
+	內政部主管法規共用系統-法規體系
+</title>
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <![endif]-->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" /><link href="css/layout.css" rel="stylesheet" type="text/css" media="screen" /><link href="css/table.css" rel="stylesheet" type="text/css" media="screen" />
+    <!-- 網站樣式設定：依據後端設定樣式編號，讀取對應的CSS檔 -->
+    <link id="ctl00_TemplateID" href="/css/02.css" rel="stylesheet" type="text/css" media="all" /><link href="css/printweb.css" rel="stylesheet" type="text/css" media="print" />
+    <!-- 網頁背景圖設定：若後端自行上傳背景圖，則顯示以下這一行 -->
+    
+
+    <script src="/js/jquery-3.5.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            //避免XFS攻擊
+            if (top != self) { top.location = self.location; }
+            //無障礙需求
+            //$("pre").attr("title", "內容");
+        });
+    </script>
+    <noscript><span style="color:#fff;">您的瀏覽器不支援JavaScript功能，若網頁功能無法正常使用時，請開啟瀏覽器JavaScript狀態</span></noscript>
+    
+    <link href="css/jquery.treeview.css" rel="stylesheet">
+</head>
+<body>
+    <form name="aspnetForm" method="post" action="./LawCategoryMain.aspx" id="aspnetForm">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="A7F35E93" />
+<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="tEfRbSTlb04KKpgKO2MvANwBArqtBWSoPt26iKNrdRAWNItG3Zifkpx+NoA0A5tZmrj52ymlqHqHLbsHJi2A50Uq3Xp/dSsZgm7e9HMcqEuej9tm7XE1rKiovbddmSjJSqCnxli3M/SdQlcMGjSZ6pRF2umAQloQP8kwDCa8CFo7Vkxxk4JDAzWfYreMCEDLtZI5zj64Bxlew+7jtCcTR/EYPHdjcjNybrC0Ld5DQDniWVKPspxvwG5XnkCdt0m8UB07BO7tf0QSfDV8uU2C400JAPRYBXL/tcPzaPj24XHEKjwf+31PYVwM3UylMmN9" />
+        <input type="hidden" name="ctl00$ctl08$forgeryToken" id="ctl00_ctl08_forgeryToken" value="7d05842e-1d28-462b-b414-aa122c9f3433" />
+        <a href="#content" id="AM" class="sr-only sr-only-focusable A1" tabindex="1">跳到主要內容區塊</a>
+        <header>
+            <div id="ctl00_h1title" class="nav-system">主管法規查詢系統</div>
+            <div class="navbar navbar-default header-con">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle myNavbar" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <button type="button" class="navbar-toggle mySearch" data-toggle="collapse" data-target="#mySearch">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    <!-- 領用機關Logo 圖片-->
+                    <h1 class="logo">
+                        <a href="index.aspx" id="ctl00_aUCName" title="內政部主管法規查詢系統：回首頁">
+                            <img src="ImageHandler.ashx?Field=Logo" id="ctl00_imgUCName" width="320" height="90" alt="內政部logo：回主管法規查詢系統首頁" />
+                        </a>
+                    </h1>
+                    <!-- 系統名稱Banner -->
+                    <div class="sys-name">
+                        <img src="images/logo_system.png" id="ctl00_imglogo" width="300" height="90" alt="主管法規查詢系統 Laws and Regulations Retrieving System" />
+                    </div>
+                </div>
+
+                <!-- 上方選單 -->
+                <div class="collapse navbar-collapse header-nav">
+                    <ul class="nav navbar-nav nav-right">
+                        <li><a href="#U" id="AU" name="U" title="功能區塊" accesskey="U" tabindex="2">:::</a></li>
+                        
+                        <li><a href="SiteMap.aspx" tabindex="3">網站導覽</a></li>
+                        
+                        <li id="ctl00_Manual_All"><a href="/UseManual/使用手冊20171020.pdf" title="下載使用手冊.pdf" tabindex="5">使用手冊</a></li>
+                        
+                        
+                        <li><a href="index.aspx" tabindex="6">回首頁</a></li>
+                        <li id="ctl00_Manual_Eng"><a href="EngNewsList.aspx" tabindex="7">English</a></li>
+                        
+                    </ul>
+                </div>
+
+                <!-- 上方整合查詢 -->
+                <div class="collapse navbar-collapse search-box">
+                    <div class="navbar-form" role="search">
+                        <div class="input-group">
+                            <label for="keyword1" class="sr-only">請輸入關鍵字</label>
+                            <input id="keyword1" type="text" class="form-control" accesskey="S" placeholder="請輸入關鍵字">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-default"
+                                    onclick="GlobalCheckForm1();return false;">
+                                    整合查詢</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </header>
+
+        <!-- mySearch 整合查詢 小螢幕顯示-->
+        <div class="menu visible-xs" role="navigation">
+            <div class="collapse navbar-collapse" id="mySearch">
+                <div class="navbar-form" role="search">
+                    <div class="input-group">
+                        <label for="keyword2" class="sr-only">請輸入關鍵字</label>
+                        <input id="keyword2" type="text" class="form-control" placeholder="請輸入關鍵字">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default"
+                                onclick="GlobalCheckForm2();return false;">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span><span class="sr-only">整合查詢</span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <!-- myNavbar 主選單 -->
+        <nav class="menu" aria-label="主要功能選單">
+            <div class="collapse navbar-collapse menu-con" id="myNavbar">
+                <ul>
+                    <li class="active"><a href="index.aspx">最新訊息</a></li>
+                    <li><a href="LawCategoryMain.aspx?type=M" id="hlLawCategory">法規體系</a></li>
+                    <li><a href="LawQuery.aspx">法規檢索</a></li>
+                    <!-- 人事行政總處客制 -->
+                    <li></li>
+                    <!-- 環保署客制 -->
+                    <li></li>
+                    
+                    <li><a href="DraftForum.aspx">草案預告</a></li>
+                    <li><a href="WebList.aspx">相關網站</a></li>
+                    <!-- 小螢幕才會顯示 -->
+                    <li class="topmenu visible-xs"><a href="SiteMap.aspx">網站導覽</a></li>
+                    
+                    <li class="topmenu visible-xs"><a href="/UseManual/使用手冊20171020.pdf" title="下載使用手冊.pdf">使用手冊</a></li>
+                    <li class="topmenu visible-xs"><a href="index.aspx">回首頁</a></li>
+                    <li id="ctl00_Manual_Eng_mobile" class="topmenu visible-xs"><a href="EngNewsList.aspx">English</a></li>
+                    <li class="topmenu visible-xs" ><a href="OpenDataWeb.aspx">資料開放(Open Data)</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </nav>
+
+        <!-- 主要內容 -->
+        <div class="container-fluid con-bg">
+            <div class="content-con" id="content">
+                <a href="#C" id="AC" name="C" title="內容區塊" accesskey="C">:::</a>
+                
+    <ol id="ctl00_cp_content_olbreadcrumb" class="breadcrumb">
+        現在位置：
+            <li>法規體系</li>
+    </ol>
+    <div class="btn-printer">
+        <a href="LawCategoryContentList.aspx?media=print&CategoryID=01&size=10&page=1" id="ctl00_cp_content_aPrint" class="btn btn-default" title="另開新視窗" target="_blank"><span class="glyphicon glyphicon-print"></span>&nbsp;友善列印</a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="text-con">
+        <div class="text-title">
+            <h2><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>法規體系</h2>
+        </div>
+
+        
+                <div class="row">
+                    <div class="col-sm-3 left">
+                    	
+                        
+                        <div class="well leftCategory" id="tree">
+                            <ul id="ctl00_cp_content_ulLawCategory"><li><a href="/LawCategoryMain.aspx?CategoryID=01">通用<span class="badge">12</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=02">組織<span class="badge">189</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=03">處務<span class="badge">91</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=18">綜合規劃<span class="badge">6</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=04">民政<span class="badge">107</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=05">戶政<span class="badge">106</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=09">地政<span class="badge">483</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=29">宗教及禮制<span class="badge">93</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=28">合作及人民團體<span class="badge">64</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=16">役政<span class="badge">76</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=24">資訊服務<span class="badge">14</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=10">警政<span class="badge">231</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=11">警察教育<span class="badge">26</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=14">消防<span class="badge">209</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=17">移民<span class="badge">162</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=30">國土管理<span class="badge">677</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=31">國家公園<span class="badge">191</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=13">建築研究<span class="badge">24</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=15">空中勤務<span class="badge">1</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=19">秘書<span class="badge">6</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=20">人事<span class="badge">8</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=21">政風<span class="badge">3</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=22">會計<span class="badge">3</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=23">統計<span class="badge">2</span></a></li><li><a href="/LawCategoryMain.aspx?CategoryID=06">社政    (原社會福利、社會救助、社會保險及社政機構等業務，102年7月23日已移撥至衛生福利部。)<span class="badge">8</span></a></li></ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="law-result">
+                            <h3><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>通用
+                                12
+                                筆 </h3>
+                        </div>
+                        
+                        
+                        
+                                <table class="table table-hover tab-list tab-category">
+                                    <tbody>
+                                        <th>序</th>
+                                        <th>日期</th>
+                                        <th>標題</th>
+                                        <th>法規類別</th>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">1.</td>
+                                    <td class="aCenter" width="6%">108.01.19</td>
+                                    <td class="aCenter"><span id="ctl00_cp_content_rptList_ctl01_spanLawFilesRela" class="glyphicon glyphicon-paperclip" aria-hidden="true"></span><a id="ctl00_cp_content_rptList_ctl01_hlkLawName" href="LawContent.aspx?id=GL001130">全國性內政財團法人設立捐助財產之最低總額及現金總額比率</a></td>
+                                    <td class="aCenter" width="10%">實質法規</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">2.</td>
+                                    <td class="aCenter" width="6%">112.12.19</td>
+                                    <td class="aCenter"><span id="ctl00_cp_content_rptList_ctl02_spanLawFilesRela" class="glyphicon glyphicon-paperclip" aria-hidden="true"></span><a id="ctl00_cp_content_rptList_ctl02_hlkLawName" href="LawContent.aspx?id=GL001548">營造業工地主任執業證申請書</a></td>
+                                    <td class="aCenter" width="10%">行政規則</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">3.</td>
+                                    <td class="aCenter" width="6%">112.12.19</td>
+                                    <td class="aCenter"><span id="ctl00_cp_content_rptList_ctl03_spanLawFilesRela" class="glyphicon glyphicon-paperclip" aria-hidden="true"></span><a id="ctl00_cp_content_rptList_ctl03_hlkLawName" href="LawContent.aspx?id=GL001549">營造業工地主任執業證補(換)發申請書</a></td>
+                                    <td class="aCenter" width="10%">行政規則</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">4.</td>
+                                    <td class="aCenter" width="6%">110.09.17</td>
+                                    <td class="aCenter"><a id="ctl00_cp_content_rptList_ctl04_hlkLawName" href="LawContent.aspx?id=GL001356">內政部對受嚴重特殊傳染性肺炎影響發生營運困難事業紓困辦法之切結書格式</a></td>
+                                    <td class="aCenter" width="10%">行政規則</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">5.</td>
+                                    <td class="aCenter" width="6%">106.07.27</td>
+                                    <td class="aCenter"><span id="ctl00_cp_content_rptList_ctl05_spanLawFilesRela" class="glyphicon glyphicon-paperclip" aria-hidden="true"></span><a id="ctl00_cp_content_rptList_ctl05_hlkLawName" href="LawContent.aspx?id=GL001001">內政業務公益信託許可及監督辦法相關書表格式</a></td>
+                                    <td class="aCenter" width="10%">行政規則</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">6.</td>
+                                    <td class="aCenter" width="6%">105.10.31</td>
+                                    <td class="aCenter"><span id="ctl00_cp_content_rptList_ctl06_spanLawFilesRela" class="glyphicon glyphicon-paperclip" aria-hidden="true"></span><a id="ctl00_cp_content_rptList_ctl06_hlkLawName" href="LawContent.aspx?id=GL000939">內政部舉行聽證作業要點</a><span class="label-eng"><a aria-labelledby=ctl00_cp_content_rptList_ctl06_hlkLawName href="EngLawList.aspx?id=GL000939" title="英譯資料">英</a></span></td>
+                                    <td class="aCenter" width="10%">行政規則</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">7.</td>
+                                    <td class="aCenter" width="6%">110.07.12</td>
+                                    <td class="aCenter"><span id="ctl00_cp_content_rptList_ctl07_spanLawFilesRela" class="glyphicon glyphicon-paperclip" aria-hidden="true"></span><a id="ctl00_cp_content_rptList_ctl07_hlkLawName" href="LawContent.aspx?id=GL000962">內政部主管法律及法規命令草案辦理預告作業要點</a></td>
+                                    <td class="aCenter" width="10%">行政規則</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">8.</td>
+                                    <td class="aCenter" width="6%">110.02.09</td>
+                                    <td class="aCenter"><span id="ctl00_cp_content_rptList_ctl08_spanLawFilesRela" class="glyphicon glyphicon-paperclip" aria-hidden="true"></span><a id="ctl00_cp_content_rptList_ctl08_hlkLawName" href="LawContent.aspx?id=FL053319">內政部國家賠償事件處理要點</a></td>
+                                    <td class="aCenter" width="10%">行政規則</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">9.</td>
+                                    <td class="aCenter" width="6%">102.10.21</td>
+                                    <td class="aCenter"><a id="ctl00_cp_content_rptList_ctl09_hlkLawName" href="LawContent.aspx?id=FL053322">內政部主管法規共用系統法規建置及稽核作業要點</a></td>
+                                    <td class="aCenter" width="10%">行政規則</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td class="aCenter" width="1%">10.</td>
+                                    <td class="aCenter" width="6%">096.05.30</td>
+                                    <td class="aCenter"><span id="ctl00_cp_content_rptList_ctl10_spanCauseCode" class="label-fei">廢</span><a id="ctl00_cp_content_rptList_ctl10_hlkLawName" href="LawContent.aspx?id=FL001911">內政業務財團法人監督準則</a></td>
+                                    <td class="aCenter" width="10%">命令</td>
+                                </tr>
+                            
+                                </tbody>
+                                </table>
+                                <!--- Page --->
+                            <div id="ctl00_cp_content_rptList_ctl11_PagerButtom_navPager" class="pageZone">
+    <ul id="ctl00_cp_content_rptList_ctl11_PagerButtom_plControl" class="pager">
+        <li id="ctl00_cp_content_rptList_ctl11_PagerButtom_liFirst" class="disabled hidden-xs">
+            <a id="ctl00_cp_content_rptList_ctl11_PagerButtom_hlFirst" disabled="disabled">第一頁</a></li>
+        <li id="ctl00_cp_content_rptList_ctl11_PagerButtom_liPriv" class="disabled">
+            <a id="ctl00_cp_content_rptList_ctl11_PagerButtom_hlPriv" disabled="disabled">上一頁</a></li>
+        <li id="ctl00_cp_content_rptList_ctl11_PagerButtom_liNext">
+            <a id="ctl00_cp_content_rptList_ctl11_PagerButtom_hlNext" href="/LawCategoryMain.aspx?page=2">下一頁</a></li>
+        <li id="ctl00_cp_content_rptList_ctl11_PagerButtom_liLast" class="hidden-xs">
+            <a id="ctl00_cp_content_rptList_ctl11_PagerButtom_hlLast" href="/LawCategoryMain.aspx?page=2">最末頁</a></li>
+        <li class="pageinfo">共
+            12
+            筆，頁次：1
+            /
+            2<div class="pageno hidden-xs">
+                ，<label for="ctl00_cp_content_rptList_ctl11_PagerButtom_ddlPage">每頁顯示筆數</label>
+            <select name="ctl00$cp_content$rptList$ctl11$PagerButtom$ddlPage" id="ctl00_cp_content_rptList_ctl11_PagerButtom_ddlPage">
+	<option selected="selected" value="10">10</option>
+	<option value="20">20</option>
+	<option value="30">30</option>
+	<option value="40">40</option>
+
+</select>
+            <button id="buttonPage" type="button" class="btn btn-default btn-sm" onclick="changeSize();">送出</button>
+            </div>
+        </li>
+    </ul>
+</div>
+<script>
+    function changeSize(size) {
+        var size = document.getElementById('ctl00_cp_content_rptList_ctl11_PagerButtom_ddlPage').value;
+        var regexPage = /[&?\??]page=[0-9]+&?/;
+        var regexSize = /[&?\??]size=[0-9]+&?/;
+        var resultURL = location.href.replace(regexPage, "").replace(regexSize, "");
+        if (resultURL.indexOf("?") > -1) {
+            location.href = resultURL + "&size=" + encodeURIComponent(size);
+        } else {
+            location.href = resultURL + "?size=" + encodeURIComponent(size);
+        }
+    }
+</script>
+
+                            
+                    </div>
+                </div>
+            
+
+    </div>
+    <!-- text-con end -->
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!-- 主要內容結束 -->
+
+        <footer>
+            
+            
+                    <div class="footer-con">
+                        <a href="#Z" id="AF" name="Z" title="網站資訊區塊" accesskey="Z">:::</a>
+                        <div class="clearfix"></div>
+                        <ul class="logo-box">
+                            <li><a href="https://accessibility.moda.gov.tw/Applications/Detail?category=20200519084140" id="ctl00_aAccessibilityUrl" title="通過A優先等級無障礙網頁檢測（另開新視窗）" target="_blank">
+                                <img src="images/accessability.png" id="ctl00_imgAccessibilityDis" width="88" height="31" alt="通過A優先等級無障礙網頁檢測" /></a></li>
+                        </ul>
+                        <ul class="address">
+                            <li>
+                                內政部：台北市徐州路5號</li>
+                            <li>電話總機：
+                                1996
+                                傳真電話：(02)2397-6868</li>
+                            <li>系統版本：112.12.25</li>
+                            
+                        </ul>
+                        <div id="ctl00_divBrowsingPeople" class="visitors">瀏覽人數：35,445,364</div>
+                    </div>
+                
+            <p id="gotop"><a role="button" href="#">回上方</a></p>
+        </footer>
+    </form>
+</body>
+</html>
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script>
+<script src="/js/FYLS.js"></script>
+<script type="text/javascript">
+    $(function () {
+        ChangeFunUrl();
+        $(window).resize(function () {
+            ChangeFunUrl();
+        });
+    });
+    function ChangeFunUrl() {
+        //功能頁面切換：依據頁面寬度切換功能
+        if ($(window).width() < 767) {
+            $("#hlLawCategory").attr("href", "LawCategoryMain.aspx?type=M");
+        }
+        else {
+            $("#hlLawCategory").attr("href", "LawCategoryMain.aspx");
+        }
+    }
+    function QueryString(name) {
+        var AllVars = window.location.search.substring(1);
+        var Vars = AllVars.split("&");
+        for (i = 0; i < Vars.length; i++) {
+            var Var = Vars[i].split("=");
+            if (Var[0] == name) return Var[1];
+        }
+        return "";
+    }
+    function GlobalCheckForm1() {
+        var keyword = $.trim($("#keyword1").val());
+        //全文檢索字詞不得為空值
+        if (keyword == "") {
+            alert("請輸入「檢索字詞」！");
+            return false;
+        }
+        //全文檢索字詞格式綜合判斷
+        if (keyword != "" && !validKeys(keyword)) {
+            alert("檢索字詞格式錯誤！請檢查後重新輸入！");
+            return false;
+        }
+        location.href = "SearchAllResultList.aspx?KW=" + encodeURIComponent(keyword);
+    }
+    function GlobalCheckForm2() {
+        var keyword = $.trim($("#keyword2").val());
+        //全文檢索字詞不得為空值
+        if (keyword == "") {
+            alert("請輸入「檢索字詞」！");
+            return false;
+        }
+        //全文檢索字詞格式綜合判斷
+        if (keyword != "" && !validKeys(keyword)) {
+            alert("檢索字詞格式錯誤！請檢查後重新輸入！");
+            return false;
+        }
+        location.href = "SearchAllResultList.aspx?KW=" + encodeURIComponent(keyword);
+    }
+</script>
+
+    <script src="/js/jquery.treeview.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            let urlParams = new URLSearchParams(window.location.search);
+
+            $.ajax({
+                type: 'post',
+                url: 'LdapValidationCheck.ashx',
+                data: { CategoryID: urlParams.get('CategoryID') },
+                success: function (data) {
+                    if (data == "1") {
+                        alert("您的要求可能具有潛在攻擊性質，若操作非屬攻擊性質，請稍後再試或洽系統管理員。");
+                    }
+                }
+            });
+
+            $("#tree > ul").treeview({
+                collapsed: true,
+                animated: "fast",
+                persist: "location",
+                toggle: function () {
+                    
+                    if (this.className.indexOf('collapsable') >= 0) {
+                        $(this).find('.sr-only').text('已展開');
+                    }
+
+                    if (this.className.indexOf('expandable') >= 0) {
+                        $(this).find('.sr-only').text('已收合');
+                    }
+                }
+            });
+            $(window).resize(function () {
+                var sType = getParameterByName("type")
+                //alert(sType);
+                //功能頁面切換：依據頁面寬度切換功能
+                if ($(window).width() < 767 && sType == null)
+                    location.href = "LawCategoryMain.aspx?type=M";
+                else if ($(window).width() >= 767 && sType == "M")
+                    location.href = "LawCategoryMain.aspx";
+            });
+
+            var sCategoryID = getParameterByName("CategoryID")
+            if (sCategoryID == "" || sCategoryID==null) {
+                $("#tree > ul a").eq(0).trigger("click");
+            }
+
+        });
+    </script>
+
