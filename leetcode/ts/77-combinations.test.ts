@@ -26,27 +26,20 @@ import { ListNode, makeList } from './list';
 // [1], [1, 2], [1, 3], [1, 4]
 // [2]
 function combine(n: number, k: number): number[][] {
-  let res: number[][] = []
-  // pick picks integer numbers starts from `start` and until combo.length = k 
-  function pick(start: number, k: number, combo: number[]) {
-    // end condition
-    if (combo.length == k) {
-      res.push(combo)
-      return
+  let path: Array<number> = [];
+  let res: Array<Array<number>> = [];
+  const pick = (start: number) => {
+    if (path.length == k) {
+      res.push(path.slice());
     }
-
     for (let i = start; i <= n; i++) {
-      // current level of all possible result
-      const comb = combo.concat([i])
-
-      // append possible number to com
-      pick(i + 1, k, comb)
+      path.push(i);
+      pick(i + 1);
+      path.pop();
     }
   }
-
-  pick(1, k, [])
-
-  return res
+  pick(1);
+  return res;
 };
 
 // [1], 
