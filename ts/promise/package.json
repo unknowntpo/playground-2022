@@ -1,0 +1,14 @@
+{
+  "name": "promise",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "dependencies": {
+    "@types/node": "^20.11.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
