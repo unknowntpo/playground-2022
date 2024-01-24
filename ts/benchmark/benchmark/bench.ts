@@ -1,4 +1,5 @@
 import Benchmark from "benchmark";
+import * as Pyroscope from '@pyroscope/nodejs';
 
 const fib = (i: number): number => {
     if (i < 0) return 0;
@@ -19,7 +20,10 @@ if (n < 0) return 0;
     return cur; 
 }
 
-let suite = new Benchmark.Suite;
+let suite = new Benchmark.Suite('fib', {
+    'onStart': setup,
+    'onAbort': () => {Pyroscope.stop()},
+});
 
 // Adding a test to the suite
 suite.add('fib', () => {
@@ -36,3 +40,11 @@ suite.add('fib_iter', () => {
 })
 .run({ 'async': true });
 
+async function setup() {
+  Pyroscope.init({
+    serverAddress: 'http://localhost:4040',
+    appName: 'myNodeService'
+  });
+
+  Pyroscope.start()
+}
