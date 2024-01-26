@@ -1,6 +1,4 @@
 use anyhow::Result;
-use std::future::Future;
-use std::io::{copy, Error as IOError};
 use std::net::SocketAddr;
 use tokio::io::AsyncWriteExt;
 use tokio::{
@@ -8,7 +6,6 @@ use tokio::{
     net::{TcpListener, TcpStream},
 };
 use tracing::*;
-use tracing_subscriber::*;
 use url::Url;
 
 use proxy::proxy::Error;
