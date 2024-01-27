@@ -131,6 +131,11 @@
     protobufjs "^7.2.4"
     yargs "^17.7.2"
 
+"@hono/node-server@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.5.0.tgz#f54f03f1b23391b823c18334bcf7416c817666d4"
+  integrity sha512-xMZW2tuHLdUtx5B28E5bsLazJe9NVU2z4QW/Xefgvg41U84r4L1mTxNutTMNwt6BrRujy7hs1aKyUpIuSqcXtQ==
+
 "@jridgewell/resolve-uri@^3.0.3":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@jridgewell/resolve-uri/-/resolve-uri-3.1.1.tgz#c08679063f279615a3326583ba3a90d1d82cc721"
@@ -922,6 +927,11 @@ has-unicode@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/has-unicode/-/has-unicode-2.0.1.tgz#e0e6fe6a28cf51138855e086d1691e771de2a8b9"
   integrity sha512-8Rf9Y83NBReMnx0gFzA8JImQACstCYWUplepDa9xprwwtmgEZUF0h/i5xSA625zB/I37EtrswSST6OXxwaaIJQ==
+
+hono@^3.12.7:
+  version "3.12.7"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-3.12.7.tgz#76be7d8a2f43ef29bba47e663b1adfba264a3281"
+  integrity sha512-jfyIoE8D5I1PGj0tXAGqpQ2miAWBBuHFjJsWjh0hbBVludQ8QO4lF6KTbPvjMi4venp8Q6DyMoJ51CwP6L5LNA==
 
 http-proxy-agent@^5.0.0:
   version "5.0.0"
