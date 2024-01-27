@@ -1,0 +1,16 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "start": "node --loader ts-node/esm ./src/index.ts"
+  },
+  "dependencies": {
+    "@google-cloud/profiler": "^6.0.0",
+    "@types/node": "^20.11.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
