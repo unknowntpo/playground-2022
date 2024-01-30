@@ -4,37 +4,25 @@ help:
 	@echo 'Usage:'
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
-## tf/aws/refresh: refresh the state
+## tf/gcloud/refresh: refresh the state
 tf/gcloud/refresh:
 		TF_LOG=ERROR terraform refresh
 
-## tf/aws/plan: plan the change
-tf/aws/plan: tf/aws/refresh
-		TF_LOG=ERROR terraform plan \
-			-var='aws_access_key=${AWS_ACCESS_KEY}' \
-			-var='aws_secret_key=${AWS_SECRET_KEY}' \
-			-var='ami-id=${AMI_ID}'
+## tf/gcloud/plan: plan the change
+tf/gcloud/plan: tf/gcloud/refresh
+		TF_LOG=ERROR terraform plan
 
+## tf/gcloud/apply: apply the plan
+tf/gcloud/apply: tf/gcloud/plan
+		TF_LOG=ERROR terraform apply -auto-approve
+					 
+## tf/gcloud/destroy: apply the plan
+tf/gcloud/destroy: tf/gcloud/refresh
+		TF_LOG=ERROR terraform destroy
 
-## tf/aws/apply: apply the plan
-tf/aws/apply: tf/aws/plan
-		TF_LOG=ERROR terraform apply -auto-approve \
-			-var='aws_access_key=${AWS_ACCESS_KEY}' \
-			-var='aws_secret_key=${AWS_SECRET_KEY}' \
-			-var='ami-id=${AMI_ID}'
-
-## tf/aws/destroy: apply the plan
-tf/aws/destroy: tf/aws/refresh
-		TF_LOG=ERROR terraform destroy \
-			-var='aws_access_key=${AWS_ACCESS_KEY}' \
-			-var='aws_secret_key=${AWS_SECRET_KEY}'
-
-## packer/aws/build: build the AMI
-packer/aws/build:
-			packer build \
-			-var='aws_access_key=${AWS_ACCESS_KEY}' \
-			-var='aws_secret_key=${AWS_SECRET_KEY}' \
-			packer.pkr.hcl
+## packer/gcloud/build: build the AMI
+packer/gcloud/build:
+			packer build packer.pkr.hcl
 
 
 

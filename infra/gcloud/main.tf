@@ -23,7 +23,7 @@ resource "google_compute_subnetwork" "default" {
 resource "google_compute_instance" "default" {
   name         = "flask-vm"
   machine_type = "f1-micro"
-  zone         = "us-west1-a"
+  zone         = "asia-east1-a"
   tags         = ["ssh"]
 
   boot_disk {
