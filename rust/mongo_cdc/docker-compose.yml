@@ -1,0 +1,24 @@
+# Create a MongoDB with Replica Set
+# refer: https://blog.yowko.com/docker-mongodb-replica-set/
+
+version: "3"
+services:
+  heimdall2-mongo:
+    container_name: mongo
+    image: mongo:6.0.13
+    ports:
+      - "27017:27017"
+    restart: always
+    entrypoint: [ "/bin/sh", "-c" ]
+    command:
+      - |
+        while ! mongosh --host localhost --port 27017 --eval "print('waiting for mongo')" --quiet; do
+          sleep 1;
+        done;
+        mongosh --host localhost --port 27017 --eval "rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'localhost:27017'}]})";
+        mongosh --host localhost --port 27017 --eval "db.adminCommand({setParameter: 1, maxTransactionLockRequestTimeoutMillis: 5000})";
+        wait
+    networks:
+      - heimdall2
+networks:
+  heimdall2:
