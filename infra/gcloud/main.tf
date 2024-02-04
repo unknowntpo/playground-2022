@@ -1,16 +1,16 @@
 # Ref https://cloud.google.com/docs/terraform/get-started-with-terraform#permissions
 provider "google" {
-  project = "web-service-design"
+  project     = "web-service-design"
   credentials = file("~/.gcloud/keys/web-service-design-d0d64b3d1239.json")
-  region = "asia-east1"
-  zone = "asia-east1a"
+  region      = "asia-east1"
+  zone        = "asia-east1a"
 }
 
-resource  "google_compute_network" "vpc_network" {
-  name = "my-custom-network"
+resource "google_compute_network" "vpc_network" {
+  name                    = "my-custom-network"
   auto_create_subnetworks = false
-  mtu = 1460
-} 
+  mtu                     = 1460
+}
 
 resource "google_compute_subnetwork" "default" {
   name          = "my-custom-subnet"
@@ -55,4 +55,14 @@ resource "google_compute_firewall" "ssh" {
   priority      = 1000
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["ssh"]
+}
+
+resource "google_compute_firewall" "flask" {
+  name    = "flask-app-firewall"
+  network = google_compute_network.vpc_network.id
+  allow {
+    protocol = "tcp"
+    ports    = ["5000"]
+  }
+  source_ranges = ["0.0.0.0/0"]
 }
