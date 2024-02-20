@@ -1,0 +1,17 @@
+{
+    "name": "puppeteer",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start:dynamic": "bun dynamic_content.ts"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@types/node": "^20.11.19",
+        "puppeteer": "^22.1.0",
+        "ts-node": "^10.9.2",
+        "tsc": "^2.0.4",
+        "typescript": "^5.3.3"
+    }
+}
