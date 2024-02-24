@@ -10,9 +10,18 @@ impl List {
         List::Nil
     }
 
-    // Consume a list, and return the same list with a new element at its front
-    fn prepend(self, elem: u32) -> List {
+    fn push_head(self, elem: u32) -> List {
         List::Cons(elem, Box::new(self))
+    }
+
+    //      t
+    // 1 -> x
+    //
+    fn push_back(&mut self, elem: u32) {
+        match self {
+            List::Cons(_, ref mut tail) => tail.push_back(elem),
+            List::Nil => *self = List::Cons(elem, Box::new(List::Nil)),
+        }
     }
 
     fn len(&self) -> u32 {
@@ -43,10 +52,20 @@ mod tests {
     fn basic_operation() {
         let mut list = List::new();
         assert_eq!(list.len(), 0);
-        list = list.prepend(1);
-        list = list.prepend(2);
-        list = list.prepend(3);
+        list = list.push_head(1);
+        list = list.push_head(2);
+        list = list.push_head(3);
         assert_eq!(list.stringify(), "3, 2, 1, Nil".to_string());
+    }
+
+    #[test]
+    fn push_back() {
+        let mut list = List::new();
+        assert_eq!(list.len(), 0);
+        list.push_back(1);
+        list.push_back(2);
+        list.push_back(3);
+        assert_eq!(list.stringify(), "1, 2, 3, Nil".to_string());
     }
 }
 
