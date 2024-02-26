@@ -4,7 +4,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start:dynamic": "bun dynamic_content.ts"
+        "start:dynamic": "yarn node --loader ts-node/esm dynamic_content.ts"
     },
     "license": "MIT",
     "dependencies": {
