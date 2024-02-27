@@ -1,3 +1,4 @@
+use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::fmt;
 
@@ -34,6 +35,17 @@ impl Trie {
         }
         cur.is_end = true;
         cur.val = word.to_string();
+    }
+    pub fn search(&self, word: &str) -> bool {
+        // false
+        let mut cur = &self.root;
+        for char in word.chars() {
+            cur = match cur.children.get(&char) {
+                Some(child_node) => child_node,
+                None => return false,
+            }
+        }
+        cur.is_end
     }
 }
 

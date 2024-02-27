@@ -10,8 +10,8 @@ fn main() {
 
     println!("{}", t);
 
-    // println!("Contains 'hello': {}", t.search("hello"));
-    // println!("Contains 'heal': {}", t.search("heal"));
+    println!("Contains 'hello': {}", t.search("hello"));
+    println!("Contains 'heal': {}", t.search("heal"));
 
     // // Prefix Search
     // println!("Contains 'hel': {}", t.get_suggestions("hello"));
