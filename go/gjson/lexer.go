@@ -20,17 +20,19 @@ type Token struct {
 type TokenType string
 
 const (
-	TokenError        TokenType = "ERROR"
-	TokenEOF                    = "EOF"
-	TokenString                 = "STRING"
-	TokenNumber                 = "STRING"
-	TokenTrue                   = "TRUE"
-	TokenFalse                  = "FALSE"
-	TokenNull                   = "NULL"
-	TokenLeftBracket            = "LEFT_BRACKET"
-	TokenRightBracket           = "RIGHT_BRACKET"
-	TokenColon                  = "COLON"
-	TokenComma                  = "COMMA"
+	TokenError              TokenType = "ERROR"                // error
+	TokenEOF                          = "EOF"                  // eof
+	TokenString                       = "STRING"               // string
+	TokenNumber                       = "NUMBER"               // number
+	TokenTrue                         = "TRUE"                 // true
+	TokenFalse                        = "FALSE"                // false
+	TokenNull                         = "NULL"                 // null
+	TokenLeftBracket                  = "LEFT_BRACKET"         // {
+	TokenRightBracket                 = "RIGHT_BRACKET"        // }
+	TokenLeftSquareBracket            = "LEFT_SQUARE_BRACKET"  // [
+	TokenRightSquareBracket           = "RIGHT_SQUARE_BRACKET" // ]
+	TokenColon                        = "COLON"                // :
+	TokenComma                        = "COMMA"                // ,
 )
 
 func NewLexer(input string) *Lexer {
@@ -100,8 +102,10 @@ func (l *Lexer) dump() {
 	cPerLine := 6
 
 	for pIdx := range l.input {
+		// print index number
 		fmt.Printf("%d\t", pIdx)
-		if pIdx%cPerLine == cPerLine-1 {
+		if pIdx%cPerLine == cPerLine-1 || pIdx == len(l.input)-1 {
+			// need to print literal
 			fmt.Printf("\n")
 			for ; pChar <= pIdx; pChar++ {
 				fmt.Printf("%s\t", string(l.input[pChar]))

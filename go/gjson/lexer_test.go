@@ -14,13 +14,22 @@ func TestLexer(t *testing.T) {
 	}
 	testCases := []TestCase{
 		{
-			name:  "basic case",
-			input: `{"hello": "world"}`,
+			name:  "key-value pair",
+			input: `{"hello": "world", arr: ["hello", 123, null]}`,
 			want: []Token{
 				{TokenLeftBracket, "{"},
+				// string: string
 				{TokenString, "hello"},
 				{TokenColon, ":"},
 				{TokenString, "world"},
+				{TokenComma, ","},
+				// array of object
+				{TokenString, "arr"},
+				{TokenLeftSquareBracket, "["},
+				{TokenString, "hello"},
+				{TokenNumber, "123"},
+				{TokenNull, "null"},
+				{TokenRightSquareBracket, "]"},
 				{TokenRightBracket, "}"},
 			},
 		},
