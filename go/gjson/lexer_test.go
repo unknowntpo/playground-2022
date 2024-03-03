@@ -15,7 +15,7 @@ func TestLexer(t *testing.T) {
 	testCases := []TestCase{
 		{
 			name:  "key-value pair",
-			input: `{"hello": "world", arr: ["hello", 123, null]}`,
+			input: `{"hello": "world", "arr": ["hello", 123, null]}`,
 			want: []Token{
 				{TokenLeftBracket, "{"},
 				// string: string
@@ -33,6 +33,7 @@ func TestLexer(t *testing.T) {
 				{TokenRightBracket, "}"},
 			},
 		},
+		// TODO: test unquoted string: {"hello": "world", arr: ["hello", 123, null]}
 	}
 	for _, tt := range testCases {
 		t.Run(tt.name, func(t *testing.T) {

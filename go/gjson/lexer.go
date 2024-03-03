@@ -57,8 +57,17 @@ func lexJSON(l *Lexer) stateFn {
 	case string(r) == `'` || string(r) == `"`:
 		l.backup()
 		return lexString
+	case r == '[':
+		l.TokenChan <- Token{Type: TokenLeftSquareBracket, Value: "["}
+		return lexJSON
+	case r == ']':
+		l.TokenChan <- Token{Type: TokenRightSquareBracket, Value: "]"}
+		return lexJSON
 	case string(r) == `:`:
 		l.TokenChan <- Token{Type: TokenColon, Value: ":"}
+		return lexJSON
+	case string(r) == `,`:
+		l.TokenChan <- Token{Type: TokenComma, Value: ","}
 		return lexJSON
 	}
 	return l.errorf("unreachable")
