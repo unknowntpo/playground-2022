@@ -44,33 +44,49 @@ func NewLexer(input string) *Lexer {
 type stateFn func(l *Lexer) stateFn
 
 func lexJSON(l *Lexer) stateFn {
-	var r rune
-	switch r = l.next(); {
-	case r == EOF:
+	var r rune = l.next()
+	switch r {
+	case EOF:
 		return nil
-	case r == '{':
+	case '{':
 		l.TokenChan <- Token{Type: TokenLeftBracket, Value: "{"}
 		return lexJSON
-	case r == '}':
+	case '}':
 		l.TokenChan <- Token{Type: TokenRightBracket, Value: "}"}
 		return lexJSON
-	case string(r) == `'` || string(r) == `"`:
+	case '\'', '"':
 		l.backup()
 		return lexString
-	case r == '[':
+	case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+		l.backup()
+		return lexNumber
+	case '[':
 		l.TokenChan <- Token{Type: TokenLeftSquareBracket, Value: "["}
 		return lexJSON
-	case r == ']':
+	case ']':
 		l.TokenChan <- Token{Type: TokenRightSquareBracket, Value: "]"}
 		return lexJSON
-	case string(r) == `:`:
+	case ':':
 		l.TokenChan <- Token{Type: TokenColon, Value: ":"}
 		return lexJSON
-	case string(r) == `,`:
+	case ',':
 		l.TokenChan <- Token{Type: TokenComma, Value: ","}
 		return lexJSON
 	}
 	return l.errorf("unreachable")
+}
+
+func lexNumber(l *Lexer) stateFn {
+	var r rune
+	numStr := ""
+	for r = l.next(); r == '0' || r == '1' || r == '2' || r == '3' ||
+		r == '4' || r == '5' || r == '6' || r == '7' ||
+		r == '8' || r == '9'; r = l.next() {
+		numStr += string(r)
+	}
+	fmt.Println("got numStr", numStr)
+	l.TokenChan <- Token{Type: TokenNumber, Value: numStr}
+	return lexJSON
 }
 
 func lexString(l *Lexer) stateFn {
