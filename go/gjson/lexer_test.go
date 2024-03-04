@@ -25,9 +25,12 @@ func TestLexer(t *testing.T) {
 				{TokenComma, ","},
 				// array of object
 				{TokenString, "arr"},
+				{TokenColon, ":"},
 				{TokenLeftSquareBracket, "["},
 				{TokenString, "hello"},
+				{TokenComma, ","},
 				{TokenNumber, "123"},
+				{TokenComma, ","},
 				{TokenNull, "null"},
 				{TokenRightSquareBracket, "]"},
 				{TokenRightBracket, "}"},
@@ -47,7 +50,12 @@ func TestLexer(t *testing.T) {
 				got = append(got, token)
 				t.Log("got token", token)
 			}
-			assert.Equal(t, got, tt.want, "got should be equal to want")
+			if !assert.Equal(t, got, tt.want, "got should be equal to want") {
+				t.Log("got: ")
+				for _, tok := range got {
+					t.Log(tok.Value)
+				}
+			}
 		})
 	}
 }

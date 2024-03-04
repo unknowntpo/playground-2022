@@ -60,6 +60,17 @@ func lexJSON(l *Lexer) stateFn {
 	case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 		l.backup()
 		return lexNumber
+	case 'n':
+		var null = "n"
+		null += string(l.next())
+		null += string(l.next())
+		null += string(l.next())
+		if null != "null" {
+			l.errorf("unquoted string literal")
+			return nil
+		}
+		l.TokenChan <- Token{Type: TokenNull, Value: "null"}
+		return lexJSON
 	case '[':
 		l.TokenChan <- Token{Type: TokenLeftSquareBracket, Value: "["}
 		return lexJSON
@@ -84,6 +95,7 @@ func lexNumber(l *Lexer) stateFn {
 		r == '8' || r == '9'; r = l.next() {
 		numStr += string(r)
 	}
+	l.backup()
 	fmt.Println("got numStr", numStr)
 	l.TokenChan <- Token{Type: TokenNumber, Value: numStr}
 	return lexJSON
