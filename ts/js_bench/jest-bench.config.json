@@ -1,0 +1,17 @@
+{
+    "testEnvironment": "jest-bench/environment",
+    "testEnvironmentOptions": {
+        "testEnvironment": "jest-environment-node",
+        "testEnvironmentOptions": {}
+    },
+    "reporters": [
+        "default",
+        [
+            "jest-bench/reporter",
+            {
+                "withOpsPerSecond": true
+            }
+        ]
+    ],
+    "testRegex": "(/__benchmarks__/.*|\\.bench)\\.(ts|tsx)$"
+}
