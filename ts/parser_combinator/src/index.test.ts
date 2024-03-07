@@ -1,5 +1,5 @@
 import { describe, expect, test, it } from '@jest/globals';
-import { char, either } from '.';
+import { char, either, digit } from '.';
 
 describe('char', () => {
     it('match a single character', () => {
@@ -20,5 +20,17 @@ describe("either", () => {
 
     it("returns false none of the combinators are true", () => {
         expect(aOrB("c")).toBeFalsy();
+    });
+});
+
+
+describe("digit", () => {
+    it("return true when input is digit", () => {
+        expect(digit("036937530354")).toBeTruthy();
+        expect(digit("038438593343")).toBeTruthy();
+    });
+
+    it("returns false when input is not digit", () => {
+        expect(digit("0c74759322545")).toBeFalsy();
     });
 });
