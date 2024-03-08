@@ -11,6 +11,6 @@ export default {
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { useESM: true }),
   watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
-  // testEnvironment: "node",
-  // nodeOptions: "--inspect-brk"
+  testEnvironment: "node",
+  nodeOptions: "--inspect-brk"
 };
