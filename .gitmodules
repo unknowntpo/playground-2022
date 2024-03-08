@@ -1,0 +1,3 @@
+[submodule "ts/ts-esm-paths-jest"]
+	path = ts/ts-esm-paths-jest
+	url = git@github.com:unknowntpo/ts-esm-paths-jest.git
