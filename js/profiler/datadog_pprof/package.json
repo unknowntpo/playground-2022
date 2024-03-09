@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "start": "tsx watch ./src/index.ts",
+    "start": "NODE_OPTIONS='--inspect' tsx watch ./src/index.ts",
+    "profile": "NODE_OPTIONS='--import tsx --inspect' node ./src/index.ts",
     "build": "rm -rf dist && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "test": "jest --watchAll",
     "test:ci": "jest --ci --collectCoverage"
