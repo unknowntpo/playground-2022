@@ -1,5 +1,5 @@
 {
-  "name": "ts-paths-esm-jest",
+  "name": "node-inspector-test",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
