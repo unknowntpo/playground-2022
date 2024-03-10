@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "start": "yarn build && node --inspect ./dist/index.js",
+    "start": "yarn build && node --require pprof-it ./dist/index.js",
     "build": "rm -rf dist && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "test": "jest --watchAll",
     "test:ci": "jest --ci --collectCoverage"
   },
   "devDependencies": {
+    "@datadog/pprof": "^5.1.0",
     "@tsconfig/node18": "^18.2.2",
     "@tsconfig/node20": "^20.1.2",
     "@types/jest": "^29.5.8",

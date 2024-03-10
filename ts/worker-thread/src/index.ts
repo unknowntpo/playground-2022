@@ -1,6 +1,8 @@
 import { Worker } from 'worker_threads';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import pprof from '@datadog/pprof';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,11 +16,11 @@ worker.postMessage('Hello, Worker!');
 // Listen for messages from the worker
 worker.on('message', (result) => {
   console.log(`Main thread received result: ${result}`);
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 1000; i++) {
     concat();
+    sleep(100);
     console.log('done concating');
   }
-  sleep(1000000);
 });
 
 const sleep = async (ms: number) => {
@@ -29,7 +31,7 @@ const sleep = async (ms: number) => {
 
 function concat() {
   let s = '';
-  for (let i = 0; i < 10000000; i++) {
+  for (let i = 0; i < 10000; i++) {
     s += 'hello';
   }
 }
