@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "start": "yarn build && node --require pprof-it ./dist/index.js",
+    "start": "yarn build && node --prof ./dist/index.js",
+    "profile": "yarn build && node ./dist/index.js",
     "build": "rm -rf dist && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "test": "jest --watchAll",
     "test:ci": "jest --ci --collectCoverage"
@@ -19,5 +20,9 @@
     "tsc-alias": "^1.8.8",
     "tsx": "^4.1.0",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@types/node": "^20.11.25",
+    "v8-profiler-next": "^1.10.0"
   }
 }
