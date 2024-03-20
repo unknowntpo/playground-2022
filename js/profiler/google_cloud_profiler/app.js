@@ -42,7 +42,13 @@ async function main() {
     const n = parseInt(req.params.n);
     console.log(`n = ${n}`);
     const result = fib(n);
-    res.json({ result }); 
+    res.json({ result });
+  });
+
+  app.get('/concat', (req, res) => {
+    req;
+    concat();
+    res.json({ "status": "OK" });
   });
 
   // Start the Express server
@@ -52,4 +58,13 @@ async function main() {
   });
 }
 
-main(); 
+main();
+
+function concat() {
+  let str = "";
+  for (let i = 0; i < 10000; i++) {
+    for (let j = 0; j < 1000; j++) {
+      str += "hello";
+    }
+  }
+}

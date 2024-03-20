@@ -5,7 +5,7 @@
   "description": "Google Cloud Profiler samples",
   "main": "app.js",
   "scripts": {
-    "test": "echo 'no test yet'"
+    "start": "node app.js"
   },
   "engines": {
     "node": ">=14.0.0"
