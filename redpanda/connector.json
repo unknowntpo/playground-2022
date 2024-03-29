@@ -1,0 +1,9 @@
+{
+  "name": "classifieds-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mongodb.MongoDbConnector",
+    "mongodb.hosts": "mongo-datasource:27017",
+    "mongodb.name": "mongo-datasource",
+    "collection.include.list": "testdb.classifieds"
+  }
+}
