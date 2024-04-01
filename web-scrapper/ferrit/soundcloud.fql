@@ -1,0 +1,10 @@
+              
+LET doc = DOCUMENT("https://soundcloud.com/charts/top") 
+LET tracks = ELEMENTS(doc, ".chartTrack__details")
+
+FOR track IN tracks
+    RETURN {
+        artist: TRIM(INNER_TEXT(track, ".chartTrack__username")),
+        track: TRIM(INNER_TEXT(track, ".chartTrack__title"))
+    }
+
