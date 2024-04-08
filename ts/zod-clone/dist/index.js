@@ -15,4 +15,24 @@ function isNumber(val) {
 }
 console.log(`is string: ${isString("hello")}`);
 console.log(`is number: ${isNumber(123)}`);
-console.log(`is number: ${isNumber("NaN")}`);
+var x = {
+  string: () => ({
+    parse(arg) {
+      isString(arg);
+      return arg;
+    }
+  }),
+  number: () => ({
+    parse(arg) {
+      isNumber(arg);
+      return arg;
+    }
+  })
+};
+console.log(`++++++++ Parsers ========`);
+var strParser = x.string();
+var val0 = strParser.parse("hello");
+console.log(val0);
+var numParser = x.number();
+var val1 = numParser.parse("NaN");
+console.log(val1);

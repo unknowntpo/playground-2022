@@ -20,3 +20,39 @@ console.log(`is string: ${isString("hello")}`)
 console.log(`is number: ${isNumber(123)}`)
 
 // console.log(`is number: ${isNumber("NaN")}`)
+//
+type AssertFn<T> = (arg: unknown) => asserts arg is T;
+type ParseFn<T> = (arg: unknown) => T;
+type Parser<T> = {
+  parse: ParseFn<T>
+}
+
+const x = {
+  string: () => ({
+    parse(arg: unknown): string {
+      isString(arg);
+      return arg;
+    }
+  }),
+  number: () => ({
+    parse(arg: unknown): number {
+      isNumber(arg);
+      return arg;
+    }
+  })
+}
+
+console.log(`++++++++ Parsers ========`);
+
+
+const strParser = x.string();
+const val0 = strParser.parse("hello");
+console.log(val0);
+
+const numParser = x.number();
+const val1 = numParser.parse("NaN");
+console.log(val1);
+
+
+
+
