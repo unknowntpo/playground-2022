@@ -1,0 +1,14 @@
+{
+  "name": "zod-clone",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsup index.ts && node ./dist/index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.12.5",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.4"
+  }
+}
