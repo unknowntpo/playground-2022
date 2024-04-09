@@ -1,0 +1,65 @@
+version: '3'
+services:
+  lakefs:
+    image: treeverse/lakefs:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - minio
+    environment:
+      - LAKEFS_DATABASE_TYPE=postgres
+      - LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING=postgres://lakefs:lakefs@postgres/lakefs?sslmode=disable
+      - LAKEFS_AUTH_ENCRYPT_SECRET_KEY=some_random_string
+      - LAKEFS_BLOCKSTORE_TYPE=s3
+      - LAKEFS_BLOCKSTORE_S3_FORCE_PATH_STYLE=true
+      - LAKEFS_BLOCKSTORE_S3_ENDPOINT=http://minio:9000
+      - LAKEFS_BLOCKSTORE_S3_DISCOVER_BUCKET_REGION=false
+      - LAKEFS_BLOCKSTORE_S3_CREDENTIALS_ACCESS_KEY_ID=minioadmin
+      - LAKEFS_BLOCKSTORE_S3_CREDENTIALS_SECRET_ACCESS_KEY=minioadmin
+    command: run
+    networks:
+      - lakefs-network
+
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=lakefs
+      - POSTGRES_PASSWORD=lakefs
+      - POSTGRES_DB=lakefs
+    networks:
+      - lakefs-network
+
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    command: server /data
+    volumes:
+      - minio_data:/data
+    networks:
+      - lakefs-network
+
+  minio-console:
+    image: minio/console:latest
+    ports:
+      - "9090:9090"
+    depends_on:
+      - minio
+    command: server
+    environment:
+      - MINIO_SERVER_URL=http://minio:9000
+      - MINIO_CONSOLE_PORT=9090
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    networks:
+      - lakefs-network
+volumes:
+  minio_data:
+
+networks:
+  lakefs-network:
