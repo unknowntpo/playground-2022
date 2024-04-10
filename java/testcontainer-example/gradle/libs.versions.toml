@@ -5,6 +5,7 @@
 guava = "32.1.3-jre"
 junit-jupiter = "5.10.1"
 testcontainers = "1.19.0"
+log4j = "2.20.0"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
@@ -13,3 +14,5 @@ testcontainers = { group = "org.testcontainers", name = "testcontainers", versio
 testcontainers-mysql = { group = "org.testcontainers", name = "mysql", version.ref = "testcontainers" }
 testcontainers-postgresql = { group = "org.testcontainers", name = "postgresql", version.ref = "testcontainers" }
 testcontainers-junit-jupiter = { group = "org.testcontainers", name = "junit-jupiter", version.ref = "testcontainers" }
+log4j = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+

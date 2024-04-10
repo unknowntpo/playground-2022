@@ -14,11 +14,14 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.testcontainers)
+    testImplementation(libs.testcontainers.postgresql)
+
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation(libs.log4j)
 
 }
 
