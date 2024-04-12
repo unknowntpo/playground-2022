@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres-sink
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: quarantine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./pgconfig.conf:/usr/share/postgresql/postgresql.conf.sample
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+    - external-network
+
+networks:
+  external-network:
+    external: true
+    name: airbyte_airbyte_internal
+
+volumes:
+  postgres_data:

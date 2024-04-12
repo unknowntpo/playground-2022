@@ -1,0 +1,12 @@
+dbt_tutorial:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres.dbt-tutorial.orb.local
+      port: 5432
+      dbname: quarantine
+      user: postgres
+      password: password
+      schema: your_schema
+      threads: 1
