@@ -1,3 +1,6 @@
 [submodule "ts/ts-esm-paths-jest"]
 	path = ts/ts-esm-paths-jest
 	url = git@github.com:unknowntpo/ts-esm-paths-jest.git
+[submodule "dataops/dbt_tutorial"]
+	path = dataops/dbt_tutorial
+	url = git@github.com:unknowntpo/dbt_tutorial.git
