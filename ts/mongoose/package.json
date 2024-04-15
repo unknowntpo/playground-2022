@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "tsup index.ts && node dist/index.js"
   },
   "dependencies": {
     "@types/koa": "^2.13.12",
@@ -12,6 +12,7 @@
     "@types/node": "^20.10.6",
     "mongoose": "^8.0.3",
     "ts-node": "^10.9.2",
+    "tsup": "^8.0.2",
     "typescript": "^5.3.3"
   }
 }
