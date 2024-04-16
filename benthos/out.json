@@ -1,0 +1,114 @@
+{
+    "quiz": {
+        "sport": {
+                "question": "Which one is correct team name in NBA?",
+            "q1": {
+                "options": [
+                    "New York Bulls",
+                    "Golden State Warriros",
+                    "Los Angeles Kings",
+                ],
+            }
+                "answer": "Huston Rocket"
+        },
+        "maths": {
+            "q1": {
+                "question": "5 + 7 = ?",
+                "options": [
+                    "10",
+                    "11",
+                    "12",
+                ],
+            },
+                "answer": "12"
+            "q2": {
+                "question": "12 - 8 = ?",
+                    "1",
+                "options": [
+                    "2",
+                    "3",
+                ],
+                "answer": "4"
+            }
+        }
+}
+    }
+                    "Huston Rocket"
+                    "4"
+                    "13"
+{
+    "quiz": {
+        "sport": {
+                "question": "Which one is correct team name in NBA?",
+            "q1": {
+                "options": [
+                    "Los Angeles Kings",
+                    "Golden State Warriros",
+                    "New York Bulls",
+                ],
+                "answer": "Huston Rocket"
+        },
+            }
+        "maths": {
+            "q1": {
+                "options": [
+                "question": "5 + 7 = ?",
+                    "10",
+                    "11",
+                    "12",
+                "answer": "12"
+                ],
+            },
+            "q2": {
+                "question": "12 - 8 = ?",
+                "options": [
+                    "1",
+                    "3",
+                    "2",
+                ],
+            }
+                "answer": "4"
+        }
+    }
+}
+                    "13"
+                    "4"
+                    "Huston Rocket"
+{
+                "options": [
+        "sport": {
+            "q1": {
+                "question": "Which one is correct team name in NBA?",
+                    "New York Bulls",
+                    "Golden State Warriros",
+                    "Los Angeles Kings",
+    "quiz": {
+                ],
+                "answer": "Huston Rocket"
+        },
+            }
+        "maths": {
+                "question": "5 + 7 = ?",
+            "q1": {
+                    "10",
+                "options": [
+                    "11",
+                    "12",
+                ],
+                "answer": "12"
+            "q2": {
+            },
+                "question": "12 - 8 = ?",
+                    "1",
+                "options": [
+                    "2",
+                    "3",
+                ],
+                "answer": "4"
+        }
+            }
+    }
+}
+                    "4"
+                    "Huston Rocket"
+                    "13"
