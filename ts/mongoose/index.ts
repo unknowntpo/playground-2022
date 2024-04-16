@@ -20,13 +20,19 @@ interface blogDoc {
 	meta: mongoose.Schema.Types.ObjectId
 }
 
-const commentSchema = new mongoose.Schema({
+interface commentDoc {
+	blog_id: mongoose.Types.ObjectId,
+	body: String,
+	date: Date
+}
+
+const commentSchema = new mongoose.Schema<commentDoc>({
 	blog_id: mongoose.Types.ObjectId,
 	body: String,
 	date: Date
 })
 
-const metaSchema = new mongoose.Schema({
+const metaSchema = new mongoose.Schema<metaDoc>({
 	blog_id: mongoose.Types.ObjectId,
 	votes: Number,
 	favs: Number
@@ -40,11 +46,6 @@ interface meta {
 
 type metaDoc = meta & BaseDocument;
 
-interface commentDoc {
-	blog_id: mongoose.Types.ObjectId,
-	body: String,
-	date: Date
-}
 
 interface BaseDocument {
 	/** [mongodb native] Document 的 ID */
@@ -91,7 +92,22 @@ const main = async () => {
 
 	await createNewCommentsForBlog(newBlog._id)
 
+	const updatedBlog = await blog.findOne({ _id: newBlog._id }).lean();
+
+	peekStructure(blogSchema);
+
 	await mongoose.connection.close();
+}
+
+async function peekStructure(schema: mongoose.Schema) {
+	// const blogDoc = await blog.findOne({ _id: blog_id });
+	// console.log(`inspect on blogDoc: ${blog.(blogDoc!)}`);
+	// blog.insp
+	for (const [k, v] of Object.entries(schema.paths)) {
+		if (k !== '_id' && v.instance === 'ObjectId') {
+			console.log(`${k.toString()} has type ObjectId`);
+		}
+	}
 }
 
 async function createNewCommentsForBlog(blog_id: mongoose.Types.ObjectId) {
@@ -113,7 +129,7 @@ async function createNewCommentsForBlog(blog_id: mongoose.Types.ObjectId) {
 	);
 	// Fetch the updated blogDoc after the update operation
 	let updatedBlogDoc = await blog.findOne({ _id: blog_id });
-	console.log(`updated blogDoc: ${updatedBlogDoc}`);
+	// console.log(`updated blogDoc: ${updatedBlogDoc}`);
 }
 
 main()
