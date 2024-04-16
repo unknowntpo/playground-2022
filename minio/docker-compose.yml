@@ -1,0 +1,48 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mcevent
+    volumes:
+      - pg_data:/data
+    networks:
+      - minio-network
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - minio-network
+
+# minio-console:
+#   image: minio/console:latest
+#   ports:
+#     - "9091:9090"
+#   depends_on:
+#     - minio
+#   command: server
+#   environment:
+#     - MINIO_SERVER_URL=http://minio.minio.orb.local:9000
+#     - MINIO_CONSOLE_PORT=9090
+#     - MINIO_ROOT_USER=minioadmin
+#     - MINIO_ROOT_PASSWORD=minioadmin
+#   networks:
+#     - minio-network
+volumes:
+  minio_data:
+  pg_data:
+
+networks:
+  minio-network:
+
