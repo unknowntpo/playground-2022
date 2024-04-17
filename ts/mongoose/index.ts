@@ -1,21 +1,28 @@
-import mongoose from "mongoose";
-import { BuilderProgram } from "typescript";
+import mongoose, { ValidatorProps } from "mongoose";
+import { networkInterfaces } from "os";
 
-const blogSchema = new mongoose.Schema({
+const blogSchema = new mongoose.Schema<blogDoc>({
 	title: String, // String is shorthand for {type: String}
 	author: String,
 	body: String,
-	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+	comments: [{
+		type: mongoose.Schema.Types.ObjectId, ref: 'Comment'
+	}],
 	date: { type: Date, default: Date.now },
 	hidden: Boolean,
 	meta: { type: mongoose.Schema.Types.ObjectId, ref: 'Meta' }
 });
 
+//   interface ValidateFn<T> {
+//     (value: T, props?: ValidatorProps & Record<string, any>): boolean;
+//   }
+
+
 interface blogDoc {
 	title: String, // String is shorthand for {type: String}
 	author: String,
 	body: String,
-	comments: [mongoose.Schema.Types.ObjectId],
+	comments: [mongoose.Types.ObjectId],
 	date: Date,
 	hidden: Boolean,
 	meta: mongoose.Schema.Types.ObjectId
@@ -25,12 +32,41 @@ interface commentDoc {
 	blog_id: mongoose.Types.ObjectId,
 	body: String,
 	date: Date
+	nested_comment: mongoose.Types.ObjectId,
+	nested_comment_body: String,
+	nested_comment_date: Date,
 }
 
 const commentSchema = new mongoose.Schema<commentDoc>({
-	blog_id: mongoose.Types.ObjectId,
+	blog_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Blog' },
 	body: String,
-	date: Date
+	date: Date,
+	nested_comment: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' },
+	nested_comment_body: {
+		type: mongoose.Schema.Types.String,
+		validate: {
+			// (value: T, props?: ValidatorProps & Record<string, any>): Promise<boolean>;
+			// validator: async<T>(value: T, props: ValidatorProps & Record<string, any>): Promise<boolean> => {
+			// 	const nested_comment_id = this.get("nested_comment");
+			// 	const nested_comment = commentModel.find({ _id: nested_comment_id });
+			// 	const { body, date } = nested_comment;
+			// 	console.log(`KKK here`);
+			// 	return body == this.get('body') && date == this.get('date');
+			// }
+			validator: async function (this: commentDoc, value: String): Promise<boolean> {
+				const nested_comment_id = this.nested_comment;
+				const nested_comment = await commentModel.findOne({ _id: nested_comment_id }).lean();
+				if (!nested_comment) {
+					throw new Error(`should exist`);
+				}
+				const { body, date } = nested_comment!;
+				console.log(`KKK here`);
+
+				return this.nested_comment_body == nested_comment.body && this.nested_comment_date == nested_comment.date;
+			}
+		}
+	},
+	nested_comment_date: Date,
 })
 
 const metaSchema = new mongoose.Schema<metaDoc>({
@@ -60,6 +96,12 @@ interface BaseDocument {
 const commentModel = mongoose.model('Comment', commentSchema);
 const metaModel = mongoose.model('Meta', metaSchema);
 const blogModel = mongoose.model('Blog', blogSchema);
+
+const models = [
+	commentModel,
+	metaModel,
+	blogModel,
+]
 
 
 const main = async () => {
@@ -95,29 +137,50 @@ const main = async () => {
 
 	const updatedBlog = await blogModel.findOne({ _id: newBlog._id }).lean();
 
-	await validate(blogSchema);
+	await validate();
 
+	// const populatedBlog = await blogModel.
+	// 	find({}).
+	// 	populate({
+	// 		path: 'comments', populate: {
+	// 			path: 'nested_comment',
+	// 			model: 'Comment'
+	// 		}
+	// 	}).
+	// 	exec();
+	// console.log(`XXXX Populated blog: ${populatedBlog}`);
 	await mongoose.connection.close();
 }
 
-async function validate(schema: mongoose.Schema) {
+async function validate() {
 	console.log("YYY start validate");
-	const model = mongoose.model('Blog', schema);
-	const docs = await model.find();
-	docs.forEach(async (doc) => {
-		await doc.validate();
-	})
-	console.log("validate OK");
+	const comments = await commentModel.find({});
+	for (const comment of comments) {
+		await comment.validate();
+	}
 }
 
 
 async function createNewCommentsForBlog(blog_id: mongoose.Types.ObjectId) {
 	let commentIDs: Array<mongoose.Types.ObjectId> = [];
+	const rootComment = new commentModel({
+		blog_id,
+		body: 'hello',
+		date: new Date()
+	});
+	const savedRootComment = await rootComment.save();
+
+	console.log(`saved root comment: ${rootComment}`);
+
 	for (let i = 0; i < 3; i++) {
 		const newComment = new commentModel({
 			blog_id,
 			body: 'hello',
-			date: new Date()
+			date: new Date(),
+			nested_comment: savedRootComment._id,
+			// nested_comment: new mongoose.Types.ObjectId()
+			nested_comment_body: savedRootComment.body + 'testModify',
+			nested_comment_date: savedRootComment.date,
 		});
 		const savedComment = await newComment.save();
 		console.log(`comment: ${savedComment} is saved`);
