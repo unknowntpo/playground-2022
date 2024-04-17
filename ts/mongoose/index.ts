@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
+import { BuilderProgram } from "typescript";
 
 const blogSchema = new mongoose.Schema({
 	title: String, // String is shorthand for {type: String}
 	author: String,
 	body: String,
-	comments: [mongoose.Schema.Types.ObjectId],
+	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
 	date: { type: Date, default: Date.now },
 	hidden: Boolean,
-	meta: mongoose.Schema.Types.ObjectId
+	meta: { type: mongoose.Schema.Types.ObjectId, ref: 'Meta' }
 });
 
 interface blogDoc {
@@ -56,9 +57,9 @@ interface BaseDocument {
 	updatedAt: Date;
 }
 
-const comment = mongoose.model('Comment', commentSchema);
-const meta = mongoose.model('Meta', metaSchema);
-const blog = mongoose.model('Blog', blogSchema);
+const commentModel = mongoose.model('Comment', commentSchema);
+const metaModel = mongoose.model('Meta', metaSchema);
+const blogModel = mongoose.model('Blog', blogSchema);
 
 
 const main = async () => {
@@ -72,13 +73,13 @@ const main = async () => {
 		.catch((err: Error) => console.log(err));
 
 
-	const newMeta = new meta({
+	const newMeta = new metaModel({
 		votes: 10,
 		favs: 5
 	});
 	await newMeta.save().then(() => console.log('Meta saved successfully.', newMeta));
 
-	const newBlog = new blog({
+	const newBlog = new blogModel({
 		title: "My First Blog",
 		author: "John Doe",
 		body: "This is the content of my first blog post.",
@@ -92,28 +93,28 @@ const main = async () => {
 
 	await createNewCommentsForBlog(newBlog._id)
 
-	const updatedBlog = await blog.findOne({ _id: newBlog._id }).lean();
+	const updatedBlog = await blogModel.findOne({ _id: newBlog._id }).lean();
 
-	peekStructure(blogSchema);
+	await validate(blogSchema);
 
 	await mongoose.connection.close();
 }
 
-async function peekStructure(schema: mongoose.Schema) {
-	// const blogDoc = await blog.findOne({ _id: blog_id });
-	// console.log(`inspect on blogDoc: ${blog.(blogDoc!)}`);
-	// blog.insp
-	for (const [k, v] of Object.entries(schema.paths)) {
-		if (k !== '_id' && v.instance === 'ObjectId') {
-			console.log(`${k.toString()} has type ObjectId`);
-		}
-	}
+async function validate(schema: mongoose.Schema) {
+	console.log("YYY start validate");
+	const model = mongoose.model('Blog', schema);
+	const docs = await model.find();
+	docs.forEach(async (doc) => {
+		await doc.validate();
+	})
+	console.log("validate OK");
 }
+
 
 async function createNewCommentsForBlog(blog_id: mongoose.Types.ObjectId) {
 	let commentIDs: Array<mongoose.Types.ObjectId> = [];
 	for (let i = 0; i < 3; i++) {
-		const newComment = new comment({
+		const newComment = new commentModel({
 			blog_id,
 			body: 'hello',
 			date: new Date()
@@ -122,13 +123,13 @@ async function createNewCommentsForBlog(blog_id: mongoose.Types.ObjectId) {
 		console.log(`comment: ${savedComment} is saved`);
 		commentIDs.push(savedComment._id);
 	}
-	let blogDoc = await blog.findOne({ _id: blog_id });
-	await blog.updateOne(
+	let blogDoc = await blogModel.findOne({ _id: blog_id });
+	await blogModel.updateOne(
 		{ _id: blog_id },
 		{ $set: { comments: commentIDs } }
 	);
 	// Fetch the updated blogDoc after the update operation
-	let updatedBlogDoc = await blog.findOne({ _id: blog_id });
+	let updatedBlogDoc = await blogModel.findOne({ _id: blog_id });
 	// console.log(`updated blogDoc: ${updatedBlogDoc}`);
 }
 
