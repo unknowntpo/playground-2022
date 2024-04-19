@@ -18,4 +18,22 @@ async function simpleTest() {
   console.log(sumN);
 }
 
-simpleTest();
+// simpleTest();
+
+async function fetchFromHttp() {
+  const db = await Database.create(":memory:");
+
+  db.register_udf('css_selector', 'string', (url) => {
+    console.log(`fetching from url: ${url}`);
+    const data = fetch(url)
+      .then(res => res.text());
+    return data;
+  });
+
+  const rows = await db.all(`select css_selector('https://example.com/') as html`);
+  await db.wait();
+
+  console.log(rows);
+}
+
+await fetchFromHttp();
