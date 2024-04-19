@@ -1,0 +1,13 @@
+{
+  "name": "duckdb-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsup ./src/index.ts && node dist/index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "duckdb-async": "^0.10.0",
+    "tsup": "^8.0.2"
+  }
+}
