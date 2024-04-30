@@ -56,8 +56,8 @@ class Parser {
 	getLevel(content: string): Level {
 		// 項:沒有數字
 		const regList = [
-			//  // 項:沒有數字
-			// 廢棄
+			// 項:只要不是後兩個的都歸類為項
+			// place holder
 			new RegExp(/^[^一二三四五六七八九十]/, 'g'),
 			// 「款冠以一、二、三等數字」：特徵必定為 一、、二、 ... 諸此類推，使用的標點符號必定為全行頓號 、。
 			new RegExp(/^[一二三四五六七八九十]+、/, 'g'),
@@ -71,7 +71,6 @@ class Parser {
 		}
 		// nothing match: it's 項
 		return 0;
-		// throw new Error(`No matched RegExp at ${this.lawContents[this.idx]}`);
 	}
 
 
@@ -81,9 +80,6 @@ class Parser {
 			list: []
 		};
 		for (let content = this.nextContent(); content !== null; content = this.nextContent()) {
-			// e.g.
-			// [a], push a
-			// [a, b], push b
 			console.log(`curLevel: ${level}, level of ${content}: ${this.getLevel(content)}`)
 			switch (this.getLevel(content)) {
 				case level: {
@@ -117,35 +113,5 @@ class Parser {
 			this.idx--;
 	}
 }
-
-
-
-/*
- 
-
-A: asdfs
-B: adsf
-1. asdfsadf
-2. sdfds
-3. dfsdfa
-C: dfasd
-D: asdfsdf
-
-// indent rules: if same as stack.top() -1, then outdent:
-// else: indent
-// parseLaw(0) // A
-// parseLaw(0) // B
-// parseLaw(1) // B.child[0]
-// parseLaw(1) // B.child[1]
-// parseLaw(1) // B.child[1]
-// parseLaw(0) // C
-
-
-// list
-// child
-
-
-
- */
 
 export { Parser } 
