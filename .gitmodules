@@ -4,3 +4,6 @@
 [submodule "dataops/dbt_tutorial"]
 	path = dataops/dbt_tutorial
 	url = git@github.com:unknowntpo/dbt_tutorial.git
+[submodule "java/spring-petclinic"]
+	path = java/spring-petclinic
+	url = git@github.com:unknowntpo/spring-petclinic.git
