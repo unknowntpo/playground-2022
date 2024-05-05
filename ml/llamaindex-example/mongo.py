@@ -37,5 +37,5 @@ index = SummaryIndex.from_documents(documents)
 
 # set Logging to DEBUG for more detailed outputs
 query_engine = index.as_query_engine()
-response = query_engine.query("What did i eat at 2024/5/5? ")
+response = query_engine.query("What did i eat at 2024/5/8? ")
 print(response)
