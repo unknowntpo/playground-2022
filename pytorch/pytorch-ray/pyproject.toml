@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pytorch-ray"
+version = "0.1.0"
+description = ""
+authors = ["unknowntpo <e850506@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+torch = "^2.3.0"
+mlflow = "^2.12.1"
+pytorch-lightning = "^2.2.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
