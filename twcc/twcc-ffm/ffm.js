@@ -34,7 +34,7 @@ const lawContent = `金融監督管理委員會　裁處書
 正本：兆豐國際商業銀行股份有限公司（代表人張兆順先生）
 副本：兆豐金融控股股份有限公司（代表人張兆順先生）、中央銀行、中央存款保險股份有限公司(代表人林銘寬先生)、本會檢查局、銀行局`
 
-const relatedIssuePrompt = '你是一個擁有 100 年經驗的台灣法律專家，這是台灣政府網站的裁罰內容，請幫我列出內文中做出裁罰時引用的相關的法條與訴願中提及的相關法條的字號並以 JSON 呈現'
+const relatedIssuePrompt = '你是一個擁有 100 年經驗的台灣法律專家，這是台灣政府網站的裁罰內容，請幫我列出內文中做出裁罰時引用的相關法條與訴願中提及的相關法條的條號並以 JSON 呈現'
 
 async function main() {
   const body =
@@ -48,8 +48,8 @@ async function main() {
     ],
     "parameters": {
       "max_new_tokens": 350,
-      "temperature": 0.5,
-      "top_k": 50,
+      "temperature": 0.1,
+      "top_k": 30,
       "top_p": 1,
       "frequence_penalty": 1
     }
@@ -70,6 +70,30 @@ async function main() {
   const text = await resp.text();
   const respObj = JSON.parse(text);
   console.log(respObj.generated_text);
+
+	// {
+	//   "裁罰引用的法條": [
+	//     "銀行法第45條之1第1項",
+	//     "銀行法第129條第7款"
+	//   ],
+	//   "訴願中提及的法條": [
+	//     "訴願法第58條第1項",
+	//     "訴願法第93條第1項",
+	//     "行政執行法第4條第1項"
+	//   ]
+	// }
+
+	// {
+	// 	"裁罰時引用法條": [
+	// 	  "銀行法第45條之1第1項",
+	// 	  "銀行法第129條第7款"
+	// 	],
+	// 	"訴願中提及法條": [
+	// 	  "訴願法第58條第1項",
+	// 	  "訴願法第93條第1項",
+	// 	  "行政執行法第4條第1項但書"
+	// 	]
+	// }
 }
 
 main()
