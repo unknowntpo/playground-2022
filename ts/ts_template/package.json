@@ -4,9 +4,10 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build && node ./dist/index.js",
-    "build": "rm -rf dist && tsup src/index.ts",
-    "test": "vitest test/",
-    "test:ui": "vitest --ui"
+    "build": "yarn clean && tsup src/index.ts",
+    "test": "yarn clean && vitest test/",
+    "test:ui": "yarn clean && vitest --ui",
+    "clean": "rm -rf dist"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
