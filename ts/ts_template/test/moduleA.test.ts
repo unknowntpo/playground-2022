@@ -1,3 +1,5 @@
+import { describe, test, expect } from 'vitest'
+
 import { abc } from "src/moduleA";
 
 describe("project tests", () => {
