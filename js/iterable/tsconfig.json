@@ -1,0 +1,35 @@
+{
+	"extends": "@tsconfig/node20/tsconfig.json",
+	"compilerOptions": {
+		"checkJs": true,
+		"allowJs": true,
+		"module": "nodenext",
+		"strict": true,
+		"target": "ES6",
+		"moduleResolution": "NodeNext",
+		"baseUrl": "./",
+		"noEmit": false,
+		// "rootDir": "src",
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"traceResolution": true,
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"declaration": true,
+		"paths": {
+			"src/*": [
+				"src/*"
+			]
+		},
+		"types": [
+			"node",
+		]
+	},
+	"include": [
+		"./src/**/*",
+		"./test/**/*"
+	],
+	"exclude": [
+		"dist"
+	],
+}
