@@ -1,0 +1,6 @@
+server_name = myserver
+jetstream {
+    store_dir: /data/jetstream
+    max_mem: 1G
+    max_file: 100G
+}
