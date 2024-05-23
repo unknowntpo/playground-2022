@@ -1,29 +1,28 @@
 version: "3.5"
 services:
-  nats-0:
-    image: nats:2.10.12
+  nats:
+    image: nats:2.10.16
     ports:
       - "8222:8222"
-      - "4222:4222"
-    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --http_port 8222"
+    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --http_port 8222 "
     networks: ["nats"]
   nats-1:
-    image: nats:2.10.12
-    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats-0:6222"
+    image: nats:2.10.16
+    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222"
     networks: ["nats"]
-    depends_on: ["nats-0"]
+    depends_on: ["nats"]
   nats-2:
-    image: nats:2.10.12
-    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats-0:6222"
+    image: nats:2.10.16
+    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222"
     networks: ["nats"]
-    depends_on: ["nats-0"]
+    depends_on: ["nats"]
   # NATS dashboard instance running on the same private network.
   dashboard:
     image: mdawar/nats-dashboard
     environment:
       # The NATS monitoring server will be proxied on /proxy/* on the frontend.
       # See: config/Caddyfile for the reverse proxy configuration.
-      REVERSE_PROXY_UPSTREAM: 'nats-0:8222'
+      REVERSE_PROXY_UPSTREAM: 'nats:8222'
     volumes:
       # Optional config file.
       - ./config.json:/srv/config.json
@@ -31,6 +30,8 @@ services:
       - target: 80
         published: 8000
         protocol: tcp
+    depends_on: ["nats"]
+    networks: ["nats"]
 networks:
   nats:
     name: nats
