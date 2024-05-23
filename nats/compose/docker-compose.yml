@@ -32,6 +32,12 @@ services:
         protocol: tcp
     depends_on: ["nats"]
     networks: ["nats"]
+  web:
+    image: sphqxe/nats-webui:latest
+    ports:
+      - "8080:80"
+    networks: ["nats"]
+
 networks:
   nats:
     name: nats
