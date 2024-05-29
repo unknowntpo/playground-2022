@@ -7,3 +7,6 @@
 [submodule "java/spring-petclinic"]
 	path = java/spring-petclinic
 	url = git@github.com:unknowntpo/spring-petclinic.git
+[submodule "java/java-plugin-quickstart"]
+	path = java/java-plugin-quickstart
+	url = git@github.com:unknowntpo/java-plugin-quickstart.git
