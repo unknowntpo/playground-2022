@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1.2
-
 # Apache Ranger Admin runtime Docker image
 FROM debian:buster
 LABEL maintainer="support@datastrato.com"
@@ -11,7 +9,7 @@ ENV RANGER_PASSWORD=rangerR0cks!
 
 WORKDIR /root
 
-RUN --mount=type=cache,target=/var/cache/apt \
-    apt-get -q update && \
-    apt-get install -y -q python python3 gcc mariadb-server vim curl wget openjdk-11-jdk git procps && \
+# RUN --mount=type=cache,target=/var/cache/apt \
+RUN apt-get -q update && \
+    apt-get install -y -q python python3 && \
     rm -rf /var/lib/apt/lists/*
