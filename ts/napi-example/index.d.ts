@@ -5,3 +5,4 @@
 
 export function sum(a: number, b: number): number
 export function readFileAsync(path: string): Promise<Buffer>
+export function callWithOne(func: (arg0: number) => number): number

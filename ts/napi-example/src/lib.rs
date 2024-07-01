@@ -24,3 +24,11 @@ async fn read_file_async(path: String) -> Result<Buffer> {
     })
     .await
 }
+
+#[napi]
+fn call_with_one<F>(func: F) -> Result<i32>
+where
+  F: Fn(i32) -> Result<i32>,
+{
+    return func(30);
+}

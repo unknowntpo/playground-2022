@@ -1,13 +1,19 @@
-import test from "ava";
+import { expect, test } from "vitest";
 
-import { readFileAsync, sum } from "../index.js";
+import { callWithOne, readFileAsync, sum } from "../index.js";
 
-test("sum from native", (t) => {
-  t.is(sum(1, 2), 3);
+test("sum from native", () => {
+  expect(sum(1, 2)).toBe(3);
 });
 
-test("read file async", async (t) => {
+test("read file async", async () => {
   const buf = await readFileAsync("__test__/test.txt");
-  t.log(buf.toString());
-  t.is(1 + 1, 2);
+  console.log(buf.toString());
+  expect(1 + 1).toBe(2);
+});
+
+test("call_with_one", () => {
+  const res = callWithOne((i) => i + 1);
+  console.log(res);
+  expect(res).toBe(31);
 });
