@@ -5,4 +5,5 @@
 
 export function sum(a: number, b: number): number
 export function readFileAsync(path: string): Promise<Buffer>
+export function busyLoopRs(n: number): number
 export function callWithOne(n: number, func: (arg0: number) => number): number

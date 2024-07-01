@@ -1,6 +1,6 @@
 import { bench, describe, expect, test } from "vitest";
 
-import { callWithOne, readFileAsync, sum } from "../index.js";
+import { busyLoopRs, callWithOne, readFileAsync, sum } from "../index.js";
 
 describe("basic", () => {
   test("sum from native", () => {
@@ -35,5 +35,13 @@ bench("JS -> Rust callWithOne", () => {
 });
 
 bench("JS native", () => {
+  busyLoop(count);
+});
+
+bench("JS -> Rust busyLoop", () => {
+  busyLoopRs(count);
+});
+
+bench("JS native busyLoop", () => {
   busyLoop(count);
 });
