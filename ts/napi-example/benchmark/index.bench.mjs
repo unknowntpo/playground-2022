@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { bench, describe, expect, test } from "vitest";
 
 import { callWithOne, readFileAsync, sum } from "../index.js";
 
@@ -14,8 +14,26 @@ describe("basic", () => {
   });
 
   test("call_with_one", () => {
-    const res = callWithOne(100, (i) => i + 1);
+    const res = callWithOne((i) => i + 1);
     console.log(res);
-    expect(res).toBe(101);
+    expect(res).toBe(31);
   });
+});
+
+const busyLoop = (n) => {
+  let i = 0;
+  while (i < n) {
+    i++;
+  }
+  return i;
+};
+
+const count = 10000;
+// Call busyLoop 50 times
+bench("JS -> Rust callWithOne", () => {
+  callWithOne(count, busyLoop);
+});
+
+bench("JS native", () => {
+  busyLoop(count);
 });

@@ -26,9 +26,9 @@ async fn read_file_async(path: String) -> Result<Buffer> {
 }
 
 #[napi]
-fn call_with_one<F>(func: F) -> Result<i32>
+fn call_with_one<F>(n: i32, func: F) -> Result<i32>
 where
   F: Fn(i32) -> Result<i32>,
 {
-    return func(30);
+    return func(n)
 }
