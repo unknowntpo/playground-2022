@@ -1,0 +1,6 @@
+apiVersion: example.com/v1
+kind: MyResource
+metadata:
+  name: test-resource
+spec:
+  message: "Hello, kube-rs! New"

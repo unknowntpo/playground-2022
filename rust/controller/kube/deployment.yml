@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-rs-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-rs-controller
+  template:
+    metadata:
+      labels:
+        app: kube-rs-controller
+    spec:
+      serviceAccountName: kube-rs-controller
+      containers:
+      - name: kube-rs-controller
+        image: unknowntpo/kube-rs-controller:v1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
