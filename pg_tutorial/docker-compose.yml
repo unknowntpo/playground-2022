@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres-tutorial
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dvdrental
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./dvdrental.zip:/tmp/dvdrental.zip
+      #      - pg_restore -U $POSTGRES_USER -d /tmp/dvdrental.zip
+    networks:
+      - pg_network
+
+  restore:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dvdrental
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        cat > /wait-for-postgres.sh << EOF
+        #!/bin/sh
+        while true; do
+          if pg_isready -h postgres-tutorial -U $$POSTGRES_USER; then
+            echo "PostgreSQL is ready!"
+            break
+          else
+            echo "PostgreSQL is not ready. Waiting..."
+            sleep 1
+          fi
+        done
+        EOF
+        chmod +x /wait-for-postgres.sh
+        /wait-for-postgres.sh
+
+        psql -v -h postgres-tutorial -U $POSTGRES_USER -f /tmp/dump/dvdrental -d dvdrental
+    volumes:
+      - ./dvdrental.zip:/tmp/dump/dvdrental.zip
+
+    networks:
+      - pg_network
+
+
+networks:
+  pg_network:
+
+volumes:
+  pgdata:
