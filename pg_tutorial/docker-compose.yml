@@ -3,7 +3,6 @@ version: '3.7'
 services:
   postgres:
     image: postgres:16
-    container_name: postgres-tutorial
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -31,7 +30,7 @@ services:
         cat > /wait-for-postgres.sh << EOF
         #!/bin/sh
         while true; do
-          if pg_isready -h postgres-tutorial -U $$POSTGRES_USER; then
+          if pg_isready -h postgres -U $$POSTGRES_USER; then
             echo "PostgreSQL is ready!"
             break
           else
@@ -43,9 +42,11 @@ services:
         chmod +x /wait-for-postgres.sh
         /wait-for-postgres.sh
 
-        psql -v -h postgres-tutorial -U $POSTGRES_USER -f /tmp/dump/dvdrental -d dvdrental
+        PGPASSWORD=$$POSTGRES_PASSWORD pg_restore -h postgres -U $$POSTGRES_USER -v -d dvdrental /tmp/dvdrental/
+
+        echo "Migration completed."
     volumes:
-      - ./dvdrental.zip:/tmp/dump/dvdrental.zip
+      - ./dvdrental:/tmp/dvdrental
 
     networks:
       - pg_network
