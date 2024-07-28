@@ -1,0 +1,59 @@
+---
+# PersistentVolume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: ./
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - your-node-name  # Replace with your actual node name
+
+---
+# PersistentVolumeClaim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-storage
+
+---
+# Pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: local-pv-pod
+spec:
+  containers:
+  - name: app
+    image: ubuntu
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do sleep 3600; done"]
+    volumeMounts:
+    - name: local-persistent-storage
+      mountPath: /mnt/data
+  volumes:
+  - name: local-persistent-storage
+    persistentVolumeClaim:
+      claimName: local-pvc
