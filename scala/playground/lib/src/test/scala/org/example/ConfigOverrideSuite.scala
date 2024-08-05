@@ -15,6 +15,13 @@ class ConfigOverrideSuite extends AnyFunSuite {
     testClass.overrideConfig(conf).map { case (k, v) => assertEquals(conf(k), v) }
   }
 
+  test("should not override if override config is not set") {
+    def testClass = new ConfigOverride()
+
+    val defaultConf = testClass.getDefaultConf()
+    testClass.overrideConfig().map { case (k, v) => assertEquals(defaultConf(k), v) }
+  }
+
   test("stringIntMapToStringStringMap") {
     def library = new Library()
 
