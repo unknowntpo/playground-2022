@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "tsup optimistic_lock.ts && node dist/optimistic_lock.js"
+    "start": "tsup index.ts && node dist/index.js",
+    "start:find_and_update": "tsup find_and_update.ts && node dist/find_and_update.js"
   },
   "dependencies": {
     "@types/koa": "^2.13.12",

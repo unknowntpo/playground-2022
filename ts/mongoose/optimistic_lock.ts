@@ -1,12 +1,11 @@
 import mongoose, { ValidatorProps } from "mongoose";
-import { networkInterfaces } from "os";
 
 const blogSchema = new mongoose.Schema<blog>({
 	title: String, // String is shorthand for {type: String}
 	author: String,
 	body: String,
 	// }, { optimisticConcurrency: true, versionKey: true });
-}, { optimisticConcurrency: true, versionKey: '__v' });
+}, { optimisticConcurrency: true });
 
 
 interface blog {
@@ -42,6 +41,7 @@ const main = async () => {
 	// console.log("blog instance created");
 
 	// await newBlog.save().then(() => console.log('Blog saved successfully.', newBlog));
+	mongoose.set('debug', true)
 
 	const promises = Array.from({ length: 10, }, async () => {
 		return new Promise<void>(async (resolve) => {
