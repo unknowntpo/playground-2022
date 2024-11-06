@@ -21,6 +21,7 @@ io.on('connection', (socket) => {
 	socket.on('disconnect', () => {
 		console.log('Server A: Client disconnected');
 	});
+	// TODO: 需要一個 isEnd 的 topic
 });
 
 server.listen(3000, () => {
