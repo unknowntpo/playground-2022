@@ -56,9 +56,9 @@ class UserGenerator {
 
 
 async function prepareData() {
-	fs.openSync("../data/input.json", "a+")
+	const f = fs.openSync(`${__dirname}/../data/input.json`, "a+")
 
-	const stream = fs.createWriteStream("../data/input.json")
+	const stream = fs.createWriteStream(`${__dirname}/../data/input.json`)
 
 	const userGenerator = new UserGenerator();
 
@@ -77,14 +77,31 @@ async function prepareData() {
 async function main() {
 	await prepareData();
 
-	const readStream = fs.createReadStream("../data/input.json")
-	const writeStream = fs.createWriteStream("../data/output.json")
+	const readStream = fs.createReadStream(`${__dirname}/../data/input.json`)
+	const writeStream = fs.createWriteStream(`${__dirname}/../data/output.json`)
+
+	readStream.pipe(writeStream);
 
 	const passThrough = new PassThrough()
 
-	passThrough.on('data', (chunk) => { console.log(chunk.toString()); });
+	passThrough.on('data', (chunk) => {
+		console.log(chunk.toString());
+	});
 
 	await pipeline(readStream, passThrough, writeStream);
+
+	readStream.on('data', (data) => {
+		console.log(data.toString());
+
+		// passThrough.end();
+		// writeStream.end();
+	})
+
+
+	readStream.on('end', () => {
+		passThrough.end();
+		writeStream.end();
+	})
 }
 
 main()
