@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "tsup": "^8.0.2",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "vite-node": "^2.1.4"
   }
 }
