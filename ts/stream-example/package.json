@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build && node ./dist/index.js",
+    "start:readAndWrite": "yarn clean && tsup src/readAndWrite.ts && node ./dist/readAndWrite.js",
     "build": "yarn clean && tsup src/index.ts",
     "test": "yarn clean && vitest test/",
     "test:ui": "yarn clean && vitest --ui",
