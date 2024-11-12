@@ -1,6 +1,7 @@
 import fs from 'node:fs';
-import { PassThrough } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
+import { PassThrough, Transform } from 'node:stream';
+import { pipeline, finished } from 'node:stream/promises';
+import readline from 'node:readline';
 
 interface User {
 	Id: number;
@@ -77,31 +78,43 @@ async function prepareData() {
 async function main() {
 	await prepareData();
 
-	const readStream = fs.createReadStream(`${__dirname}/../data/input.json`)
-	const writeStream = fs.createWriteStream(`${__dirname}/../data/output.json`)
-
-	readStream.pipe(writeStream);
-
-	const passThrough = new PassThrough()
-
-	passThrough.on('data', (chunk) => {
-		console.log(chunk.toString());
-	});
-
-	await pipeline(readStream, passThrough, writeStream);
+	const readStream = fs.createReadStream(`${__dirname}/../data/input.json`, { encoding: 'utf-8' })
+	const writeStream = fs.createWriteStream(`${__dirname}/../data/output.json`, { encoding: 'utf-8' })
 
 	readStream.on('data', (data) => {
-		console.log(data.toString());
-
-		// passThrough.end();
-		// writeStream.end();
+		console.log(`readStream got data: ${data.toString()}`);
 	})
 
+	writeStream.on('data', (data) => {
+		console.log(`writeStream got data: ${data.toString()}`);
+	})
 
 	readStream.on('end', () => {
-		passThrough.end();
-		writeStream.end();
+		// passThrough.end();
+		console.log(`readStream ended`);
 	})
+
+	readStream.on('error', function (err) {
+		console.log(err.stack);
+	});
+
+	const tf = new Transform({
+		transform(chunk, _encoding, callback) {
+			let str = chunk.toString();
+			console.log(`Transform got data: ${str}`)
+			this.push(str);
+			callback();
+		},
+	});
+
+	console.log("beforePipeline")
+
+	await pipeline(readStream, tf, writeStream);
+
+	console.log("afterPipeline")
+
+	await finished(readStream)
+	await finished(writeStream)
 }
 
 main()
