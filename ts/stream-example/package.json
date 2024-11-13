@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build && node ./dist/index.js",
-    "start:readAndWrite": "yarn clean && tsup src/readAndWrite.ts && node ./dist/readAndWrite.js",
-    "build": "yarn clean && tsup src/index.ts",
+    "start:readAndWrite": "vite-node src/readAndWrite.ts",
+    "build": "yarn clean && tsup src/readAndWrite.ts",
     "test": "yarn clean && vitest test/",
     "test:ui": "yarn clean && vitest --ui",
     "clean": "rm -rf dist"

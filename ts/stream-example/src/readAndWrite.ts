@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { PassThrough, Transform } from 'node:stream';
+import { PassThrough, Readable, Transform } from 'node:stream';
 import { pipeline, finished } from 'node:stream/promises';
 import readline from 'node:readline';
 
@@ -57,9 +57,9 @@ class UserGenerator {
 
 
 async function prepareData() {
-	const f = fs.openSync(`${__dirname}/../data/input.json`, "a+")
+	// const f = fs.openSync(`${__dirname}/../data/input.json`, "a+")
 
-	const stream = fs.createWriteStream(`${__dirname}/../data/input.json`)
+	const stream = fs.createWriteStream(`${__dirname}/../data/input.json`, { flags: 'w' })
 
 	const userGenerator = new UserGenerator();
 
@@ -72,16 +72,19 @@ async function prepareData() {
 		console.log(err)
 	} finally {
 		stream.end();
+
+		// If we don't wait for finished, in main function, fsReadStream can not read data.
+		await finished(stream);
 	}
 }
 
 async function main() {
 	await prepareData();
 
-	const readStream = fs.createReadStream(`${__dirname}/../data/input.json`, { encoding: 'utf-8' })
+	const fsReadStream = fs.createReadStream(`${__dirname}/../data/input.json`, { encoding: 'utf-8' })
 	const writeStream = fs.createWriteStream(`${__dirname}/../data/output.json`, { encoding: 'utf-8' })
 
-	readStream.on('data', (data) => {
+	fsReadStream.on('data', (data) => {
 		console.log(`readStream got data: ${data.toString()}`);
 	})
 
@@ -89,14 +92,23 @@ async function main() {
 		console.log(`writeStream got data: ${data.toString()}`);
 	})
 
-	readStream.on('end', () => {
+	fsReadStream.once('readable', () => {
+		// passThrough.end();
+		console.log(`readStream readable`);
+		// const by = fsReadStream.read(8);
+		// console.log(`got 8 bytes: ${by.toString()}`)
+	})
+
+	fsReadStream.on('end', () => {
 		// passThrough.end();
 		console.log(`readStream ended`);
 	})
 
-	readStream.on('error', function (err) {
+	fsReadStream.on('error', function (err) {
 		console.log(err.stack);
 	});
+
+	const readable = Readable.from(fsReadStream, { objectMode: true, highWaterMark: 1 });
 
 	const tf = new Transform({
 		transform(chunk, _encoding, callback) {
@@ -107,13 +119,25 @@ async function main() {
 		},
 	});
 
+	// for await (const chunk of fsReadStream) {
+	// 	console.log(`iterate: readStream: ${chunk.toString()}`)
+	// }
+
 	console.log("beforePipeline")
 
-	await pipeline(readStream, tf, writeStream);
+	const ps = new PassThrough();
+
+	readable.on('data', (chunk) => {
+		console.log(`readable: ${chunk.toString()}`)
+	})
+
+
+	await pipeline(fsReadStream, tf, writeStream);
+	// await pipeline(readable, tf, writeStream);
 
 	console.log("afterPipeline")
 
-	await finished(readStream)
+	await finished(fsReadStream)
 	await finished(writeStream)
 }
 
