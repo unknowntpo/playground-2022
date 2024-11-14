@@ -33,12 +33,12 @@ class UserGenerator {
 	}
 
 	*[Symbol.iterator]() {
-		for (let value = 1; value <= this.count; value++) {
+		for (let currentId = 0; currentId <= this.count; currentId++) {
 			yield this.generateUser()
 		}
 	}
 
-	generateUser() {
+	generateUser(): User {
 		const name = randString(5);
 		return {
 			Id: this.currentId,
@@ -61,23 +61,46 @@ async function sleep(ms: number) {
 
 async function main() {
 	const ps = new PassThrough({
-		objectMode: true
+		// should set writableObjectMode, not objectMode
+		// https://stackoverflow.com/a/54401036
+		objectMode: true,
+		// writableObjectMode: true,
+		// readableObjectMode: true
 	})
+
+	const ws = new Writable({
+		objectMode: true,
+		write: (chunk, encoding, callback) => {
+			console.dir(chunk)
+			callback();
+		}
+	})
+
+
 	await startWorkerGroup(3, async (workerId: number) => {
 		console.log(`worker[${workerId}] started...`)
 		const gen = new UserGenerator(10);
 		for (const user of gen) {
+			console.log(`${workerId} try to write user: ${JSON.stringify(user)}`)
 			ps.write(user)
+			console.log(`${workerId} write user done`)
+
 			await sleep(100)
 		}
 	})
 
-	const Uppercase = new Transform({
+	const toLowercaseName = new Transform({
+		objectMode: true,
 		transform: (chunk: any, _encoding, callback) => {
-			const user = chunk;
-			callback();
+			let user = chunk as User;
+			user.name = user.name.toLowerCase()
+			callback(null, user);
 		}
 	})
+
+	// await pipeline(ps, ws);
+
+	await pipeline(ps, toLowercaseName, ws);
 
 	// await pipeline(ps, Uppercase, tf1, tf2, ws);
 }

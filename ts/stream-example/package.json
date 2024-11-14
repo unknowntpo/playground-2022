@@ -6,6 +6,7 @@
     "start": "yarn build && node ./dist/index.js",
     "start:readAndWrite": "vite-node src/readAndWrite.ts",
     "start:flowControl": "vite-node src/flowControl.ts",
+	"start:multiWorker": "vite-node src/multiWorker.ts",
     "build": "yarn clean && tsup src/readAndWrite.ts",
     "test": "yarn clean && vitest test/",
     "test:ui": "yarn clean && vitest --ui",
