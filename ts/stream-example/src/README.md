@@ -4,8 +4,7 @@
 
 ## Chapter1: Basic
 
-Stream:
-- Relationship
+### Replationship between Stream 
 
 - fs.Readable
   - extends
@@ -32,12 +31,15 @@ Stream:
 - Readable stream
 https://blog.dennisokeeffe.com/blog/2024-07-08-readable-streams-in-nodejs
 
-How to end a stream ?
-    
- 
- - mode
-  - flowing
-  - paused
+### How to end a stream ?
+> By [NodeJS Docs: Event: 'end'](https://nodejs.org/api/stream.html#event-end) The 'end' event is emitted when there is no more data to be consumed from the stream.
+> The 'end' event will not be emitted unless the data is completely consumed. This can be accomplished by switching the stream into flowing mode, or by calling `stream.read()` repeatedly until all data has been consumed.
+
+### Two Reading modes
+- [NodeJS docs](https://nodejs.org/api/stream.html#two-reading-modes)
+#### When to switch ?
+##### flowing mode
+##### pause mode
 
 - Read from file and write to another file
 - Read from Readable string
@@ -48,17 +50,18 @@ How to end a stream ?
 ## Chapter2: Flow control
 
 ### Highwatermark
-- writableLength
+- `writableLength`
 > This property contains the number of bytes (or objects) in the queue ready to be written. The value provides introspection data regarding the status of the highWaterMark.
-- readableLength
+- `readableLength`
 > This property contains the number of bytes (or objects) in the queue ready to be read. The value provides introspection data regarding the status of the highWaterMark.
-### Writable: Drain Event
+### Events
 
-#### When?
-write stream resumed.
+#### Drain
+- stream.Writable specific event
+Ref: [NodeJS Docs: Event: drain](https://nodejs.org/api/stream.html#event-drain)
 
-### Not flushed problem:
-https://github.com/nodejs/node/issues/34274
+- When `stream.write()` return `false`, `drain` event will be emitted -> can write more data
+- When `stream.write()` return `true` -> writer needs to WAIT!
 
 ### Back pressure
 - https://nodejs.org/en/learn/modules/backpressuring-in-streams
@@ -68,3 +71,6 @@ https://github.com/nodejs/node/issues/34274
 Great blog about nodejs stream and buffers
 
 https://blog.dennisokeeffe.com/blog/series/node-js-streams
+
+---- 
+oFIIXMEJka

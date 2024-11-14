@@ -57,8 +57,6 @@ class UserGenerator {
 
 
 async function prepareData() {
-	// const f = fs.openSync(`${__dirname}/../data/input.json`, "a+")
-
 	const stream = fs.createWriteStream(`${__dirname}/../data/input.json`, { flags: 'w' })
 
 	const userGenerator = new UserGenerator();
