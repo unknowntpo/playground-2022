@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { PassThrough, Readable, Writable, Transform } from 'node:stream';
 import { pipeline, finished } from 'node:stream/promises';
 import readline from 'node:readline';
-import { GeneratedIdentifierFlags } from 'typescript';
+import { GeneratedIdentifierFlags, TransformationContext } from 'typescript';
 import { readAndWrite } from './stream';
 
 interface User {
@@ -49,24 +49,38 @@ class UserGenerator {
 	}
 }
 
-async function startWorkerGroup(numOfWorkers: number, workerFn: any) {
+async function startWorkerGroup(numOfWorkers: number, workerFn: (workerId: number) => Promise<void>) {
 	for (let i = 0; i < numOfWorkers; i++) {
-		setTimeout(() => {
-
-		})
+		workerFn(i);
 	}
 }
-
-
-async function main() {
-
-}
-
-
-main()
 
 async function sleep(ms: number) {
 	return await new Promise(resolve => setTimeout(resolve, ms))
 }
 
+async function main() {
+	const ps = new PassThrough({
+		objectMode: true
+	})
+	await startWorkerGroup(3, async (workerId: number) => {
+		console.log(`worker[${workerId}] started...`)
+		const gen = new UserGenerator(10);
+		for (const user of gen) {
+			ps.write(user)
+			await sleep(100)
+		}
+	})
 
+	const Uppercase = new Transform({
+		transform: (chunk: any, _encoding, callback) => {
+			const user = chunk;
+			callback();
+		}
+	})
+
+	// await pipeline(ps, Uppercase, tf1, tf2, ws);
+}
+
+
+main()
