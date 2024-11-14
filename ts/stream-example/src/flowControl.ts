@@ -32,24 +32,12 @@ class UserGenerator {
 		this.currentId = 0;
 	}
 
-	[Symbol.iterator]() {
-		return {
-			next: () => {
-				if (this.currentId < this.count) {
-					this.currentId++;
-					// yield {
-					// 	value: this.generateUser(),
-					// 		done: false
-					// };
-					return {
-						value: this.generateUser(),
-						done: false
-					};
-				}
-				return { done: true, value: undefined }
-			}
+	*[Symbol.iterator]() {
+		for (let value = 1; value <= this.count; value++) {
+			yield this.generateUser()
 		}
 	}
+
 	generateUser() {
 		const name = randString(5);
 		return {

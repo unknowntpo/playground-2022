@@ -30,18 +30,9 @@ class UserGenerator {
 		this.currentId = 0;
 	}
 
-	[Symbol.iterator]() {
-		return {
-			next: () => {
-				if (this.currentId < this.count) {
-					this.currentId++;
-					return {
-						value: this.generateUser(),
-						done: false
-					};
-				}
-				return { done: true }
-			}
+	*[Symbol.iterator]() {
+		for (let value = 1; value <= this.count; value++) {
+			yield this.generateUser()
 		}
 	}
 	generateUser() {
