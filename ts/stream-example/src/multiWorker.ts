@@ -1,9 +1,5 @@
-import fs from 'node:fs';
-import { PassThrough, Readable, Writable, Transform } from 'node:stream';
-import { pipeline, finished } from 'node:stream/promises';
-import readline from 'node:readline';
-import { GeneratedIdentifierFlags, TransformationContext } from 'typescript';
-import { readAndWrite } from './stream';
+import { PassThrough, Writable, Transform } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 
 interface User {
 	Id: number;
@@ -33,7 +29,7 @@ class UserGenerator {
 	}
 
 	*[Symbol.iterator]() {
-		for (let currentId = 0; currentId <= this.count; currentId++) {
+		for (; this.currentId <= this.count; this.currentId++) {
 			yield this.generateUser()
 		}
 	}
@@ -59,6 +55,8 @@ async function sleep(ms: number) {
 	return await new Promise(resolve => setTimeout(resolve, ms))
 }
 
+const generator = new UserGenerator(30);
+
 async function main() {
 	const ps = new PassThrough({
 		// should set writableObjectMode, not objectMode
@@ -79,8 +77,7 @@ async function main() {
 
 	await startWorkerGroup(3, async (workerId: number) => {
 		console.log(`worker[${workerId}] started...`)
-		const gen = new UserGenerator(10);
-		for (const user of gen) {
+		for (const user of generator) {
 			console.log(`${workerId} try to write user: ${JSON.stringify(user)}`)
 			ps.write(user)
 			console.log(`${workerId} write user done`)
@@ -98,11 +95,7 @@ async function main() {
 		}
 	})
 
-	// await pipeline(ps, ws);
-
 	await pipeline(ps, toLowercaseName, ws);
-
-	// await pipeline(ps, Uppercase, tf1, tf2, ws);
 }
 
 

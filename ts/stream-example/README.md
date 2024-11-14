@@ -1,15 +1,82 @@
-# TypeScript, Jest and ECMAScript Modules (ESM)
 
-> Inspired by [Gist](https://gist.github.com/danpetitt/37f5c966886f54e457ece4b08d66e404) from @danpetitt
 
-Being frustrated by many outdated blog posts and misleading guides, I decided to create this boilerplate, so it may save hours/days of research to make things work which I would expect working out of the box (unfortunately, they don't).
+# Stream Example
 
-This is a minimalistic setup using TypeScript with ESM modules for a typical Node.js project with some important capabilities (in my view) like debugging.
+## Chapter1: Basic
 
-On top what is described in the original Gist, this repo contains the following features:
-- Support for absolute paths when importing modules (to avoid hell of `../../../`);
-- Pre-setup configs for debugging: both TS files and Jest tests for VSCode & WebStorm;
-- Dev mode with watching for changed files (using [tsx](https://www.npmjs.com/package/tsx));
-- Hide complex/scary configs by using official presets for `tsconfig` & `ts-jest` (main motivation — less maintenance if something changes).
+### Replationship between Stream 
 
-Enjoy! 🎉
+- fs.Readable
+  - extends
+    - stream.Readable
+- fs.Writable
+  - extends:
+    - stream.Writable
+
+- stream.Duplex
+  - extends:
+    - stream.ReadableBase
+	- stream.WritableBase
+
+- NodeJS.WritableStream
+  - extends:
+    - EventEmitter
+
+- NodeJS.ReadableStream
+  - extends:
+    - EventEmitter
+  - isA:
+    - asyncIterator
+
+- Readable stream
+https://blog.dennisokeeffe.com/blog/2024-07-08-readable-streams-in-nodejs
+
+### How to end a stream ?
+> By [NodeJS Docs: Event: 'end'](https://nodejs.org/api/stream.html#event-end) The 'end' event is emitted when there is no more data to be consumed from the stream.
+> The 'end' event will not be emitted unless the data is completely consumed. This can be accomplished by switching the stream into flowing mode, or by calling `stream.read()` repeatedly until all data has been consumed.
+
+#### pipeline in node:stream/promises 
+
+- Works well with Async / Await
+- Auto cleanup
+- [Stream Pipelines in Node.js](https://blog.dennisokeeffe.com/blog/2024-07-13-stream-pipelines-in-nodejs)
+
+### Two Reading modes
+- [NodeJS docs](https://nodejs.org/api/stream.html#two-reading-modes)
+#### When to switch ?
+##### flowing mode
+##### pause mode
+
+- Read from file and write to another file
+- Read from Readable string
+- stream.on 
+- Write to stream
+- Use Transfer to filter
+
+## Chapter2: Flow control
+
+### Highwatermark
+- `writableLength`
+> This property contains the number of bytes (or objects) in the queue ready to be written. The value provides introspection data regarding the status of the highWaterMark.
+- `readableLength`
+> This property contains the number of bytes (or objects) in the queue ready to be read. The value provides introspection data regarding the status of the highWaterMark.
+### Events
+
+#### Drain
+- stream.Writable specific event
+Ref: [NodeJS Docs: Event: drain](https://nodejs.org/api/stream.html#event-drain)
+
+- When `stream.write()` return `false`, `drain` event will be emitted -> can write more data
+- When `stream.write()` return `true` -> writer needs to WAIT!
+
+### Back pressure
+- https://nodejs.org/en/learn/modules/backpressuring-in-streams
+
+## Chapter3: 
+
+Great blog about nodejs stream and buffers
+
+https://blog.dennisokeeffe.com/blog/series/node-js-streams
+
+---- 
+oFIIXMEJka
