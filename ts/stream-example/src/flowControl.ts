@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { Readable, Writable } from 'node:stream';
 import { finished } from 'node:stream/promises';
 import { User, UserGenerator } from './user.js';
+import { readAndWrite } from './stream.js';
 
 async function prepareData() {
 	const stream = fs.createWriteStream(`${__dirname}/../data/input.json`, { flags: 'w' })
@@ -25,14 +26,15 @@ async function prepareData() {
 
 async function main() {
 	const gen = new UserGenerator(30);
-	const rs = Readable.from(gen, { objectMode: true, highWaterMark: 10 });
-
-	rs.on('drain', () => {
-		console.log(`rs: drain`)
-	})
+	const rs = Readable.from(gen, { objectMode: true, highWaterMark: 30 });
 
 	rs.on('data', () => {
-		console.log(`readable length: ${rs.readableLength}`)
+		console.log(`rs got data, readable length: ${rs.readableLength}`)
+	})
+
+	rs.on('end', () => {
+		// end event ca
+		console.log(`⛔ rs: ended`)
 	})
 
 	const ws = new Writable({
@@ -42,9 +44,9 @@ async function main() {
 			callback: (error?: Error | null) => void,
 		) => {
 			const ch = chunk as User;
+			console.log(`ws: one data is written, ws.writableLength: ${ws.writableLength}`)
 			console.log(`User: id: ${ch.Id}, name: ${ch.name}, age: ${ch.age}, email: ${ch.email}`)
-			await sleep(100);
-			console.log(`ws: write one data, ${ws.writableLength}`)
+			await sleep(50);
 			callback();
 		},
 	});
@@ -57,18 +59,34 @@ async function main() {
 		console.log(`ws: drain`)
 	})
 
+	ws.on('finish', () => {
+		// end event ca
+		console.log(`👌 ws: finished`)
+	})
+
+	ws.on('end', () => {
+		// end event ca
+		console.log(`⛔ ws: ended, writableLength: ${ws.writableLength}`)
+	})
+
 	for await (const chunk of rs) {
 		console.log(`read one data from rs`)
+		console.log(`after read, rs.readableLength: ${rs.readableLength}`)
+
+		console.log(`before write, rs.writableLength: ${ws.writableLength}`)
 		const canWrite = ws.write(chunk)
 		if (!canWrite) {
 			// sleep for a while
-			console.log(`writer reached highWaterMark, slow down...`)
-			await sleep(1000);
+			console.log(`❌ ws reached highWaterMark, slow down...`)
+			await new Promise(resolve => ws.once('drain', resolve))
+			console.log(`✅ got drain event from ws, continue ...`)
 		}
 	}
 
 	await finished(rs);
+
 	await finished(ws);
+	await sleep(3000);
 }
 
 
