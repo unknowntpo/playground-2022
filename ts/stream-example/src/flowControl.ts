@@ -46,7 +46,7 @@ async function main() {
 			const ch = chunk as User;
 			console.log(`ws: one data is written, ws.writableLength: ${ws.writableLength}`)
 			console.log(`User: id: ${ch.Id}, name: ${ch.name}, age: ${ch.age}, email: ${ch.email}`)
-			await sleep(50);
+			await sleep(500);
 			callback();
 		},
 	});
@@ -71,9 +71,8 @@ async function main() {
 
 	for await (const chunk of rs) {
 		console.log(`read one data from rs`)
-		console.log(`after read, rs.readableLength: ${rs.readableLength}`)
 
-		console.log(`before write, rs.writableLength: ${ws.writableLength}`)
+		console.log(`before write, ws.writableLength: ${ws.writableLength}`)
 		const canWrite = ws.write(chunk)
 		if (!canWrite) {
 			// sleep for a while
@@ -84,9 +83,7 @@ async function main() {
 	}
 
 	await finished(rs);
-
 	await finished(ws);
-	await sleep(3000);
 }
 
 
