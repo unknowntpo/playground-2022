@@ -40,7 +40,7 @@ async function main() {
 			ps.write(user)
 			console.log(`${workerId} write user done`)
 
-			await sleep(100)
+			await sleep(Math.random() * (workerId + 1))
 		}
 	})
 

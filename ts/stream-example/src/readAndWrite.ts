@@ -4,10 +4,15 @@ import { pipeline, finished } from 'node:stream/promises';
 import readline from 'node:readline';
 import { UserGenerator } from './user.js';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
+
 async function prepareData() {
 	const stream = fs.createWriteStream(`${__dirname}/../data/input.json`, { flags: 'w' })
 
-	const userGenerator = new UserGenerator();
+	const userGenerator = new UserGenerator(5000);
 
 	try {
 		for (const user of userGenerator) {
@@ -28,13 +33,13 @@ async function main() {
 	await prepareData();
 
 	const fsReadStream = fs.createReadStream(`${__dirname}/../data/input.json`, { encoding: 'utf-8' })
-	const writeStream = fs.createWriteStream(`${__dirname}/../data/output.json`, { encoding: 'utf-8' })
+	const fsWriteStream = fs.createWriteStream(`${__dirname}/../data/output.json`, { encoding: 'utf-8' })
 
 	fsReadStream.on('data', (data) => {
 		console.log(`readStream got data: ${data.toString()}`);
 	})
 
-	writeStream.on('data', (data) => {
+	fsWriteStream.on('data', (data) => {
 		console.log(`writeStream got data: ${data.toString()}`);
 	})
 
@@ -68,10 +73,10 @@ async function main() {
 		console.log(`readable: ${chunk.toString()}`)
 	})
 
-	await pipeline(fsReadStream, tf, writeStream);
+	await pipeline(fsReadStream, tf, fsWriteStream);
 
 	await finished(fsReadStream)
-	await finished(writeStream)
+	await finished(fsWriteStream)
 }
 
 main()

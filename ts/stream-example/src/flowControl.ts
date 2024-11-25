@@ -69,17 +69,35 @@ async function main() {
 		console.log(`⛔ ws: ended, writableLength: ${ws.writableLength}`)
 	})
 
+	let canWrite = true
+
+	ws.on('drain', () => {
+		console.log(`✅ got drain event from ws, continue ...`)
+		canWrite = true
+	})
+
 	for await (const chunk of rs) {
 		console.log(`read one data from rs`)
 
 		console.log(`before write, ws.writableLength: ${ws.writableLength}`)
-		const canWrite = ws.write(chunk)
-		if (!canWrite) {
-			// sleep for a while
+
+		// while (!ws.write(chunk)) {
+		// 	throw new Error(`heello`)
+		// 	console.log(`❌ ws reached highWaterMark, slow down...`)
+		// 	await sleep(100);
+		// }
+
+		if (canWrite) {
+			console.log(`✅ in for loop, drain event from ws, continue ...`)
+
+			canWrite = ws.write(chunk)
+		} else {
 			console.log(`❌ ws reached highWaterMark, slow down...`)
-			await new Promise(resolve => ws.once('drain', resolve))
-			console.log(`✅ got drain event from ws, continue ...`)
 		}
+		// canWrite = ws.write(chunk)
+		// if (!canWrite) {
+		// 	// sleep for a while
+		// }
 	}
 
 	await finished(rs);

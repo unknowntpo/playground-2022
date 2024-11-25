@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build && node ./dist/index.js",
-    "start:readAndWrite": "vite-node src/readAndWrite.ts",
-    "start:flowControl": "vite-node src/flowControl.ts",
-	"start:multiWorker": "vite-node src/multiWorker.ts",
+    "start:readAndWrite": "tsx src/readAndWrite.ts",
+    "start:flowControl": "tsx src/flowControl.ts",
+    "start:multiWorker": "tsx src/multiWorker.ts",
     "build": "yarn clean && tsup src/readAndWrite.ts",
     "test": "yarn clean && vitest test/",
     "test:ui": "yarn clean && vitest --ui",
@@ -16,17 +16,17 @@
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
     "@types/jest": "^29.5.8",
+    "@types/node": "^22.9.3",
     "@vitest/ui": "^1.6.0",
     "jest": "^29.7.0",
     "jest-watch-typeahead": "^2.2.2",
     "ts-jest": "^29.1.1",
     "tsc-alias": "^1.8.8",
-    "tsx": "^4.1.0",
+    "tsx": "^4.19.2",
     "vitest": "^1.6.0"
   },
   "dependencies": {
     "tsup": "^8.0.2",
-    "typescript": "5.2.2",
-    "vite-node": "^2.1.4"
+    "typescript": "5.2.2"
   }
 }
