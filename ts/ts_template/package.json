@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build && node ./dist/index.js",
+    "start:dev": "tsx ./src/index.js",
     "build": "yarn clean && tsup src/index.ts",
     "test": "yarn clean && vitest test/",
     "test:ui": "yarn clean && vitest --ui",
@@ -17,7 +18,7 @@
     "jest-watch-typeahead": "^2.2.2",
     "ts-jest": "^29.1.1",
     "tsc-alias": "^1.8.8",
-    "tsx": "^4.1.0",
+    "tsx": "^4.19.2",
     "vitest": "^1.6.0"
   },
   "dependencies": {
