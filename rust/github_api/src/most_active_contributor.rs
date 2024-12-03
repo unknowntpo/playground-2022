@@ -17,7 +17,6 @@ struct Author {
     login: String,
 }
 
-#[tokio::main]
 pub async fn do_work() -> Result<()> {
     println!("Helo");
     Ok(())
