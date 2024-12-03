@@ -1,0 +1,2462 @@
+[
+  {
+    "sha": "986af9279caab991a9a5b51eec7a3507ef723b78",
+    "node_id": "C_kwDOJaLfldoAKDk4NmFmOTI3OWNhYWI5OTFhOWE1YjUxZWVjN2EzNTA3ZWY3MjNiNzg",
+    "commit": {
+      "author": {
+        "name": "danhuawang",
+        "email": "154112360+danhuawang@users.noreply.github.com",
+        "date": "2024-12-03T02:00:12Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-03T02:00:12Z"
+      },
+      "message": "[#5631] Add test cases for other supported catalogs in Trino Cascading (#5632)\n\n### What changes were proposed in this pull request?\r\n\r\n1. Trino connector: add some external table type test cases in hive\r\ncatalog.\r\n2. Cascading connector: Add cases to cover hive,PG,Iceberg catalogs.\r\n3. Some test cases can't pass on the Trino cascading v0.0.1, I move to\r\n\"ignored\" directory.\r\n\r\n### Why are the changes needed?\r\n\r\nIn trino-cascading-testsets, it only covered MySQL catalog.\r\nWe need to add more test cases for other supported catalogs.\r\n\r\nFix: #5631 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\n```\r\n./gradlew -PskipTests -PtestMode=embedded -PjdkVersion=17 -PskipDockerTests=false :trino-connector:integration-test:test\r\n\r\n./gradlew -PskipTests -PtestMode=deploy -PjdkVersion=17 -PskipDockerTests=false :trino-connector:integration-test:test\r\n\r\ntrino-connector/integration-test/trino-test-tools/run_test.sh\r\n\r\n2024-11-20 19:39:05 INFO  [main] TrinoQueryIT:402 - All testers have finished. Total:116, Pass: 116\r\nhive:hive/00001_datatype.sql, PASS, 4.743, \r\niceberg:lakehouse-iceberg-hive/00002_partition_sort_order.sql, PASS, 4.042, \r\niceberg_mysql:lakehouse-iceberg-mysql/00002_partition_sort_order.sql, PASS, 1.614, \r\niceberg_postgres:lakehouse-iceberg-postgres/00002_partition_sort_order.sql, PASS, 3.290, \r\nmysql:jdbc-mysql/00001_datatype.sql, PASS, 1.753, \r\nmysql:jdbc-mysql/00002_pushdown.sql, PASS, 1.095, \r\nmysql:jdbc-mysql/catalog_mysql_cascading_test.sql, PASS, 0.207, \r\nmysql:tpcds/00000.sql, PASS, 16.305, \r\nmysql:tpcds/00001.sql, PASS, 1.036, \r\nmysql:tpcds/00002.sql, PASS, 1.954, \r\nmysql:tpcds/00003.sql, PASS, 0.795, \r\nmysql:tpcds/00004.sql, PASS, 3.311, \r\nmysql:tpcds/00005.sql, PASS, 2.008, \r\nmysql:tpcds/00006.sql, PASS, 1.282, \r\nmysql:tpcds/00007.sql, PASS, 1.439, \r\n....\r\nmysql:tpch/00021.sql, PASS, 1.336, \r\nmysql:tpch/00022.sql, PASS, 0.536, \r\npg:jdbc-postgresql/00001_datatype.sql, PASS, 1.259, \r\npg:jdbc-postgresql/00002_pushdown.sql, PASS, 1.583, \r\npg:jdbc-postgresql/catalog_pg_cascading_test.sql, PASS, 0.217, \r\nAll testers have finished. Total:116, Pass: 116\r\n```",
+      "tree": {
+        "sha": "f1972cb1555369e1021bb1b885e6f3cc400495f9",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/f1972cb1555369e1021bb1b885e6f3cc400495f9"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/986af9279caab991a9a5b51eec7a3507ef723b78",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTmYsCRC1aQ7uu5UhlAAAQLIQAHxfkfw1+gFi1GCztp8mq0I4\nkW0krK+VVYJ4BbA7M+fAcZccVxYSPselYEvhXj9YzypLz6wwA7Ti2Mr4FEQQgrpe\nms1UsV6kz5n2mBT8SwPE6bIweN+jlgQYJI8AwoVUWncfBz7sH8YcNr4AfQpRskeM\nax9R4cvF43QZwQcG4MyUa+BavudYuVbXFG1lvgvPrakUaqaHwX0AOPol83Sx+b+C\nCDzfEKuIEPI0RjNJx2iby35yxCbDc7iE1KikAAqQy0i8XpJENajL5utOzqxITWj/\no9Of4SkJLRWCPCj1Nuhgdo4R3nbkGqM2zULmjPqTXr+0SYY0AEpTGbcudtgY2b9k\nujS3kklDaqC3HWIGV9vyX85KHfJYOc+w2nWss3V9JVWHsnspp3MqxXx+GW7OKYoH\np9sgiKdWkVUm3D8drFt8VA2/9WIbJeMXWvtqS1O6+TrAwlUNtzCqIs2quLAgmSgq\ncS7HsK+Y4XJadWzuaK35582/FKudu8cni2sWAy5m/NcpnapMD57hbM8waGvPhSmg\nQ2Xkm5KN2BRVNXsNwC6UcsYOqxlzfRs4eAyRu9nUDDeq3np0JJsGkorX2nIoAp+M\n/GZlNLQFwqexYAW7hh2isrW65+ejnx6whu7+WUZlBrcJoZF0AAz+s/3gYQCk+uA5\nS8y/0XcDdROb62zwV9KJ\n=EkJZ\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree f1972cb1555369e1021bb1b885e6f3cc400495f9\nparent f135a036b7add21ce03bc612342d1c97fac825a9\nauthor danhuawang <154112360+danhuawang@users.noreply.github.com> 1733191212 +0800\ncommitter GitHub <noreply@github.com> 1733191212 +0800\n\n[#5631] Add test cases for other supported catalogs in Trino Cascading (#5632)\n\n### What changes were proposed in this pull request?\r\n\r\n1. Trino connector: add some external table type test cases in hive\r\ncatalog.\r\n2. Cascading connector: Add cases to cover hive,PG,Iceberg catalogs.\r\n3. Some test cases can't pass on the Trino cascading v0.0.1, I move to\r\n\"ignored\" directory.\r\n\r\n### Why are the changes needed?\r\n\r\nIn trino-cascading-testsets, it only covered MySQL catalog.\r\nWe need to add more test cases for other supported catalogs.\r\n\r\nFix: #5631 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\n```\r\n./gradlew -PskipTests -PtestMode=embedded -PjdkVersion=17 -PskipDockerTests=false :trino-connector:integration-test:test\r\n\r\n./gradlew -PskipTests -PtestMode=deploy -PjdkVersion=17 -PskipDockerTests=false :trino-connector:integration-test:test\r\n\r\ntrino-connector/integration-test/trino-test-tools/run_test.sh\r\n\r\n2024-11-20 19:39:05 INFO  [main] TrinoQueryIT:402 - All testers have finished. Total:116, Pass: 116\r\nhive:hive/00001_datatype.sql, PASS, 4.743, \r\niceberg:lakehouse-iceberg-hive/00002_partition_sort_order.sql, PASS, 4.042, \r\niceberg_mysql:lakehouse-iceberg-mysql/00002_partition_sort_order.sql, PASS, 1.614, \r\niceberg_postgres:lakehouse-iceberg-postgres/00002_partition_sort_order.sql, PASS, 3.290, \r\nmysql:jdbc-mysql/00001_datatype.sql, PASS, 1.753, \r\nmysql:jdbc-mysql/00002_pushdown.sql, PASS, 1.095, \r\nmysql:jdbc-mysql/catalog_mysql_cascading_test.sql, PASS, 0.207, \r\nmysql:tpcds/00000.sql, PASS, 16.305, \r\nmysql:tpcds/00001.sql, PASS, 1.036, \r\nmysql:tpcds/00002.sql, PASS, 1.954, \r\nmysql:tpcds/00003.sql, PASS, 0.795, \r\nmysql:tpcds/00004.sql, PASS, 3.311, \r\nmysql:tpcds/00005.sql, PASS, 2.008, \r\nmysql:tpcds/00006.sql, PASS, 1.282, \r\nmysql:tpcds/00007.sql, PASS, 1.439, \r\n....\r\nmysql:tpch/00021.sql, PASS, 1.336, \r\nmysql:tpch/00022.sql, PASS, 0.536, \r\npg:jdbc-postgresql/00001_datatype.sql, PASS, 1.259, \r\npg:jdbc-postgresql/00002_pushdown.sql, PASS, 1.583, \r\npg:jdbc-postgresql/catalog_pg_cascading_test.sql, PASS, 0.217, \r\nAll testers have finished. Total:116, Pass: 116\r\n```",
+        "verified_at": "2024-12-03T02:05:15Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/986af9279caab991a9a5b51eec7a3507ef723b78",
+    "html_url": "https://github.com/apache/gravitino/commit/986af9279caab991a9a5b51eec7a3507ef723b78",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/986af9279caab991a9a5b51eec7a3507ef723b78/comments",
+    "author": {
+      "login": "danhuawang",
+      "id": 154112360,
+      "node_id": "U_kgDOCS-RaA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/154112360?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/danhuawang",
+      "html_url": "https://github.com/danhuawang",
+      "followers_url": "https://api.github.com/users/danhuawang/followers",
+      "following_url": "https://api.github.com/users/danhuawang/following{/other_user}",
+      "gists_url": "https://api.github.com/users/danhuawang/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/danhuawang/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/danhuawang/subscriptions",
+      "organizations_url": "https://api.github.com/users/danhuawang/orgs",
+      "repos_url": "https://api.github.com/users/danhuawang/repos",
+      "events_url": "https://api.github.com/users/danhuawang/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/danhuawang/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f135a036b7add21ce03bc612342d1c97fac825a9",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/f135a036b7add21ce03bc612342d1c97fac825a9",
+        "html_url": "https://github.com/apache/gravitino/commit/f135a036b7add21ce03bc612342d1c97fac825a9"
+      }
+    ]
+  },
+  {
+    "sha": "f135a036b7add21ce03bc612342d1c97fac825a9",
+    "node_id": "C_kwDOJaLfldoAKGYxMzVhMDM2YjdhZGQyMWNlMDNiYzYxMjM0MmQxYzk3ZmFjODI1YTk",
+    "commit": {
+      "author": {
+        "name": "mchades",
+        "email": "liminghuang@datastrato.com",
+        "date": "2024-12-02T08:49:37Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T08:49:37Z"
+      },
+      "message": "[#5519] fix(CI): fix build CI missing new changes (#5712)\n\n### What changes were proposed in this pull request?\r\n\r\n - Use file extension matching to enhance matching rules\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5519 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nno\r\n\r\n### How was this patch tested?\r\n\r\nby CR",
+      "tree": {
+        "sha": "595f0284892d496d410de433aca6fc7902a17ef1",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/595f0284892d496d410de433aca6fc7902a17ef1"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/f135a036b7add21ce03bc612342d1c97fac825a9",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTXShCRC1aQ7uu5UhlAAAyCAQAGl4Qyic5VMwq9x1GbnObPZA\n2u1z2WjBFjDVZ60Mba0FfBt7aslRWy3dEpTyS/YYD01j4sLbGPmG3jYURHITHasZ\neO2Ad1sE5FkKuPZVVzml1JH4uQ1PXJ4aqjO+IA8VCzbCmtLf/8N9dDDIuWLZHk27\nS7GO17bcKTUl9QH54VZjqWjEwP0vNAynpVLMs/kukQfoVekCd8n5UUqyeVAdIxop\nb8H7AhYzE75pmPKW48Zz7WjmiyaXyGVk8MQX4M5eAOmzDOyGH7hB0PKvmFkViOBE\njEvb7mEmkfOGBNtBAJ3e3dNepKq+7BdguVtxAov5z+C4Iep1R545y2IIYkpcwLhX\nuFHbN7T8AkFANZQGvHyIgfQQRTl8/+K3EcowO9nTSHBgmVMHb5YMBDJNMBPsFTpm\nW0dZ6Vzkh7Gk9kEb/tNTTE7JCArLUkYdqS1tClEM3D+oC8h5xPJQQ3OjmQOXJ+Jj\nt/2kCwq+iMg8AHvEyWK9IkMfWfQLjHaNxArXI/yATuVHtGlC372BxXH10e/Bbz9N\nVQLIfKCFZ1Y4XYEYv4X8WpbXFhWmMKRWnapj3PVLLDUzNsFz1zp757eDchTqVk1W\nJU12Qi7hkdLHLzeyX2G+bax9M6fseDVXIZHk2gbkeERg2QhqJpgeZ076IPQJqDf8\nSC8e6RNkFfMssarDPuj+\n=lBfG\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 595f0284892d496d410de433aca6fc7902a17ef1\nparent 52d47500dbdf4e72c1b89d9ea738eb7be8639404\nauthor mchades <liminghuang@datastrato.com> 1733129377 +0800\ncommitter GitHub <noreply@github.com> 1733129377 +0800\n\n[#5519] fix(CI): fix build CI missing new changes (#5712)\n\n### What changes were proposed in this pull request?\r\n\r\n - Use file extension matching to enhance matching rules\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5519 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nno\r\n\r\n### How was this patch tested?\r\n\r\nby CR",
+        "verified_at": "2024-12-02T08:49:42Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/f135a036b7add21ce03bc612342d1c97fac825a9",
+    "html_url": "https://github.com/apache/gravitino/commit/f135a036b7add21ce03bc612342d1c97fac825a9",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/f135a036b7add21ce03bc612342d1c97fac825a9/comments",
+    "author": {
+      "login": "mchades",
+      "id": 24897598,
+      "node_id": "MDQ6VXNlcjI0ODk3NTk4",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24897598?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/mchades",
+      "html_url": "https://github.com/mchades",
+      "followers_url": "https://api.github.com/users/mchades/followers",
+      "following_url": "https://api.github.com/users/mchades/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mchades/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/mchades/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mchades/subscriptions",
+      "organizations_url": "https://api.github.com/users/mchades/orgs",
+      "repos_url": "https://api.github.com/users/mchades/repos",
+      "events_url": "https://api.github.com/users/mchades/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/mchades/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "52d47500dbdf4e72c1b89d9ea738eb7be8639404",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/52d47500dbdf4e72c1b89d9ea738eb7be8639404",
+        "html_url": "https://github.com/apache/gravitino/commit/52d47500dbdf4e72c1b89d9ea738eb7be8639404"
+      }
+    ]
+  },
+  {
+    "sha": "52d47500dbdf4e72c1b89d9ea738eb7be8639404",
+    "node_id": "C_kwDOJaLfldoAKDUyZDQ3NTAwZGJkZjRlNzJjMWI4OWQ5ZWE3MzhlYjdiZTg2Mzk0MDQ",
+    "commit": {
+      "author": {
+        "name": "Yuan Chen",
+        "email": "cysbc1999@gmail.com",
+        "date": "2024-12-02T07:57:10Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T07:57:10Z"
+      },
+      "message": "[#5700] feat(CLI):Add extended help for catalogs in Gravitino CLI (#5703)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded extended help for catalog commands.\r\n\r\n### Why are the changes needed?\r\n\r\nTo provide user with extra help.\r\n\r\nFix: #5700\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nN/A\r\n\r\nCo-authored-by: Justin Mclean <justin@classsoftware.com>",
+      "tree": {
+        "sha": "3a8a5a6244e216e1fe5146515b4c75cf10aa183b",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/3a8a5a6244e216e1fe5146515b4c75cf10aa183b"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/52d47500dbdf4e72c1b89d9ea738eb7be8639404",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTWhWCRC1aQ7uu5UhlAAAIjoQAJnafN32PiPOaaPN82A40A9t\njpeh2NsC+yvBiO8IockEhtjrDwN9Wp71slHKw1RSuDAQgjVaBCXxMypANLqAQhLA\nANcAY+YTMCRQ7CDMCRl1TlXbemCmB/U8ytzcN+R2543E/YXyeDB4oYMeJYE0qwaR\nvcFB6M6Yj5prDoIJGwy55ekltqB0nvgup8YMTxrzSAcIAcVgVrilpY98NyQoSvuS\nlt1h1WQKWDz9ElflsZX7lDvHpYlUyut3fQ9AyIGvtdcvG7ERjozrHwkGqINKKYm4\nugXlLPPK13gfx8fp296DqLqwv+owNAaQ4MXLAA6Yn9ElFocwNse/157O7Op3Osyr\n/20ikQqYi3SaqGBrUBNv7RuTr+ImNkSfXzOqvLCKcLKSN7JUuXtyhPA3RC/WJ7GR\nuUAV1PFRl45zzZdRPSa6Jjou18b3LDlpKeL4JBHycViegOxicCTSVfX/CyA3j24u\nqg/Z3kGwTvGCuP7Pj8DjNO1aoPkMr1ZSF1LWl/rOSVNFmYV6dzpggu/8RScgv0Ss\nmI40U4Zx/+iH3yYmOFwl/5Q5eErR2QaZwZiO9FnluWyU0Y/L8q2BQLs1cTSBHcxr\nSsrBWcBhXIKm5Kkjvhd9Vzf8SWc+KAftqf40IxWro596OgPRRxq7tH7sv8rJyqLJ\n+rbGH6+7JMHh/B1ujKjq\n=30yv\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 3a8a5a6244e216e1fe5146515b4c75cf10aa183b\nparent 12e50e50bc8fdc758bdbe7f8e92e052c95576f15\nauthor Yuan Chen <cysbc1999@gmail.com> 1733126230 -0500\ncommitter GitHub <noreply@github.com> 1733126230 +1100\n\n[#5700] feat(CLI):Add extended help for catalogs in Gravitino CLI (#5703)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded extended help for catalog commands.\r\n\r\n### Why are the changes needed?\r\n\r\nTo provide user with extra help.\r\n\r\nFix: #5700\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nN/A\r\n\r\nCo-authored-by: Justin Mclean <justin@classsoftware.com>",
+        "verified_at": "2024-12-02T07:57:28Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/52d47500dbdf4e72c1b89d9ea738eb7be8639404",
+    "html_url": "https://github.com/apache/gravitino/commit/52d47500dbdf4e72c1b89d9ea738eb7be8639404",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/52d47500dbdf4e72c1b89d9ea738eb7be8639404/comments",
+    "author": {
+      "login": "chenyuan99",
+      "id": 25518100,
+      "node_id": "MDQ6VXNlcjI1NTE4MTAw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25518100?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chenyuan99",
+      "html_url": "https://github.com/chenyuan99",
+      "followers_url": "https://api.github.com/users/chenyuan99/followers",
+      "following_url": "https://api.github.com/users/chenyuan99/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chenyuan99/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chenyuan99/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chenyuan99/subscriptions",
+      "organizations_url": "https://api.github.com/users/chenyuan99/orgs",
+      "repos_url": "https://api.github.com/users/chenyuan99/repos",
+      "events_url": "https://api.github.com/users/chenyuan99/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chenyuan99/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "12e50e50bc8fdc758bdbe7f8e92e052c95576f15",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/12e50e50bc8fdc758bdbe7f8e92e052c95576f15",
+        "html_url": "https://github.com/apache/gravitino/commit/12e50e50bc8fdc758bdbe7f8e92e052c95576f15"
+      }
+    ]
+  },
+  {
+    "sha": "12e50e50bc8fdc758bdbe7f8e92e052c95576f15",
+    "node_id": "C_kwDOJaLfldoAKDEyZTUwZTUwYmM4ZmRjNzU4YmRiZTdmOGU5MmUwNTJjOTU1NzZmMTU",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-12-02T06:50:40Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T06:50:40Z"
+      },
+      "message": "[#5383] Add support for rename and update command command for Tables in Gravitino CLI (#5391)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded support for rename and update command command for Tables in the\r\nGravitino CLI.\r\n\r\n### Why are the changes needed?\r\n\r\nExpanding the CLI support.\r\n\r\nFix: #5383\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but adds more commands to the CLI.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally on MySQL, Postgres and Hive databases.",
+      "tree": {
+        "sha": "6786cb8206862d0d9643e1ec26fa5a989570790e",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/6786cb8206862d0d9643e1ec26fa5a989570790e"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/12e50e50bc8fdc758bdbe7f8e92e052c95576f15",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTVjACRC1aQ7uu5UhlAAA4sIQAJXH6B2fHuJT3TruFpKn9gNx\nLk6HaBd9aMOjCjb/xhLf3N8IpM6FcLUspbZkjcauK8tUqITMfJCa4yXqPepOe1Yl\noCHqfHNGSX9VfjJW7qx1s4PtQFd9cxjwJ4w398OE4SDV5gwoCqBgSEjWYe8FHkFq\nqQObiZ1Y8SWTW6jFvk9207TzOAFposinEEMlszItWHOxIYgFDRaHtRgdt+WzNAFF\nA9rPd0QobEF9HN6Z4tfKGZm3k4EzoJMevCZ/RodMO7nG+XWFhrt0w+AgEKKuKbhy\nxJInl0DSjN3eh0GQUbGgonLGc+LGiDFdPDug6A3N3Nk8XHrVnuM1DPma+6iKMVxO\nTqN96DMJx3i/prSc+jxs7b36U2Mk5dChNZPAGsj53ye+Gc3UwO4FcqRDoYfUrdgR\naX0Pjn5RjG6J80Bl5/x9y1YO0kvMsv72fob9VSt1BNfcg2a32roM0wLDFC4aZQn+\nWTBbgHEDlVQ4fx1UdYy0RCKZzFtDgZz5IMjOnBsa6NI5AUwzDgVZfk7NGsbOU4o5\nGM7E4U45L8CHLCpE863nadT+oM/7YW3MeJ+A0nDEvz2KvcUw18n/VzxnWtV5AZ2P\nKMji1fHQs3TnygKmwMJG9zBNILl1iJ7uzeW9/zzr8TkZmplZtw3lL1L4N0zn7h5r\nbzKDp43w2TURAOn3zym+\n=qGL0\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 6786cb8206862d0d9643e1ec26fa5a989570790e\nparent 867cb1e891d94533acdb962e0cadfd9f9ece48ea\nauthor Justin Mclean <justin@classsoftware.com> 1733122240 +1100\ncommitter GitHub <noreply@github.com> 1733122240 +0800\n\n[#5383] Add support for rename and update command command for Tables in Gravitino CLI (#5391)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded support for rename and update command command for Tables in the\r\nGravitino CLI.\r\n\r\n### Why are the changes needed?\r\n\r\nExpanding the CLI support.\r\n\r\nFix: #5383\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but adds more commands to the CLI.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally on MySQL, Postgres and Hive databases.",
+        "verified_at": "2024-12-02T06:54:38Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/12e50e50bc8fdc758bdbe7f8e92e052c95576f15",
+    "html_url": "https://github.com/apache/gravitino/commit/12e50e50bc8fdc758bdbe7f8e92e052c95576f15",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/12e50e50bc8fdc758bdbe7f8e92e052c95576f15/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "867cb1e891d94533acdb962e0cadfd9f9ece48ea",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/867cb1e891d94533acdb962e0cadfd9f9ece48ea",
+        "html_url": "https://github.com/apache/gravitino/commit/867cb1e891d94533acdb962e0cadfd9f9ece48ea"
+      }
+    ]
+  },
+  {
+    "sha": "867cb1e891d94533acdb962e0cadfd9f9ece48ea",
+    "node_id": "C_kwDOJaLfldoAKDg2N2NiMWU4OTFkOTQ1MzNhY2RiOTYyZTBjYWRmZDlmOWVjZTQ4ZWE",
+    "commit": {
+      "author": {
+        "name": "Jerry Shao",
+        "email": "jerryshao@datastrato.com",
+        "date": "2024-12-02T03:40:22Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T03:40:22Z"
+      },
+      "message": "[MINOR] improve(build): Update the ASF yaml file's collaborator list (#5718)\n\n### What changes were proposed in this pull request?\r\n\r\nThis PR updates the collaborator list to remove some existing\r\ncommitter's name and one new active contributor.\r\n\r\n### Why are the changes needed?\r\n\r\nUpdate the collaborator list.\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nN/A",
+      "tree": {
+        "sha": "c8b9ad42f210346b0bae9f47913229916e520f56",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/c8b9ad42f210346b0bae9f47913229916e520f56"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/867cb1e891d94533acdb962e0cadfd9f9ece48ea",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTSwmCRC1aQ7uu5UhlAAAcYwQAAG5M1U/U+u4s45Fl3gvmrzb\nx9GUnOah07S3aHp1879X0EP0bT5kzs9acEbMxQWfZZ6HOnzah9hvVnN3x1g3DWPs\nPE0ME94RZ869IkwwTSC7OfrkywK3uY0ARt6uvm0WFxvdTsI0unkSViMd3Z8jvpI3\nkxtG6ZqmxSDpbDUMuxZOznxXnyd9a6Xf9JJS4b39aMjMuRgPumYnrRZ7Kl0wmPcK\nDfgOnhrEfA4V2rNuhot9/cM/q54o69CZg9HklgcP8dINXCSFBleuycghEmFATDaD\nSr1yFSOxc7kT0+z7IDip4usKodCC7b9YfXHZFbqVXsyhzAxU6Iegnaa6uEBnomaM\niTG2uTsPXvet8BMvA8UuX7aaQQdr+RQp+khNf2LVLMBzQk9bPOFkYwZDNWzJw8Cg\nHzJjAtnK+nvfMVQ9wzZL2U13q+TVD0QI9ZNz3jiMfFkDhe6C7FStnTCnHqmv20KF\nFuQ1jxvfqvnJ4yFfhdDVVPnQDkdKuH47GHhhaa4LQefNgfussXLnXYar/dMt6JoW\nva+ByZEmK+4S12l+YABuzOAKMGI/iWuLsu7JNyX1BqxiRjApy8det4flTC1NIpsc\nStdkfE8tlNZn91HACiPDtP0ZMjbBZ8cu8r7JWd55wB+4pnh+EX4LYVm0v932Cw1I\nCMJK1gmXuM9XowcrQREO\n=KL68\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree c8b9ad42f210346b0bae9f47913229916e520f56\nparent 626bc7943b56af431215ea3cd4aae9ce5cee6bef\nauthor Jerry Shao <jerryshao@datastrato.com> 1733110822 +0800\ncommitter GitHub <noreply@github.com> 1733110822 +0800\n\n[MINOR] improve(build): Update the ASF yaml file's collaborator list (#5718)\n\n### What changes were proposed in this pull request?\r\n\r\nThis PR updates the collaborator list to remove some existing\r\ncommitter's name and one new active contributor.\r\n\r\n### Why are the changes needed?\r\n\r\nUpdate the collaborator list.\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nN/A",
+        "verified_at": "2024-12-02T03:41:15Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/867cb1e891d94533acdb962e0cadfd9f9ece48ea",
+    "html_url": "https://github.com/apache/gravitino/commit/867cb1e891d94533acdb962e0cadfd9f9ece48ea",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/867cb1e891d94533acdb962e0cadfd9f9ece48ea/comments",
+    "author": {
+      "login": "jerryshao",
+      "id": 850797,
+      "node_id": "MDQ6VXNlcjg1MDc5Nw==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/850797?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jerryshao",
+      "html_url": "https://github.com/jerryshao",
+      "followers_url": "https://api.github.com/users/jerryshao/followers",
+      "following_url": "https://api.github.com/users/jerryshao/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jerryshao/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jerryshao/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jerryshao/subscriptions",
+      "organizations_url": "https://api.github.com/users/jerryshao/orgs",
+      "repos_url": "https://api.github.com/users/jerryshao/repos",
+      "events_url": "https://api.github.com/users/jerryshao/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jerryshao/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "626bc7943b56af431215ea3cd4aae9ce5cee6bef",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/626bc7943b56af431215ea3cd4aae9ce5cee6bef",
+        "html_url": "https://github.com/apache/gravitino/commit/626bc7943b56af431215ea3cd4aae9ce5cee6bef"
+      }
+    ]
+  },
+  {
+    "sha": "626bc7943b56af431215ea3cd4aae9ce5cee6bef",
+    "node_id": "C_kwDOJaLfldoAKDYyNmJjNzk0M2I1NmFmNDMxMjE1ZWEzY2Q0YWFlOWNlNWNlZTZiZWY",
+    "commit": {
+      "author": {
+        "name": "Jimmy Lee",
+        "email": "55496001+waukin@users.noreply.github.com",
+        "date": "2024-12-02T02:52:03Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T02:52:03Z"
+      },
+      "message": "[#5506] feat(CLI): Table formatted output (#5714)\n\n### What changes were proposed in this pull request?\r\n\r\nEnhance the Gravitino CLI with formatted output.\r\n\r\n<img width=\"323\" alt=\"383987880-78e48033-601e-422f-b5bb-20061536c6b2\"\r\nsrc=\"https://github.com/user-attachments/assets/9655c081-1575-44c3-bcce-49ca2b49a259\">\r\n\r\n### Why are the changes needed?\r\n\r\nIssue: #5506\r\nCause the original PR (https://github.com/apache/gravitino/pull/5606)\r\ncannot be reopened, I create a new PR.\r\nThe purpose is to make Gravitino CLI output look more readable;\r\ncurrently, it supports only table and plain output formats.\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\n```shell\r\ngcli metalake list\r\ngcli metalake list --output plain\r\ngcli metalake list --output table\r\n```",
+      "tree": {
+        "sha": "94efc42f80c17663e5ff37e56353a59716c98368",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/94efc42f80c17663e5ff37e56353a59716c98368"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/626bc7943b56af431215ea3cd4aae9ce5cee6bef",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTSDTCRC1aQ7uu5UhlAAA22oQAJL7njsnDAw/lhYew/B1Le32\nm1+BvcosSoE+ahoBLGmeoCFDLaFMf6XuZ1ht6RpOiBbasysJsKXaea3iK0k5/e7C\nDIxNDboWHUZyfdjuKW+cMAAQ87k4BMTz45dk1W3lGlbdsxo6wZ4uFD4RYO0tcHg2\nbxx2REP5E3bQNdAU1eV0Ix5NJKTZzTmr6RHBN1M7h2AUDQDG8pVm8bYeSJvLv7Yp\nLTF2JyKzNeF/f/ClU2fyqF24+omyfI6qiTIpQmKF7aBNnBdx7BXJdaQK6d9C4dxl\nbefvMVJrFOxh/mg7vZrP6lECJ4APwfRqE/EbW/gebJ8+gb4q1pNhiGXnx7x551+f\nGQqUGrsr88F2LW8TuHlMJzxH5g6QsASdVMbArpXXGqVFkCMj3xU+1gcyDjVwMgAA\nY/hXbx1P3RR7/VIymbWDgMDRRHcUcW6ebpFPSqAER27C5cb2Yq5caiCXmGp7YrWr\nW86VAUfKmZgD8+dasZsZ/a6QxG7ub+ll7n9NMfK60rvBrNE0QPKeGe4eBgh9fEf5\nDChwwPPjmZaAW1nefGiXoAU3C1v5p97ZY0p6pzdI+MUQnPkPD6wC98E7JWo0YHn5\nSrMM+rawJcrt1uuT6uqOw9KYD0L3e1vn0r4O/J91o4h7kzLglC6nUBzyuClvol3f\nL8hlvfM55m4v14dQPAQ9\n=RloT\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 94efc42f80c17663e5ff37e56353a59716c98368\nparent 74ecaeb933e931db67f471c580dfcaef5329be73\nauthor Jimmy Lee <55496001+waukin@users.noreply.github.com> 1733107923 +0800\ncommitter GitHub <noreply@github.com> 1733107923 +0800\n\n[#5506] feat(CLI): Table formatted output (#5714)\n\n### What changes were proposed in this pull request?\r\n\r\nEnhance the Gravitino CLI with formatted output.\r\n\r\n<img width=\"323\" alt=\"383987880-78e48033-601e-422f-b5bb-20061536c6b2\"\r\nsrc=\"https://github.com/user-attachments/assets/9655c081-1575-44c3-bcce-49ca2b49a259\">\r\n\r\n### Why are the changes needed?\r\n\r\nIssue: #5506\r\nCause the original PR (https://github.com/apache/gravitino/pull/5606)\r\ncannot be reopened, I create a new PR.\r\nThe purpose is to make Gravitino CLI output look more readable;\r\ncurrently, it supports only table and plain output formats.\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\n```shell\r\ngcli metalake list\r\ngcli metalake list --output plain\r\ngcli metalake list --output table\r\n```",
+        "verified_at": "2024-12-02T02:52:12Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/626bc7943b56af431215ea3cd4aae9ce5cee6bef",
+    "html_url": "https://github.com/apache/gravitino/commit/626bc7943b56af431215ea3cd4aae9ce5cee6bef",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/626bc7943b56af431215ea3cd4aae9ce5cee6bef/comments",
+    "author": {
+      "login": "waukin",
+      "id": 55496001,
+      "node_id": "MDQ6VXNlcjU1NDk2MDAx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55496001?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/waukin",
+      "html_url": "https://github.com/waukin",
+      "followers_url": "https://api.github.com/users/waukin/followers",
+      "following_url": "https://api.github.com/users/waukin/following{/other_user}",
+      "gists_url": "https://api.github.com/users/waukin/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/waukin/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/waukin/subscriptions",
+      "organizations_url": "https://api.github.com/users/waukin/orgs",
+      "repos_url": "https://api.github.com/users/waukin/repos",
+      "events_url": "https://api.github.com/users/waukin/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/waukin/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "74ecaeb933e931db67f471c580dfcaef5329be73",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/74ecaeb933e931db67f471c580dfcaef5329be73",
+        "html_url": "https://github.com/apache/gravitino/commit/74ecaeb933e931db67f471c580dfcaef5329be73"
+      }
+    ]
+  },
+  {
+    "sha": "74ecaeb933e931db67f471c580dfcaef5329be73",
+    "node_id": "C_kwDOJaLfldoAKDc0ZWNhZWI5MzNlOTMxZGI2N2Y0NzFjNTgwZGZjYWVmNTMyOWJlNzM",
+    "commit": {
+      "author": {
+        "name": "Jerry Shao",
+        "email": "jerryshao@datastrato.com",
+        "date": "2024-12-02T02:45:38Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T02:45:38Z"
+      },
+      "message": "[#5602] feat(core): Add storage schema for model (part-1) (#5689)\n\n### What changes were proposed in this pull request?\r\n\r\nThis PR adds the 1st part of storage schema for model metadata.\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5602 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nAdd various UTs to cover the code.",
+      "tree": {
+        "sha": "4994653536b1c0c6512aa5439664d21a40aec95e",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/4994653536b1c0c6512aa5439664d21a40aec95e"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/74ecaeb933e931db67f471c580dfcaef5329be73",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTR9SCRC1aQ7uu5UhlAAAqOIQAGwgAS9WQydiEZQEZN1CSSsC\n0WfTJaJcW9CZM/Dl17LGQqYHl1d6xwMvXbdaUxCLkzArki7srgu/tp0JFJPNHoV3\nmwRLy1NtOVpdPp1l4lH6hIq9dPulBfkf6Z8E2J/buUmDuP6ehgJpZM2cDWgg5v9P\nFveDGbWXXfCKNGOCwoge/oNoxsMV4mImEJQS+a7O9Og98RlmFQNHp4GZLXvZMLVu\nPp9NbITC7E0Tfk1S+meFcUZ/FFncC8oW8u8H6zwOpstsDK4aEsNG1vbmYGU/Bd4X\nrWQYderiJ28tGSuB7f7jfVLTWxoa0xN60rzx/5IZa8K4g2NWh43at91h8Quqo55q\nYclxhKpZHEyY6/af+iK0Fwk3mQ7/FP9BUiWseM2aq+qQghWwqPJXol/TCKzQGh4N\nWuE+tPl2k6FQddLMwH8T5fg1VsSGZzL+b9dcpTKUAnDZb+wjBaJdzJpFUlrjEdz3\nZC42N7gVsp4NgRqOWlOVJa4ljQcHjVeCXTW0dmmeYqZm041T3rQWJs2TJCBXElIF\n0eItnVw/JlF2+XgLA86tEk2ZWS1Wk8Qciazx3N5zcDarB8O6NX85j+e/90ngKAYz\n76faiGl7MQ80YSeFFdGJB0RKsJbSrBgwrfmBPYuF5KDBYcJ6aXDpKIbsYgG+Iu8K\nQsRQjTDLyVbutilQ0J7s\n=GBQ9\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 4994653536b1c0c6512aa5439664d21a40aec95e\nparent 2254c7a12f45d9b75c4589dfbc82a7d24d166f5e\nauthor Jerry Shao <jerryshao@datastrato.com> 1733107538 +0800\ncommitter GitHub <noreply@github.com> 1733107538 +0800\n\n[#5602] feat(core): Add storage schema for model (part-1) (#5689)\n\n### What changes were proposed in this pull request?\r\n\r\nThis PR adds the 1st part of storage schema for model metadata.\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5602 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nAdd various UTs to cover the code.",
+        "verified_at": "2024-12-02T02:48:04Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/74ecaeb933e931db67f471c580dfcaef5329be73",
+    "html_url": "https://github.com/apache/gravitino/commit/74ecaeb933e931db67f471c580dfcaef5329be73",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/74ecaeb933e931db67f471c580dfcaef5329be73/comments",
+    "author": {
+      "login": "jerryshao",
+      "id": 850797,
+      "node_id": "MDQ6VXNlcjg1MDc5Nw==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/850797?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jerryshao",
+      "html_url": "https://github.com/jerryshao",
+      "followers_url": "https://api.github.com/users/jerryshao/followers",
+      "following_url": "https://api.github.com/users/jerryshao/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jerryshao/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jerryshao/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jerryshao/subscriptions",
+      "organizations_url": "https://api.github.com/users/jerryshao/orgs",
+      "repos_url": "https://api.github.com/users/jerryshao/repos",
+      "events_url": "https://api.github.com/users/jerryshao/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jerryshao/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "2254c7a12f45d9b75c4589dfbc82a7d24d166f5e",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/2254c7a12f45d9b75c4589dfbc82a7d24d166f5e",
+        "html_url": "https://github.com/apache/gravitino/commit/2254c7a12f45d9b75c4589dfbc82a7d24d166f5e"
+      }
+    ]
+  },
+  {
+    "sha": "2254c7a12f45d9b75c4589dfbc82a7d24d166f5e",
+    "node_id": "C_kwDOJaLfldoAKDIyNTRjN2ExMmY0NWQ5Yjc1YzQ1ODlkZmJjODJhN2QyNGQxNjZmNWU",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-12-02T02:21:30Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T02:21:30Z"
+      },
+      "message": "[#5383] Add property commands for table in the Gravitino CLI (#5706)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd property command for table in Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo expand on the set of commands the CLI has.\r\n\r\nFix: #5383\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds extra commands.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally.",
+      "tree": {
+        "sha": "733fb6d8937479f22b54a1c92e7acd756fed1f14",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/733fb6d8937479f22b54a1c92e7acd756fed1f14"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/2254c7a12f45d9b75c4589dfbc82a7d24d166f5e",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTRmqCRC1aQ7uu5UhlAAAvGYQAAxdNMIA8ddsZrbHxdWxjWtF\nX1sGEtqdDnfPpc+vUks4oUEKXlri8qWOGySMtopsx0TRtq8hy4FAAy447POs7CpG\n/QsQi2aRkfmLZAeNd6xPc1b2nq94cZ3koIAWq41q3xW5IlzAF+56PGu/Masp3PXb\nqntCGKr5GjIm2Y85fbWMHa1wHUwwbjTFoltuVj+K/I7C7oymLFi8qQltnQxaQ0O2\n5c15whFVxvcbuIqGhPDyBsVUD3QRRIBt2LDU2+flEEoEORrGXO2+X0kYqvTByryk\nC0Pogu2f/J6aohaH6RTD6gV/TdWWo5CpBpsyuWL9M4GQqGBbfLSQ8BjOu9I1jWrd\nVAIUcXo1Cwz/StCPGCDA2WyBPfRYRh0P6pT0AetPA+7vTkEAILJmnKulIsUYwF9u\nUWZ4NtTSjT3VExiGmxu5a+C/EZhAJuq27Mx7K2Kgv0m+Akb0wwafisUlm5DNdjWs\nxil13zRLukLHf+41Rg8TBp5f2fzVEG50OnXracWJhYUSLgJ9oQkjPoqpz+FUKzQT\nE5R815pHpg7/odihdqU9UEVdM1QHr5oUu+Rgipj4twEvS2kiqkXpRseLoBgHJgPE\njVBmLa8oapdRxUqorVvJkatORj8sk2ua3DUqG0gT9GdRmp1FGGMVqUSgbumc4vHA\ntuuOBiYvdGN0TNflADkS\n=F44U\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 733fb6d8937479f22b54a1c92e7acd756fed1f14\nparent b0e4686b50e13dc44dc1516225ee43068281fc2f\nauthor Justin Mclean <justin@classsoftware.com> 1733106090 +1100\ncommitter GitHub <noreply@github.com> 1733106090 +0800\n\n[#5383] Add property commands for table in the Gravitino CLI (#5706)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd property command for table in Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo expand on the set of commands the CLI has.\r\n\r\nFix: #5383\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds extra commands.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally.",
+        "verified_at": "2024-12-02T02:21:44Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/2254c7a12f45d9b75c4589dfbc82a7d24d166f5e",
+    "html_url": "https://github.com/apache/gravitino/commit/2254c7a12f45d9b75c4589dfbc82a7d24d166f5e",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/2254c7a12f45d9b75c4589dfbc82a7d24d166f5e/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "b0e4686b50e13dc44dc1516225ee43068281fc2f",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/b0e4686b50e13dc44dc1516225ee43068281fc2f",
+        "html_url": "https://github.com/apache/gravitino/commit/b0e4686b50e13dc44dc1516225ee43068281fc2f"
+      }
+    ]
+  },
+  {
+    "sha": "b0e4686b50e13dc44dc1516225ee43068281fc2f",
+    "node_id": "C_kwDOJaLfldoAKGIwZTQ2ODZiNTBlMTNkYzQ0ZGMxNTE2MjI1ZWU0MzA2ODI4MWZjMmY",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-12-02T02:16:43Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T02:16:43Z"
+      },
+      "message": "[#5383] Add table property commands to Gravitino CLI (#5390)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded table property commands to Gravitino CLI.\r\n\r\n### Why are the changes needed?\r\n\r\nThe expand the CLI support.\r\n\r\nFix: #5383\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds more commands.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally with Hive, Postgres and MySQL databases. Note that\r\ndatabase support varies.",
+      "tree": {
+        "sha": "430c8832c84d23490e25b2bd8b01387c93660e03",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/430c8832c84d23490e25b2bd8b01387c93660e03"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/b0e4686b50e13dc44dc1516225ee43068281fc2f",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTRiLCRC1aQ7uu5UhlAAAFTIQADbbTjIEWLPUvi96BUjg001D\nKnWyhRbp0nGUGphDeTQymqcd6dH2FXmBy0h10qemg+ruR5fK937eUo38Vh3kE8yf\nTF9fYLxWPxTMClEEY5kbujBLi5/w3CLOBpGSzIktUv2kIYxWh4VRCD93b19EsRwp\nPLZk84+OB3mRA+RrzmFEvOkmKPB9HiWo1vEq3d1OmtygBf45CG6wbFpIiYURk2bk\n3a5y59eDuZEDWoNJbGaR+QErO+vpSQdDP9Kf9z/6SM6YXJ9UlAuSCM1mdmRdC32h\nNdH8lzRxFYgVegzeg3FQQwtEku1gYNFEcw2GBZ1kh4+ullIzk1yjDi3dpoYa9MRF\n8T0ubJjJXMi2mYD1efKV3eq4LpkURCdgsPkwHZYdaRmcxtOiW90OgX04RTwt1jF5\nt/T7Yhd96bUHPid0EObgWAtvls3sOas/Rh9F2DdE0LI/XPFgu8/aM9/pF6SNpH1y\nr60uLjp2ntoaZVWEOvWwe6yUgz8XQUwJPjHXbbyGOhRv4WnUkGPA8XGqF+sVFBuY\noYI3+PXvBuJUoomoPLrjs0JqC8C66QhA82gomtDkZk5SlAUZcka7nN9DlGiVG4iU\n5fpcMuXcWUQxdpVXBA0zr5tRdI4Q/ZZLFdHwwxKSnz/FiZz3F99CAj1iUYbpi5Ac\n6/5T5vwfANwW+o60E8CB\n=lNFq\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 430c8832c84d23490e25b2bd8b01387c93660e03\nparent 3b08dd7a446a6dbbcd98da374e192d050104ef45\nauthor Justin Mclean <justin@classsoftware.com> 1733105803 +1100\ncommitter GitHub <noreply@github.com> 1733105803 +0800\n\n[#5383] Add table property commands to Gravitino CLI (#5390)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded table property commands to Gravitino CLI.\r\n\r\n### Why are the changes needed?\r\n\r\nThe expand the CLI support.\r\n\r\nFix: #5383\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds more commands.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally with Hive, Postgres and MySQL databases. Note that\r\ndatabase support varies.",
+        "verified_at": "2024-12-02T02:19:22Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/b0e4686b50e13dc44dc1516225ee43068281fc2f",
+    "html_url": "https://github.com/apache/gravitino/commit/b0e4686b50e13dc44dc1516225ee43068281fc2f",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/b0e4686b50e13dc44dc1516225ee43068281fc2f/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "3b08dd7a446a6dbbcd98da374e192d050104ef45",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/3b08dd7a446a6dbbcd98da374e192d050104ef45",
+        "html_url": "https://github.com/apache/gravitino/commit/3b08dd7a446a6dbbcd98da374e192d050104ef45"
+      }
+    ]
+  },
+  {
+    "sha": "3b08dd7a446a6dbbcd98da374e192d050104ef45",
+    "node_id": "C_kwDOJaLfldoAKDNiMDhkZDdhNDQ2YTZkYmJjZDk4ZGEzNzRlMTkyZDA1MDEwNGVmNDU",
+    "commit": {
+      "author": {
+        "name": "Yuan Chen",
+        "email": "cysbc1999@gmail.com",
+        "date": "2024-12-02T02:04:39Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T02:04:39Z"
+      },
+      "message": "[#3783] improvement(test): add test 'list-all-tables' for the Hive catalog (#5710)\n\n### What changes were proposed in this pull request?\r\n\r\nadd test 'list-all-tables'  for the Hive catalog\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #3783 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\n CI passed",
+      "tree": {
+        "sha": "aca86b3fa2060b0b5cb2f97b8807da07a914198f",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/aca86b3fa2060b0b5cb2f97b8807da07a914198f"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/3b08dd7a446a6dbbcd98da374e192d050104ef45",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTRW3CRC1aQ7uu5UhlAAALRMQADmbQjqcc2c5k30SocU2sAko\nQXks7ETSWg2XjJBw94AVzaSF6qeuKXkOx93Yu1KmRdxHtjTjh6dmaDXloDlmPsst\ntyEqeULwmHiACWWtZy7AnxDG8ZO1renNe6Vetsmq1QsKaeXnzAM+y0oWj/PAT9Xz\n7HG0HIMqqyYBXqNlnfQE41CkYMzpwsJQRiSVBJQlXCu03Ujcd6y/lXOIkpyFccjx\nW3urN9uMpR2Jk6frhk9fqVe7UVo+qCdRxZl4qtWjZUaG3pVYfuFAOMYv89BuQvN3\nHKVuDbSCc4hOPaGk8x0nhu7vbewdfiyb5CWDtT4pl1xOqURjan8p2gYZ5mMRJtge\nDtQKlJQxfJoBfB/9iqU1BUbULqOjOQDx9lbBAtrkPbl7RoLERb9TgIDFtjdtpi6H\nBm2Eu1hVYNvV19Fd1lt5VL56TfEwmb0a3WONgHh1C+ekJVUem7wb6o3fjjO6Reg0\niyAkFWrXyTPLSJnYa/+UBzikf9XcK+TbnGr6hYrEPjDOmat0UqE5+HZJhLkOHDHU\nF2jDNW8CYxqzY2K3MjSYI3vY9M2cAXsBpj3WP0X4Kg/gwwfA3dJ29G2MqH+/FEcT\nQhIugqq6ojHg5ZjwVRCml5v0QBVU88KsU8PTBzsgXoJSlh0Ouo/isF3DEhn9p+M/\n6a+YOqIkCOOoEAi2nGS0\n=LF/u\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree aca86b3fa2060b0b5cb2f97b8807da07a914198f\nparent 8672ad73a3168b919e4ddc04df26700d9a739b9a\nauthor Yuan Chen <cysbc1999@gmail.com> 1733105079 -0500\ncommitter GitHub <noreply@github.com> 1733105079 +0800\n\n[#3783] improvement(test): add test 'list-all-tables' for the Hive catalog (#5710)\n\n### What changes were proposed in this pull request?\r\n\r\nadd test 'list-all-tables'  for the Hive catalog\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #3783 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\n CI passed",
+        "verified_at": "2024-12-02T02:06:53Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/3b08dd7a446a6dbbcd98da374e192d050104ef45",
+    "html_url": "https://github.com/apache/gravitino/commit/3b08dd7a446a6dbbcd98da374e192d050104ef45",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/3b08dd7a446a6dbbcd98da374e192d050104ef45/comments",
+    "author": {
+      "login": "chenyuan99",
+      "id": 25518100,
+      "node_id": "MDQ6VXNlcjI1NTE4MTAw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25518100?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chenyuan99",
+      "html_url": "https://github.com/chenyuan99",
+      "followers_url": "https://api.github.com/users/chenyuan99/followers",
+      "following_url": "https://api.github.com/users/chenyuan99/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chenyuan99/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chenyuan99/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chenyuan99/subscriptions",
+      "organizations_url": "https://api.github.com/users/chenyuan99/orgs",
+      "repos_url": "https://api.github.com/users/chenyuan99/repos",
+      "events_url": "https://api.github.com/users/chenyuan99/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chenyuan99/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "8672ad73a3168b919e4ddc04df26700d9a739b9a",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/8672ad73a3168b919e4ddc04df26700d9a739b9a",
+        "html_url": "https://github.com/apache/gravitino/commit/8672ad73a3168b919e4ddc04df26700d9a739b9a"
+      }
+    ]
+  },
+  {
+    "sha": "8672ad73a3168b919e4ddc04df26700d9a739b9a",
+    "node_id": "C_kwDOJaLfldoAKDg2NzJhZDczYTMxNjhiOTE5ZTRkZGMwNGRmMjY3MDBkOWE3MzliOWE",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-12-02T00:55:54Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T00:55:54Z"
+      },
+      "message": "[#5603] Add metalake extended help command to Gravitino CLI (#5604)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd metalake extended help command to Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo give the use extended help via the command line.\r\n\r\nFix: #5603\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, other than providing extra help information.\r\n\r\n### How was this patch tested?\r\n\r\nLocally.",
+      "tree": {
+        "sha": "3b080e41e4486e6c623d2e11953feded963403f7",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/3b080e41e4486e6c623d2e11953feded963403f7"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/8672ad73a3168b919e4ddc04df26700d9a739b9a",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTQWaCRC1aQ7uu5UhlAAAh/4QAKGR8rqspCf0N8UCYxhZGqWN\nEHmEmxMObpszENGsFJXFlx+ioxzHHOWHs8Bl0Rlm57vyezowXy1mGK1Z8/6FHh9Y\ng6kPpgXa0gqsY7OJWm9JYUCstImJv7xURvY7gDKQ4oPIAkQ5jJgH2tWwnnRQ6K+c\nz/Coq2jwDs0zqY3hw+Enr0ps1clvbk0VA1rPxFXxldZTu93v/8+DRBLIkbp3r9jK\nCfGL7nBlL4TMrKfoazg7nOdVFuOypO6jdmv9SHEEYWBhxq6gPyafGCGoykGc8x8o\nFHzN2uR+SOIBAe3jmTQWtNrvORKXUkmpNsGz2Hp4yuL25tVj+/SKfE/m3SXmU233\ns3fUii4N8UhXFi0alqmpkWg7g1bliBnD3+rIqdJUak3Ra/CPyAhU22YP6fqSRDkS\nWLL6uOQfBKXeLmwPITYXAYidwyEJ4CwxeQc9vSY5hL5xUZPcq2+5tnejV67krvX3\nWftDjbiHGPHxrVhrlM2+n01W3OIp8NLdkkZixOcWhYZit11W0VKy/DrI7ffO51lf\nLXMtu0Qbo7j0cNp/HIUwU82eaUedhbAPW3LdTRz3cMsPSXg9CEElqjlVYe1dJzO5\no1fGCa5kpd2cSyysqRIL9MlgWPDs2DbjgcCt0ABo6u1K6CJnByp6W+GrELJlVexx\nkA9o48T5Io0kSo3gOwtW\n=hzUl\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 3b080e41e4486e6c623d2e11953feded963403f7\nparent 2e034b26d2a45e090af3741e6c31d31f4ca68b90\nauthor Justin Mclean <justin@classsoftware.com> 1733100954 +1100\ncommitter GitHub <noreply@github.com> 1733100954 +0800\n\n[#5603] Add metalake extended help command to Gravitino CLI (#5604)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd metalake extended help command to Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo give the use extended help via the command line.\r\n\r\nFix: #5603\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, other than providing extra help information.\r\n\r\n### How was this patch tested?\r\n\r\nLocally.",
+        "verified_at": "2024-12-02T00:56:03Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/8672ad73a3168b919e4ddc04df26700d9a739b9a",
+    "html_url": "https://github.com/apache/gravitino/commit/8672ad73a3168b919e4ddc04df26700d9a739b9a",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/8672ad73a3168b919e4ddc04df26700d9a739b9a/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "2e034b26d2a45e090af3741e6c31d31f4ca68b90",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/2e034b26d2a45e090af3741e6c31d31f4ca68b90",
+        "html_url": "https://github.com/apache/gravitino/commit/2e034b26d2a45e090af3741e6c31d31f4ca68b90"
+      }
+    ]
+  },
+  {
+    "sha": "2e034b26d2a45e090af3741e6c31d31f4ca68b90",
+    "node_id": "C_kwDOJaLfldoAKDJlMDM0YjI2ZDJhNDVlMDkwYWYzNzQxZTZjMzFkMzFmNGNhNjhiOTA",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-12-02T00:43:08Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-12-02T00:43:08Z"
+      },
+      "message": "[#5294] Add topic property command to Gravitino CLI (#5352)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd topic property command to Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo expand Gravitino CLI.\r\n\r\nFix: #5294\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo but it adds additional command to the Gravitino CLi.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally with a running Apache Kafka instance.",
+      "tree": {
+        "sha": "50eabc5b78b2cb4a17ae32414108a02468c29ab5",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/50eabc5b78b2cb4a17ae32414108a02468c29ab5"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/2e034b26d2a45e090af3741e6c31d31f4ca68b90",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnTQKcCRC1aQ7uu5UhlAAA2yEQAH4DEz5EkLnVhb17Y7WGdMy3\nlAUtTu9a9iyf4p9QKDPf+9id09ANx4Qtnv8AiEv24h3w9kSKBBZFBY32E1K8terz\nVBGw8+A6z+ZMsKYHmVi1Ms6UsDaB1Z86IDAOHvjDAqisSVo0R06CndeWZ+vxyCfA\nTQP7/FzTn2MsEedC6CFLA3O9/EjXU9tAUln59DGP2f+nYm8v7XuQYafVXVeiaUNs\ngRfR+DwR8FqjE3x1k8T17ZYnrz2jlTXyzzzAuZb5uinHgQ/WyWPmQR1h7WbNrn8p\ndqgahtKKaUklCRHNWTgdmpFkUTh9Qu38+IE5rOfN2T5pF6ZnMjagIbekkAX1rCBQ\nK0AUfB3kO11tp9AQLok/UjkVYwskMV3fBF40kB5XeyY/XWN9B0IAzTEohlmdYcmD\n+qEVPf93FicTSDIvaxjS5bcNJH4Gi86YEyR/byH6mPhIu4YdVInBM93IXcVvjIS6\nW1cGc46tTLR/8bakpy3j9a42uAt7r2GPNRdVBKEs715orSLl3qYkL6SQ8iVEgeic\n4dB6AqvmbMCbuUk/VYi6od3bMD8LVYaAllIOgOsksr1Ct1fQr0k/G4t3aCFF4ptt\nni1NHV2qV1zhAcJvLVJVlRFVj5FiV3ODNzyFr28zgWoQxuyR8qqez2i5UgvHBwOV\nZp4eTGMf4KFhGCbSxLnA\n=+TPx\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 50eabc5b78b2cb4a17ae32414108a02468c29ab5\nparent 9cd7674e7209f7b14d715d4cac4d3c7494ce29bf\nauthor Justin Mclean <justin@classsoftware.com> 1733100188 +1100\ncommitter GitHub <noreply@github.com> 1733100188 +0800\n\n[#5294] Add topic property command to Gravitino CLI (#5352)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd topic property command to Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo expand Gravitino CLI.\r\n\r\nFix: #5294\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo but it adds additional command to the Gravitino CLi.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally with a running Apache Kafka instance.",
+        "verified_at": "2024-12-02T00:48:11Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/2e034b26d2a45e090af3741e6c31d31f4ca68b90",
+    "html_url": "https://github.com/apache/gravitino/commit/2e034b26d2a45e090af3741e6c31d31f4ca68b90",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/2e034b26d2a45e090af3741e6c31d31f4ca68b90/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "9cd7674e7209f7b14d715d4cac4d3c7494ce29bf",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/9cd7674e7209f7b14d715d4cac4d3c7494ce29bf",
+        "html_url": "https://github.com/apache/gravitino/commit/9cd7674e7209f7b14d715d4cac4d3c7494ce29bf"
+      }
+    ]
+  },
+  {
+    "sha": "9cd7674e7209f7b14d715d4cac4d3c7494ce29bf",
+    "node_id": "C_kwDOJaLfldoAKDljZDc2NzRlNzIwOWY3YjE0ZDcxNWQ0Y2FjNGQzYzc0OTRjZTI5YmY",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-11-29T08:38:35Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-29T08:38:35Z"
+      },
+      "message": "[#5379] Add property commands for filesets in Gravitio CLI (#5382)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded property command for filesets in the Gravitio CLI.\r\n\r\n### Why are the changes needed?\r\n\r\nExpand coverage of Java API in Gravitino CLI.\r\n\r\nFix: #5379\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds extra command to the Gravitino CLI.\r\n\r\n### How was this patch tested?\r\n\r\nCompiled and tested locally.",
+      "tree": {
+        "sha": "023ed307841375ec8c298cd78a0def045be08ac1",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/023ed307841375ec8c298cd78a0def045be08ac1"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/9cd7674e7209f7b14d715d4cac4d3c7494ce29bf",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnSX2LCRC1aQ7uu5UhlAAA0LQQAFb65jynnnU6HdGnnLS1McXM\nR6Exz3xHvCoJRa6dYRMCRyt2A+zFWWVmz8npkJCAvKTBmonOYKC9N9b7JyTHKJPh\nZ8xyQ1MLMbMRBd/azLQdqrk1xOEXtEqiOahAC8sZZwwDyisrWbgf2LyoEDJum1E3\nP5Lx3LH8xs18gOwNxzM+i2VsQEqa9fEAJHnUwSv3q8CV8Awf1fN3TQnKnbsSYuzk\n+lsYqm7FwgiO/M9vE6oXl0LTpOPOC8oOZ1IZ/emazNTtP5K3OFuJpwTYHcGHnSA/\npvQFkq8sFZBoOKGh3rdY1WmwkSsRTQT9tfw/ekzNJMkg1C/jYVvvj1FqBPHOIyWD\nBouV8GoRsjktHxbeNbjIyE5CA/F+1ZnSJVvwk7Y1Ycm+NIjSWqMD2aLJnjWYcAYU\n1ajsI7p9QKxQeiib6vf1SHh2+md0lRGE/PgqYoeebm1ggOB1dnO9h4UZTJGciKt7\nDWOM2fXKk7FDs/Wn1XuImxQL56DxdxsIgO0Zif5T+tGAZ6qQeBUpO2cp8YTscMUM\nd/gIjJ/grr+JlX7BRIrFA2S6JlMN0OIgE92zShFdy2pO5aNR+qCvXQwk/WJJyfCD\ntkP6nqpDPqFzVStzMRxVIHDRQVBw5UL5aZsx8LYv4Jl8R6hgwXNk7afGRGJAqv1R\n8U9QgHYZDV3VzlpGbGdP\n=3Cpd\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 023ed307841375ec8c298cd78a0def045be08ac1\nparent d5aa571c831ac20058ec7529478a223ac9716928\nauthor Justin Mclean <justin@classsoftware.com> 1732869515 +1100\ncommitter GitHub <noreply@github.com> 1732869515 +0800\n\n[#5379] Add property commands for filesets in Gravitio CLI (#5382)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded property command for filesets in the Gravitio CLI.\r\n\r\n### Why are the changes needed?\r\n\r\nExpand coverage of Java API in Gravitino CLI.\r\n\r\nFix: #5379\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds extra command to the Gravitino CLI.\r\n\r\n### How was this patch tested?\r\n\r\nCompiled and tested locally.",
+        "verified_at": "2024-11-29T08:38:44Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/9cd7674e7209f7b14d715d4cac4d3c7494ce29bf",
+    "html_url": "https://github.com/apache/gravitino/commit/9cd7674e7209f7b14d715d4cac4d3c7494ce29bf",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/9cd7674e7209f7b14d715d4cac4d3c7494ce29bf/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "d5aa571c831ac20058ec7529478a223ac9716928",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/d5aa571c831ac20058ec7529478a223ac9716928",
+        "html_url": "https://github.com/apache/gravitino/commit/d5aa571c831ac20058ec7529478a223ac9716928"
+      }
+    ]
+  },
+  {
+    "sha": "d5aa571c831ac20058ec7529478a223ac9716928",
+    "node_id": "C_kwDOJaLfldoAKGQ1YWE1NzFjODMxYWMyMDA1OGVjNzUyOTQ3OGEyMjNhYzk3MTY5Mjg",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-11-29T04:12:25Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-29T04:12:25Z"
+      },
+      "message": "[#5379] Add update commands for fileset in Gravitino CLI (#5381)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd update commands for fileset in Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nto continue to extend the Gravitino CLI.\r\n\r\nFix: #5379\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds more commands to the Gravitino CLI.\r\n\r\n### How was this patch tested?\r\n\r\nCompiled and tested locally.",
+      "tree": {
+        "sha": "4b23fd7a8b80ed74ee89eeb483aabe2ec5df375c",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/4b23fd7a8b80ed74ee89eeb483aabe2ec5df375c"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/d5aa571c831ac20058ec7529478a223ac9716928",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnST8pCRC1aQ7uu5UhlAAAoZUQAC8luQCeS44iKROj/iFtApJv\nNg0Nx9QwIs1ULVfiXFSpyHSIfRwjGJh9y8Ipi/58kRFzfZYEID2dSSkX6n1PuGt1\nAPlA7ANbxF3aHyXOzHbFgonAqQcPf3rkbIsLP16q7P5y3thfh7HuXTg0SCxM0Fml\no0taJ/ql7yEWHNdrDhWsu6WwR9qXp0fPQGIhrmVwvojryLyBx8AnwPpBMuc9Zv6c\nCNiuPDD+zzcY0dXbG5O06yUhORB9NzLlCf/btIb9wemtiS1ETAqcB9wmWrJQDXH4\n1U1G6YggU39W9MRY5L2zQNDf1BmjMBi6e+S85J5+GcnDBVrQH5/ehhDGRLqE/Sk5\nnkXme+Mtbjax6aStw2Y7583VV+t76RyS+TLlPi22qJ3KSladByYBZWB30zaIdMyW\nSzzn81vXN559envPPClU5Z9B/ZhKmBv4pQM5KgG2ligekiDRtNL57phlrTFTEWUD\nUzCZ7kL9vUq7QYxZcZp8Tu4DR5zkOX+rFlWD2WtB+k/gz9PnimuWiTPQEUs64lTy\nPCmylVdU7eXucC7H8hq0o7NE4Eqa3t1ByWSJ9fukid5K7XS2AC/eXIiXMiOwpQUC\nv38tZ0QZTT1Xo1l4OP5jRxfRlnv6vZD+XXmKnDjzh/2Xurp9EhTq/dwS2QVjwAnD\nl4wxo3wY6ytJZI6zi1no\n=/tie\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 4b23fd7a8b80ed74ee89eeb483aabe2ec5df375c\nparent 0119e0e4c81a4289edf330f942a7ab2d51eb9428\nauthor Justin Mclean <justin@classsoftware.com> 1732853545 +1100\ncommitter GitHub <noreply@github.com> 1732853545 +0800\n\n[#5379] Add update commands for fileset in Gravitino CLI (#5381)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd update commands for fileset in Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nto continue to extend the Gravitino CLI.\r\n\r\nFix: #5379\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds more commands to the Gravitino CLI.\r\n\r\n### How was this patch tested?\r\n\r\nCompiled and tested locally.",
+        "verified_at": "2024-11-29T04:12:33Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/d5aa571c831ac20058ec7529478a223ac9716928",
+    "html_url": "https://github.com/apache/gravitino/commit/d5aa571c831ac20058ec7529478a223ac9716928",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/d5aa571c831ac20058ec7529478a223ac9716928/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "0119e0e4c81a4289edf330f942a7ab2d51eb9428",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/0119e0e4c81a4289edf330f942a7ab2d51eb9428",
+        "html_url": "https://github.com/apache/gravitino/commit/0119e0e4c81a4289edf330f942a7ab2d51eb9428"
+      }
+    ]
+  },
+  {
+    "sha": "0119e0e4c81a4289edf330f942a7ab2d51eb9428",
+    "node_id": "C_kwDOJaLfldoAKDAxMTllMGU0YzgxYTQyODllZGYzMzBmOTQyYTdhYjJkNTFlYjk0Mjg",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-11-29T03:23:02Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-29T03:23:02Z"
+      },
+      "message": "[#5294] Add basic topic commands to Gravitino CLI (#5331)\n\n### What changes were proposed in this pull request?\r\n\r\n Add basic topic commands to list, create and delete topics.\r\n\r\n### Why are the changes needed?\r\n\r\nTo extend the Gravitino CLI.\r\n\r\nFix: #5294\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it extends the Gravitiuno CLI.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally with a local instance of Apache Kafka.",
+      "tree": {
+        "sha": "caf15d3857ae169bf6b5952f8a8e4cf65a283ce4",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/caf15d3857ae169bf6b5952f8a8e4cf65a283ce4"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/0119e0e4c81a4289edf330f942a7ab2d51eb9428",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnSTOWCRC1aQ7uu5UhlAAAtgQQACqOJf/I2RWlDpTUf6v167G8\nJ29GomRTSWPriLImainMo5bpZE/IdvVH1Dk2lcsq9X2ENCAUXoxW6DE8iEjV1laT\n6XSVobTeiYa2/eNONmtWX8cbACB/H3mllCEirvGRkc49GVW0D8se+igyWxMTK4v+\nAhuOU3BuObMB3Ww/Xsu6RcW1t9fJ/2g8fN+aEIX+w687QimgaFz56cHDhYOxF05K\nKMiG1gOGnjmZ/ijzWIb93Ioc0xFlNjUMIWel+qnbEaIUbxTVpIcjaUXzBmaf0V+W\nfnnviJu+GVCrnbN6RtCO31oa3kExblLcr34Xw6XLi9sXUVayz3mpiS9iYE7/Ixra\nfMai+LdZTQVfGQGEnHjHOWvXSrrQ+m3gcSMt5V6UJ1EECIZT8TjJ2jZLD4PCFHLl\n9+ZiwL8h16M1BLIwesnUrPfQAHxnwDG9qzzwcLfsM85INLNf8t1ZOMFXQZUr7kmd\nyse1yXZXMkG90hvCWB5gcQP2XrEOZ29N3IGoyZBYjeqLsYUzYOcv7b6GT5QpaNZe\netuArMDYO0CmnxbVthj+QUSRKUMzHZV9J/igKKAWUnWz1VzW1tpFPk+boMfk2OS7\nRnLVPp164ol7D7NKuKk51T1Vukyy/FD8cB0xEUluDsvuNr6URCiJWGWZFCSYxDVk\n3ZrPb1deYTfSTXa81DLi\n=m76a\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree caf15d3857ae169bf6b5952f8a8e4cf65a283ce4\nparent 7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850\nauthor Justin Mclean <justin@classsoftware.com> 1732850582 +1100\ncommitter GitHub <noreply@github.com> 1732850582 +0800\n\n[#5294] Add basic topic commands to Gravitino CLI (#5331)\n\n### What changes were proposed in this pull request?\r\n\r\n Add basic topic commands to list, create and delete topics.\r\n\r\n### Why are the changes needed?\r\n\r\nTo extend the Gravitino CLI.\r\n\r\nFix: #5294\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it extends the Gravitiuno CLI.\r\n\r\n### How was this patch tested?\r\n\r\nTested locally with a local instance of Apache Kafka.",
+        "verified_at": "2024-11-29T03:28:06Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/0119e0e4c81a4289edf330f942a7ab2d51eb9428",
+    "html_url": "https://github.com/apache/gravitino/commit/0119e0e4c81a4289edf330f942a7ab2d51eb9428",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/0119e0e4c81a4289edf330f942a7ab2d51eb9428/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850",
+        "html_url": "https://github.com/apache/gravitino/commit/7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850"
+      }
+    ]
+  },
+  {
+    "sha": "7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850",
+    "node_id": "C_kwDOJaLfldoAKDdhNDIxOTlhNWZjYWEwMmVhYTgwNTNjZmVjNWI2ZjdiM2RhYjM4NTA",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-11-29T02:20:46Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-29T02:20:46Z"
+      },
+      "message": "[#5379] Add basic Fileset commands to Gravitno CLI (#5380)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded basic Fileset commands to Gravitno CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo expand Gravitino CLI support.\r\n\r\nFix: #5379\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds extra commands to the Gravitino CLI.\r\n\r\n### How was this patch tested?\r\n\r\nCompiled and tested locally.",
+      "tree": {
+        "sha": "68cb93de4d6c7df8381ad84b18e851d7e49978b0",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/68cb93de4d6c7df8381ad84b18e851d7e49978b0"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnSST+CRC1aQ7uu5UhlAAAk+8QAC0Vr0qRdkVH+AowYt0X2unJ\nI1oQ7Okeph2eQeD6kkjln6LNMVXaSNFyugWM3GUSTLz8V97zDMpflfE85SkF0tLo\nuhFPFYXSjRHuo7opXmK1RI4AmHKoNYwzKtKSlpl9Fv870KCmQcqEyXPM/7RsGCJc\ngBodv44PH6DyNGRC7A6Ejppxi6Mjc/0K/ORoLBY3jcbHe0bAK9l2KViw5JP/ql3/\ne6rIkJYX8+ogMi0AlDJypSHe8Hi6DKQ/+QS9ItqySEJ8VJWXMKbK3WEjctQh046v\neoPU5DWvmvnfgeJFRCo9bf+UUjf7Dh1fW9ovfrUwey2MCEfrII/bKt5Q2mI+Z8M0\nVaQwAhklrhy9n36qmQXuEhDAoaZFJZ68aq2hq4Gsg7DPVIn22eALvLlalggEpHQ4\nLrTgCmdAb5oJj4CKYiYJg1U8Ca+H5+TIhid+3yDaBooLbHRGalU0IYSGoDCIu+gm\nU9mBOjjFbL13FIbl3lqBp5uhTfHTukVbBmCb694dYjuHc2VBrEMtKcT4Iz5YqTce\nuzg3G4kMbEgVZcI/61q4xyWK/z/HWV4y3kWJZEPXGFB5F+0AlDzQgw6899zulSFX\nYLRj/+Yvoe30KBghRI2e4FhuuLjqi9mDhS9lE+8lPjIycl89kRXCYkQuG9rkETgk\nOGK3VBE4OZUSbIn2JKgZ\n=Dd67\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 68cb93de4d6c7df8381ad84b18e851d7e49978b0\nparent e25a67aac6669efbff77c83b5bb7e143117a04a2\nauthor Justin Mclean <justin@classsoftware.com> 1732846846 +1100\ncommitter GitHub <noreply@github.com> 1732846846 +0800\n\n[#5379] Add basic Fileset commands to Gravitno CLI (#5380)\n\n### What changes were proposed in this pull request?\r\n\r\nAdded basic Fileset commands to Gravitno CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo expand Gravitino CLI support.\r\n\r\nFix: #5379\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it adds extra commands to the Gravitino CLI.\r\n\r\n### How was this patch tested?\r\n\r\nCompiled and tested locally.",
+        "verified_at": "2024-11-29T02:22:26Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850",
+    "html_url": "https://github.com/apache/gravitino/commit/7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/7a42199a5fcaa02eaa8053cfec5b6f7b3dab3850/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "e25a67aac6669efbff77c83b5bb7e143117a04a2",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/e25a67aac6669efbff77c83b5bb7e143117a04a2",
+        "html_url": "https://github.com/apache/gravitino/commit/e25a67aac6669efbff77c83b5bb7e143117a04a2"
+      }
+    ]
+  },
+  {
+    "sha": "e25a67aac6669efbff77c83b5bb7e143117a04a2",
+    "node_id": "C_kwDOJaLfldoAKGUyNWE2N2FhYzY2NjllZmJmZjc3YzgzYjViYjdlMTQzMTE3YTA0YTI",
+    "commit": {
+      "author": {
+        "name": "Qi Yu",
+        "email": "yuqi@datastrato.com",
+        "date": "2024-11-29T02:02:52Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-29T02:02:52Z"
+      },
+      "message": "[#5557] improvement(CI): Add some docs and tests about how to use Azure Blob Storage(ADLS) in Hive (#5558)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd some tests to demonstrate how to use ADLS in Hive.\r\n\r\n### Why are the changes needed?\r\n\r\nTo verify if we can use ADLS in Hive.\r\nFix: #5557\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nTest manually.",
+      "tree": {
+        "sha": "27e0b3d1273037a42098f14da1ae6e1dbc240f64",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/27e0b3d1273037a42098f14da1ae6e1dbc240f64"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/e25a67aac6669efbff77c83b5bb7e143117a04a2",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnSSDMCRC1aQ7uu5UhlAAAJiQQAJPtgYCNa4x74gIi7k9zf8An\nfudsjpbWLtXlXeLfERj8wOm4sa3r0PeIJ+TAEHxEUOh0/i8cKjFfsUZMQsNYPiO6\nYImQOaiGma8oikWnZ1S32KDP7wNblIVBclf3U/kUBMWVZKHLhzZ2saJ3o8X8aq0c\nd5n96Mp9OIxQ9QQPVtdRkB1SDSujSb/+PpIkwJuL7/M33aw9EaCe7Knj5uSaKlaO\njd/xaF2To0+ar3T1Jj5K5oIajmZcGYDkTumd30awV6Va27XagXqLYrfsKN8p2pfw\nuWlQbmZoQshRUkR4UEx357K+6Ta6/2rRDqVEFoDLx+TDFXcwd2kEqvJwAvQvbzF5\nUQI1U7UMbWLB8GjL2d5LT3OhvpW9MuID7GhIwSnpNzntKLH9g1XG+PZpk+p9Zze3\nAfkcv3apVu8gNcg9zZ1Xg8nRpmDVOveEDIlXFkBhWxHNgoEYKij8bIs2+0S/wwnY\nlB0rSa3FY/NYBTEqeEiWqUXyZ9hfQLHrfxP45mtUAT5cDhCgGoHlpkkb3EMQOBrq\nMo+WhyE5uCz+QbcMIQ1i/53i/hThdfIUBmNglUz51avvux3mMyVp9CEs3Mrwxm3+\nUhiD0GfMFQT97PYDsjn+20BjrlRhxDd3DEYNP/LrKnmwOG7BLqyOYY2wQdldfSQ9\nJZDKLGBlfUnfz4LrE0j1\n=Y/A4\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 27e0b3d1273037a42098f14da1ae6e1dbc240f64\nparent 4f7ac0794dc53a49f3e0c8306264fa88fbb10c68\nauthor Qi Yu <yuqi@datastrato.com> 1732845772 +0800\ncommitter GitHub <noreply@github.com> 1732845772 +0800\n\n[#5557] improvement(CI): Add some docs and tests about how to use Azure Blob Storage(ADLS) in Hive (#5558)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd some tests to demonstrate how to use ADLS in Hive.\r\n\r\n### Why are the changes needed?\r\n\r\nTo verify if we can use ADLS in Hive.\r\nFix: #5557\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nTest manually.",
+        "verified_at": "2024-11-29T02:06:52Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/e25a67aac6669efbff77c83b5bb7e143117a04a2",
+    "html_url": "https://github.com/apache/gravitino/commit/e25a67aac6669efbff77c83b5bb7e143117a04a2",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/e25a67aac6669efbff77c83b5bb7e143117a04a2/comments",
+    "author": {
+      "login": "yuqi1129",
+      "id": 15794564,
+      "node_id": "MDQ6VXNlcjE1Nzk0NTY0",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15794564?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yuqi1129",
+      "html_url": "https://github.com/yuqi1129",
+      "followers_url": "https://api.github.com/users/yuqi1129/followers",
+      "following_url": "https://api.github.com/users/yuqi1129/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yuqi1129/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yuqi1129/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yuqi1129/subscriptions",
+      "organizations_url": "https://api.github.com/users/yuqi1129/orgs",
+      "repos_url": "https://api.github.com/users/yuqi1129/repos",
+      "events_url": "https://api.github.com/users/yuqi1129/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yuqi1129/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "4f7ac0794dc53a49f3e0c8306264fa88fbb10c68",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/4f7ac0794dc53a49f3e0c8306264fa88fbb10c68",
+        "html_url": "https://github.com/apache/gravitino/commit/4f7ac0794dc53a49f3e0c8306264fa88fbb10c68"
+      }
+    ]
+  },
+  {
+    "sha": "4f7ac0794dc53a49f3e0c8306264fa88fbb10c68",
+    "node_id": "C_kwDOJaLfldoAKDRmN2FjMDc5NGRjNTNhNDlmM2UwYzgzMDYyNjRmYTg4ZmJiMTBjNjg",
+    "commit": {
+      "author": {
+        "name": "Qi Yu",
+        "email": "yuqi@datastrato.com",
+        "date": "2024-11-28T13:40:24Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-28T13:40:24Z"
+      },
+      "message": "[#5691] fix(doris-catalog): Fix errors in type mapping about timestamp in Doris catalog. (#5693)\n\n### What changes were proposed in this pull request?\r\n\r\nWhen loading table with datetime column from Doris table, we should\r\nconvert it to Gravitno timestamp without timezone NOT\r\ntimestamp_tz(timestamp with timezone)\r\n\r\n### Why are the changes needed?\r\n\r\nAccording to docs \r\n1.\r\nhttps://gravitino.apache.org/docs/0.7.0-incubating/jdbc-doris-catalog#table-column-types\r\n2.\r\nhttps://doris.apache.org/docs/1.2/sql-manual/sql-reference/Data-Definition-Statements/Create/CREATE-TABLE\r\n\r\nit's a bug when converting Gravitino timestamp type to Doris datetime\r\ntype.\r\n\r\nFix: #5691\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nUT & IT",
+      "tree": {
+        "sha": "f5c2930aa28f3e636168bb367a9f06382abf81a3",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/f5c2930aa28f3e636168bb367a9f06382abf81a3"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/4f7ac0794dc53a49f3e0c8306264fa88fbb10c68",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnSHLICRC1aQ7uu5UhlAAAV+UQAKt56bTWRkpEAhYD3sTlwdvK\nKahVOX9+C/UB62Qm0YBXvqY3cHcnqzm73pjjTO/dsHsPCG14aSGC/npYvMuApc6L\nhvTOGxMIQGfEU7D8p3rla5z9b3wn1SBD5do67geZ1pRRn1pnzLcV/7cQ9hOIH0cx\nAApQ2d47iRN1kEt9SnDpOGMt5l6Ol37tZg+OBC+9+K6QdxpcFSmikUk2rMkBYNUT\n0muZnmibX2oAswb1nACzXoa7xzobhMd/Sie5QLAkwQywEkBd6qKFijqPEhNPRFrq\nqOBwgo8Q8j6EFBAqCg6UZExRHygNy2tgD7Ve6RX9x5CQYXpe4PhISm6VD/1VLTay\n5hXDD5HgwfrvcRvSzqeC2grwINpALhs/3DBp3lMGhSWzQqEF0AMk+62Ve9JL6Suv\nGWIkSShg6uiaU9nxw55gF/fe+K/AXKUjNQg0+RJCQk32ls7SXV2drKID6FE+IAvd\nmtU8hwL8+ymr8wBQobfvLHl2e5pIhrucvNpz6hLduCKWyK1ZtJQzYom43c3re2Nv\nZZrA9kLygJ+3/FSfCnhF3a2Z5TocBL7Om98arT1lKAgdn0uRBk6y9sGI78mFsdaF\n++D8k0UEQTlWq+w61NtVfH/XBk9joMNihvZw8CwhxHxyACGk/Lh3yU7rKaoxN/fI\nMulbIGLajhtfwKmJdVh3\n=oxSz\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree f5c2930aa28f3e636168bb367a9f06382abf81a3\nparent 8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26\nauthor Qi Yu <yuqi@datastrato.com> 1732801224 +0800\ncommitter GitHub <noreply@github.com> 1732801224 +0800\n\n[#5691] fix(doris-catalog): Fix errors in type mapping about timestamp in Doris catalog. (#5693)\n\n### What changes were proposed in this pull request?\r\n\r\nWhen loading table with datetime column from Doris table, we should\r\nconvert it to Gravitno timestamp without timezone NOT\r\ntimestamp_tz(timestamp with timezone)\r\n\r\n### Why are the changes needed?\r\n\r\nAccording to docs \r\n1.\r\nhttps://gravitino.apache.org/docs/0.7.0-incubating/jdbc-doris-catalog#table-column-types\r\n2.\r\nhttps://doris.apache.org/docs/1.2/sql-manual/sql-reference/Data-Definition-Statements/Create/CREATE-TABLE\r\n\r\nit's a bug when converting Gravitino timestamp type to Doris datetime\r\ntype.\r\n\r\nFix: #5691\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nUT & IT",
+        "verified_at": "2024-11-28T13:40:33Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/4f7ac0794dc53a49f3e0c8306264fa88fbb10c68",
+    "html_url": "https://github.com/apache/gravitino/commit/4f7ac0794dc53a49f3e0c8306264fa88fbb10c68",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/4f7ac0794dc53a49f3e0c8306264fa88fbb10c68/comments",
+    "author": {
+      "login": "yuqi1129",
+      "id": 15794564,
+      "node_id": "MDQ6VXNlcjE1Nzk0NTY0",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15794564?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yuqi1129",
+      "html_url": "https://github.com/yuqi1129",
+      "followers_url": "https://api.github.com/users/yuqi1129/followers",
+      "following_url": "https://api.github.com/users/yuqi1129/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yuqi1129/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yuqi1129/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yuqi1129/subscriptions",
+      "organizations_url": "https://api.github.com/users/yuqi1129/orgs",
+      "repos_url": "https://api.github.com/users/yuqi1129/repos",
+      "events_url": "https://api.github.com/users/yuqi1129/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yuqi1129/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26",
+        "html_url": "https://github.com/apache/gravitino/commit/8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26"
+      }
+    ]
+  },
+  {
+    "sha": "8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26",
+    "node_id": "C_kwDOJaLfldoAKDhjZGE0ZDRhMmQxYjhhNWI2ZThmYTEzNDdlMWY1YzU5M2Q1MjRlMjY",
+    "commit": {
+      "author": {
+        "name": "JUN",
+        "email": "oren.ccl@gmail.com",
+        "date": "2024-11-28T12:43:01Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-28T12:43:01Z"
+      },
+      "message": "[#5648] improvement(iceberg): generate credential according to the data path and metadata path (#5698)\n\n### What changes were proposed in this pull request?\r\n\r\nThis PR updates the credential generation process to also consider\r\n`write.data.path` and `write.metadata.path`.\r\n\r\n### Why are the changes needed?\r\n\r\nTo provide greater flexibility for users.  \r\nFixes: #5648\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\n- Used Spark to create a table via Gravitino Iceberg REST server to AWS\r\nS3 and verified that `write.data.path` and `write.metadata.path` are\r\nworking as expected.\r\n- Added unit tests to check if table properties include\r\n`write.data.path` and `write.metadata.path`.\r\n\r\n![image](https://github.com/user-attachments/assets/fc2ebbfc-e758-4800-99ce-a575bb23605c)",
+      "tree": {
+        "sha": "49f088f9ce42e1a60377b91608928bcbc55a1ad9",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/49f088f9ce42e1a60377b91608928bcbc55a1ad9"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnSGVVCRC1aQ7uu5UhlAAACWEQAIkBpL11B22v40/5ZPxBY8Xb\nnaOqWAULfexaJbyuOPilvS7ODH/5ziBWVRmU+I7XkXBTXNbFB5Q7xNdmSg4cKhgh\nFdFvaRU50wkqRG/F8ExmZR8f3MAEZkSfUEFfLBJIfQAgD3SBIOUsu+qT8AabyVeh\nsaHndwAAMd42h8JUH5YezbH6w5j7MFvs1l23e8Ll/VkfbSq4EKVmoAPN2TZy7LwV\nkEbM3a5yxeQZBo5mCrX6xWnw/I3Os6FQcaFoOJYA+VZVhQtgRdOFtBa+NdDCKkbs\n9InnixFISgwcN3EyhkiEtlawsQSCgwePOkDHOCbcliOrQxbULzlUOtKZHiMjnwEF\nzB4HF/CEeBzLM/Yv482PFL5adbcEbBDEgtde03zxPMPHht04rGL+sSYDtxQmIAK+\nYz9WQXqHDz1z5LklYgROFpdwyj9ZnVVWdSDr/LsHsMffq8nbqbZCHt3KIJXi3jSj\nChfg1HWl0Lohnbf+84Loo+RQRDHH6lRZbli/fXMJhmil97x/9xWi5PDr5hbHR8c7\njpOwRY0ZDUjNxruUUP5MXuDztnB4ADg7ogssrmB0XQTdSjuWIzG/1Xf8KUwXLfTg\n+v1lhMarzqbGZvl6/AjhWBTy/NvAWnnAk1VNNtU5y8h6IFr6w0VsGmnvzQwnof3Z\nhk5qqJCUzMXCMzaOTRES\n=2pCP\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 49f088f9ce42e1a60377b91608928bcbc55a1ad9\nparent 478b6ea070ad92833a6839ad3e73e9df943141ad\nauthor JUN <oren.ccl@gmail.com> 1732797781 +0800\ncommitter GitHub <noreply@github.com> 1732797781 +0800\n\n[#5648] improvement(iceberg): generate credential according to the data path and metadata path (#5698)\n\n### What changes were proposed in this pull request?\r\n\r\nThis PR updates the credential generation process to also consider\r\n`write.data.path` and `write.metadata.path`.\r\n\r\n### Why are the changes needed?\r\n\r\nTo provide greater flexibility for users.  \r\nFixes: #5648\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\n- Used Spark to create a table via Gravitino Iceberg REST server to AWS\r\nS3 and verified that `write.data.path` and `write.metadata.path` are\r\nworking as expected.\r\n- Added unit tests to check if table properties include\r\n`write.data.path` and `write.metadata.path`.\r\n\r\n![image](https://github.com/user-attachments/assets/fc2ebbfc-e758-4800-99ce-a575bb23605c)",
+        "verified_at": "2024-11-28T12:45:04Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26",
+    "html_url": "https://github.com/apache/gravitino/commit/8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/8cda4d4a2d1b8a5b6e8fa1347e1f5c593d524e26/comments",
+    "author": {
+      "login": "orenccl",
+      "id": 16741926,
+      "node_id": "MDQ6VXNlcjE2NzQxOTI2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16741926?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/orenccl",
+      "html_url": "https://github.com/orenccl",
+      "followers_url": "https://api.github.com/users/orenccl/followers",
+      "following_url": "https://api.github.com/users/orenccl/following{/other_user}",
+      "gists_url": "https://api.github.com/users/orenccl/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/orenccl/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/orenccl/subscriptions",
+      "organizations_url": "https://api.github.com/users/orenccl/orgs",
+      "repos_url": "https://api.github.com/users/orenccl/repos",
+      "events_url": "https://api.github.com/users/orenccl/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/orenccl/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "478b6ea070ad92833a6839ad3e73e9df943141ad",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/478b6ea070ad92833a6839ad3e73e9df943141ad",
+        "html_url": "https://github.com/apache/gravitino/commit/478b6ea070ad92833a6839ad3e73e9df943141ad"
+      }
+    ]
+  },
+  {
+    "sha": "478b6ea070ad92833a6839ad3e73e9df943141ad",
+    "node_id": "C_kwDOJaLfldoAKDQ3OGI2ZWEwNzBhZDkyODMzYTY4MzlhZDNlNzNlOWRmOTQzMTQxYWQ",
+    "commit": {
+      "author": {
+        "name": "JUN",
+        "email": "oren.ccl@gmail.com",
+        "date": "2024-11-28T02:45:16Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-28T02:45:16Z"
+      },
+      "message": "[#5647] improvement(build): update the jar name to add gravitino prefix  (#5654)\n\n### What changes were proposed in this pull request?\r\n\r\nAs title\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5647\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\n Makes users easy to know it is from Gravitino\r\n\r\n### How was this patch tested?\r\nExecute Gradle command `./gradlew publishToMavenLocal -x test` then\r\ncheck in Maven local path.",
+      "tree": {
+        "sha": "35e5276c4b96e5974e5f05d1fedc6cbbf46c43ac",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/35e5276c4b96e5974e5f05d1fedc6cbbf46c43ac"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/478b6ea070ad92833a6839ad3e73e9df943141ad",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnR9k8CRC1aQ7uu5UhlAAA4/cQAERWwO2WGe5O4X3j9tyekzKt\nGXe85tnc2/QByi5JNLnx4pj+WZlzGD2UZ9yyugOLw0jQ2I2keQk97rKqTxF5wKBL\nNlLD/Z6Ts6gLdM1cEbE88syCJfrOgCxCMaKdvS0LX25KACwnb6GQKoaj6GB7bs26\nLjEHeNTAa1V6qpOomVYNAQrFB812cHuDj2toQdaqLivj38kYegNSGxTgsIyfmaoq\n90GZQo1EmLZ5svbK5N8sIIUCdr80LJp07eQyBt02v/rUKpt9FVopBnBVfR6O7fto\nyJRjQnD+Y28q2JQG6KYbSNXgV9Of2+fpK1CbUgKVAdcsis/mKjmm0FVb6Jh9T9vv\nNDce+6FVPMt+Z1M4q45zzgJdRF9zcOs/q62izEK85xDx3c1gbAf7w4nJTysizEBK\nIgpsGBeU9h9jc1JILXUnZMKPs9H63zKrIOEDpisNyYMo076L9XlodVUmScgAMGqr\nppR0KdOpQQJMA4m/j9EIInGeLJhMiFy194GItM6Apfb1V5Va4v0h4vQZ6A6xECXH\nlyqZnzxz1xDmKTZ2i8FZhUHk3lw18hmn7Xn0J0tElT4ymN6vjM2dt/OudpMUWWsC\nT6+ho5MzbsalG0G4U5Ij6pdPJIIvNUbBXD3N0y0H8895SMbtaj8eQnVTd6QNR1P2\nPd8SJYaetREcxz6D/63D\n=FSAB\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 35e5276c4b96e5974e5f05d1fedc6cbbf46c43ac\nparent ee9422bbdee28a860f284896867a261058b46ff2\nauthor JUN <oren.ccl@gmail.com> 1732761916 +0800\ncommitter GitHub <noreply@github.com> 1732761916 +0800\n\n[#5647] improvement(build): update the jar name to add gravitino prefix  (#5654)\n\n### What changes were proposed in this pull request?\r\n\r\nAs title\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5647\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\n Makes users easy to know it is from Gravitino\r\n\r\n### How was this patch tested?\r\nExecute Gradle command `./gradlew publishToMavenLocal -x test` then\r\ncheck in Maven local path.",
+        "verified_at": "2024-11-28T02:45:52Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/478b6ea070ad92833a6839ad3e73e9df943141ad",
+    "html_url": "https://github.com/apache/gravitino/commit/478b6ea070ad92833a6839ad3e73e9df943141ad",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/478b6ea070ad92833a6839ad3e73e9df943141ad/comments",
+    "author": {
+      "login": "orenccl",
+      "id": 16741926,
+      "node_id": "MDQ6VXNlcjE2NzQxOTI2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16741926?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/orenccl",
+      "html_url": "https://github.com/orenccl",
+      "followers_url": "https://api.github.com/users/orenccl/followers",
+      "following_url": "https://api.github.com/users/orenccl/following{/other_user}",
+      "gists_url": "https://api.github.com/users/orenccl/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/orenccl/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/orenccl/subscriptions",
+      "organizations_url": "https://api.github.com/users/orenccl/orgs",
+      "repos_url": "https://api.github.com/users/orenccl/repos",
+      "events_url": "https://api.github.com/users/orenccl/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/orenccl/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "ee9422bbdee28a860f284896867a261058b46ff2",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/ee9422bbdee28a860f284896867a261058b46ff2",
+        "html_url": "https://github.com/apache/gravitino/commit/ee9422bbdee28a860f284896867a261058b46ff2"
+      }
+    ]
+  },
+  {
+    "sha": "ee9422bbdee28a860f284896867a261058b46ff2",
+    "node_id": "C_kwDOJaLfldoAKGVlOTQyMmJiZGVlMjhhODYwZjI4NDg5Njg2N2EyNjEwNThiNDZmZjI",
+    "commit": {
+      "author": {
+        "name": "mchades",
+        "email": "liminghuang@datastrato.com",
+        "date": "2024-11-28T02:44:00Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-28T02:44:00Z"
+      },
+      "message": "[#5465] fix(core): deleting location of managed sub-entities when deleting a fileset catalog (#5692)\n\n### What changes were proposed in this pull request?\r\n\r\ndrop the location of managed schemas and filesets when dropping a\r\nfileset catalog\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5465 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nno\r\n\r\n### How was this patch tested?\r\n\r\ntests added",
+      "tree": {
+        "sha": "941bec3c5fa5774d30471a5a06b1ecf6ff1ff1b4",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/941bec3c5fa5774d30471a5a06b1ecf6ff1ff1b4"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/ee9422bbdee28a860f284896867a261058b46ff2",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnR9jwCRC1aQ7uu5UhlAAAoOMQAGOmKZbbsGmVUI2zHPbSIkSi\ncsowBoNeID3DgxRBJlAnv5qJVfnm6dy8KodP3inKgxZhbVgDvqSvH5YTrAF3jheG\nPMheOnHmaU/UAi/QsydtcXB0z3L0brEsKNha9qFHM30efQ2WGtztElZWS8m168jE\nntCmIfdU+GOEAgBvqnyYUwltH+L4J3RQgR0xu/cNUcSSMiLO+fcmB0qSncBb7ECg\nzA8K6GqoBijpFt49sXNm6/tRlTPrN4tr+oDEcUamjGSTV/MU5SZPDpxcLCer0Oh8\nRp86DeCEcYkGfYnI9UNp6hI25zJmq9a31l/rXhhy/ifKwxciIq6TgSQrTYrQVXwA\nZBoMIbV6vSVi8DsWZ5Put4z4L7EIV6GGS7v6OF9TMSkBxzQSwvxel4JsKCfoy7ZK\ne7vCotFjvuRINty/p2BkXs/dIJ17U3aAw0DI/13aNg3wU7wSBX8WMdyYmhrk+Wq9\nwF6XmQS2BcGtcA6mf6WrEXS3f9nDd3VDIgscG0gZQwtRsmkNYHifDP4172efulq/\njJ9i6NRDFHMs/N8o8kzq89W7erD2UfS2ACJaNW/O0LCHE43Em0w9THMB89sRS8A2\nxRgd4Pcwlomk+DiA82pL4sJOu18mlOi8I2rDmvbqJbIk1ODEOGYQxwGBOMREEsMh\nLR7MSXaEO8yl//LcxOuU\n=Zzur\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 941bec3c5fa5774d30471a5a06b1ecf6ff1ff1b4\nparent b953226ab5fc5d15bcb2c075f1e292139f62e50c\nauthor mchades <liminghuang@datastrato.com> 1732761840 +0800\ncommitter GitHub <noreply@github.com> 1732761840 +0800\n\n[#5465] fix(core): deleting location of managed sub-entities when deleting a fileset catalog (#5692)\n\n### What changes were proposed in this pull request?\r\n\r\ndrop the location of managed schemas and filesets when dropping a\r\nfileset catalog\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5465 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nno\r\n\r\n### How was this patch tested?\r\n\r\ntests added",
+        "verified_at": "2024-11-28T02:44:08Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/ee9422bbdee28a860f284896867a261058b46ff2",
+    "html_url": "https://github.com/apache/gravitino/commit/ee9422bbdee28a860f284896867a261058b46ff2",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/ee9422bbdee28a860f284896867a261058b46ff2/comments",
+    "author": {
+      "login": "mchades",
+      "id": 24897598,
+      "node_id": "MDQ6VXNlcjI0ODk3NTk4",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24897598?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/mchades",
+      "html_url": "https://github.com/mchades",
+      "followers_url": "https://api.github.com/users/mchades/followers",
+      "following_url": "https://api.github.com/users/mchades/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mchades/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/mchades/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mchades/subscriptions",
+      "organizations_url": "https://api.github.com/users/mchades/orgs",
+      "repos_url": "https://api.github.com/users/mchades/repos",
+      "events_url": "https://api.github.com/users/mchades/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/mchades/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "b953226ab5fc5d15bcb2c075f1e292139f62e50c",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/b953226ab5fc5d15bcb2c075f1e292139f62e50c",
+        "html_url": "https://github.com/apache/gravitino/commit/b953226ab5fc5d15bcb2c075f1e292139f62e50c"
+      }
+    ]
+  },
+  {
+    "sha": "b953226ab5fc5d15bcb2c075f1e292139f62e50c",
+    "node_id": "C_kwDOJaLfldoAKGI5NTMyMjZhYjVmYzVkMTViY2IyYzA3NWYxZTI5MjEzOWY2MmU1MGM",
+    "commit": {
+      "author": {
+        "name": "Xun",
+        "email": "xun@datastrato.com",
+        "date": "2024-11-27T12:49:02Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-27T12:49:02Z"
+      },
+      "message": "[#5665] refactor(auth): Underlying datasource authorization privilege abstraction (#5674)\n\n### What changes were proposed in this pull request?\r\n\r\n1. abstract AuthorizationMetadataObject interface\r\n2. abstract AuthorizationPrivilege interface\r\n3. abstract AuthorizationSecurableObject interface\r\n4. abstract AuthorizationPrivilegesMappingProvider interface\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5665\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nCI Passed.",
+      "tree": {
+        "sha": "1ca6c1fea417469a87d643ea18dd7fd1c53433a4",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/1ca6c1fea417469a87d643ea18dd7fd1c53433a4"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/b953226ab5fc5d15bcb2c075f1e292139f62e50c",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRxU+CRC1aQ7uu5UhlAAA5DYQADDkbaGdZ9BKl+nIxwx6+Kxr\nHfZCcp1NEmCm5kjaGP75STHBAhzlsRTAEAihCcgS+7DZx2DbOgSb2yfk64aiIav6\n5ARwfNG5QG10rlnI5XYwlsbvHGxqohwaLz+kfSColrCcUR0IA819XroVvP+Zecvs\nfheiR7vJyD249HJdvigX0dqJBGrRwANWJ0LALdQkPKam8PJaOMNp54lX4DUvfCUV\n7g1wNKCi4Nd8JD1hGtqHbCGb3IuUnDaaJx6kjhyOTjQ7hq3U8XZ0OokJ2ByMgurM\nHiyEQd/nwvRErShlZW49+Oea4/pC4m004hyDypldWy4Lqdtt5TfLn8XDjwm5RcC1\n3t1rJk0Z+8Im6RNDVorr0cVrZ7AfTkE8KAviJYP6P03brBd1L9Jb+nfwgjXWC7Ls\nfxORMk27N4YAm99xi8BUbLfW6ErBvytqhD73X4XynxVUfY0UmMbTVIKvO62RDarB\nCAYcqT0efqjNtkU+JECfqD8E3bGuH6AMI0IygkwPBSZoPQ4TNFhB+/ZWjd0DLr9m\nUkvrfNS9uFpDxJlr8gAwEhVKhMfy7WxKFT64p00s3TigmAjurgnpjRYfBeGHYq85\nrJK0D+6hIJbR3M8doH3cOdy+p+sf9AFKbBPlaeN5DX4Y0EnMFGbiq0SxoSE7MBlG\nEVrlA02yhOJnkHG4qgKk\n=ez8r\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 1ca6c1fea417469a87d643ea18dd7fd1c53433a4\nparent 93b623b5cddf1448f2753909cadc723fc089e8ef\nauthor Xun <xun@datastrato.com> 1732711742 +0800\ncommitter GitHub <noreply@github.com> 1732711742 +0800\n\n[#5665] refactor(auth): Underlying datasource authorization privilege abstraction (#5674)\n\n### What changes were proposed in this pull request?\r\n\r\n1. abstract AuthorizationMetadataObject interface\r\n2. abstract AuthorizationPrivilege interface\r\n3. abstract AuthorizationSecurableObject interface\r\n4. abstract AuthorizationPrivilegesMappingProvider interface\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5665\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nCI Passed.",
+        "verified_at": "2024-11-27T12:49:16Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/b953226ab5fc5d15bcb2c075f1e292139f62e50c",
+    "html_url": "https://github.com/apache/gravitino/commit/b953226ab5fc5d15bcb2c075f1e292139f62e50c",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/b953226ab5fc5d15bcb2c075f1e292139f62e50c/comments",
+    "author": {
+      "login": "xunliu",
+      "id": 3677382,
+      "node_id": "MDQ6VXNlcjM2NzczODI=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3677382?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/xunliu",
+      "html_url": "https://github.com/xunliu",
+      "followers_url": "https://api.github.com/users/xunliu/followers",
+      "following_url": "https://api.github.com/users/xunliu/following{/other_user}",
+      "gists_url": "https://api.github.com/users/xunliu/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/xunliu/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/xunliu/subscriptions",
+      "organizations_url": "https://api.github.com/users/xunliu/orgs",
+      "repos_url": "https://api.github.com/users/xunliu/repos",
+      "events_url": "https://api.github.com/users/xunliu/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/xunliu/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "93b623b5cddf1448f2753909cadc723fc089e8ef",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/93b623b5cddf1448f2753909cadc723fc089e8ef",
+        "html_url": "https://github.com/apache/gravitino/commit/93b623b5cddf1448f2753909cadc723fc089e8ef"
+      }
+    ]
+  },
+  {
+    "sha": "93b623b5cddf1448f2753909cadc723fc089e8ef",
+    "node_id": "C_kwDOJaLfldoAKDkzYjYyM2I1Y2RkZjE0NDhmMjc1MzkwOWNhZGM3MjNmYzA4OWU4ZWY",
+    "commit": {
+      "author": {
+        "name": "roryqi",
+        "email": "roryqi@apache.org",
+        "date": "2024-11-27T06:54:41Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-27T06:54:41Z"
+      },
+      "message": "[#5671] fix(auth): Auth IT should add Iceberg and Paimon dependency (#5672)\n\n### What changes were proposed in this pull request?\r\n\r\nAuth IT should add Iceberg and Paimon dependency\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5671 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nI run the command `./gradlew clean` and run `RangerPaimonE2EIT` locally.",
+      "tree": {
+        "sha": "4982a777cc374fa6679612514ff59e7695bcd369",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/4982a777cc374fa6679612514ff59e7695bcd369"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/93b623b5cddf1448f2753909cadc723fc089e8ef",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRsIxCRC1aQ7uu5UhlAAAsdIQABzWlmfVecII/kXYhMLSmh4K\ngTcy7vyaGRlx4nZgB1mqUc9Gt+ZvwkAKH2L1WKolze312WtedPUDNRQ6pUNUnxQ5\ni3Pel5x8uQu6Vw0ql9G03d1ppzinVHR9s9LG3JvWd0wbCjZcMwwGfPa04ZW+q3JH\nUgeaH2mLy667i0L8Q6ruIY6yeECIYoTlLPVYkh9MsEAnc+qRTQRuj8rf9rq/pHcN\nmPw4xoN/AKddImSXdmjw3ygCtkoWdE5py5eCkwC6ndZFDDsqCt4eNGzGCv2WWGa1\nKhxswtFxhb/vMmW0RL5V8JhCm3j012no7eLjgkriMapAX7nt2bycPXxCKMg9+a+h\nExSMZBjg5c/rxwwvooJRTFURi9snWBXjFwHcw8HtdbhncK5wyCiBP3F9YJCXctT/\nIsPaqs3XM7fvzWCQ2j38aR7bA+lQcXXqjDgO5c2hlXsr9LLiHzLODI4SyJePrRhM\nBbfE58BFHIYpmXfoalIO7k9p+TYGgH0hJH7ExnSILnyNcSteQxZXqx4yz+iUCopQ\n5+Syc/MGAetTbc94GSiCz/fbxjVnBmwjJ9zzjv2taj+vPLsrY6LQP/8N0/njb6wB\nEBrwGAHjVwnN8+5l7hC+O+87VE1gtumz3oMhVSFSF7TSbF73oNvxyn4MnMsOJCHS\nKgbVzeRkPV1cmQe0KF61\n=KXvf\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 4982a777cc374fa6679612514ff59e7695bcd369\nparent d8b4407e31d92608f02ac7023c96e2996ad4d0db\nauthor roryqi <roryqi@apache.org> 1732690481 +0800\ncommitter GitHub <noreply@github.com> 1732690481 +0800\n\n[#5671] fix(auth): Auth IT should add Iceberg and Paimon dependency (#5672)\n\n### What changes were proposed in this pull request?\r\n\r\nAuth IT should add Iceberg and Paimon dependency\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5671 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nI run the command `./gradlew clean` and run `RangerPaimonE2EIT` locally.",
+        "verified_at": "2024-11-27T06:55:12Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/93b623b5cddf1448f2753909cadc723fc089e8ef",
+    "html_url": "https://github.com/apache/gravitino/commit/93b623b5cddf1448f2753909cadc723fc089e8ef",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/93b623b5cddf1448f2753909cadc723fc089e8ef/comments",
+    "author": {
+      "login": "jerqi",
+      "id": 8159038,
+      "node_id": "MDQ6VXNlcjgxNTkwMzg=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8159038?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jerqi",
+      "html_url": "https://github.com/jerqi",
+      "followers_url": "https://api.github.com/users/jerqi/followers",
+      "following_url": "https://api.github.com/users/jerqi/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jerqi/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jerqi/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jerqi/subscriptions",
+      "organizations_url": "https://api.github.com/users/jerqi/orgs",
+      "repos_url": "https://api.github.com/users/jerqi/repos",
+      "events_url": "https://api.github.com/users/jerqi/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jerqi/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "d8b4407e31d92608f02ac7023c96e2996ad4d0db",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/d8b4407e31d92608f02ac7023c96e2996ad4d0db",
+        "html_url": "https://github.com/apache/gravitino/commit/d8b4407e31d92608f02ac7023c96e2996ad4d0db"
+      }
+    ]
+  },
+  {
+    "sha": "d8b4407e31d92608f02ac7023c96e2996ad4d0db",
+    "node_id": "C_kwDOJaLfldoAKGQ4YjQ0MDdlMzFkOTI2MDhmMDJhYzcwMjNjOTZlMjk5NmFkNGQwZGI",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-11-27T06:35:27Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-27T06:35:27Z"
+      },
+      "message": "[#5281] Add owner support to Gravitino CLI (#5293)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd owner support to Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo continue adding to the CLI.\r\n\r\nFix: #5281\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it expands on the CLI.\r\n\r\n### How was this patch tested?\r\n\r\nCompiled and tested locally.",
+      "tree": {
+        "sha": "1c5879222c6999c0eb216441395657d78fef599d",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/1c5879222c6999c0eb216441395657d78fef599d"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/d8b4407e31d92608f02ac7023c96e2996ad4d0db",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRr2vCRC1aQ7uu5UhlAAA8U0QAKHODkTUkGRuTYgB3FMCVVBV\nGvzAbOcXKDLvHZXcTGpPtJlTrnV4puYwSc1VAMaOO7NfzkijMpR51sbQG3qfs93d\nO+oRMKnzWivoOdhYcIosqnNPm+5NXNbF/G4c07oKNYWEuPYX4tMGirnHobRmlP9z\nt7mQoiOs7xXZYL89SxPN7VF4DvdUlGogun4i70xbwjGohJ85epicOuOMMhFViz9G\nMqi3PMatntQU3DZAXxetmdqPT7tfbZjBqpc0xqnE5h8e4cThwsYqmGQYe92GE1qr\neVE89GqhqxmCtTZEiK+SfMyesUlc1Ax4jg7R00Q93394ETFD8Vhyi1ujwY0kdQ8o\n/GSzuMjq91gbaKnHa+OSYWP81Pv0YVJJZezuTSgKE5qEF1YkPg/79zkmLHuv9FGf\n0rG3uEPC01fYqUjeoE1BplE9SL0HKRtnh0wrtnLIRmY/trLnFXVZhhgsh86C8pog\nrUeFzaAxNam8TY9X//IfHTzi6sDG/qNyZ0dCXdhefz/F86unACJO2mg3uRedJBh2\nMMEya9lkBURaInFQGQdmo0xTXm/nwyLwQxEg/bc/AOHRO+6uaycTXqbaisv4QHJz\nfC1uJCHlnZP99h8ODEWupYHqV86++SuepugzHUHXlgCXuP1jrYXkhL6o6iogS7V/\nRwTgQpj86AXLWpMHhs9S\n=I1Ke\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 1c5879222c6999c0eb216441395657d78fef599d\nparent 1fd2225901680f8200066adb3532a8110360ebca\nauthor Justin Mclean <justin@classsoftware.com> 1732689327 +1100\ncommitter GitHub <noreply@github.com> 1732689327 +0800\n\n[#5281] Add owner support to Gravitino CLI (#5293)\n\n### What changes were proposed in this pull request?\r\n\r\nAdd owner support to Gravitino CLI\r\n\r\n### Why are the changes needed?\r\n\r\nTo continue adding to the CLI.\r\n\r\nFix: #5281\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo, but it expands on the CLI.\r\n\r\n### How was this patch tested?\r\n\r\nCompiled and tested locally.",
+        "verified_at": "2024-11-27T06:36:20Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/d8b4407e31d92608f02ac7023c96e2996ad4d0db",
+    "html_url": "https://github.com/apache/gravitino/commit/d8b4407e31d92608f02ac7023c96e2996ad4d0db",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/d8b4407e31d92608f02ac7023c96e2996ad4d0db/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "1fd2225901680f8200066adb3532a8110360ebca",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/1fd2225901680f8200066adb3532a8110360ebca",
+        "html_url": "https://github.com/apache/gravitino/commit/1fd2225901680f8200066adb3532a8110360ebca"
+      }
+    ]
+  },
+  {
+    "sha": "1fd2225901680f8200066adb3532a8110360ebca",
+    "node_id": "C_kwDOJaLfldoAKDFmZDIyMjU5MDE2ODBmODIwMDA2NmFkYjM1MzJhODExMDM2MGViY2E",
+    "commit": {
+      "author": {
+        "name": "mchades",
+        "email": "liminghuang@datastrato.com",
+        "date": "2024-11-27T06:14:25Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-27T06:14:25Z"
+      },
+      "message": "[#5520] improvement(JDBC-connection): handle JDBC access denied exception (#5546)\n\n### What changes were proposed in this pull request?\r\n\r\ncatch JDBC access denied exception and convert to UnauthorizedException\r\n\r\n### Why are the changes needed?\r\n\r\nThe REST client need the real exception instead of\r\nGravitinoRuntimeException\r\n\r\nFix: #5520 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nno\r\n\r\n### How was this patch tested?\r\n\r\nITs added",
+      "tree": {
+        "sha": "33036ba8206b4d36236df98bc8662afd4a218840",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/33036ba8206b4d36236df98bc8662afd4a218840"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/1fd2225901680f8200066adb3532a8110360ebca",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRrjBCRC1aQ7uu5UhlAAAHyUQALD6e+qsEzViX4ZQ6TVFSPci\nN375U4VkHFXPIwdDO6V0O/ZnJQgFcXZVcfxCj2PhPiF/7terXtxmU+fpB0ho6F3b\nCRSihXgBDAsQH8zK23MlH2Mz08P+W82eIp31rugat4E+SkbSM9UKKU9bhJpwIhGW\nZH5y5beG44EAvSO1hhyuRjv0obzB3s1g3BaXoopidTlxkXlPIpVQoa9q3UqhsCrV\nTVYWljiDu4bjGt9mQr8rJM0ayTNbJWOzYJQlhGZhNJfnnIJOyLExKqYf2U8N7NEm\nMF/Ia2R7sky5N6gPy+cbuiY5wB6rNdi3jzoGPwWCKQOfvCjGnNEUqKUVHDXlp0AI\nqIBR742OgsQfA818tC2sQ2ISVlY+iD70NnSMFz7LkA9njy6v9XtpUbdV94K/7TOq\nwXQ40oYjsI2vT0+XuTrzdPyS6LRmZ8xU5lHYeFIkuIpFsyEJLZYhiebw2Apr9ob/\nkmEHlQKXOXs7QaraXVzZcVWxpx5aswyumY47NcfNVUlXpGrAcWdVNiuAYpGEzuqt\nsEA0FTbZhljD0AmUE35u+MFSQVr/ID3XF2BGxGe0bexd0dSKTqsm5P/BuCFHXOs5\nFut8pXM7i97+AYVz7Pef46XaEoKL885afpOc6yH/AGwq3taXgDK7/1tcdTa7q5pX\n0upyrv5vMtiPD/YwUnqu\n=Msl9\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 33036ba8206b4d36236df98bc8662afd4a218840\nparent 9af57e84e48d584edef22064446d10e30104e5a5\nauthor mchades <liminghuang@datastrato.com> 1732688065 +0800\ncommitter GitHub <noreply@github.com> 1732688065 +0800\n\n[#5520] improvement(JDBC-connection): handle JDBC access denied exception (#5546)\n\n### What changes were proposed in this pull request?\r\n\r\ncatch JDBC access denied exception and convert to UnauthorizedException\r\n\r\n### Why are the changes needed?\r\n\r\nThe REST client need the real exception instead of\r\nGravitinoRuntimeException\r\n\r\nFix: #5520 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nno\r\n\r\n### How was this patch tested?\r\n\r\nITs added",
+        "verified_at": "2024-11-27T06:16:15Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/1fd2225901680f8200066adb3532a8110360ebca",
+    "html_url": "https://github.com/apache/gravitino/commit/1fd2225901680f8200066adb3532a8110360ebca",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/1fd2225901680f8200066adb3532a8110360ebca/comments",
+    "author": {
+      "login": "mchades",
+      "id": 24897598,
+      "node_id": "MDQ6VXNlcjI0ODk3NTk4",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24897598?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/mchades",
+      "html_url": "https://github.com/mchades",
+      "followers_url": "https://api.github.com/users/mchades/followers",
+      "following_url": "https://api.github.com/users/mchades/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mchades/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/mchades/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mchades/subscriptions",
+      "organizations_url": "https://api.github.com/users/mchades/orgs",
+      "repos_url": "https://api.github.com/users/mchades/repos",
+      "events_url": "https://api.github.com/users/mchades/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/mchades/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "9af57e84e48d584edef22064446d10e30104e5a5",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/9af57e84e48d584edef22064446d10e30104e5a5",
+        "html_url": "https://github.com/apache/gravitino/commit/9af57e84e48d584edef22064446d10e30104e5a5"
+      }
+    ]
+  },
+  {
+    "sha": "9af57e84e48d584edef22064446d10e30104e5a5",
+    "node_id": "C_kwDOJaLfldoAKDlhZjU3ZTg0ZTQ4ZDU4NGVkZWYyMjA2NDQ0NmQxMGUzMDEwNGU1YTU",
+    "commit": {
+      "author": {
+        "name": "theoryxu",
+        "email": "xuxiaotheory@gmail.com",
+        "date": "2024-11-27T04:50:40Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-27T04:50:40Z"
+      },
+      "message": "[#5336] feat(auth-ranger): Remove MANAGED_BY_GRAVITINO limit and compatible for existing ranger policy (#5629)\n\n### What changes were proposed in this pull request?\r\n\r\nMany clients and users have used Ranger for a while. Gravitino should be\r\ncompatible with these cases.\r\n\r\nThere are some principles Gravitino needs to follow when it pushes down\r\npolicies:\r\n\r\n1. Gravitino can't modify existing policy names because users may have\r\ntheir own name rules.\r\n2. Gravitino and users could share the same policy and not disturb each\r\nother for the same resource.\r\n\r\nFor the target, this PR includes the following changes:\r\n\r\n1. `wildcardSearchPolies` removes the `MANAGED_BY_GRAVITINO` filter.\r\n2. Gravitino managed role name add the prefix `GRAVITINO_`.\r\n3. Using Gravitino Managed role to identify and operate policy items.\r\n\r\nDespite doing these, users should be cautious about directly managing\r\nthe ranger policy. There are some restricts:\r\n\r\n1. Don't directly rename Gravitino-managed policies.\r\n2. Don't directly modify policy resources in the policy that have\r\nGravitino Managed roles.\r\n3. Don't directly modify policy items that have Gravitino Managed roles.\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5336\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nAdded ITs\r\n\r\n---------\r\n\r\nCo-authored-by: theoryxu <theoryxu@tencent.com>",
+      "tree": {
+        "sha": "9b9f97b6d768bef8a88961fe557ee74d462a8565",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/9b9f97b6d768bef8a88961fe557ee74d462a8565"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/9af57e84e48d584edef22064446d10e30104e5a5",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRqUgCRC1aQ7uu5UhlAAAPFEQAEiRHsyl8ab4K6yumcn57cOp\nnkPxSyVRtyt0JlUhgZ6PFyrxeveUlqyfS0fetXjE9j0zp5zAxHQicrnexDvlZffo\nG48uvhywTNAWkdsK3/IQeU0YMjB8/j17/1CBF/q8fRbqcysWMXXnZn7Wjy0ikfER\ni3ih8I3WlWNFiBwZfcDe9ZYXdQZofS9S614a1qhJwCccVMsJ2726VArQ+mOTGF8J\nTH4bhOiVN5UyU4oggzCdKwu9UHANTCf6YDtZ/okl6tNmP6s8Rgffl8iTSF067o+o\nU7bj9GxH4U16X5fJsf50V+MMcs5o9wB0H8hr54AWIevpE7flqZUGwf6XmDz2QgKI\nyNpMkIWtysW1zA6dQM56P8hyEdpwSTQXrUA+IxsB8z/oJq/C9EC3YXWR862VisqA\nVHxjhyG80Sf51/i0y2V14dWl2xKR1LMOD9IsMhAwjcNiVRAu197s35yUX0q/Ykpe\nLOkEmwEW8xRmEvLyx4dXXHEmu2iRoyxDuWW+lO5xcm1LJP1LNjjQ+8+ZL/ZpiNfM\nW8XZZllDSov9cP0EW4tPCgmWaXwZ5pcFzbj15mBZLIIowVYV6/HcnhWdLeQrlIjs\nGSY6Uq/t5y8RZXFCAhClT4wSlmOEx/vyd6PBYf5eF8+mBJsFDoRaFNjJae+2aUMf\n/qc4y/OAhOa6hcmBOVWy\n=ek9v\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 9b9f97b6d768bef8a88961fe557ee74d462a8565\nparent bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47\nauthor theoryxu <xuxiaotheory@gmail.com> 1732683040 +0800\ncommitter GitHub <noreply@github.com> 1732683040 +0800\n\n[#5336] feat(auth-ranger): Remove MANAGED_BY_GRAVITINO limit and compatible for existing ranger policy (#5629)\n\n### What changes were proposed in this pull request?\r\n\r\nMany clients and users have used Ranger for a while. Gravitino should be\r\ncompatible with these cases.\r\n\r\nThere are some principles Gravitino needs to follow when it pushes down\r\npolicies:\r\n\r\n1. Gravitino can't modify existing policy names because users may have\r\ntheir own name rules.\r\n2. Gravitino and users could share the same policy and not disturb each\r\nother for the same resource.\r\n\r\nFor the target, this PR includes the following changes:\r\n\r\n1. `wildcardSearchPolies` removes the `MANAGED_BY_GRAVITINO` filter.\r\n2. Gravitino managed role name add the prefix `GRAVITINO_`.\r\n3. Using Gravitino Managed role to identify and operate policy items.\r\n\r\nDespite doing these, users should be cautious about directly managing\r\nthe ranger policy. There are some restricts:\r\n\r\n1. Don't directly rename Gravitino-managed policies.\r\n2. Don't directly modify policy resources in the policy that have\r\nGravitino Managed roles.\r\n3. Don't directly modify policy items that have Gravitino Managed roles.\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5336\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nAdded ITs\r\n\r\n---------\r\n\r\nCo-authored-by: theoryxu <theoryxu@tencent.com>",
+        "verified_at": "2024-11-27T04:52:35Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/9af57e84e48d584edef22064446d10e30104e5a5",
+    "html_url": "https://github.com/apache/gravitino/commit/9af57e84e48d584edef22064446d10e30104e5a5",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/9af57e84e48d584edef22064446d10e30104e5a5/comments",
+    "author": {
+      "login": "theoryxu",
+      "id": 6671568,
+      "node_id": "MDQ6VXNlcjY2NzE1Njg=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6671568?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/theoryxu",
+      "html_url": "https://github.com/theoryxu",
+      "followers_url": "https://api.github.com/users/theoryxu/followers",
+      "following_url": "https://api.github.com/users/theoryxu/following{/other_user}",
+      "gists_url": "https://api.github.com/users/theoryxu/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/theoryxu/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/theoryxu/subscriptions",
+      "organizations_url": "https://api.github.com/users/theoryxu/orgs",
+      "repos_url": "https://api.github.com/users/theoryxu/repos",
+      "events_url": "https://api.github.com/users/theoryxu/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/theoryxu/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47",
+        "html_url": "https://github.com/apache/gravitino/commit/bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47"
+      }
+    ]
+  },
+  {
+    "sha": "bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47",
+    "node_id": "C_kwDOJaLfldoAKGJiM2Q4NjhjYmMxYjYwZDk4YjhiOTU3YzZjNWU0NmY1YmRjNGJkNDc",
+    "commit": {
+      "author": {
+        "name": "Yuhui",
+        "email": "hui@datastrato.com",
+        "date": "2024-11-27T03:30:20Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-27T03:30:20Z"
+      },
+      "message": "[#5626] feat (gvfs-fuse): Set up a submodule project for the Gvfs-fuse (#5627)\n\n### What changes were proposed in this pull request?\r\n\r\nSet up a submodule project for the Gvfs-fuse, layout the rust module\r\nenvironment for gvfs-fuse\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5626 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo\r\n\r\n### How was this patch tested?\r\n\r\nNo",
+      "tree": {
+        "sha": "c7fd94a1c3f7a050f5134750796d4d56a2a3e818",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/c7fd94a1c3f7a050f5134750796d4d56a2a3e818"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRpJMCRC1aQ7uu5UhlAAAwQ4QAEdV3fjy5g68h5wZWtYCWcdg\n8bpwdFCbTep250CHq3aswHAs1BLewvVO0t6sNEXhckGU5m42mSSmOrZFdhaqEi14\nTeeI/IzauJwL/8zH+4fZNQDQj3cY8R18LkF6xReCErjgcKrhaudI4cPRqX7FcmLM\nhjWtJ74SWtsKnhlbpNF9gSoxrRqMd7XCrekyJ+5B0zd6wEJu4g7qN7Ha64g3i3As\nJnAgFWBCM9f25vcOCNo4EBZ55RP2kcbnuAlLk41EyLoPXB7+egIJy/w9/FxrZ0d4\nwnO7wAzbl09jwypuJ9d0tcVska72bBb3R4DX8y82GJbP+TISmU2sHles9yPbUuLK\nJMPApsOCMolnLPTr+ubRgUErKE3+Lf7vtA4W79JpGqG4OJoYmdVJRgyr6UNarW11\nVZTn0is1DAM2slnP/MwxCqaOHyWqiDU0ywNG/OVqe+DLAvxgbQ2UoTILRRhU3PiV\nIp1Br4wom4TGmcwlIjXXtGbr2ylegUPNb1DOnMUlse12/obbD73j9sJ9ifk1YyOA\nBZtTKfi1xjRvAhSakvvCLOXMr2MxH+UE/oX02enmkdIVsZ6yMPAYaXQkArAp7PR8\n8n0/24NlQf6hcUu7wzogZlCEtVdLl8+9vuGgdqbfibf7dWdzq662lxSQtLr/mhLK\nXvJpFAcEI3se6wlzmGy5\n=9jHA\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree c7fd94a1c3f7a050f5134750796d4d56a2a3e818\nparent 77136b692fc73f2500552305f9fe775e3e008ef3\nauthor Yuhui <hui@datastrato.com> 1732678220 +0800\ncommitter GitHub <noreply@github.com> 1732678220 +0800\n\n[#5626] feat (gvfs-fuse): Set up a submodule project for the Gvfs-fuse (#5627)\n\n### What changes were proposed in this pull request?\r\n\r\nSet up a submodule project for the Gvfs-fuse, layout the rust module\r\nenvironment for gvfs-fuse\r\n\r\n### Why are the changes needed?\r\n\r\nFix: #5626 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo\r\n\r\n### How was this patch tested?\r\n\r\nNo",
+        "verified_at": "2024-11-27T03:34:08Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47",
+    "html_url": "https://github.com/apache/gravitino/commit/bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/bb3d868cbc1b60d98b8b957c6c5e46f5bdc4bd47/comments",
+    "author": {
+      "login": "diqiu50",
+      "id": 7985733,
+      "node_id": "MDQ6VXNlcjc5ODU3MzM=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7985733?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/diqiu50",
+      "html_url": "https://github.com/diqiu50",
+      "followers_url": "https://api.github.com/users/diqiu50/followers",
+      "following_url": "https://api.github.com/users/diqiu50/following{/other_user}",
+      "gists_url": "https://api.github.com/users/diqiu50/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/diqiu50/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/diqiu50/subscriptions",
+      "organizations_url": "https://api.github.com/users/diqiu50/orgs",
+      "repos_url": "https://api.github.com/users/diqiu50/repos",
+      "events_url": "https://api.github.com/users/diqiu50/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/diqiu50/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "77136b692fc73f2500552305f9fe775e3e008ef3",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/77136b692fc73f2500552305f9fe775e3e008ef3",
+        "html_url": "https://github.com/apache/gravitino/commit/77136b692fc73f2500552305f9fe775e3e008ef3"
+      }
+    ]
+  },
+  {
+    "sha": "77136b692fc73f2500552305f9fe775e3e008ef3",
+    "node_id": "C_kwDOJaLfldoAKDc3MTM2YjY5MmZjNzNmMjUwMDU1MjMwNWY5ZmU3NzVlM2UwMDhlZjM",
+    "commit": {
+      "author": {
+        "name": "Jerry Shao",
+        "email": "jerryshao@datastrato.com",
+        "date": "2024-11-26T13:39:07Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-26T13:39:07Z"
+      },
+      "message": "[#5601] feat(core): Add model entity and model dispatcher in Gravitino (#5662)\n\n### What changes were proposed in this pull request?\r\n\r\n1. Define and add the model namespace, name identifier, entity definition in Gravitino.\r\n2. Add the basic dispatcher framework in Gravitino.\r\n\r\n### Why are the changes needed?\r\n\r\nThis is the second PR to support model management in Gravitino.\r\n\r\nFix: #5601 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nAdd UTs to verify part of the code.",
+      "tree": {
+        "sha": "2905ed50479cd79d4694bf641f71590c544780c0",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/2905ed50479cd79d4694bf641f71590c544780c0"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/77136b692fc73f2500552305f9fe775e3e008ef3",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRc97CRC1aQ7uu5UhlAAAWj0QAI8rpBJM1P+dhXqUkN6NHp29\no3VJ/x78TfxDKHnjvFLR7VCIWW8Im3rSvBvvBjIedV73DhP2wY+jeZWPQKAsY0fm\nXS1lHhL4AL5VqqrP02rh/xL1H5F1pS+QlTKKsrgPV3R0G2WBrI0Dr799KdRwEqUh\nVGdC6ICZQNdFW19fWzPqjqKDjx/wjljWPbmpRNWl/upLAkP7aIrC5XQ/jNinYEK6\nuPaiRD6/dyUzy66KKkKYViM8v+QTqpCxTd6CfoZ3B7UAtaErm7hdhAVcIv7MRQbL\nBdINoDvQBzQ6l1pVkZ5e156/8leCoKZtziCmmTwBCuw1GAt1YFXAGlyRFM/zGGy+\nq/yn2iJ3qjcSAR5q0OiwWySaHtN+LAtHh+kYRFHc3FkrtMK86liDD2rgm/VrnvjD\nXSzjLHE+/yd1/WbNg82C+rOCyTClxzRjpT7TM+WCjpzvu92/7H9QdJw1BYHC3SCP\nr1KInaLSvUUqfAslRnj+PCX/l9F8opjDG5ZkffrvNY7Uvgfp85Fe4PDg0ulTQ8aq\nkIFLSKCDT55ozpWJAdt2RHC1vLXOFMVjrugq9C4wy3ZjM5ia/xONQZCTWHNphVO2\nMshaSd54xlgWICjiNzmNRAjAKW2sjHS8qV4X9wO9ehJ1/QtXREw02Avz0EKdhCxx\nsGjOMT0G9KOCfdpoCPU5\n=RV7W\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 2905ed50479cd79d4694bf641f71590c544780c0\nparent 0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a\nauthor Jerry Shao <jerryshao@datastrato.com> 1732628347 +0800\ncommitter GitHub <noreply@github.com> 1732628347 +0800\n\n[#5601] feat(core): Add model entity and model dispatcher in Gravitino (#5662)\n\n### What changes were proposed in this pull request?\r\n\r\n1. Define and add the model namespace, name identifier, entity definition in Gravitino.\r\n2. Add the basic dispatcher framework in Gravitino.\r\n\r\n### Why are the changes needed?\r\n\r\nThis is the second PR to support model management in Gravitino.\r\n\r\nFix: #5601 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nNo.\r\n\r\n### How was this patch tested?\r\n\r\nAdd UTs to verify part of the code.",
+        "verified_at": "2024-11-26T13:44:09Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/77136b692fc73f2500552305f9fe775e3e008ef3",
+    "html_url": "https://github.com/apache/gravitino/commit/77136b692fc73f2500552305f9fe775e3e008ef3",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/77136b692fc73f2500552305f9fe775e3e008ef3/comments",
+    "author": {
+      "login": "jerryshao",
+      "id": 850797,
+      "node_id": "MDQ6VXNlcjg1MDc5Nw==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/850797?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jerryshao",
+      "html_url": "https://github.com/jerryshao",
+      "followers_url": "https://api.github.com/users/jerryshao/followers",
+      "following_url": "https://api.github.com/users/jerryshao/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jerryshao/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jerryshao/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jerryshao/subscriptions",
+      "organizations_url": "https://api.github.com/users/jerryshao/orgs",
+      "repos_url": "https://api.github.com/users/jerryshao/repos",
+      "events_url": "https://api.github.com/users/jerryshao/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jerryshao/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a",
+        "html_url": "https://github.com/apache/gravitino/commit/0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a"
+      }
+    ]
+  },
+  {
+    "sha": "0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a",
+    "node_id": "C_kwDOJaLfldoAKDBiMDU5YjllZDRiN2RjZjllNTM4OGUxOTIwYzdhMjczOWQ2YWUzMmE",
+    "commit": {
+      "author": {
+        "name": "Qi Yu",
+        "email": "yuqi@datastrato.com",
+        "date": "2024-11-26T11:42:48Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-26T11:42:48Z"
+      },
+      "message": "[#5507] feat(python): Support Azure blob storage for GVFS python client (#5538)\n\n### What changes were proposed in this pull request?\r\n\r\nSupport GVFS python client to access ADSL fileset. \r\n\r\n### Why are the changes needed?\r\n\r\nThis is a subsequent PR for #5508 \r\n\r\nFix: #5507 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nIT locally.\r\n\r\n---------\r\n\r\nCo-authored-by: Jerry Shao <jerryshao@datastrato.com>",
+      "tree": {
+        "sha": "0925ae725bf909a716325332bafb770d2876a1ae",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/0925ae725bf909a716325332bafb770d2876a1ae"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRbQ4CRC1aQ7uu5UhlAAA61MQAEq4lh6mGwR46r92422cVI6+\ntla9aEVkNt1vRyEKMLQplizWSQh6pXLFyfnN6yXIw3QfseFHd4BCJ10Np/ARPcBZ\ny0dwZ1BiCHw9/EksV++GSL3NsqI1bRK71Xavz+X5yNiUgoMFRwrU0ZZZYxcLFlj6\nQZ/dLL5dY/o8mYf68jUj78exB6ADOgYXftiUtnfGXnmSWOgn5ttVcVg1erfIlXze\nONJLQbf41t4VIb1mmMj9rxCnTzWRi1LK7jvNMq1aYHOPrGSy/GHnPsRUj4EPTzXt\nBDd03nc1eMdyll+noEoTEzkQq8WxiBLlxxccUxlEt1tLPWvpGTsHBOzDsvRzIx4a\nqoDCb4ksko2LagwfIKnCPjPr4aA76ScaZZjCmMdxd0u13l+xxyg+ZU84Jwj/0396\nJZeQAshEubdFFeKOCdSUIHuYwjRjTHEIurW8t1dRy/X8XTLInkge/6tnAMtUrVm0\npc+8K4uiszxNbhHYEQw8j25x/fh4r7L7wOZMUa0S1S8cA7j4zRgob8BZuN169uG4\nJ8c5AH9ObFtfuXRQA0kV8l6uesTUdHOhxm0GLZJrX4jU1/Wmtuv0uAkctKjkCJOs\nWLLy9ywdOWjt53bdjYJlWeo3JeG0Ns1xNUdGNcAWLWYT/KTpmHNCVrZOlM8GukGM\nTZ8H7cAFJlB8trIj9EPA\n=LC1B\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 0925ae725bf909a716325332bafb770d2876a1ae\nparent f902f2fa9a2a4edd650fc8ee804e4064b82b6550\nauthor Qi Yu <yuqi@datastrato.com> 1732621368 +0800\ncommitter GitHub <noreply@github.com> 1732621368 +0800\n\n[#5507] feat(python): Support Azure blob storage for GVFS python client (#5538)\n\n### What changes were proposed in this pull request?\r\n\r\nSupport GVFS python client to access ADSL fileset. \r\n\r\n### Why are the changes needed?\r\n\r\nThis is a subsequent PR for #5508 \r\n\r\nFix: #5507 \r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n\r\n### How was this patch tested?\r\n\r\nIT locally.\r\n\r\n---------\r\n\r\nCo-authored-by: Jerry Shao <jerryshao@datastrato.com>",
+        "verified_at": "2024-11-26T11:44:56Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a",
+    "html_url": "https://github.com/apache/gravitino/commit/0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/0b059b9ed4b7dcf9e5388e1920c7a2739d6ae32a/comments",
+    "author": {
+      "login": "yuqi1129",
+      "id": 15794564,
+      "node_id": "MDQ6VXNlcjE1Nzk0NTY0",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15794564?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yuqi1129",
+      "html_url": "https://github.com/yuqi1129",
+      "followers_url": "https://api.github.com/users/yuqi1129/followers",
+      "following_url": "https://api.github.com/users/yuqi1129/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yuqi1129/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yuqi1129/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yuqi1129/subscriptions",
+      "organizations_url": "https://api.github.com/users/yuqi1129/orgs",
+      "repos_url": "https://api.github.com/users/yuqi1129/repos",
+      "events_url": "https://api.github.com/users/yuqi1129/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yuqi1129/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f902f2fa9a2a4edd650fc8ee804e4064b82b6550",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/f902f2fa9a2a4edd650fc8ee804e4064b82b6550",
+        "html_url": "https://github.com/apache/gravitino/commit/f902f2fa9a2a4edd650fc8ee804e4064b82b6550"
+      }
+    ]
+  },
+  {
+    "sha": "f902f2fa9a2a4edd650fc8ee804e4064b82b6550",
+    "node_id": "C_kwDOJaLfldoAKGY5MDJmMmZhOWEyYTRlZGQ2NTBmYzhlZTgwNGU0MDY0YjgyYjY1NTA",
+    "commit": {
+      "author": {
+        "name": "Justin Mclean",
+        "email": "justin@classsoftware.com",
+        "date": "2024-11-26T09:38:58Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-11-26T09:38:58Z"
+      },
+      "message": "[Minor] Updates to delete multiple tags in Gravitino CLI (#5666)\n\n### What changes were proposed in this pull request?\r\n\r\nFixed some display issues and minor improvements to code.\r\n\r\n### Why are the changes needed?\r\n\r\nTo have display messages more consistent.\r\n\r\nFix: # N/A\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n### How was this patch tested?\r\n\r\nTested locally.\r\n\r\n---------\r\n\r\nCo-authored-by: sunxiaojian <sunxiaojian926@163.com>",
+      "tree": {
+        "sha": "af740f9b09aaa01e87582fb0366069721953d3fe",
+        "url": "https://api.github.com/repos/apache/gravitino/git/trees/af740f9b09aaa01e87582fb0366069721953d3fe"
+      },
+      "url": "https://api.github.com/repos/apache/gravitino/git/commits/f902f2fa9a2a4edd650fc8ee804e4064b82b6550",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJnRZcyCRC1aQ7uu5UhlAAAsAMQAIYl70qu3unoPTpqsLMvCgsM\nxSaFUn5KCuiFmJa+9c5XqyWvRFkJl1vqpuzzGkepPPUZCRzp8NUe53pIPhfBEgK0\nKYzh1RivOrTDDbVlW9lQWJ8hMdEZFCHaPMCrFDreZxN4cvfJooahUzaMGA6iRrd1\nPcbv6qa5X9h/UV30zjFRZwTK0cMobiZA7+1AWQ7jTPWjB9H7/wnTdkXiYEp1xbIm\nylxoGIV7xr2VE0rpLWs6pCMM+UVEsK8XyH1L92ywWUwcGa+YdCw+5nPuYojbr2yr\nnCdnXcOkJp1/BWXnyqPVqpyDiAnPy0Ex4FrhkYox4KnMfpxuodDV3r7dfDh4tgRc\n4xKpCR2wTPCuMJwUTNIbGKdmCCrA5LhJxqq9SIy1KlCMK4gZ6BcksSNRdZEPsa0a\nrRpzwGGo3sB8g4x0PSGlwnsYQGBBTzNGg/n+8NVcAuEyGYlnHG20E7xkFS1RErqp\n8QjhykwSRRei9RvrfZPg3x9NyGvuUfgz9fuQUDrGhVBQh3flcJr0DjLVdNKJYF2V\nJIL9iHSYrTz8FvftlVtFvnVWaGgB6C6aIJAjrbaM7VvQ/OUJz7p1Agw0LFXjU1UF\njX/44GQ7sc0ipI9f16qprIpqS+SWUiryGxSfDuJZN55OA1GowndGrIUP+B0C1D5G\n1c1dDUnMdgXIWAYnxghi\n=RELW\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree af740f9b09aaa01e87582fb0366069721953d3fe\nparent 4dd044039088c1587587f6d84e5ea7f2431f11c3\nauthor Justin Mclean <justin@classsoftware.com> 1732613938 +1100\ncommitter GitHub <noreply@github.com> 1732613938 +0800\n\n[Minor] Updates to delete multiple tags in Gravitino CLI (#5666)\n\n### What changes were proposed in this pull request?\r\n\r\nFixed some display issues and minor improvements to code.\r\n\r\n### Why are the changes needed?\r\n\r\nTo have display messages more consistent.\r\n\r\nFix: # N/A\r\n\r\n### Does this PR introduce _any_ user-facing change?\r\n\r\nN/A\r\n### How was this patch tested?\r\n\r\nTested locally.\r\n\r\n---------\r\n\r\nCo-authored-by: sunxiaojian <sunxiaojian926@163.com>",
+        "verified_at": "2024-11-26T09:41:55Z"
+      }
+    },
+    "url": "https://api.github.com/repos/apache/gravitino/commits/f902f2fa9a2a4edd650fc8ee804e4064b82b6550",
+    "html_url": "https://github.com/apache/gravitino/commit/f902f2fa9a2a4edd650fc8ee804e4064b82b6550",
+    "comments_url": "https://api.github.com/repos/apache/gravitino/commits/f902f2fa9a2a4edd650fc8ee804e4064b82b6550/comments",
+    "author": {
+      "login": "justinmclean",
+      "id": 144504,
+      "node_id": "MDQ6VXNlcjE0NDUwNA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/144504?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/justinmclean",
+      "html_url": "https://github.com/justinmclean",
+      "followers_url": "https://api.github.com/users/justinmclean/followers",
+      "following_url": "https://api.github.com/users/justinmclean/following{/other_user}",
+      "gists_url": "https://api.github.com/users/justinmclean/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/justinmclean/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/justinmclean/subscriptions",
+      "organizations_url": "https://api.github.com/users/justinmclean/orgs",
+      "repos_url": "https://api.github.com/users/justinmclean/repos",
+      "events_url": "https://api.github.com/users/justinmclean/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/justinmclean/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "4dd044039088c1587587f6d84e5ea7f2431f11c3",
+        "url": "https://api.github.com/repos/apache/gravitino/commits/4dd044039088c1587587f6d84e5ea7f2431f11c3",
+        "html_url": "https://github.com/apache/gravitino/commit/4dd044039088c1587587f6d84e5ea7f2431f11c3"
+      }
+    ]
+  }
+]
