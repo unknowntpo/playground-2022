@@ -6,11 +6,12 @@ use std::time::{Duration, SystemTime};
 use std::vec::IntoIter;
 
 use bytes::Bytes;
+use env_logger;
 use fuse3::raw::prelude::*;
 use fuse3::{MountOptions, Result};
 use futures_util::stream;
 use futures_util::stream::Iter;
-use tracing::Level;
+use log::debug;
 
 const CONTENT: &str = "hello world\n";
 
@@ -44,10 +45,12 @@ impl Filesystem for HelloWorld {
 
     async fn lookup(&self, _req: Request, parent: u64, name: &OsStr) -> Result<ReplyEntry> {
         if parent != PARENT_INODE {
+            debug!("zzz parent != PARENT_INODE");
             return Err(libc::ENOENT.into());
         }
 
         if name != OsStr::new(FILE_NAME) {
+            debug!("zzz name {:?} != FILE_NAME: {}, name: ", name, FILE_NAME);
             return Err(libc::ENOENT.into());
         }
 
@@ -180,10 +183,12 @@ impl Filesystem for HelloWorld {
         offset: i64,
     ) -> Result<ReplyDirectory<Self::DirEntryStream<'_>>> {
         if inode == FILE_INODE {
+            debug!("zzz inode == FILE_INODE");
             return Err(libc::ENOTDIR.into());
         }
 
         if inode != PARENT_INODE {
+            debug!("zzz inode != PARENT_INODE, inode: {}", inode);
             return Err(libc::ENOENT.into());
         }
 
@@ -235,10 +240,12 @@ impl Filesystem for HelloWorld {
         _lock_owner: u64,
     ) -> Result<ReplyDirectoryPlus<Self::DirEntryPlusStream<'_>>> {
         if parent == FILE_INODE {
+            debug!("zzz readirplus: parent {} == FILE_INODE", parent);
             return Err(libc::ENOTDIR.into());
         }
 
         if parent != PARENT_INODE {
+            debug!("zzz parent: parent {} == FILE_INODE", parent);
             return Err(libc::ENOENT.into());
         }
 
@@ -331,7 +338,10 @@ impl Filesystem for HelloWorld {
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
-    log_init();
+    env_logger::init();
+
+    debug!("zzz hello");
+    debug!("kkk hello");
 
     let args = env::args_os().skip(1).take(1).collect::<Vec<_>>();
 
@@ -350,11 +360,4 @@ async fn main() {
         .unwrap()
         .await
         .unwrap()
-}
-
-fn log_init() {
-    let subscriber = tracing_subscriber::fmt()
-        .with_max_level(Level::DEBUG)
-        .finish();
-    tracing::subscriber::set_global_default(subscriber).unwrap();
 }
