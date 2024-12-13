@@ -8,6 +8,8 @@ testCases = [
         "input": [7, 6, 4, 3, 1],
         "want": 0,
     },
+    {"name": "high low high", "input": [7, 3, 2, 5, 8], "want": 6},
+    {"name": "low high low", "input": [3, 4, 8, 5, 1], "want": 5},
 ]
 
 """
@@ -23,7 +25,7 @@ Ref: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/
 
 class Solution:
     # input: [1,2,3,4,5]
-    def maxProfit(self, prices: List[int]) -> int:
+    def maxProfitOn2(self, prices: List[int]) -> int:
         maxProfit = 0
         #
         for i in range(0, len(prices) - 1):
@@ -39,11 +41,31 @@ class Solution:
                     # update maxProfit = 1
         return maxProfit
 
+    def maxProfitOn(self, prices: List[int]) -> int:
+        maxProfit = 0
+        buyIn = prices[0]
+        curProfit = 0
+        for i in range(1, len(prices)):
+            curProfit = prices[i] - buyIn
+            if curProfit < 0:
+                buyIn = prices[i]
+            maxProfit = max(maxProfit, curProfit)
+        return maxProfit
+
 
 @pytest.mark.parametrize("testCase", testCases, ids=lambda testCase: testCase["name"])
-def test_maxProfit(testCase):
+def test_maxProfitOn2(testCase):
     sol = Solution()
     input = testCase["input"]
     want = testCase["want"]
-    got = sol.maxProfit(input)
+    got = sol.maxProfitOn2(input)
+    assert got == want
+
+
+@pytest.mark.parametrize("testCase", testCases, ids=lambda testCase: testCase["name"])
+def test_maxProfitOn(testCase):
+    sol = Solution()
+    input = testCase["input"]
+    want = testCase["want"]
+    got = sol.maxProfitOn(input)
     assert got == want
