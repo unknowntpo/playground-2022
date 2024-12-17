@@ -32,44 +32,14 @@ m := l % 2k:
 """
 class Solution:
     def reverseStr(self, s: str, k: int) -> str:
-        # s = abcde, k = 3
-        # {"name": "case1", "s": "abcd", "k": 2, "want": "bacd"},
-        # s = cbadgbbecka, k = 3
-        # s = abcd
         out = list(s)
-        # for 2k range
         for i in range(0, len(s), 2 * k):
-            # i = 0
-            # i = 2 * 3 = 6
-            # len(out) == 11
-            # 11 % (2* 3) >= 3
-            # 11 % 6 == 5 >= 3
-            # 4 % (4) >= k:
-            # if len(out) % (2 * k) >= k:
-                # 5 % (2 * 3) = 5 % 6 = 5 >= 3
             l = i
-            # l = 0
-            # l = 6
-            r = i + k - 1
-            # r = 0 + 3 - 1 = 2
-            # r = 6 + 3 - 1 = 8
-            while r < len(out) and l < r:
-                # 0 < 2
-                # 6 < 8
-                # out: {[cba][dgb]}{[bec][ka]}
-                #                    l
-                #                      r
-                # out: {[abc][dgb]}{[bec][ka]}
+            r = i + k -1 if i + k - 1 < len(out) - 1 else len(out) - 1
+            while l < r:
                 out[l], out[r] = out[r], out[l]
-                # out: {[abc][dgb]}{[bec][ka]}
-                # out: {[abc][dgb]}{[ceb][ka]}
                 l+=1
-                # l = 1
-                # l = 6+1 = 7
                 r-=1
-                # r = 1
-                # r = 8 - 1 = 7
-        # # for k range
         return ''.join(out)
 
 
