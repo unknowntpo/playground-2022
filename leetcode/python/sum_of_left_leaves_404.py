@@ -1,8 +1,8 @@
 from collections import deque
+from os import times_result
 
 import pytest
 from typing import List, Optional, Deque
-
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -23,9 +23,30 @@ Ref: https://leetcode.cn/problems/sum-of-left-leaves/description/
 """
 
 class Solution:
-    def sumOfLeftLeaves(self, root: TreeNode):
-        print(root)
-        return 0
+    def sumOfLeftLeaves(self, root: TreeNode) -> int:
+        # is left leaf ?
+        # if n.left is not None and n.left.left == n.left.right == None
+        # is leaf ?
+        # node.left == node.right == None
+        s = 0
+        if root.left is not None and root.left.left == root.left.right is None:
+            s+= root.left.val
+        if root.right is not None:
+            s += self.sumOfLeftLeaves(root.right)
+        return s
+
+    def show_tree(self, root:  TreeNode):
+        q: List[Optional[TreeNode]] = [root]
+        while q:
+            nodes: List[Optional[TreeNode]] = []
+            for n in q:
+                print(n.val if n is not None else "x", end = " ")
+                if n is not None:
+                    nodes.append(n.left)
+                    nodes.append(n.right)
+            q = nodes
+            print()
+
 
     def build_tree(self, vals: List[Optional[int]]) -> TreeNode:
         if len(vals) == 0 or vals[0] is None:
@@ -54,73 +75,8 @@ class Solution:
             root.right = TreeNode(val=rVal)
             self.__build_tree(root.right, dq)
 
-"""
-
- i
-vals = [3,9,20,None,None,5,7]
-
-q: containing nodes
-q: [node]
-
-1. enqueue root
-2. pop root, set val
-3. set root.left, root.right
-
-root: TreeNode()
-root.val = vals.pop()
-nodeStack.push(root.right)
-nodeStack.push(root.left)
-
-[rootLeft, rootRight]
-
-while 1:
-    node = nodeStack.pop()
-    val = q.pop()
-    
-    node.val = val
-    nodeStack.push(node.right)
-    nodeStack.push(node.left)
-    
-_buildTree(root):
-    if !vals:
-        # no more val to build
-        return
-    lVal = vals.pop()
-    rVal = vals.pop()
-    if lVal is not None:
-        root.left = TreeNode(val=lVal)
-        buildTree(root.left)
-    if rVal is not None:
-       root.right = TreeNode(val=rVal)
-       buildTree(root.right)
-     
-vals = [3,9,20,None,None,5,7]
-
-root: 3
-
-vals = [9,20,None,None,5,7]
-
-lVal = 9
-rVal = 20
-
-    3 
-  9    20
-  
-vals = [None,None, 5, 7]
-
-buildTree(9)
-
-
-    
-
-
-
-"""
-
-
-
 testCases = [
-    {"name": "case0", "vals": [3,9,20, None, None, 5, 7], "want": 24},
+    {"name": "case0", "vals": [3,9,20, None, None, 15, 7], "want": 24},
     {"name": "case1", "vals": [1], "want": 0},
 ]
 
@@ -131,6 +87,7 @@ def test_sum_of_left_root(testCase):
 
     sol = Solution()
     root = sol.build_tree(vals)
+    sol.show_tree(root)
 
     got = sol.sumOfLeftLeaves(root)
     assert got == want
