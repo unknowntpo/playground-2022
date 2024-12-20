@@ -29,8 +29,11 @@ class Solution:
         # is leaf ?
         # node.left == node.right == None
         s = 0
-        if root.left is not None and root.left.left == root.left.right is None:
-            s+= root.left.val
+        if root.left is not None:
+            if root.left.left == root.left.right is None:
+                s+= root.left.val
+            else:
+                s += self.sumOfLeftLeaves(root.left)
         if root.right is not None:
             s += self.sumOfLeftLeaves(root.right)
         return s
@@ -78,6 +81,7 @@ class Solution:
 testCases = [
     {"name": "case0", "vals": [3,9,20, None, None, 15, 7], "want": 24},
     {"name": "case1", "vals": [1], "want": 0},
+    {"name": "3 layer, root.left has left leaf", "vals": [1,2,3,4,5], "want": 4},
 ]
 
 @pytest.mark.parametrize("testCase", testCases, ids=lambda testCase: testCase["name"])
