@@ -1,0 +1,9 @@
+[project]
+name = "pytest-bench"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pytest-benchmark[histogram]>=5.1.0",
+]
