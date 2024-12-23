@@ -1,7 +1,9 @@
 package org.example;
 
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 import java.util.function.Consumer;
 
 public class BinaryTree<T> {
@@ -34,7 +36,7 @@ public class BinaryTree<T> {
 
             System.out.printf("i: %s, i+1: %s%n",
                     (vals[i] != null) ? vals[i] : "null",
-                    (vals[i+1] != null) ? vals[i+1] : "null");
+                    (vals[i + 1] != null) ? vals[i + 1] : "null");
 
             if (curNode == null) {
                 throw new RuntimeException("curNode should not be null");
@@ -69,5 +71,28 @@ public class BinaryTree<T> {
         nodeProcessor.accept(node);
         this._preOrderTraversal(node.getLeft(), nodeProcessor);
         this._preOrderTraversal(node.getRight(), nodeProcessor);
+    }
+
+    public void preOrderIterUniversalTraversal(BinaryTree<T> tree, Consumer<TreeNode<T>> nodeProcessor) {
+        if (tree.getRoot() == null) {
+            return;
+        }
+        var stack = new Stack<TreeNode>();
+        stack.push(tree.getRoot());
+
+        while (!stack.isEmpty()) {
+            TreeNode<T> node = stack.pop();
+            if (node != null) {
+                if (node.getRight() != null) stack.push(node.getRight());
+                if (node.getLeft() != null) stack.push(node.getLeft());
+
+                // do operation on current node
+                stack.push(node);
+                stack.push(null);
+            } else {
+                node = stack.pop();
+                nodeProcessor.accept(node);
+            }
+        }
     }
 }
