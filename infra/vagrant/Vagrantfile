@@ -2,8 +2,9 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "jeffnoxon/ubuntu-20.04-arm64"
+  config.vm.box = "bento/ubuntu-24.04"
   # config.vm.box = "bento/ubuntu-18.04"
+  # config.vm.box_version = "7.0.18"
   config.vm.hostname = 'k8s-dev'
   config.vm.define vm_name = 'k8s'
 
