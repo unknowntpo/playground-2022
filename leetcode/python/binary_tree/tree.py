@@ -1,23 +1,58 @@
 from __future__ import annotations
-from typing import Optional, Deque, List, TYPE_CHECKING
+from typing import Optional, Deque, List, Callable
 from collections import deque
+
 
 class BinaryTree[T]:
     def __init__(self, root: Optional[TreeNode[T]] = None):
         self.root = root
 
-    @staticmethod
-    def show_tree(tree:  BinaryTree[T]):
-        q: List[Optional[TreeNode[T]]] = [tree.root]
+    def show_tree(self):
+        q: List[Optional[TreeNode[T]]] = [self.root]
         while q:
             nodes: List[Optional[TreeNode[T]]] = []
             for n in q:
-                print(n.val if n is not None else "x", end = " ")
+                print(n.val if n is not None else "x", end=" ")
                 if n is not None:
                     nodes.append(n.left)
                     nodes.append(n.right)
             q = nodes
             print()
+
+    def prefix_iter_traversal(self, f: Callable[[TreeNode[T]], None]):
+        """
+           3
+        9   20
+           15 7
+
+        """
+        if self.root is None:
+            return
+
+        dq: Deque[Optional[TreeNode[T]]] = deque([self.root])
+        # dq: [3]
+        while dq:
+            node = dq.pop()
+            # dq: [], node: 3
+            if node is not None:
+                print("node is not None: ", node.val)
+                if node.right is not None:
+                    dq.append(node.right)
+                    # dq: [20]
+                if node.left is not None:
+                    dq.append(node.left)
+                    # dq: [20 9]
+                dq.append(node)
+                dq.append(None)
+                # dq: [20 9 3 None]
+            else:
+                # for n in dq: print(f"{n.val if n is not None else "None"}")
+                node = dq.pop()
+                # dq: [20 9]
+                # f(3)
+                f(node)
+                # print("cur")
+        return
 
     @staticmethod
     def build_tree(vals: List[Optional[int]]) -> BinaryTree[T]:
@@ -32,6 +67,9 @@ class BinaryTree[T]:
 
     @staticmethod
     def __build_tree(root: TreeNode, dq: Deque[Optional[int]]):
+        """
+        [3,9,20, None, None, 15, 7, None, None, None, None]
+        """
         if len(dq) == 0:
             return
         lVal: Optional[T] = None
@@ -50,24 +88,39 @@ class BinaryTree[T]:
 
     def to_array(self) -> List[Optional[T]]:
         out: List[Optional[T]] = []
-        dq: Deque[TreeNode[T]] = deque([self.root])
+        dq: Deque[Optional[TreeNode[T]]] = deque([self.root])
 
         """
         out: [3, 9, 20]
+            3
+           9 20
+         x x 15 7
         """
         while dq:
-            node: TreeNode[T] = dq.popleft()
-            out.append(node.val)
-            if node.left is not None:
-                dq.append(node.left)
-            else:
-                out.append(None)
-            if node.right is not None:
-                dq.append(node.right)
-            else:
-                out.append(None)
+            node: Optional[TreeNode[T]] = dq.popleft()
+            out.append(node.val if node is not None else None)
+            if node is None:
+                continue
+            # enqueue next layer
+            dq.append(node.left if node.left is not None else None)
+            dq.append(node.right if node.right is not None else None)
 
         return out
+
+    def prefix_recursive_traversal(self, f: Callable[[Optional[TreeNode[T]]], None]):
+        if self.root is None:
+            return
+
+        def _walk(
+            root: Optional[TreeNode[T]], f: Callable[[Optional[TreeNode[T]]], None]
+        ):
+            if root is None:
+                return
+            f(root)
+            _walk(root.left, f)
+            _walk(root.right, f)
+
+        _walk(self.root, f)
 
 
 class TreeNode[T]:
@@ -75,4 +128,3 @@ class TreeNode[T]:
         self.val = val
         self.left = left
         self.right = right
-
