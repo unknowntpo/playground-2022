@@ -3,9 +3,12 @@ import pytest
 from binary_tree.tree import BinaryTree
 
 testCases = [
-    {"name": "case0", "vals": [3, 9, 20, None, None, 15, 7, None, None, None, None]},
+    {"name": "case0", "vals": [3, 9, 20, None, None, 15, 7]},
+    # can not have only one value, which value is None, e.g. vals: [None]
+    {"name": "no value", "vals": []},
     # {"name": "case1", "vals": [1, None,None]},
-    # {"name": "3 layer, root.left has left leaf", "vals": [1,2,3, None, None,4,5]},
+    {"name": "3 layer, root.left has left leaf", "vals": [1,2,3, None, None,4,5]},
+    {"name": "case from leetcode 226, 3 layer", "vals": [4,2,7, 1,3,6,9]},
 ]
 
 

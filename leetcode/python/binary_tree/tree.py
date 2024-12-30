@@ -57,16 +57,45 @@ class BinaryTree[T]:
     @staticmethod
     def build_tree(vals: List[Optional[int]]) -> BinaryTree[T]:
         if len(vals) == 0 or vals[0] is None:
-            raise Exception("root can not has 0 element or root[0] can not be None")
+            return BinaryTree(None)
         root = TreeNode()
         dq: Deque[Optional[T]] = deque(vals)
-        root.val = dq.popleft()
-        BinaryTree.__build_tree(root, dq)
+        BinaryTree.__build_tree_iter(root, dq)
+
+        return BinaryTree(root)
+    @staticmethod
+    def __build_tree_iter(root: Optional[TreeNode[T]], vals: Deque[Optional[int]])-> BinaryTree[T]:
+        """
+        [3,9,20, None, None, 15, 7, None, None, None, None]
+        """
+        if len(vals) == 0:
+            return
+
+        root.val = vals.popleft()
+
+        dq = deque([root])
+
+        while vals:
+            node = dq.popleft()
+
+            if len(vals) == 0:
+                break
+            node.left = TreeNode(vals.popleft())
+            if len(vals) == 0:
+                break
+            node.right = TreeNode(vals.popleft())
+
+            if node.left is not None:
+                dq.append(node.left)
+            if node.right is not None:
+                dq.append(node.right)
 
         return BinaryTree(root)
 
+
+
     @staticmethod
-    def __build_tree(root: TreeNode, dq: Deque[Optional[int]]):
+    def __build_tree_recr_failed(root: TreeNode, dq: Deque[Optional[int]]):
         """
         [3,9,20, None, None, 15, 7, None, None, None, None]
         """
@@ -98,12 +127,18 @@ class BinaryTree[T]:
         """
         while dq:
             node: Optional[TreeNode[T]] = dq.popleft()
-            out.append(node.val if node is not None else None)
             if node is None:
-                continue
+                # if same layer has not None node, then None should be added to out
+                if len(list(filter(lambda node: node is not None, dq))) > 0:
+                    out.append(None)
+                break
+
+            # append non None node.val
+            out.append(node.val)
+
             # enqueue next layer
-            dq.append(node.left if node.left is not None else None)
-            dq.append(node.right if node.right is not None else None)
+            dq.append(node.left)
+            dq.append(node.right)
 
         return out
 
@@ -121,10 +156,36 @@ class BinaryTree[T]:
             _walk(root.right, f)
 
         _walk(self.root, f)
+    def level_order_iter_traversal(self, f: Callable[[Optional[TreeNode[T]]], None]):
+        if self.root is None:
+            return
+
+        dq: Deque[Optional[TreeNode[T]]] = deque([self.root])
+
+        while dq:
+            node = dq.popleft()
+            f(node)
+            if node.left is not None:
+                dq.append(node.left)
+            if node.right is not None:
+                dq.append(node.right)
+
+
+        # def _walk(
+        #     root: Optional[TreeNode[T]], f: Callable[[Optional[TreeNode[T]]], None]
+        # ):
+        #     if root is None:
+        #         return
+        #     f(root)
+        #     _walk(root.left, f)
+        #     _walk(root.right, f)
+
+        # _walk(self.root, f)
+
 
 
 class TreeNode[T]:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val=0, left: Optional[TreeNode[T]]=None, right: Optional[TreeNode[T]]=None):
         self.val = val
         self.left = left
         self.right = right
