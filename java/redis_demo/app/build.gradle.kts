@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.aop)
     implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.data.redis)
     implementation(libs.postgresql)
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
