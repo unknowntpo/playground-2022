@@ -26,7 +26,7 @@ class StudentRepositoryTest {
     // can not use @Autowired because we have generic
     // https://blog.csdn.net/weixin_63577740/article/details/133843898
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, Student> redisTemplate;
 
     @BeforeEach
     public void setup() {
@@ -50,7 +50,9 @@ class StudentRepositoryTest {
             String redisKey = "student:" + student.getId();
             assertTrue(redisTemplate.hasKey(redisKey));
 
-            assertEquals(student, redisTemplate.opsForValue().get(redisKey));
+            Student gotStudent = (Student) redisTemplate.opsForValue().get(redisKey);
+            assertEquals(student.getId(), gotStudent.getId());
+            assertEquals(student.getName(), gotStudent.getName());
         }
 
 //        @Test
