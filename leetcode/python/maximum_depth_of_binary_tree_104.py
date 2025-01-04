@@ -23,7 +23,7 @@ class Solution:
         """
          r (cur)
         r.l r.r
-                3 (cur: 0)
+                3 curLayer = 1
              9 .(cur=1)  20 (2)
             n (cur=2) n (cur=2) . 15 (cur=2) 7 (cur=2)
                                 x(cur=3) .  x (cur=3)
@@ -39,6 +39,24 @@ class Solution:
             )
 
         return _maxDepth(0, root)
+
+    def maxDepthIter(self, root: Optional[TreeNode]) -> int:
+        if root is None:
+            return 0
+        # current layer of nodes
+        nodes = [root]
+        curLayer = 0
+        while nodes:
+            # this layer has elements
+            curLayer += 1
+            nextLayerNodes = []
+            for n in nodes:
+                if n.left is not None:
+                    nextLayerNodes.append(n.left)
+                if n.right is not None:
+                    nextLayerNodes.append(n.right)
+            nodes = nextLayerNodes
+        return curLayer
 
 
 testCases = [
@@ -58,4 +76,7 @@ def test_invert_binary_tree(testCase):
     sol = Solution()
     # resRoot = sol.invertTree(tree.root)
     res = sol.maxDepth(tree.root)
+    assert res == want
+
+    res = sol.maxDepthIter(tree.root)
     assert res == want
