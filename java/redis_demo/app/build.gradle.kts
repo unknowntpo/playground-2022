@@ -29,6 +29,10 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.spring.boot.starter.test)
 
+    // mapper
+    implementation(libs.mapstruct)
+    annotationProcessor(libs.mapstruct.processor)
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // This dependency is used by the application.

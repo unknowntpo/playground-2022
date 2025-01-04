@@ -1,7 +1,6 @@
-package org.example.repositories;
+package org.example.repositories.jpa;
 
 import org.example.entities.Student;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

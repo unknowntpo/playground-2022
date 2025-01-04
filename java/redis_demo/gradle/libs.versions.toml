@@ -4,6 +4,7 @@ junit-jupiter = "5.9.1"  # Assuming this is the version you're using
 spring-boot = "3.4.1"
 spring-dependency-management = "1.1.5"
 postgresql = "42.5.0"
+mapstruct = "1.5.5.Final"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
@@ -16,6 +17,8 @@ spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "spring-boot" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
