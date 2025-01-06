@@ -32,6 +32,14 @@ dependencies {
     // mapper
     implementation(libs.mapstruct)
     annotationProcessor(libs.mapstruct.processor)
+    // Add Lombok MapStruct binding
+    annotationProcessor(libs.lombok.mapstruct.binding)
+
+    // lombok
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 

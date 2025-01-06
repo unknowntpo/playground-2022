@@ -28,7 +28,7 @@ class StudentRepositoryTest {
             String name = "Eric";
             StudentDTO studentDto = new StudentDTO(name);
             Student student = studentMapper.toEntity(studentDto);
-            assertNotNull(student);
+            assertNotNull(student.getName());
 
             student = repo.save(student);
             assertTrue(student.getId() > 0);
