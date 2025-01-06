@@ -1,4 +1,8 @@
 package org.example.repositories.redis;
 
-public class StudentRedisRepository {
+import org.example.entities.Student;
+import org.springframework.data.repository.CrudRepository;
+
+public interface StudentRedisRepository extends CrudRepository<Student, Integer> {
+
 }
