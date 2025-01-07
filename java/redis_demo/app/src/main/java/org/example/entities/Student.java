@@ -19,6 +19,12 @@ public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @org.springframework.data.annotation.Id
+    public String getRedisId() {
+        return String.format("%d", id);
+    }
+
     @Column(nullable = false, length = 100)
     private String name;
 }
