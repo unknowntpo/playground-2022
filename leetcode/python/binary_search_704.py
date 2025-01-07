@@ -28,7 +28,26 @@ Example:
 
 """
 class Solution:
+    # [left, right] (closed interval)
     def search(self, nums: List[int], target: int) -> int:
+        l = -1
+        r = len(nums)
+        while l + 1 < r:
+            # FIXME: may overflow
+            # m = int(l / 2 + r / 2)
+            # FIXME why equals
+           m = l + (r - l) // 2
+           midNum = nums[m]
+           if midNum == target:
+               return m
+           if target > midNum:
+               l = m
+           else:
+                r = m
+
+        return -1
+
+    def search_slow(self, nums: List[int], target: int) -> int:
         for i, num in enumerate(nums):
             if num == target:
                 return i
