@@ -30,7 +30,7 @@ public class StudentService {
     public StudentDTO getById(Integer studentId) {
         logger.info("getting student by id: {}, toString: {}", studentId, studentId.toString());
         if (studentRedisRepository.existsById(studentId)) {
-            Student student = studentRedisRepository.getStudentById(studentId);
+            Student student = studentRedisRepository.getById(studentId);
             logger.info("got student in redis: {}", student);
             StudentDTO dto = studentMapper.toDto(student);
 
@@ -38,6 +38,8 @@ public class StudentService {
 
             return dto;
         }
+
+        logger.info("getting student from studentRepository by id: {}, toString: {}", studentId, studentId.toString());
 
         Student student = studentRepository.getById(studentId);
         studentRedisRepository.save(student);
