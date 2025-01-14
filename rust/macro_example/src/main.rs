@@ -28,6 +28,12 @@ macro_rules! math_operation {
     };
 }
 
+macro_rules! create_list {
+    ($($ele:expr),*) => {
+        vec![$(($ele)),*]
+    };
+}
+
 mod test {
     use super::*;
 
@@ -47,5 +53,10 @@ mod test {
     fn test_math_operations_macro() {
         assert_eq!(math_operation!(add 1, 2), 3);
         assert_eq!(math_operation!(subtract 3, 2), 1);
+    }
+
+    #[test]
+    fn test_create_list() {
+        assert_eq!(create_list!(1, 2, 3), vec![1, 2, 3]);
     }
 }
