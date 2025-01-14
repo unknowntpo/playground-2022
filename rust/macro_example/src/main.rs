@@ -13,8 +13,8 @@ macro_rules! max {
 }
 
 macro_rules! hello {
-    () => {
-        format!("Hello")
+    ($name:expr) => {
+        format!("Hello: {}", $name)
     };
 }
 
@@ -30,6 +30,6 @@ mod test {
 
     #[test]
     fn test_hello_macro() {
-        assert_eq!(hello!(), "Hello".to_string())
+        assert_eq!(hello!("Eric"), "Hello: Eric".to_string())
     }
 }
