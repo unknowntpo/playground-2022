@@ -49,6 +49,13 @@ public class StudentService {
         logger.info("got studentDto: {}", dto);
 
         return dto;
-//        return studentMapper.toDto(student);
+    }
+
+    public StudentDTO save(StudentDTO studentDto) {
+        Student student = studentMapper.toEntity(studentDto);
+        Student savedStudent = studentRepository.save(student);
+        studentRedisRepository.save(savedStudent);
+
+        return studentMapper.toDto(savedStudent);
     }
 }
