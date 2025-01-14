@@ -18,6 +18,16 @@ macro_rules! hello {
     };
 }
 
+macro_rules! math_operation {
+    (add $a:expr, $b:expr) => {
+        $a + $b
+    };
+
+    (subtract $a:expr, $b:expr) => {
+        $a - $b
+    };
+}
+
 mod test {
     use super::*;
 
@@ -31,5 +41,11 @@ mod test {
     #[test]
     fn test_hello_macro() {
         assert_eq!(hello!("Eric"), "Hello: Eric".to_string())
+    }
+
+    #[test]
+    fn test_math_operations_macro() {
+        assert_eq!(math_operation!(add 1, 2), 3);
+        assert_eq!(math_operation!(subtract 3, 2), 1);
     }
 }
