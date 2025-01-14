@@ -12,9 +12,24 @@ macro_rules! max {
     };
 }
 
-#[test]
-fn test_max_macro() {
-    assert_eq!(max!(3, 2), 3);
-    assert_eq!(max!(2, 2), 2);
-    assert_eq!(max!(2, 3), 3);
+macro_rules! hello {
+    () => {
+        format!("Hello")
+    };
+}
+
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_max_macro() {
+        assert_eq!(max!(3, 2), 3);
+        assert_eq!(max!(2, 2), 2);
+        assert_eq!(max!(2, 3), 3);
+    }
+
+    #[test]
+    fn test_hello_macro() {
+        assert_eq!(hello!(), "Hello".to_string())
+    }
 }

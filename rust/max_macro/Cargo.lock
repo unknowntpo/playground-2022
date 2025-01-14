@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "max_macro"
+name = "macro_example"
 version = "0.1.0"
