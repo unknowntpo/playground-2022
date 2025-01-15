@@ -44,11 +44,36 @@ class StudentServiceTest {
         when(studentRepository.getById(studentId)).thenReturn(mockStudent);
         when(studentRedisRepository.save(mockStudent)).thenReturn(mockStudent);
 
-        StudentDTO mockStudentDto =  new StudentDTO(name);
+        StudentDTO mockStudentDto = new StudentDTO(name);
         mockStudentDto.setId(studentId);
 
         assertEquals(mockStudentDto, studentService.getById(studentId));
     }
 
+    @Test
+    void testSave() {
+        // svc: creatSttudent (dto) , return dto
+        // repo: save(student), return savedStudent
+        // assert dto is returned, name is correct, id is mocked id
 
+        String name = "Eric";
+        StudentDTO studentDto = new StudentDTO(name);
+        studentDto.setName(name);
+
+        Student student = studentMapper.toEntity(studentDto);
+        assertEquals(name, student.getName());
+
+        Student mockStudent = new Student();
+        Integer mockId = 333;
+        mockStudent.setId(mockId);
+        mockStudent.setName(name);
+
+        when(studentRepository.save(student)).thenReturn(mockStudent);
+        when(studentRedisRepository.save(mockStudent)).thenReturn(mockStudent);
+
+        StudentDTO savedStudentDto = studentService.save(studentDto);
+
+        assertEquals(mockId, savedStudentDto.getId());
+        assertEquals(name, savedStudentDto.getName());
+    }
 }
