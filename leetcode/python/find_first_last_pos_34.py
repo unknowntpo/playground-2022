@@ -54,7 +54,7 @@ class Solution:
         [5,7,7,8,8,10]
 
         invariant:
-        - nums[>=r+1] >= n
+        - nums[>r] >= n
         - nums[<=l-1] < n
         """
 
@@ -90,11 +90,12 @@ class Solution:
         def lower_bound2(nums: List[int], n: int):
             """
                 lower_bound: find the lower_bound of index which nums[lower] >= nums[n]
+                ele in [l, r): not sure
 
             [l, r)
             invariant:
-            - nums[0, l-1] < n
-            - nums[mid, r) >= n
+            - nums[<l] < n
+            - nums[>=r] >= n
             ""
             Example
             [5,7,7,8,8,10]
@@ -119,7 +120,7 @@ class Solution:
             (l, r)
             invariant:
             - nums[0, l] < n
-            - nums[>r] >= n
+            - nums[>=r] >= n
             ""
             Example
             [5,7,7,8,8,10]
