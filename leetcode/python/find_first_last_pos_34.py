@@ -46,66 +46,18 @@ class Solution:
 
     def searchRange(self, nums: List[int], target: int) -> List[int]:
         """
-        [5,7,7,8,8,10]
 
-        lower_bound(target), lower_bound(target+1)
-
-        lower_bound(n): find the first element which nums[ele] >= n
-
-        target <= nums[lower_bound]
-
-        target+1 <= nums[lower_bound2]
-
-        target < nums[lower_bound2]
-
-        return [lower_bound, lower_bound2]
-
-        lower_bound: found: got a num
-        lower_bound not found: loop invariant will break
-
-        [5,7,7,8,8,10]
-
-        close interval
-        [left,right]
+        lower_bound: find the lower_bound of index which nums[lower] >= nums[n]
 
         ""
         Example
         [5,7,7,8,8,10]
 
-        [1], target = 2
-        [1], target = 0
-
-        [1], target = 2
-        l = 0, r = 0
-        mid = 0
-        target > mid
-        l = 1
-
-        [1], target = 0
-        l = 0, r = 0
-        mid = 0
-        target < mid
-        r = 0 - 1 = -1
-
-        [5,7,7,8,8,10]
-        target = 9
-        l = 0, r = 5
-        mid = 2
-        nums[target] > nums[mid]
-        l = mid + 1 = 3, r = 5
-
-        mid = 3 + (5-3) // 2 = 4
-        nums[target] > mid
-        l = mid + 1 = 4 + 1 = 5
-        post
-        0 <= l <= r
-        (not match) <= l
-        matched >= r
-
-        --
-
-
+        invariant:
+        - nums[>=r+1] >= n
+        - nums[<=l-1] < n
         """
+
         def lower_bound(nums: List[int], n: int):
             print(n)
             # invariant: [l,r] close interval
@@ -117,31 +69,83 @@ class Solution:
             r = len(nums) - 1
             # l = 0, r = 5
             while l <= r:
-               mid = l + (r - l) // 2
+                mid = l + (r - l) // 2
                 # mid = 0 + ( 5 - 0 ) // 2 = 2
-               # mid = 3 + (5-3) // 2 = 4
-               # mid = 5
-               midVal = nums[mid]
-               if n > midVal:
+                # mid = 3 + (5-3) // 2 = 4
+                # mid = 5
+                midVal = nums[mid]
+                if n > midVal:
                     # 8 > 7
                     # 10 > 8
                     l = mid + 1
                     # blue: [mid+1, r]
                     # l = 2 + 1 = 3, r = 5
                     # l = 4 + 1 = 5, r = 5
-               else:
+                else:
                     r = mid - 1
             print(l)
             return l
 
-        lower = lower_bound(nums, target)
+
+        def lower_bound2(nums: List[int], n: int):
+            """
+                lower_bound: find the lower_bound of index which nums[lower] >= nums[n]
+
+            [l, r)
+            invariant:
+            - nums[0, l-1] < n
+            - nums[mid, r) >= n
+            ""
+            Example
+            [5,7,7,8,8,10]
+
+                  r | b
+            [5,7,7,8,8,10]
+            """
+            l = 0
+            r = len(nums)
+            while l < r:
+                mid = l + (r - l) // 2
+                if n > nums[mid]:
+                    l = mid + 1 # n is at [mid+1, r)
+                else:
+                    r = mid
+            return l
+
+        def lower_bound3(nums: List[int], n: int):
+            """
+                lower_bound: find the lower_bound of index which nums[lower] >= nums[n]
+
+            (l, r)
+            invariant:
+            - nums[0, l] < n
+            - nums[>r] >= n
+            ""
+            Example
+            [5,7,7,8,8,10]
+
+                  r | b
+            [5,7,7,8,8,10]
+            """
+            l = -1
+            r = len(nums)
+            while l+1 < r:
+                mid = l + (r - l) // 2
+                if n > nums[mid]:
+                    l = mid # n is at (mid, r)
+                else:
+                    r = mid # n is at (l, mid)
+            return r
+
+        lower = lower_bound3(nums, target)
         if lower == len(nums) or nums[lower] != target:
             return [-1, -1]
 
         # at here, target must in nums
-        upper = lower_bound(nums, target + 1) - 1
+        upper = lower_bound3(nums, target + 1) - 1
 
         return [lower, upper]
+
 
 testCases = [
     {"name": "found", "nums": [5, 7, 7, 8, 8, 10], "target": 8, "want": [3, 4]},
