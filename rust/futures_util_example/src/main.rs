@@ -1,21 +1,20 @@
+use std::borrow::BorrowMut;
+
 use futures_util::stream::{self, StreamExt};
 
 async fn process_stream_cloned() {
     let vec = vec![3, 2, 1, 4, 5];
-    let stream1 = stream::iter(vec);
+    // let stream_factory = || stream::iter(vec);
+    // FIXME: FnOnce, FnMut, Fn
+    let stream_factory = || stream::iter(vec.clone()).inspect(|&e| println!("Debug Read: {}", e));
 
-    let stream2 = stream1.clone();
+    let debug_stream = stream::iter(vec.clone()).inspect(|&e| println!("Debug Read: {}", e));
 
-    // First read
-    stream1
-        .for_each(|item| async move {
-            println!("First read: {}", item);
-        })
-        .await;
+    let stream2 = debug_stream;
 
     stream2
         .for_each(|item| async move {
-            println!("Second read: {}", item);
+            println!("Second read: {:?}", item);
         })
         .await;
 }
