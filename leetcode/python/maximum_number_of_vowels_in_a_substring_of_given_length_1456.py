@@ -65,27 +65,15 @@ class Solution:
         return c in ["a", "e", "i", "o", "u"]
 
     def maxVowelsFast(self, s: str, k: int) -> int:
-        """
-        s = "a", k = 1, want: 1
-
-        s = "leetcode" , k = 2, want: 2
-        """
-
         n = len(s)
         maxVowelNums = 0
 
         # initial vowel nums
-        vowelNums = 0
-        for i in range(0, k):
-            if self.isVowel(s[i]):
-                vowelNums += 1
+        vowelNums = sum(1 for i in range(k) if self.isVowel(s[i]))
         maxVowelNums = vowelNums
 
         for i in range(k, n):
-            nextIsVowel = self.isVowel(s[i])
-            firstIsVowel = self.isVowel(s[i - k])
-
-            vowelNums += int(nextIsVowel) - int(firstIsVowel)
+            vowelNums += int(self.isVowel(s[i])) - int(self.isVowel(s[i - k]))
             maxVowelNums = max(vowelNums, maxVowelNums)
 
         return maxVowelNums
