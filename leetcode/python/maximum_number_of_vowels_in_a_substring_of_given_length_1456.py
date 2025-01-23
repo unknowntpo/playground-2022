@@ -71,10 +71,7 @@ class Solution:
         s = "leetcode" , k = 2, want: 2
         """
 
-        # 0 <= i < n - k + 1
         n = len(s)
-        # n = 1
-        # n = 8
         maxVowelNums = 0
 
         # initial vowel nums
@@ -83,36 +80,13 @@ class Solution:
             if self.isVowel(s[i]):
                 vowelNums += 1
         maxVowelNums = vowelNums
-        # maxVowelNums = 1
-        # maxVowelNums = 1
 
-        # [l, r]
-        l = 0
-        r = l + k - 1
-        # l = 1, r = 1
-        # l = 0, r = 1
-        while r + 1 < n:
-            #            l
-            # .            r
-            # [l e e t c o d e]
+        for i in range(k, n):
+            nextIsVowel = self.isVowel(s[i])
+            firstIsVowel = self.isVowel(s[i - k])
 
-            # check if last is vowel
-            """
-            max = 2
-            """
-            nextIsVowel = self.isVowel(s[r + 1])
-            # nextIsVowel = isVowel(t) = false
-            # check if first is vowel
-            firstIsVowel = self.isVowel(s[l])
-            # isVowel(e) = true
-            if nextIsVowel and not firstIsVowel:
-                vowelNums += 1
-                maxVowelNums = max(vowelNums, maxVowelNums)
-            elif not nextIsVowel and firstIsVowel:
-                vowelNums -= 1
-
-            l += 1
-            r += 1
+            vowelNums += int(nextIsVowel) - int(firstIsVowel)
+            maxVowelNums = max(vowelNums, maxVowelNums)
 
         return maxVowelNums
 
