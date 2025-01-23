@@ -7,6 +7,7 @@ postgresql = "42.5.0"
 mapstruct = "1.5.5.Final"
 lombok = "1.18.36"
 lombok-mapstruct-binding = "0.2.0"
+testcontainers = "1.20.4"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
@@ -20,11 +21,16 @@ spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "spring-boot" }
 spring-kafka = { module = "org.springframework.kafka:spring-kafka" }
+spring-kafka-test = { module = "org.springframework.kafka:spring-kafka-test" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 lombok-mapstruct-binding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombok-mapstruct-binding" }
+testcontainers = {module = "org.testcontainers:testcontainers", version.ref = "testcontainers"}
+testcontainers-junit = {module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers"}
+testcontainers-kafka = {module = "org.testcontainers:kafka", version.ref = "testcontainers"}
+
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

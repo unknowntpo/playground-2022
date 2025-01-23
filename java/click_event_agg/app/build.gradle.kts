@@ -30,6 +30,10 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.testcontainers)
+    testImplementation(libs.testcontainers.junit)
+    testImplementation(libs.testcontainers.kafka)
+    testImplementation(libs.spring.kafka.test)
 
     // mapper
     implementation(libs.mapstruct)

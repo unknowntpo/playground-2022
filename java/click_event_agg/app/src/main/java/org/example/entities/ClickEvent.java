@@ -13,6 +13,11 @@ public class ClickEvent implements Serializable {
     private Integer userId;
     private String tag;
 
+    // Default constructor (required by Jackson)
+    public ClickEvent() {
+        this.timestamp = System.currentTimeMillis();
+    }
+
     public ClickEvent(Integer userId, String tag) {
         this.userId = userId;
         this.tag = tag;
