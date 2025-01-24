@@ -78,9 +78,25 @@ class Solution:
 
         return maxVowelNums
 
+    def maxVowels0x3f(self, s: str, k: int) -> int:
+        n = len(s)
+        vowelNums = maxVowels = 0
+        for i, c in enumerate(s):
+            if c in "aeiou":
+                vowelNums += 1
+            if i < k - 1:
+                continue
+
+            maxVowels = max(maxVowels, vowelNums)
+
+            if s[i - k + 1] in "aeiou":
+                vowelNums -= 1
+        return maxVowels
+
     def maxVowels(self, s: str, k: int) -> int:
         # return self.maxVowelsSlow(s, k)
-        return self.maxVowelsFast(s, k)
+        # return self.maxVowelsFast(s, k)
+        return self.maxVowels0x3f(s, k)
 
 
 # 1 <= s.length <= 10^5
