@@ -1,6 +1,8 @@
 package org.example.messagings.kafka;
 
 import jakarta.annotation.Resource;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -11,11 +13,13 @@ import org.example.configs.kafka.KafkaProducerConfig;
 import org.example.configs.kafka.KafkaTopicConfig;
 import org.example.entities.ClickEvent;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -26,8 +30,10 @@ import org.testcontainers.kafka.ConfluentKafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -63,8 +69,12 @@ class ClickEventIntegrationTest {
     @Autowired
     private ClickEventConsumer consumer;
 
+    @Autowired
+    private KafkaAdmin kafkaAdmin;
+
     @Resource
     private ConcurrentKafkaListenerContainerFactory<String, ClickEvent> kafkaListenerContainerFactory;
+
 
     @Test
     void testProducerAndConsumer() throws Exception {
@@ -72,42 +82,52 @@ class ClickEventIntegrationTest {
         // Create and start the Kafka listener container using the factory
         ContainerProperties containerProperties = new ContainerProperties(topic);
 
-        Consumer kafkaConsumer = kafkaConsumerFactory.createConsumer();
+//        Consumer kafkaConsumer = kafkaConsumerFactory.createConsumer();
 
         // Subscribe to the topic
-        kafkaConsumer.subscribe(Collections.singletonList(topic));
+//        kafkaConsumer.subscribe(Collections.singletonList(topic));
 
-        ClickEvent event = new ClickEvent((int) (Math.random() * 10), "Test message");
-
+        List<ClickEvent> events = new ArrayList<>();
 
         // Produce a message
         for (int i = 0; i < 100; i++) {
+            ClickEvent event = new ClickEvent((int) (Math.random() * 10), "Test message");
             producer.sendEvent(event);
+            events.add(event);
         }
 
-        // Consume the message
-        ConsumerRecords<String, ClickEvent> records = kafkaConsumer.poll(Duration.ofSeconds(10));
+        Thread.sleep(1000);
 
-        for (ConsumerRecord<String, ClickEvent> record : records) {
-            System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
-        }
+        // FIXME: wait for event to be consumed
+        List<ClickEvent> gotEvents = consumer.buffer;
 
-        // Get metadata for the topic
-        List<PartitionInfo> partitions = kafkaConsumer.partitionsFor(topic);
-
-        // Print the metadata
-        for (PartitionInfo partition : partitions) {
-            System.out.println("Topic: " + partition.topic());
-            System.out.println("Partition: " + partition.partition());
-            System.out.println("Leader: " + partition.leader());
-            System.out.println("Replicas: " + java.util.Arrays.toString(partition.replicas()));
-            System.out.println("In-Sync Replicas: " + java.util.Arrays.toString(partition.inSyncReplicas()));
-            System.out.println("----------------------------------------");
-        }
-
-
-//        ConsumerRecord<String, ClickEvent> record = records.iterator().next();
-//        assertEquals(event, record.value());
-        kafkaConsumer.close();
+        assertFalse(gotEvents.isEmpty());
+        assertEquals(events, gotEvents);
+//
+//
+//        // Consume the message
+//        ConsumerRecords<String, ClickEvent> records = kafkaConsumer.poll(Duration.ofSeconds(10));
+//
+//        for (ConsumerRecord<String, ClickEvent> record : records) {
+//            System.out.printf("partition = %s, offset = %d, key = %s, value = %s%n", record.partition(), record.offset(), record.key(), record.value());
+//        }
+//
+//        // Get metadata for the topic
+//        List<PartitionInfo> partitions = kafkaConsumer.partitionsFor(topic);
+//
+//        // Print the metadata
+//        for (PartitionInfo partition : partitions) {
+//            System.out.println("Topic: " + partition.topic());
+//            System.out.println("Partition: " + partition.partition());
+//            System.out.println("Leader: " + partition.leader());
+//            System.out.println("Replicas: " + java.util.Arrays.toString(partition.replicas()));
+//            System.out.println("In-Sync Replicas: " + java.util.Arrays.toString(partition.inSyncReplicas()));
+//            System.out.println("----------------------------------------");
+//        }
+//
+//
+////        ConsumerRecord<String, ClickEvent> record = records.iterator().next();
+////        assertEquals(event, record.value());
+//        kafkaConsumer.close();
     }
 }
