@@ -1,0 +1,98 @@
+/* General styles */
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f7fafc;
+	margin: 0;
+	padding: 0;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.pricing-section {
+	text-align: center;
+	padding: 40px 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.section-title {
+	font-size: 2.5rem;
+	color: #2d3748;
+	margin-bottom: 40px;
+}
+
+.pricing-cards {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+
+
+/* Individual Pricing Card */
+.pricing-card {
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	padding: 30px;
+	width: 300px;
+	text-align: center;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-card:hover {
+	transform: translateY(-10px);
+	box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.plan-name {
+	font-size: 1.75rem;
+	color: #2d3748;
+	margin-bottom: 10px;
+}
+
+.plan-description {
+	font-size: 1rem;
+	color: #718096;
+	margin-bottom: 20px;
+}
+
+
+.plan-price {
+	font-size: 2.5rem;
+	color: #2d3748;
+	margin-bottom: 20px;
+}
+
+.plan-price span {
+	font-size: 1rem;
+	color: #718096;
+}
+
+.plan-features {
+	list-style: none;
+	padding: 0;
+	margin-bottom: 30px;
+}
+
+.plan-features li {
+	font-size: 1rem;
+	color: #4a5568;
+	margin-bottom: 10px;
+}
+
+.plan-button {
+	background-color: #4299e1;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	padding: 12px 24px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.plan-button:hover {
+	background-color: #3182ce;
+}

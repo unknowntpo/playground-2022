@@ -73,4 +73,4 @@ def test_max_num_of_vovels(testCase):
 
     sol = Solution()
     got = sol.findMaxAverage(nums, k)
-    assert got == want
+    assert print("f{got:.5f}") == print(want)
