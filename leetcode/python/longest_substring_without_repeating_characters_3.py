@@ -35,24 +35,64 @@ s 由英文字母、数字、符号和空格组成
 
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        # s = "a"
-        # s = abkabcde
+        """
+        {"name": "len(s) non-repeating chars", "s": "dvdf", "want": 3},
+        {"name": "len(s) non-repeating chars: 7", "s": "abcdefg", "want": 7},
+        {"name": "len(s) non-repeating chars: 7", "s": "abcckabd", "want": 5},
+        {"name": "non-containing chars should be deleted from map", "s": "pwwkew", "want": 3},
+        """
         maxLength = 0
+        n = len(s)
+        if n == 0:
+            return 0
+
+        l = 0
+        r = 0
+
         m = {}
-        for i in range(0, len(s)):
-            # i = 0
-            # i = 0
-            if s[i] in m:
-                if s[i] == s[i-k+1]:
-                    
-                else:
-                    maxLength = max(len(m), maxLength)
-                    length = 0
-                    m = {s[i]: 1}
+        # dvdf
+        while l <= r and r < n:
+            c = s[r]
+            if c in m:
+                # dedup
+                #   l
+                #       r
+                # kbacdea
+                # s[l] == s[r]
+                while l < r and s[l] != s[r]:
+                    m[s[l]] -= 1
+                    if m[s[l]] == 0:
+                        m.pop(s[l])
+                    l += 1
+                # # skip same char
+                # s[l] == s[r] or l == r
+                l += 1
+                r += 1
             else:
-                m[s[i]] = 1
-                maxLength = max(len(m), maxLength)
+                m[c] = 0
+                m[c] += 1
+                maxLength = max(maxLength, len(m))
+                r += 1
         return maxLength
+
+        # # s = "a"
+        # # s = abkabcde
+        # maxLength = 0
+        # m = {}
+        # for i in range(0, len(s)):
+        #     # i = 0
+        #     # i = 0
+        #     if s[i] in m:
+        #         if s[i] == s[i-k+1]:
+
+        #         else:
+        #             maxLength = max(len(m), maxLength)
+        #             length = 0
+        #             m = {s[i]: 1}
+        #     else:
+        #         m[s[i]] = 1
+        #         maxLength = max(len(m), maxLength)
+        # return maxLength
 
 
 # 0 <= s.length <= 5 * 104
@@ -74,8 +114,10 @@ testCases = [
     {"name": "length is 0", "s": "", "want": 0},
     {"name": "only 1 element - is vowel", "s": "a", "want": 1},
     {"name": "2 non-repeating chars", "s": "abkkk", "want": 3},
-    {"name": "len(s) non-repeating chars", "s": "dvdf", "want": 3},
-    {"name": "len(s) non-repeating chars", "s": "abcdefg", "want": 7},
+    {"name": "skipped repeating characters", "s": "dvdf", "want": 3},
+    {"name": "len(s) non-repeating chars: 7", "s": "abcdefg", "want": 7},
+    {"name": "continuous repeating chars", "s": "abcckabd", "want": 5},
+    {"name": "continuous repeating chars", "s": "pwwkew", "want": 3},
 ]
 
 
