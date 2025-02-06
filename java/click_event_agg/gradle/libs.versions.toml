@@ -1,6 +1,6 @@
 [versions]
-guava = "31.1-jre"  # Assuming this is the version you're using
-junit-jupiter = "5.9.1"  # Assuming this is the version you're using
+guava = "31.1-jre"                     # Assuming this is the version you're using
+junit-jupiter = "5.9.1"                # Assuming this is the version you're using
 spring-boot = "3.4.1"
 spring-dependency-management = "1.1.5"
 postgresql = "42.5.0"
@@ -8,6 +8,7 @@ mapstruct = "1.5.5.Final"
 lombok = "1.18.36"
 lombok-mapstruct-binding = "0.2.0"
 testcontainers = "1.20.4"
+awaitility = "4.2.0"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
@@ -27,9 +28,10 @@ mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 lombok-mapstruct-binding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombok-mapstruct-binding" }
-testcontainers = {module = "org.testcontainers:testcontainers", version.ref = "testcontainers"}
-testcontainers-junit = {module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers"}
-testcontainers-kafka = {module = "org.testcontainers:kafka", version.ref = "testcontainers"}
+testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
+testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-kafka = { module = "org.testcontainers:kafka", version.ref = "testcontainers" }
+awaitility = { group = "org.awaitility", name = "awaitility", version.ref = "awaitility" }
 
 
 [plugins]

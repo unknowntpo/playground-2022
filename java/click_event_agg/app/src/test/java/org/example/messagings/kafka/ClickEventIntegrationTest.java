@@ -22,6 +22,9 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.listener.MessageListenerContainer;
+import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Container;
@@ -37,11 +40,14 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.awaitility.Awaitility.await;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 @SpringBootTest(
         classes = {ClickEventProducer.class, ClickEventConsumer.class, KafkaTopicConfig.class, KafkaProducerConfig.class, KafkaConsumerConfig.class}
 )
 @Testcontainers
+@DirtiesContext
 class ClickEventIntegrationTest {
     static ConfluentKafkaContainer kafka = new ConfluentKafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0")).withReuse(true);
     @Autowired
@@ -75,17 +81,64 @@ class ClickEventIntegrationTest {
     @Resource
     private ConcurrentKafkaListenerContainerFactory<String, ClickEvent> kafkaListenerContainerFactory;
 
+    @Autowired
+    private KafkaListenerEndpointRegistry registry;
+
+    @BeforeEach
+    void setupTopic() throws ExecutionException, InterruptedException {
+        String topicName = KafkaTopicConfig.CLICK_EVENT_TOPIC_NAME;
+        
+        // 停止所有消费者
+        stopConsumers();
+        
+        try (AdminClient adminClient = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
+            // 删除已存在的topic
+            deleteTopic(adminClient, topicName);
+            
+            // 创建新的topic（3个分区，1个副本）
+            NewTopic newTopic = new NewTopic(topicName, 3, (short) 1);
+            adminClient.createTopics(Collections.singleton(newTopic)).all().get();
+            
+            // 等待topic创建完成
+            await().atMost(10, SECONDS)
+                   .until(() -> adminClient.listTopics().names().get().contains(topicName));
+        }
+        
+        // 重启消费者
+        restartConsumers();
+    }
+
+    private void deleteTopic(AdminClient adminClient, String topicName) {
+        try {
+            adminClient.deleteTopics(Collections.singleton(topicName)).all().get();
+            await().atMost(10, SECONDS)
+                   .until(() -> !adminClient.listTopics().names().get().contains(topicName));
+        } catch (InterruptedException | ExecutionException e) {
+            if (!(e.getCause() instanceof org.apache.kafka.common.errors.UnknownTopicOrPartitionException)) {
+                throw new RuntimeException("Topic deletion failed", e);
+            }
+        }
+    }
+
+    private void stopConsumers() {
+        registry.getListenerContainers().forEach(MessageListenerContainer::stop);
+    }
+
+    private void restartConsumers() {
+        registry.getListenerContainers().forEach(MessageListenerContainer::start);
+        
+        // 等待所有消费者启动完成
+        await().atMost(10, SECONDS)
+               .until(() -> registry.getListenerContainers()
+                   .stream()
+                   .allMatch(MessageListenerContainer::isRunning));
+    }
 
     @Test
     void testProducerAndConsumer() throws Exception {
         String topic = KafkaTopicConfig.CLICK_EVENT_TOPIC_NAME;
         // Create and start the Kafka listener container using the factory
         ContainerProperties containerProperties = new ContainerProperties(topic);
-
-//        Consumer kafkaConsumer = kafkaConsumerFactory.createConsumer();
-
-        // Subscribe to the topic
-//        kafkaConsumer.subscribe(Collections.singletonList(topic));
 
         List<ClickEvent> events = new ArrayList<>();
 
