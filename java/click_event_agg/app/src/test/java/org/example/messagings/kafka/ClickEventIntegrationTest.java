@@ -67,7 +67,7 @@ class ClickEventIntegrationTest {
     private KafkaTemplate<String, ClickEvent> kafkaTemplate;
 
     @Autowired
-    KafkaTopicConfig kafkaTopicConfig;
+    private KafkaTopicConfig kafkaTopicConfig;
 
     @Autowired
     private ClickEventProducer producer;
@@ -95,8 +95,8 @@ class ClickEventIntegrationTest {
             // 删除已存在的topic
             deleteTopic(adminClient, topicName);
             
-            // 创建新的topic（3个分区，1个副本）
-            NewTopic newTopic = new NewTopic(topicName, 3, (short) 1);
+            // 使用 KafkaTopicConfig 中的配置创建新的 topic
+            NewTopic newTopic = kafkaTopicConfig.clickEventTopic();
             adminClient.createTopics(Collections.singleton(newTopic)).all().get();
             
             // 等待topic创建完成
