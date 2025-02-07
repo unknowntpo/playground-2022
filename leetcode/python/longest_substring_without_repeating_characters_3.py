@@ -34,6 +34,9 @@ s 由英文字母、数字、符号和空格组成
 
 
 class Solution:
+    def lengthOfLongestSubstring_official(self, s: str) -> int:
+        return 0
+
     def lengthOfLongestSubstring(self, s: str) -> int:
         """
         {"name": "len(s) non-repeating chars", "s": "dvdf", "want": 3},
@@ -60,17 +63,14 @@ class Solution:
                 # kbacdea
                 # s[l] == s[r]
                 while l < r and s[l] != s[r]:
-                    m[s[l]] -= 1
-                    if m[s[l]] == 0:
-                        m.pop(s[l])
+                    m.pop(s[l])
                     l += 1
                 # # skip same char
                 # s[l] == s[r] or l == r
                 l += 1
                 r += 1
             else:
-                m[c] = 0
-                m[c] += 1
+                m[c] = 1
                 maxLength = max(maxLength, len(m))
                 r += 1
         return maxLength
@@ -112,7 +112,7 @@ so: 0 <= k <= len(s)
 
 testCases = [
     {"name": "length is 0", "s": "", "want": 0},
-    {"name": "only 1 element - is vowel", "s": "a", "want": 1},
+    {"name": "only 1 element", "s": "a", "want": 1},
     {"name": "2 non-repeating chars", "s": "abkkk", "want": 3},
     {"name": "skipped repeating characters", "s": "dvdf", "want": 3},
     {"name": "len(s) non-repeating chars: 7", "s": "abcdefg", "want": 7},
@@ -121,11 +121,57 @@ testCases = [
 ]
 
 
-@pytest.mark.parametrize("testCase", testCases, ids=lambda testCase: testCase["name"])
-def test_longest_substring_without_repeating_chars(testCase):
+# @pytest.mark.parametrize("testCase", testCases, ids=lambda testCase: testCase["name"])
+# def test_longest_substring_without_repeating_chars(testCase):
+#     s: List[int] = testCase["s"]
+#     want: int = testCase["want"]
+
+#     sol = Solution()
+#     method_names = ["lengthOfLongestSubstring", "lengthOfLongestSubstring_official"]
+
+#     for method in method_names:
+#         fn = getattr(sol)
+#         got = fn(s)
+#         assert got == want
+
+
+# @pytest.mark.parametrize(
+#     "testCase,method_name",
+#     [
+#         (testCase, method_name)
+#         for testCase in testCases
+#         for method_name in [
+#             "lengthOfLongestSubstring",
+#             "lengthOfLongestSubstring_official",
+#         ]
+#     ],
+#     ids=lambda param: f"{param[0]['name']}_{param[1]}",
+# )
+
+
+def id_func(param):
+    if isinstance(param, dict):
+        return param["name"]
+    return param
+
+
+@pytest.mark.parametrize(
+    "testCase,method_name",
+    [
+        (testCase, method_name)
+        for testCase in testCases
+        for method_name in [
+            "lengthOfLongestSubstring",
+            "lengthOfLongestSubstring_official",
+        ]
+    ],
+    ids=id_func,
+)
+def test_longest_substring_without_repeating_chars(testCase, method_name):
     s: List[int] = testCase["s"]
     want: int = testCase["want"]
 
     sol = Solution()
-    got = sol.lengthOfLongestSubstring(s)
+    fn = getattr(sol, method_name)
+    got = fn(s)
     assert got == want
