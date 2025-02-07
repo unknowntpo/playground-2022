@@ -34,8 +34,34 @@ s 由英文字母、数字、符号和空格组成
 
 
 class Solution:
-    def lengthOfLongestSubstring_official(self, s: str) -> int:
-        return 0
+    """
+    {"name": "length is 0", "s": "", "want": 0},
+    {"name": "only 1 element", "s": "a", "want": 1},
+    {"name": "2 non-repeating chars", "s": "abkkk", "want": 3},
+    {"name": "skipped repeating characters", "s": "dvdf", "want": 3},
+    {"name": "len(s) non-repeating chars: 7", "s": "abcdefg", "want": 7},
+    {"name": "continuous repeating chars", "s": "abcckabd", "want": 5},
+    {"name": "continuous repeating chars", "s": "pwwkew", "want": 3},
+    """
+
+    def lengthOfLongestSubstring_official_my_attempt(self, s: str) -> int:
+        n = len(s)
+        if n <= 1:
+            return n
+
+        maxLength = 1
+        for i in range(0, n):
+            r = i + 1
+            m = {}
+            m[s[i]] = 1
+            while r < n and s[r] not in m:
+                m[s[r]] = 1
+                r += 1
+
+            # s[r] == s[i]
+            maxLength = max(r - i, maxLength)
+
+        return maxLength
 
     def lengthOfLongestSubstring(self, s: str) -> int:
         """
