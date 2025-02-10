@@ -1,0 +1,27 @@
+.container {
+    /* Make this a flex container */
+    display: flex;
+    
+    /* This is where we'll change justify-content */
+	justify-content: space-around;
+    
+    /* Some styling to see the container better */
+    background-color: #f0f0f0;
+    height: 200px;
+    margin: 20px;
+    border: 2px solid #333;
+
+	border-color: red;
+}
+
+.box {
+    /* Style for the boxes */
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    margin: 5px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} 
