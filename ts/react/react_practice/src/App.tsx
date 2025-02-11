@@ -1,51 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import ColorButton from './components/ColorButton'
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import ColorButton from './components/ColorButton'
+import Task, { taskData } from './components/Task'
+
+// export default function App() {
+//   return (
+//     <div className="flex min-h-screen items-center justify-center bg-gray-100">
+//       <h1 className="text-4xl font-bold text-blue-600">
+//         Hello Tailwind CSS!
+//       </h1>
+//     </div>
+//   )
+// }
+
 
 function App() {
-  const [count, setCount] = useState(10)
+  // const [count, setCount] = useState(10)
 
-	const decrementCount = () => {
-		setCount((count) => count - 1);
-	}
+	// const decrementCount = () => {
+	// 	setCount((count) => count - 1);
+	// }
 
-	const incrementCount= () => {
-		setCount((count) => count + 1);
-	}
+	// const incrementCount= () => {
+	// 	setCount((count) => count + 1);
+	// }
 
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-blue-100 p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-5xl text-red-500 font-bold">
+          Task Manager
+        </h1>
+        <Task 
+          subTasks={taskData} 
+          level={0}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-				<button onClick={incrementCount}>
-					+
-        </button>
-				<ColorButton />
-        <p className="count">
-					Count is {count}
-        </p>
-        <button onClick={decrementCount}>
-					-
-        </button>
-				<p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
