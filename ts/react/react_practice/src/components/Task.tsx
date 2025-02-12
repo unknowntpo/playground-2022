@@ -102,7 +102,7 @@ export default function Task({
 	return subTasks.map((task) => (
 		<div 
 			key={task.id} 
-			style={{ marginLeft: `${level * 24}px` }}
+			style={{ marginLeft: `50px` }}
 		>
 			<div className="
 				bg-white 
