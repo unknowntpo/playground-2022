@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * @see <a href="https://github.com/fahdarhalai/sample-spring-data-jpa-redis-caching/blob/90665bfa0e2d9b231a8c620fe31b3854096bca8f/src/main/java/dev/fahd/springredis/service/EmployeeService.java#L16">...</a>
  */
@@ -41,7 +43,14 @@ public class StudentService {
 
         logger.info("getting student from studentRepository by id: {}, toString: {}", studentId, studentId.toString());
 
-        Student student = studentRepository.getById(studentId);
+		// don't use getById, it returns hibernate proxy object, not POJO
+		Student student = studentRepository.findById(studentId)
+            .orElseThrow(() -> new EntityNotFoundException(
+                String.format("Student not found with id: %d", studentId)
+            ));
+
+        logger.info("got student: {}", student.toString());
+
         studentRedisRepository.save(student);
 
         var dto = studentMapper.toDto(student);

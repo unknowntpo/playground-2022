@@ -10,12 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,15 +31,17 @@ class StudentE2ETest {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private StudentRedisRepository studentRedisRepository;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     // Test methods will go here
     @BeforeEach
     void setUp() {
         studentRepository.deleteAll();
-    }
-
-    @AfterEach
-    void tearDown() {
-        studentRepository.deleteAll();
+        Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().flushAll();
     }
 
     @Test
@@ -87,8 +92,9 @@ class StudentE2ETest {
         assertEquals(studentDto.getName(), savedStudent.getName());
 
         // Delete from Redis
-        redisTemplate.opsForValue().getOperations().delete(savedStudent.getRedisKey());
-        assertFalse(redisTemplate.hasKey(savedStudent.getRedisKey()));
+        String idHash = String.format("student:%d", savedStudent.getId());
+        redisTemplate.opsForValue().getOperations().delete(idHash);
+        assertFalse(redisTemplate.hasKey(idHash));
 
         // Retrieve the Student via API
         ResponseEntity<StudentDTO> getResponse = restTemplate.getForEntity("/students/{id}", StudentDTO.class, createResponse.getBody().getId());
@@ -101,7 +107,10 @@ class StudentE2ETest {
         assertNotNull(getResponse.getBody());
         assertEquals(studentDto.getName(), getResponse.getBody().getName());
 
+        Student gotStudent = studentRedisRepository.getById(savedStudent.getId());
+        assertNotNull(gotStudent);
+
         // Make sure student has been set to cache
-        assertTrue(redisTemplate.hasKey(savedStudent.getRedisKey()));
+        assertTrue(redisTemplate.hasKey(idHash));
     }
 }
