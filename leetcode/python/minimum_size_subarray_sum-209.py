@@ -52,7 +52,7 @@ class Solution:
             # r = 2, x = 4
             s += x
             # s = 1, 3, 7
-            while l <= r and s >= target:
+            while s >= target:
                 ans = min(
                     ans, r - l + 1
                 )  # ans = min(6, 1 - 0 + 1) = 2, # ans = min(2, 2 - 1 + 1) = 2
