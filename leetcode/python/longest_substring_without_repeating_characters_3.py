@@ -48,7 +48,7 @@ class Solution:
                 m[x] = 1
                 maxLength = max(maxLength, r - l + 1)
                 continue
-            while l < r and s[l] != x:
+            while s[l] != x:
                 m.pop(s[l])
                 l += 1
             l += 1
