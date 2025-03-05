@@ -52,6 +52,45 @@ class Solution:
                     # ans = 1
         return ans
 
+    def subarraysDivByK2(self, nums: List[int], k: int) -> int:
+        # [4, 5, 0, -2, -3, 1], k = 5
+        n = len(nums)
+        s = [0] * (n + 1)
+        ans = 0
+        for i in range(n):
+            s[i + 1] = s[i] + nums[i]
+
+        # [4, 5, 0, -2, -3, 1], k = 5
+        # s
+        # [0,4,9,9,7,4,5]
+
+        # find interval in [i, r]
+        cnt = defaultdict(int)
+        cnt[0] = 1
+        for i in range(n):
+            """
+            if (sj - si) % k == 0
+            then
+            sj % k - si % k == 0
+            sj % k == si % k
+
+            """
+
+            # key = s[i] % k
+            # consider when s[i] < 0
+            key = (s[i + 1] % k + k) % k
+
+            print(f"key: {key}")
+            if cnt[key] > 0:
+                print(f"got {cnt[key]} at s[{i+1}]")
+
+            ans += cnt[key]
+            cnt[key] += 1
+            # s: [i, j]
+            # if (sj - si) % k == 0
+            # then
+        return ans
+
 
 testCases = [
     {"name": "example 1", "nums": [4, 5, 0, -2, -3, 1], "k": 5, "want": 7},
@@ -70,7 +109,7 @@ def id_func(param):
     [
         (testCase, method_name)
         for testCase in testCases
-        for method_name in ["subarraysDivByK"]
+        for method_name in ["subarraysDivByK", "subarraysDivByK2"]
     ],
     ids=id_func,
 )
