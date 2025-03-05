@@ -64,6 +64,12 @@ class Solution:
         # s
         # [0,4,9,9,7,4,5]
 
+        # [5], k = 1
+        # [0, 5]
+
+        # [5], k = 4
+        # [0, 5]
+
         # find interval in [i, r]
         cnt = defaultdict(int)
         cnt[0] = 1
