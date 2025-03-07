@@ -102,31 +102,53 @@ class Solution:
 
     # prefix sum + hashmap (PASS)
     def checkSubarraySum4(self, nums: List[int], k: int) -> bool:
+        # [1, 0], k = 2
+        # [0, 1, 1]
+        """
+        [23, 2, 4, 6, 6], k = 7
+        [0, 23, 25, 29, 35, 41]
+        """
         has = False
         n = len(nums)
-        ps = [0] * (n + 1)
-        for i in range(0, n):
-            ps[i + 1] = ps[i] + nums[i]
+        # ps = [0] * (n + 1)
+        # for i in range(0, n):
+        #     ps[i + 1] = ps[i] + nums[i]
+        presum = 0
 
         cnt = defaultdict(int)
+        # if we don't set this, we will lost the one from [0, r]
         cnt[0] = 0
         for r in range(0, n):
             # total = 1
             # total *= nums[j]
+            # presum[r+1]
+            presum += nums[r]
+            # now, pre sum is presum[r+1]
+
             """
+
             ( pj - pi ) % k == 0
             pj % k - pi % k == 0
             pj % k = pi % k
+
+            [23, 2, 4, 6, 6], k = 7
+            [0, 23, 25, 29, 35, 41]
+
             """
-            key = (ps[r + 1] % k + k) % k
+            key = (presum % k + k) % k
+            # key = 23 % 7 = 2
+            # r = 1, key = ps[2] = 25 % 7 = 4
 
             # total = ps[j + 1] - ps[i]
             if key in cnt:
-                # for (j - i + 1) >= 2:
-                if r - cnt[key] + 1 >= 2:
+                # for (j - i) >= 2:
+                # length from [i, j]
+                if r - cnt[key] >= 2:
                     return True
             else:
-                cnt[key] = r + 1
+                cnt[key] = r
+                # cnt[2] = 0
+                # cnt: {2:0, 4:1}
 
         return has
 
