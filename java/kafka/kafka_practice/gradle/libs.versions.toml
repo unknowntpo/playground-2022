@@ -5,9 +5,11 @@
 guava = "33.2.1-jre"
 junit-jupiter = "5.10.3"
 kafka = "3.6.1"          # Latest stable version
+slf4j = "2.0.9"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
 kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka" }
 kafka-streams = { module = "org.apache.kafka:kafka-streams", version.ref = "kafka" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }

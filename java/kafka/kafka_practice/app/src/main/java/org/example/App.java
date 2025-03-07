@@ -19,11 +19,14 @@ public class App {
 		return "Hello World!";
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ExecutionException, InterruptedException {
 		System.out.println(new App().getGreeting());
 
 		// Check Kafka broker status
 		checkKafkaBrokerStatus("localhost:9092");
+		WordcountService svc = new WordcountService();
+		svc.produce();
+		svc.consume();
 	}
 
 	public static void checkKafkaBrokerStatus(String bootstrapServers) {

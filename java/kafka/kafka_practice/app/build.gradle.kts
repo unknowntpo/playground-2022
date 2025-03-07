@@ -21,10 +21,15 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    // Add Kafka client dependency
+    implementation(libs.kafka.clients)
+    
+    // Add SLF4J implementation
+    implementation(libs.slf4j.simple)
+
     // This dependency is used by the application.
     implementation(libs.guava)
 	
-	implementation(libs.kafka.clients)
 	implementation(libs.kafka.streams)
 }
 
