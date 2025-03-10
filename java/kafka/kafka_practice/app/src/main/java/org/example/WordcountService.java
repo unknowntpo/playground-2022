@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -81,7 +82,10 @@ public class WordcountService {
     }
 
     public void consume() {
+        Map<String, Integer>count = new HashMap<>();
+
         LOG.info("in consume ...");
+
         try {
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
@@ -92,9 +96,11 @@ public class WordcountService {
                     LOG.info("Consumed: offset = {}, key = {}, value = {}",
                             record.offset(), record.key(), record.value());
                     // Process the message here
+                    count.put(record.key(), count.getOrDefault(record.key(), 0) + 1);
                 }
             }
         } finally {
+            LOG.info("Finally, count: {}", count);
             consumer.close();
         }
     }
