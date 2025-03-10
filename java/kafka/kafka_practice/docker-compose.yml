@@ -28,7 +28,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_LISTENERS: CONTROLLER://kafka1:29093,PLAINTEXT://kafka1:29092,PLAINTEXT_HOST://0.0.0.0:9092
     volumes:
-      - ./data/kafka1:/var/lib/kafka/data
+      - kafka1-data:/var/lib/kafka/data
 
   kafka2:
     <<: *kafka-defaults
@@ -43,7 +43,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:29092,PLAINTEXT_HOST://localhost:9093
       KAFKA_LISTENERS: CONTROLLER://kafka2:29093,PLAINTEXT://kafka2:29092,PLAINTEXT_HOST://0.0.0.0:9093
     volumes:
-      - ./data/kafka2:/var/lib/kafka/data
+      - kafka2-data:/var/lib/kafka/data
 
   kafka3:
     <<: *kafka-defaults
@@ -58,7 +58,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:29092,PLAINTEXT_HOST://localhost:9094
       KAFKA_LISTENERS: CONTROLLER://kafka3:29093,PLAINTEXT://kafka3:29092,PLAINTEXT_HOST://0.0.0.0:9094
     volumes:
-      - ./data/kafka3:/var/lib/kafka/data
+      - kafka3-data:/var/lib/kafka/data
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -71,4 +71,9 @@ services:
     depends_on:
       - kafka1
       - kafka2
-      - kafka3 
+      - kafka3
+
+volumes:
+  kafka1-data:
+  kafka2-data:
+  kafka3-data:
