@@ -6,6 +6,7 @@ package org.example;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.DescribeClusterResult;
 import org.apache.kafka.clients.admin.ListTopicsResult;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.Node;
 
@@ -25,7 +26,8 @@ public class App {
 
 		// Check Kafka broker status
 		checkKafkaBrokerStatus("localhost:9092");
-		WordcountService svc = new WordcountService();
+		NewTopic topic = new NewTopic(WordcountService.TOPIC_NAME, 2, (short) 1);
+		WordcountService svc = new WordcountService(topic);
 		svc.produce();
 		svc.consume();
 	}

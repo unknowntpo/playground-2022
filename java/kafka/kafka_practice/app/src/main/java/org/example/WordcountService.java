@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 
 public class WordcountService {
     private static final Logger LOG = LoggerFactory.getLogger(WordcountService.class);
-    private static final String TOPIC_NAME = "topic1";
+    public static final String TOPIC_NAME = "topic1";
     private KafkaProducer producer;
     private KafkaConsumer<String, String> consumer;
     private AdminClient adminClient;
@@ -30,13 +30,13 @@ public class WordcountService {
     private static final int MESSAGE_COUNT = 300;
     Map<String, Integer> messageMap = ImmutableMap.of("Alpha", MESSAGE_COUNT, "Beta", MESSAGE_COUNT, "Gama", MESSAGE_COUNT);
 
-    public WordcountService() throws ExecutionException, InterruptedException {
+    public WordcountService(NewTopic newTopic) throws ExecutionException, InterruptedException {
         String bootstrapServers = "localhost:9092";
         Properties props = new Properties();
         props.put("bootstrap.servers", bootstrapServers);
 
         this.adminClient = AdminClient.create(props);
-        this.resetTopic(adminClient);
+        this.resetTopic(adminClient, newTopic);
 
         // Configure Kafka Producer properties
         Properties producerProps = new Properties();
@@ -63,8 +63,7 @@ public class WordcountService {
         consumer.subscribe(Collections.singletonList(topic.name()));
     }
 
-    private void createTopic(AdminClient adminClient) {
-        NewTopic topic = new NewTopic(TOPIC_NAME, 2, (short) 1);
+    private void createTopic(AdminClient adminClient, NewTopic topic) {
         adminClient.createTopics(Collections.singletonList(topic));
         this.topic = topic;
     }
@@ -82,7 +81,7 @@ public class WordcountService {
     }
 
     public void consume() {
-        Map<String, Integer>count = new HashMap<>();
+        Map<String, Integer> count = new HashMap<>();
 
         LOG.info("in consume ...");
 
@@ -103,18 +102,18 @@ public class WordcountService {
             }
         } finally {
             long endTimeMillis = System.currentTimeMillis();
-            LOG.info("Finally, consumed {} records in {} seconds",count, ((float) ((endTimeMillis - startTimeMillis) / Math.pow(10, 3))));
+            LOG.info("Finally, consumed {} records in {} seconds", count, ((float) ((endTimeMillis - startTimeMillis) / Math.pow(10, 3))));
             consumer.close();
         }
     }
 
-    private void resetTopic(AdminClient adminClient) throws ExecutionException, InterruptedException {
+    private void resetTopic(AdminClient adminClient, NewTopic newTopic) {
         try {
             DeleteTopicsResult result = adminClient.deleteTopics(Collections.singletonList(TOPIC_NAME));
             result.all().get();
         } catch (Exception e) {
         }
 
-        createTopic(adminClient);
+        createTopic(adminClient, newTopic);
     }
 }
