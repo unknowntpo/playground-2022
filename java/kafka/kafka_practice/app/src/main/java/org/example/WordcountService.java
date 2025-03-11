@@ -86,11 +86,13 @@ public class WordcountService {
 
         LOG.info("in consume ...");
 
+        long startTimeMillis = System.currentTimeMillis();
+
         try {
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
                 if (records.isEmpty()) {
-                    return;
+                    break;
                 }
                 for (ConsumerRecord<String, String> record : records) {
                     LOG.info("Consumed: offset = {}, key = {}, value = {}",
@@ -100,7 +102,8 @@ public class WordcountService {
                 }
             }
         } finally {
-            LOG.info("Finally, count: {}", count);
+            long endTimeMillis = System.currentTimeMillis();
+            LOG.info("Finally, consumed {} records in {} seconds",count, ((float) ((endTimeMillis - startTimeMillis) / Math.pow(10, 3))));
             consumer.close();
         }
     }
