@@ -39,6 +39,23 @@ class Solution:
         bt(0)
         return res
 
+    def subsets2(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        res = []
+        arr = []
+
+        def dfs(i: int):
+            res.append(arr.copy())
+            if i == n:
+                return
+            for j in range(i, n):
+                arr.append(nums[j])
+                dfs(j + 1)
+                arr.pop()
+
+        dfs(0)
+        return res
+
 
 testCases = [
     {
@@ -63,7 +80,11 @@ def id_func(param):
 
 @pytest.mark.parametrize(
     "testCase,method_name",
-    [(testCase, method_name) for testCase in testCases for method_name in ["subsets"]],
+    [
+        (testCase, method_name)
+        for testCase in testCases
+        for method_name in ["subsets", "subsets2"]
+    ],
     ids=id_func,
 )
 def test_subsets(testCase, method_name):
