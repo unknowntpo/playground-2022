@@ -30,7 +30,7 @@ mod two_sum {
         let test_cases = [
             (vec![2, 7, 11, 15], 9, vec![0, 1]),
             (vec![3, 2, 4], 6, vec![1, 2]),
-            (vec![3, 3], 6, vec![0, 1]),
+            (vec![3, 3], 6, vec![0, 3]),
         ];
         for (nums, target, expected) in test_cases {
             let result = two_sum(nums, target);
