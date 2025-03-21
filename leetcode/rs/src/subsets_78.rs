@@ -14,7 +14,7 @@ mod tests {
     use super::*;
 
     #[rstest]
-    #[case(vec![1, 2, 3], vec![
+    #[case::custom_name(vec![1, 2, 3], vec![
         vec![],
         vec![1],
         vec![2],
