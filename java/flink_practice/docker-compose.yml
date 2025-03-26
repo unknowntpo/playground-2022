@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  jobmanager:
+    image: flink:latest
+    container_name: flink-jobmanager
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        state.backend: hashmap
+        execution.checkpointing.interval: 10s
+    volumes:
+      - ./app/build/libs:/opt/flink/usrlib
+      - ./data:/opt/flink/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  taskmanager:
+    image: flink:latest
+    container_name: flink-taskmanager
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+      - |
+        FLINK_PROPERTIES=
+        taskmanager.numberOfTaskSlots: 2
+        state.backend: hashmap
+    volumes:
+      - ./app/build/libs:/opt/flink/usrlib
+      - ./data:/opt/flink/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    scale: 1  # Number of task manager instances to run
+
+networks:
+  default:
+    name: flink-network
+    driver: bridge
+

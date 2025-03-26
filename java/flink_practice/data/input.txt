@@ -1,0 +1,6 @@
+Hello Apache Flink
+This is a test file
+It contains some text to be processed
+Flink is a powerful stream processing framework
+It can handle batch processing as well
+This sample will be used to test the WordCount example
