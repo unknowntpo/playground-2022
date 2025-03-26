@@ -12,15 +12,15 @@ impl Solution {
     ///
     /// 进阶：链表可以选用迭代或递归方式完成反转。你能否用两种方法解决这道题？
     pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut head = head;
-        let mut p: Option<Box<ListNode>> = None;
-        while let Some(mut node) = head {
-            head = node.next.take();
-            node.next = p.take();
-            p = Some(node);
+        let mut cur = head;
+        let mut pre: Option<Box<ListNode>> = None;
+        while let Some(mut node) = cur.take() {
+            cur = node.next;
+            node.next = pre;
+            pre = Some(node);
         }
 
-        p
+        pre
     }
 }
 
