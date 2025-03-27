@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  jobmanager:
+    image: apache/flink:1.17-scala_2.12-java11
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        state.backend: filesystem
+        state.checkpoints.dir: file:///opt/flink/checkpoints
+    volumes:
+      - ./hello.py:/opt/flink/hello.py
+      - ./checkpoints:/opt/flink/checkpoints
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  taskmanager:
+    image: apache/flink:1.17-scala_2.12-java11
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    deploy:
+      replicas: 1
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+        state.backend: filesystem
+        state.checkpoints.dir: file:///opt/flink/checkpoints
+    volumes:
+      - ./hello.py:/opt/flink/hello.py
+      - ./checkpoints:/opt/flink/checkpoints
+
+  python-job:
+    # image: apache/flink:1.17-scala_2.12-java11
+    build: .
+    depends_on:
+      jobmanager:
+        condition: service_healthy
+    volumes:
+      - ./hello.py:/opt/flink/hello.py
+      - ./input:/opt/flink/input
+      - ./output:/opt/flink/output
+      - ./run_job.sh:/opt/flink/run_job.sh
+    environment:
+      - FLINK_JOBMANAGER_HOST=jobmanager
+      - FLINK_JOBMANAGER_PORT=8081
+    command: >
+      bash -c "
+      echo 'Starting Flink Python job...' &&
+      source /opt/flink/venv/bin/activate &&
+      /opt/flink/venv/bin/python hello.py"
