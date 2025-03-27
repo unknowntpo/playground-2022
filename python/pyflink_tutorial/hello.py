@@ -89,6 +89,7 @@ def word_count(input_path, output_path):
 
     # define the sink
     if output_path is not None:
+        print(f"Saving result to {output_path}...")
         ds.sink_to(
             sink=FileSink.for_row_format(
                 base_path=output_path, encoder=Encoder.simple_string_encoder()

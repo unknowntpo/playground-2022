@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   jobmanager:
-    image: apache/flink:1.17-scala_2.12-java11
+    # image: apache/flink:1.17-scala_2.12-java11
+    build: .
     ports:
       - "8081:8081"
     command: jobmanager
@@ -16,6 +17,8 @@ services:
     volumes:
       - ./hello.py:/opt/flink/hello.py
       - ./checkpoints:/opt/flink/checkpoints
+      - ./output:/opt/flink/output
+
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/"]
       interval: 5s
@@ -24,7 +27,8 @@ services:
       start_period: 10s
 
   taskmanager:
-    image: apache/flink:1.17-scala_2.12-java11
+    # image: apache/flink:1.17-scala_2.12-java11
+    build: .
     depends_on:
       - jobmanager
     command: taskmanager
@@ -41,6 +45,7 @@ services:
     volumes:
       - ./hello.py:/opt/flink/hello.py
       - ./checkpoints:/opt/flink/checkpoints
+      - ./output:/opt/flink/output
 
   python-job:
     # image: apache/flink:1.17-scala_2.12-java11
@@ -54,10 +59,16 @@ services:
       - ./output:/opt/flink/output
       - ./run_job.sh:/opt/flink/run_job.sh
     environment:
-      - FLINK_JOBMANAGER_HOST=jobmanager
-      - FLINK_JOBMANAGER_PORT=8081
-    command: >
-      bash -c "
-      echo 'Starting Flink Python job...' &&
-      source /opt/flink/venv/bin/activate &&
-      /opt/flink/venv/bin/python hello.py"
+      - PYPATH=/opt/flink/venv/bin/python
+    command: ./run_job.sh
+
+    # command: >
+    #   bash -c "
+    #   echo 'Starting Flink Python job...' &&
+    #   source /opt/flink/venv/bin/activate &&
+    #   flink run -m jobmanager:8081 -pyPythonPath ${PYPATH} -pyclientexec ${PYPATH} --python hello.py"
+    # # command: >
+    #   bash -c "
+    #   echo 'Starting Flink Python job...' &&
+    #   source /opt/flink/venv/bin/activate &&
+    #   /opt/flink/venv/bin/python hello.py"
