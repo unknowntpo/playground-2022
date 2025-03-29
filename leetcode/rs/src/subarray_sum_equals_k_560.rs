@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use rstest::rstest;
 
 struct Solution;
@@ -68,12 +69,84 @@ impl Solution {
         for i in 0..n {
             for j in i..n {
                 // sum in [i, j]
-                acc = ps[j+1] - ps[i];
+                acc = ps[j + 1] - ps[i];
                 if acc == k {
                     res += 1;
                 }
             }
         }
+
+        res
+    }
+
+    // TC: O(n), SC: O(n)
+    pub fn subarray_sum3(nums: Vec<i32>, k: i32) -> i32 {
+        // [1, 3, 4]
+        // [0, 1, 4, 8]
+        // [i, j] = ps[j+1] - ps[i]
+        // [1, 2] = ps[3] - ps[1] = 8 - 1 = 7
+        // [0, 2] = ps[3] - ps[0] = 8 - 0 = 8
+        // m: {0: 1}
+        // m: {0: 1, 1: 1}
+        // m: {0: 1, 1: 1, 4: 1}
+        // m: {0: 1, 1: 1, 4: 1, 8: 1}
+        /// nums [1,-1,0], k = 0
+        /// ps [0, 1, 0, 0]
+        /// cnt: {0: 1}, cnt: {0: 1, 1: 1}
+        ///
+        let n = nums.len();
+        if n == 0 {
+            return 0;
+        }
+
+        let mut ps: Vec<i32> = vec![0; n + 1];
+        for i in 0..n {
+            ps[i + 1] = ps[i] + nums[i];
+        }
+
+        // for j, we wanna find [i, j] where sum == k
+        // ps[j+1] - ps[i] = k
+        // we can record ps[i] in hashMap every time
+        // m {}
+
+        let mut res = 0;
+        let mut acc = 0;
+        // map from sum to num of ps eq to sum
+        // [1, 1, 2], k = 3
+        // [0, 1, 2, 4], ps
+        // i = 0, cnt: {0}
+
+        let mut cnt: HashMap<i32, i32> = HashMap::new();
+        // FIXME: Do we need this ?
+        cnt.insert(0, 1);
+        for j in 0..n {
+            // sum in [i, j]
+            // j = 0, 1, 2
+            // cnt: {0: 1}
+            // cnt: {0: 1, 1: 1}
+            // cnt: {0: 1, 1: 1, 2: 1}
+            let x = ps[j + 1];
+            // x: 1, 2, 4
+            // let diff = x - k;
+            // 4- 3 = 1
+            let matched_cnt = cnt.get(&(x - k)).unwrap_or(&0).clone();
+            // matched_cnt: 0, 0, 1
+            res += matched_cnt;
+            // res = 0, 0, 1
+            cnt.insert(x, cnt.get(&x).unwrap_or(&0) + 1);
+            // cnt: {0: 1, 1: 1}
+            // cnt: {0: 1, 1: 1, 2: 1}
+            // cnt: {0: 1, 1: 1, 2: 1, 4: 1}
+       }
+        // for i in 0..n {
+        //     for j in i..n {
+        //         // sum in [i, j]
+        //         acc = ps[j + 1] - ps[i];
+        //         if acc == k {
+        //             res += 1;
+        //         }
+        //     }
+        // }
 
         res
     }
@@ -91,8 +164,9 @@ mod tests {
     #[case::self_example_1(vec![1], 2, 0)]
     #[case::self_example_2(vec![1, 3, 5], 9, 1)]
     #[case::self_example_3_test_negative_number(vec![1, 3, -1, 5], 3, 2)]
+    #[case::self_example_4_multi_match(vec![1, -1, 0], 0, 3)]
     fn test_subsets(#[case] nums: Vec<i32>, #[case] k: i32, #[case] want: i32) {
-        let fns = vec![Solution::subarray_sum, Solution::subarray_sum2];
+        let fns = vec![Solution::subarray_sum, Solution::subarray_sum2, Solution::subarray_sum3];
 
         for f in fns {
             // COPY v.s. CLONE
