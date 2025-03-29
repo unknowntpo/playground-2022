@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use rstest::rstest;
+use std::collections::HashMap;
 
 struct Solution;
 
@@ -137,7 +137,7 @@ impl Solution {
             // cnt: {0: 1, 1: 1}
             // cnt: {0: 1, 1: 1, 2: 1}
             // cnt: {0: 1, 1: 1, 2: 1, 4: 1}
-       }
+        }
         // for i in 0..n {
         //     for j in i..n {
         //         // sum in [i, j]
@@ -147,6 +147,29 @@ impl Solution {
         //         }
         //     }
         // }
+
+        res
+    }
+
+    // TC: on, SC: O1
+    pub fn subarray_sum4(nums: Vec<i32>, k: i32) -> i32 {
+        let n = nums.len();
+        if n == 0 {
+            return 0;
+        }
+
+        let mut res = 0;
+        let mut ps = 0;
+
+        let mut cnt: HashMap<i32, i32> = HashMap::new();
+        cnt.insert(0, 1);
+        for j in 0..n {
+            ps += nums[j];
+            let x = ps;
+            let matched_cnt = cnt.get(&(x - k)).unwrap_or(&0).clone();
+            res += matched_cnt;
+            cnt.insert(x, cnt.get(&x).unwrap_or(&0) + 1);
+        }
 
         res
     }
@@ -166,7 +189,12 @@ mod tests {
     #[case::self_example_3_test_negative_number(vec![1, 3, -1, 5], 3, 2)]
     #[case::self_example_4_multi_match(vec![1, -1, 0], 0, 3)]
     fn test_subsets(#[case] nums: Vec<i32>, #[case] k: i32, #[case] want: i32) {
-        let fns = vec![Solution::subarray_sum, Solution::subarray_sum2, Solution::subarray_sum3];
+        let fns = vec![
+            Solution::subarray_sum,
+            Solution::subarray_sum2,
+            Solution::subarray_sum3,
+            Solution::subarray_sum4,
+        ];
 
         for f in fns {
             // COPY v.s. CLONE
