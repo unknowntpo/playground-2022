@@ -166,7 +166,7 @@ impl Solution {
         for j in 0..n {
             ps += nums[j];
             let x = ps;
-            let matched_cnt = cnt.get(&(x - k)).unwrap_or(&0).clone();
+            let matched_cnt = cnt.get(&(x - k)).unwrap_or(&0);
             res += matched_cnt;
             cnt.insert(x, cnt.get(&x).unwrap_or(&0) + 1);
         }
