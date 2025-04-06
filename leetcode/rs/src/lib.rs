@@ -1,6 +1,7 @@
 mod continuous_subarray_sum_523;
 mod delete_node_in_linked_list_237;
 pub mod linked_list;
+mod maximum_average_subarray_i_643;
 mod maximum_vowels_in_substring_of_given_length_1456;
 mod reverse_linked_list_206;
 mod subarray_sum_equals_k_560;
