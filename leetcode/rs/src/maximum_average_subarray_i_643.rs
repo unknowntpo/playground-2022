@@ -25,8 +25,8 @@ impl Solution {
         // 5, 3, 2, 1, 11
         // [      ]
         let n = nums.len();
+        let mut max_s = i32::MIN;
         let mut acc = 0;
-        let mut max_avg: f64 = -f64::MAX;
         // #[case(vec![5], 1, 5.0)]
         // #[case::custom(vec![5,3,2,1,11], 2, 6.0)]
         // n = 1
@@ -40,29 +40,18 @@ impl Solution {
             // max_avg = 5 / 2 = 2.5
             // max_avg = 8 / 2 = 4
             // let k: usize = k.try_into().unwrap();
-            if i as i32 + 1 < k {
+            if i + 1 < k as usize {
                 continue;
             }
             // length of window == k
             // #[case(vec![1,12,-5,-6,50,3], 4, 12.75)]
 
-            max_avg = Solution::max(max_avg, acc as f64 / k as f64);
+            max_s = max_s.max(acc);
 
-            // update max avg
-
-            acc -= nums[(i as i32 - k + 1) as usize];
+            acc -= nums[i + 1 - k as usize];
         }
 
-        println!("max {max_avg}");
-
-        max_avg
-    }
-
-    pub fn max(a: f64, b: f64) -> f64 {
-        if a > b {
-            return a;
-        }
-        b
+        max_s as f64 / k as f64
     }
 }
 
