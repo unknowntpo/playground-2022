@@ -1,6 +1,7 @@
+pub mod binary_tree;
 mod continuous_subarray_sum_523;
 mod delete_node_in_linked_list_237;
-pub mod linked_list;
+mod linked_list;
 mod longest_substring_without_repeating_characters_3;
 mod maximum_average_subarray_i_643;
 mod maximum_vowels_in_substring_of_given_length_1456;
