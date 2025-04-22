@@ -1,0 +1,16 @@
+{
+  "name": "multi_threads_example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bench": "vitest bench single.bench.js",
+    "start": "node counter.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vitest": "^3.1.2"
+  }
+}
