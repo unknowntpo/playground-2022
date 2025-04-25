@@ -9,6 +9,10 @@ app = FastAPI()
 async def read_root() -> dict:
     return {"Hello": "World"}
 
+@app.get("/healthz")
+async def healthcheck() -> dict:
+    return {"status": "ok"}
+
 @app.get("/items/{item_id}")
 async def read_item(item_id: int, q: Union[str, None] = None) -> dict:
     return {"item_id": item_id, "q": q}
