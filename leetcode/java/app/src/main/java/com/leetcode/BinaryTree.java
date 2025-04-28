@@ -1,23 +1,14 @@
 package com.leetcode;
 
-import com.sun.source.tree.Tree;
-
-import javax.annotation.Nullable;
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Queue;
 
 public class BinaryTree {
     private TreeNode root;
 
     public BinaryTree() {
-    }
-
-    public BinaryTree(TreeNode root) {
-        this.root = root;
     }
 
     public static BinaryTree of(List<Integer> nums) {
@@ -27,26 +18,6 @@ public class BinaryTree {
     }
 
     private BinaryTree buildTreeFromList(List<Integer> nums) {
-        /**
-         * tree
-         * nums: [1,2,3], []
-         * if n.size() == 0 return null root BinaryTree
-         * root = Node(nums[0])
-         * q: [root]
-         * idx = 1
-         * while idx < nums.size():
-         *    n = q.pop()
-         *    if idx < nums.size():
-         *       n.left = Node(nums[idx])
-         *       q.push(n.left)
-         *    idx += 1
-         *    if idx < nums.size():
-         *       n.right = Node(nums[idx])
-         *       q.push(n.right)
-         *    idx += 1
-         *
-         *
-         */
         if (nums.isEmpty()) {
             return this;
         }
@@ -89,13 +60,16 @@ public class BinaryTree {
 
         while (!q.isEmpty()) {
             TreeNode n = q.poll();
-            result.add(n.val);
-            if (n.left != null) {
+            result.add(n == null ? null : n.val);
+            if (n != null) {
                 q.offer(n.left);
-            }
-            if (n.right != null) {
                 q.offer(n.right);
             }
+        }
+
+        // delete tail null variable
+        while (result.get(result.size() - 1) == null) {
+            result.remove(result.size() - 1);
         }
 
         return result;

@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -31,7 +32,8 @@ public class BinaryTreeTest {
                         {"empty list", List.of(), List.of()},
                         {"list with 1 element", List.of(1), List.of(1)},
                         {"list with multiple elements", List.of(1,2,3), List.of(1,2,3)},
-//                        {"list with null elements", List(1,null,3), List.of(1,null,3)},
+                        {"list with null elements", Arrays.asList(1,null,3), Arrays.asList(1,null,3)},
+                        {"list with null elements at tail, tailed null should be removed", Arrays.asList(1,null,3, null, null), Arrays.asList(1,null,3)},
                 }
         );
     }
