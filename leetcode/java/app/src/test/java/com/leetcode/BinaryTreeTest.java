@@ -15,10 +15,10 @@ import static org.junit.Assert.assertNull;
 @RunWith(Parameterized.class)
 public class BinaryTreeTest {
     private final String name;
-    private final int[] want;
-    private final int[] nums;
+    private final List<Integer> want;
+    private final List<Integer> nums;
 
-    public BinaryTreeTest(String name, int[] nums, int[] want) {
+    public BinaryTreeTest(String name, List<Integer> nums, List<Integer> want) {
         this.name = name;
         this.nums = nums;
         this.want = want;
@@ -28,9 +28,10 @@ public class BinaryTreeTest {
     public static Collection<Object[]> testData() {
         return Arrays.asList(
                 new Object[][]{
-                        {"empty list", new int[]{}, new int[]{}},
-                        {"list with 1 element", new int[]{1}, new int[]{1}},
-                        {"list with multiple elements", new int[]{1, 2, 3}, new int[]{1, 2, 3}},
+                        {"empty list", List.of(), List.of()},
+                        {"list with 1 element", List.of(1), List.of(1)},
+                        {"list with multiple elements", List.of(1,2,3), List.of(1,2,3)},
+//                        {"list with null elements", List(1,null,3), List.of(1,null,3)},
                 }
         );
     }
@@ -43,8 +44,8 @@ public class BinaryTreeTest {
 //
     @Test
     public void testBuildTree() {
-        List<Integer> got = BinaryTree.into(BinaryTree.of(List.of(3)));
+        List<Integer> got = BinaryTree.into(BinaryTree.of(nums));
 
-        assertEquals(want, got.toArray(Integer[]::new));
+        assertEquals(want, got);
     }
 }
