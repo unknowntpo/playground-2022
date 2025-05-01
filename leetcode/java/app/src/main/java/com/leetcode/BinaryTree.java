@@ -6,6 +6,14 @@ import java.util.List;
 import java.util.Queue;
 
 public class BinaryTree {
+    public TreeNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(TreeNode root) {
+        this.root = root;
+    }
+
     private TreeNode root;
 
     public BinaryTree() {
@@ -77,6 +85,10 @@ public class BinaryTree {
 
     public int add(int a, int b) {
         return a + b;
+    }
+
+    public List<Integer> into() {
+        return BinaryTree.into(this);
     }
 
     public class TreeNode {
