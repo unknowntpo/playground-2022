@@ -26,7 +26,9 @@ public class InvertBinaryTree226Test extends TestCase {
         return List.of(
                 new Object[]{"empty", List.of(), List.of()},
                 new Object[]{"one", List.of(1), List.of(1)},
-                new Object[]{"two", List.of(1, 2), List.of(1, 2)}
+                new Object[]{"two", Arrays.asList(1, 2), Arrays.asList(1, null, 2)},
+                new Object[]{"three", Arrays.asList(1, 2, 3), Arrays.asList(1, 3, 2)},
+                new Object[]{"seven", Arrays.asList(4, 2, 7, 1, 3, 6, 9), Arrays.asList(4, 7, 2, 9, 6, 3, 1)}
         );
     }
 
