@@ -20,26 +20,19 @@ public class InvertBinaryTree226 {
      */
     static class Solution {
         public TreeNode invertTree(TreeNode root) {
-            this._invertTree(root);
-            return root;
-        }
-
-        /**
-         *    1
-         *   2 3
-         */
-        public void _invertTree(TreeNode root) {
-            if (root != null) {
-                final TreeNode temp = root.left;
-                root.left = root.right;
-                root.right = temp;
-                if (root.left != null) {
-                    this.invertTree(root.left);
-                }
-                if (root.right != null) {
-                    this.invertTree(root.right);
-                }
+            if (root == null) {
+                return root;
             }
+            final TreeNode temp = root.left;
+            root.left = root.right;
+            root.right = temp;
+            if (root.left != null) {
+                this.invertTree(root.left);
+            }
+            if (root.right != null) {
+                this.invertTree(root.right);
+            }
+            return root;
         }
     }
 }
