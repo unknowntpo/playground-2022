@@ -22,10 +22,10 @@ const LoginSignup = () => {
 					<img src={password_icon} alt="" />
 					<input type="text" placeholder='Password' />
 				</div>
-				<div className="input">
+				{action === "Signup" && <div className="input">
 					<img src={email_icon} alt="" />
 					<input type="text" placeholder='Email' />
-				</div>
+				</div>}
 			</div>
 			<div className="forgot-password">Forgot Password? <span>Click Here</span></div>
 			<div className="submit-container">
