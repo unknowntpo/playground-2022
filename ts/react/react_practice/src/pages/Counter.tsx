@@ -4,8 +4,8 @@ export default function Counter() {
 	const [count, setCount] = useState(0);
 
 	return (
-		<div className="flex flex-col items-center justify-center gap-4 p-6 bg-lime-200">
-			<div className="text-2xl font-bold">
+		<div className="flex flex-col items-center p-8 max-w-md mx-auto bg-gray-50 rounded-lg shadow-md">
+			<div className="text-2xl font-bold mb-4">
 				Count: {count}
 			</div>
 			<div className="flex gap-2">
