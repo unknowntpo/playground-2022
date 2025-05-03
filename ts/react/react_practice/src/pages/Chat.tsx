@@ -24,7 +24,7 @@ export default function Chat() {
 					<div className="messages">
 						A: Hello
 						B: World
-						{healthStatus}
+						{ healthStatus }
 					</div>
 					<div className="input-field"></div>
 					<div className="submit">Submit</div>
