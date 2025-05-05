@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import Task, { taskData } from './components/Task'
 import Test from './pages/Test'
 import Chat from './pages/Chat'
+import Calculator from './pages/Calculator'
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
             </Link>
 						<Link to="/chat" className="text-blue-500 hover:text-blue-700">
               Chat
+            </Link>
+						<Link to="/calculator" className="text-blue-500 hover:text-blue-700">
+              Calculator
             </Link>
           </div>
         </nav>
@@ -37,6 +41,7 @@ function App() {
           } />
           <Route path="/test" element={<Test />} />
 					<Route path="/chat" element={<Chat />} />
+					<Route path="/calculator" element={<Calculator />} />
         </Routes>
       </div>
     </BrowserRouter>
