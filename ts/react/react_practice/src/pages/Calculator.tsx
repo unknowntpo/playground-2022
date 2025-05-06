@@ -15,7 +15,7 @@ export default function Calculator() {
 		["", "0", ".", "="]
 	];
 
-	const handleClick = (char: CalculatorButtonProps["value"]) => {
+	const handleClick = (char: CalculatorButtonProps["keyStroke"]) => {
 		console.log(`${char} is clicked`)
 		setExpression(prevExpression => prevExpression === initExpression ? char : prevExpression + char);
 	}
@@ -26,7 +26,7 @@ export default function Calculator() {
 		{rows.map((row, rowIndex) => (
 				<div key={rowIndex} className="flex flex-row gap-2"> {/* Row container with gap */}
 						{row.map((char) => (
-								<CalculatorButton key={char} value={char} onClick={handleClick}/>
+								<CalculatorButton key={char} keyStroke={char} onClick={handleClick}/>
 						))}
 				</div>
 		))}
