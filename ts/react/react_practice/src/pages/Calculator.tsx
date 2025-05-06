@@ -1,23 +1,31 @@
 // import { useEffect, useState } from 'react';
 import { useState } from 'react';
 import './Calculator.css'
-import CalculatorButton, { CalculatorButtonProps } from './CalculatorButton';
+import {CalculatorButton, CalculatorButtonProps, Operator } from './CalculatorButton';
 
 export default function Calculator() {
 	const initExpression = '0';
 	 
 	const [expression, setExpression] = useState(initExpression);
 	const rows: string[][] = [
-		["AC", "+/-", "%", "÷"],
-		["7", "8", "9", "x"],
-		["4", "5", "6", "-"],
-		["1", "2", "3", "+"],
-		["", "0", ".", "="]
+		[Operator.Reset, "+/-", Operator.Modulus, Operator.Divide],
+		["7", "8", "9", Operator.Multiply],
+		["4", "5", "6", Operator.Minus],
+		["1", "2", "3", Operator.Add],
+		["", "0", ".", Operator.Equal]
 	];
 
-	const handleClick = (char: CalculatorButtonProps["keyStroke"]) => {
-		console.log(`${char} is clicked`)
-		setExpression(prevExpression => prevExpression === initExpression ? char : prevExpression + char);
+	const resetExpression = () => setExpression(()=> initExpression);
+ 
+	const handleClick = (keyStroke: CalculatorButtonProps["keyStroke"]) => {
+		console.log(`${keyStroke} is clicked`)
+		switch (keyStroke) {
+			case Operator.Reset:
+				resetExpression();
+				break;
+			default:
+				setExpression(prevExpression => prevExpression === initExpression ? keyStroke : prevExpression + keyStroke);
+		}
 	}
 
 	return (
@@ -26,7 +34,7 @@ export default function Calculator() {
 		{rows.map((row, rowIndex) => (
 				<div key={rowIndex} className="flex flex-row gap-2"> {/* Row container with gap */}
 						{row.map((char) => (
-								<CalculatorButton key={char} keyStroke={char} onClick={handleClick}/>
+								<CalculatorButton key={char} keyStroke={char as Operator} onClick={handleClick}/>
 						))}
 				</div>
 		))}
