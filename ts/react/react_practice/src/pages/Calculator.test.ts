@@ -1,7 +1,6 @@
 import { describe, test, expect } from 'vitest'
 
 enum NodeType {
-	Equal = "=",
 	Add = "+",
 	Minus = "-",
 	Multiply = "x",
