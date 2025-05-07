@@ -37,17 +37,15 @@ function parseAst(node: NonNullable<AstNode>): number {
 	}
 	assert(node.left !== undefined, 'node.left should not ne undefined');
 	assert(node.right !== undefined, 'node.left should not ne undefined');
-	if (node.left && node.right) {
-		const leftResult = parseAst(node.left);
-		const rightResult = parseAst(node.right);
-		switch (node.type) {
-			case NodeType.Add:
-				return leftResult + rightResult;
-			default:
-				throw new Error(`unsupported node type: ${node.type}`)
-		}
-	} else {
-		throw new Error(`node.left and node.right can not be null, left: ${node.left}, right: ${node.right}`)
+	const leftNode = node.left!;
+	const rightNode = node.right!;
+	const leftResult = parseAst(leftNode);
+	const rightResult = parseAst(rightNode);
+	switch (node.type) {
+		case NodeType.Add:
+			return leftResult + rightResult;
+		default:
+			throw new Error(`unsupported node type: ${node.type}`)
 	}
 }
 
