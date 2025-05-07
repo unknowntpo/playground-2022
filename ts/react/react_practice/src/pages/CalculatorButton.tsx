@@ -1,6 +1,3 @@
-// import { useEffect, useState } from 'react';
-import './CalculatorButton.css'
-
 export enum Operator {
 	Equal = "=",
 	Add = "+",

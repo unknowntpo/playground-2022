@@ -1,6 +1,5 @@
 // import { useEffect, useState } from 'react';
 import { useState } from 'react';
-import './Calculator.css'
 import {CalculatorButton, CalculatorButtonProps, Operator } from './CalculatorButton';
 
 export default function Calculator() {

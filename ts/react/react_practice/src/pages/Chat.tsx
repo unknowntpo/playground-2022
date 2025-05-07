@@ -1,33 +1,34 @@
-import { useEffect, useState } from 'react';
-import './Chat.css'
+import { useState } from 'react';
 
 export default function Chat() {
-	  const [healthStatus, setHealthStatus] = useState<string>(''); 
-		// {"database":"Connected","foo":"bar","externalApi":"Responsive","status":"ok"}⏎                                                                                                                                                     
+		const [messages, setMessages] = useState<string[]>([]); 
+		const [inputValue, setInputValue] = useState<string>(''); 
 
-		useEffect(()=> {
-			const interval = setInterval(async () => {
-				try {
-					const response = await fetch('http://localhost:8080/healthz');
-					const data = await response.text();
-					setHealthStatus(data);
-				}catch(error) {
-					console.error('Health check failed:', error)
-					setHealthStatus('Error: Health check failed')
-				}
-			}, 1000);
-
-			return () => clearInterval(interval);
-		})
+		const handleSubmit = (e: React.FormEvent) => {
+			e.preventDefault();
+			messages.push(inputValue);
+			setMessages(messages);
+			setInputValue('');
+		};
     return (
         <div className="chat-container">
 					<div className="messages">
-						A: Hello
-						B: World
-						{ healthStatus }
+						{messages.map((msg, index) => (
+							<div key={index} className="message">{msg}</div>
+						))}
 					</div>
-					<div className="input-field"></div>
-					<div className="submit">Submit</div>
+					<form onSubmit={handleSubmit} className="flex">
+						<div className="input-field bg-green flex-grow">
+							<input
+								value={inputValue}
+								onChange={e => setInputValue(e.target.value)}
+								type="text"
+								placeholder="Type your message"
+								className="w-full bg-amber-50"
+								/>
+						</div>
+						<button type="submit" className="submit border-2">Submit</button>
+					</form>
 				</div>
     )
 } 

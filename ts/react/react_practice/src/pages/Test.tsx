@@ -1,5 +1,3 @@
-import './Test.css'
-
 import Counter from './Counter'
 
 export default function Test() {
