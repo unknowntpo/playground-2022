@@ -1,20 +1,33 @@
+import os from "node:os";
 import { bench } from "vitest";
 import { promiseCount, singleCount, workerCount } from "./counter.mjs";
 
-const NUM = 100000000;
+// 10 ** 10
+const NUM = 10 ** 8;
 
-const numWorkers = 4;
+const numWorkers = os.cpus().length;
+console.log(numWorkers)
 
-bench("Single thread 100K - 1 counter", async () => {
-  await singleCount(NUM);
+bench("Single thread - 1 counter", () => {
+	try {
+		singleCount(NUM);
+	} catch (error) {
+		console.error("Error in single thread counter:", error);
+	}
 }, { iterations: 10 });
 
-/*
-bench("Single thread 100K - 4 promises", async () => {
-  await promiseCount(NUM, numWorkers);
+bench(`Single thread - ${numWorkers} promises`, async () => {
+	try {
+		await promiseCount(NUM, numWorkers);
+	} catch (error) {
+		console.error("Error in promise counter:", error);
+	}
 }, { iterations: 10 });
-*/
 
-bench("Multi thread 1K - 4 workers", async () => {
-  await workerCount(NUM, numWorkers);
+bench(`Multi threads - ${numWorkers} worker threads`, async () => {
+	try {
+		await workerCount(NUM, numWorkers);
+	} catch (error) {
+		console.error("Error in worker thread counter:", error);
+	}
 }, { iterations: 10 });

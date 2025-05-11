@@ -1,8 +1,7 @@
 import { parentPort } from "worker_threads";
+import { benchmarkFunction } from "./benchmarkFunction.mjs";
 
 parentPort.on("message", (count) => {
-  for (let i = 0; i < count; i++) {
-  }
-
-  parentPort.postMessage("OK");
+	benchmarkFunction(count);
+	parentPort.postMessage("OK");
 });
