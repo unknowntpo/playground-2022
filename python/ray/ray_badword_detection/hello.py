@@ -9,8 +9,10 @@ import torch
 
 app = FastAPI()
 
+
 class BadwordBody(BaseModel):
     text: str
+
 
 @serve.deployment(autoscaling_config={"min_replicas": 1, "max_replicas": 4})
 @serve.ingress(app)
@@ -18,17 +20,18 @@ class OffensiveLanguageDetector:
     def __init__(self):
         self.classifier = pipeline(
             "text-classification",
-            model="unitary/toxic-bert",
-            device=torch.device("cuda:0") if torch.cuda.is_available() else "cpu"
+            model="martin-ha/toxic-comment-model",
+            device=torch.device("cuda:0") if torch.cuda.is_available() else "cpu",
         )
 
     @app.post("/detect")
     async def detect_offensive_content(self, body: BadwordBody):
         results = self.classifier(body.text)
         return {
-            "is_offensive": any(pred['label'] == 'toxic' for pred in results),
-            "predictions": results
+            "is_offensive": any(pred["label"] == "toxic" for pred in results),
+            "predictions": results,
         }
+
 
 # Deploy the service
 serve.run(target=OffensiveLanguageDetector.bind(), route_prefix="/")
