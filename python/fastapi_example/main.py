@@ -3,7 +3,9 @@ from fastapi import FastAPI, Depends, Query, HTTPException
 from pydantic import BaseModel, EmailStr, constr
 from sqlmodel import Session, SQLModel, create_engine, select
 
+from entities.item import Item
 from hero import Hero
+from routers.v1.ItemRouter import ItemRouter
 from routers.v1.healthz import HealthzRouter
 
 sqlite_file_name = "database.db"
@@ -25,17 +27,11 @@ SessionDep = Annotated[Session, Depends(get_session)]
 app = FastAPI()
 
 app.include_router(HealthzRouter)
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
-
+app.include_router(ItemRouter)
 
 class User(BaseModel):
     name: constr(max_length=15)
     email: EmailStr
-
 
 @app.on_event("startup")
 def on_startup():
@@ -45,16 +41,6 @@ def on_startup():
 @app.get("/")
 async def read_root() -> dict:
     return {"Hello": "World"}
-
-@app.get("/items/{item_id}")
-async def read_item(item_id: int, q: Union[str, None] = None) -> dict:
-    return {"item_id": item_id, "q": q}
-
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
-
 
 @app.put("/users")
 def add_user(user: User):
