@@ -22,7 +22,7 @@ def get_session():
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-app = FastAPI(ignore_trailing_slash=True)
+app = FastAPI()
 
 app.include_router(HealthzRouter)
 
