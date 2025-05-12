@@ -4,6 +4,7 @@ from pydantic import BaseModel, EmailStr, constr
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from hero import Hero
+from routers.v1.healthz import HealthzRouter
 
 sqlite_file_name = "database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
@@ -14,47 +15,51 @@ engine = create_engine(sqlite_url, connect_args=connect_args)
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
-
 def get_session():
     with Session(engine) as session:
         yield session
 
+
 SessionDep = Annotated[Session, Depends(get_session)]
 
-app = FastAPI()
+app = FastAPI(ignore_trailing_slash=True)
+
+app.include_router(HealthzRouter)
 
 class Item(BaseModel):
     name: str
     price: float
     is_offer: Union[bool, None] = None
 
+
 class User(BaseModel):
     name: constr(max_length=15)
     email: EmailStr
+
 
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
 
+
 @app.get("/")
 async def read_root() -> dict:
     return {"Hello": "World"}
-
-@app.get("/healthz")
-async def healthcheck() -> dict:
-    return {"status": "ok"}
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: int, q: Union[str, None] = None) -> dict:
     return {"item_id": item_id, "q": q}
 
+
 @app.put("/items/{item_id}")
 def update_item(item_id: int, item: Item):
     return {"item_name": item.name, "item_id": item_id}
 
+
 @app.put("/users")
 def add_user(user: User):
     return {"user": user}
+
 
 @app.post("/heroes/")
 def create_hero(hero: Hero, session: SessionDep) -> Hero:
