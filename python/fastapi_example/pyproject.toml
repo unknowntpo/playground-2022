@@ -1,5 +1,5 @@
 [project]
-name = "fastapi-example"
+name = "fastapi_example"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -9,3 +9,7 @@ dependencies = [
     "pytest>=8.3.5",
     "sqlmodel>=0.0.24",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+testpaths = ["__tests__"]
