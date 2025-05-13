@@ -25,13 +25,11 @@ def create_hero(hero: Hero, session: SessionDep) -> Hero:
     return hero
 
 
-@HeroRouter.get("/heroes/", response_model=list[Hero])
+@HeroRouter.get("/heroes/")
 async def read_heroes(session: SessionDep) -> list[Hero]:
-    heroes = session.exec(select(Hero)).all()
-    print(heroes)
-    return [Hero(id=3, name="Batman", age=10, secret_name="badman")]
-    # return heroes
-
+    rows = session.exec(select(Hero)).all()
+    # row has type sqlalchemy.engine.row.Row, we need to get the Hero object from row._mapping
+    return [row._mapping["Hero"] for row in rows]
 
 @HeroRouter.get("/heroes/{hero_id}", response_model=Hero)
 def read_hero(hero_id: int, session: SessionDep) -> Hero:
