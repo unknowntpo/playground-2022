@@ -4,8 +4,8 @@ import json
 import pytest
 from fastapi.testclient import TestClient
 
-from entities.item import Item
-from main import app
+from app.entities.item import Item
+from app.main import app
 
 # Create a fixture that will be used for all tests
 @pytest.fixture

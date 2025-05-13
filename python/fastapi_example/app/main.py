@@ -5,13 +5,12 @@ from pydantic import BaseModel, EmailStr, constr
 from sqlalchemy import select
 from sqlmodel import Session, SQLModel
 
-from engine import create_db_and_tables, engine
-from entities.hero import Hero
-from entities.item import Item
-from routers.v1.HeroRouter import HeroRouter
-from routers.v1.ItemRouter import ItemRouter
-from routers.v1.healthz import HealthzRouter
-
+from app.infra.engine import create_db_and_tables
+from app.entities.hero import Hero
+from app.entities.item import Item
+from app.routers.v1.HeroRouter import HeroRouter
+from app.routers.v1.ItemRouter import ItemRouter
+from app.routers.v1.healthz import HealthzRouter
 
 @asynccontextmanager
 async def lifespan(app):

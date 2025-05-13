@@ -3,9 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlmodel import Session
 
-from engine import engine, create_db_and_tables
-from entities import hero
-from entities.hero import Hero
+from app.infra.engine import engine, create_db_and_tables
+from app.entities.hero import Hero
 
 HeroRouter = APIRouter(prefix="/v1/heroes", tags=["item"])
 

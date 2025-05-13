@@ -3,7 +3,7 @@ from typing import Union
 from fastapi import APIRouter, status
 from pydantic import BaseModel
 
-from entities.item import Item
+from app.entities.item import Item
 
 class ItemResponse(BaseModel):
     item_id: int

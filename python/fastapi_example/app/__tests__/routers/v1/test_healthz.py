@@ -1,12 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
-from main import app
+from app.main import app
 
 # Create a fixture that will be used for all tests
+# Use `with` to use TestClient as a context manager
 @pytest.fixture
 def client():
-    return TestClient(app)
-
+    with TestClient(app) as client:
+        yield client
 
 def test_healthz(client):
     response = client.get("/v1/healthz")
