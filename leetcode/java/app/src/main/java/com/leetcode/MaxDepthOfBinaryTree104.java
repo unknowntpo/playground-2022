@@ -34,11 +34,29 @@ public class MaxDepthOfBinaryTree104 {
      * }
      */
     static class Solution {
+        /**
+         * Bottom up.
+         */
         public int maxDepth(TreeNode root) {
             if (root == null) {
                 return 0;
             }
             return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+        }
+
+        /**
+         * Top down.
+         */
+        public int maxDepth2(TreeNode root) {
+            int acc = 0;
+            return _maxDepthTopDown(root, 0);
+        }
+
+        public int _maxDepthTopDown(TreeNode root, int depth) {
+            if (root == null) {
+                return depth;
+            }
+            return Math.max(_maxDepthTopDown(root.left, depth + 1), _maxDepthTopDown(root.right, depth + 1));
         }
     }
 }

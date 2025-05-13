@@ -37,7 +37,8 @@ public class MaxDepthOfBinaryTree104Test extends TestCase {
     public void test() {
         MaxDepthOfBinaryTree104.Solution solution = new MaxDepthOfBinaryTree104.Solution();
         BinaryTree tree = BinaryTree.of(input);
-        int got = solution.maxDepth(tree.getRoot());
+//        int got = solution.maxDepth(tree.getRoot());
+        int got = solution.maxDepth2(tree.getRoot());
         assertEquals(want, got);
     }
 }
