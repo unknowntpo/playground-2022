@@ -30,6 +30,7 @@ public class SameTree100Test extends TestCase {
                 new Object[]{"two, same", Arrays.asList(1, 2), Arrays.asList(1,2), true},
                 new Object[]{"two, not the same", Arrays.asList(1, 2), Arrays.asList(1, null, 2), false},
                 new Object[]{"three, same", Arrays.asList(1, 2, 3),Arrays.asList(1, 2, 3), true},
+                new Object[]{"three, not the same with val different", Arrays.asList(1, null, 3),Arrays.asList(1, null, 2), false},
                 new Object[]{"official example, not the same (mirrored tree)", Arrays.asList(1, 2, 3),Arrays.asList(1, 3, 2), false}
         );
     }

@@ -1,6 +1,10 @@
 package com.leetcode;
 
 import com.leetcode.BinaryTree.TreeNode;
+import com.sun.source.tree.Tree;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 /**
@@ -34,7 +38,7 @@ public class SameTree100 {
      * }
      */
     static class Solution {
-        public boolean isSameTree(TreeNode p, TreeNode q) {
+        public boolean isSameTreeRecursive(TreeNode p, TreeNode q) {
             if (p == null && q == null) {
                 return true;
             }
@@ -42,6 +46,33 @@ public class SameTree100 {
                 return false;
             }
             return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        }
+
+        public boolean isSameTree(TreeNode p, TreeNode q) {
+            Queue<TreeNode> queue = new LinkedList<>();
+            queue.add(p);
+            queue.add(q);
+
+            while (!queue.isEmpty()) {
+                TreeNode leftNode = queue.poll();
+                TreeNode rightNode = queue.poll();
+                if (leftNode == null && rightNode == null) {
+                    // no need to verify these pairs, continue
+                    continue;
+                }
+                if (leftNode == null || rightNode == null) {
+                    return false;
+                }
+                if (leftNode.val != rightNode.val) {
+                    return false;
+                }
+                queue.add(leftNode.left);
+                queue.add(rightNode.left);
+                queue.add(leftNode.right);
+                queue.add(rightNode.right);
+            }
+
+            return true;
         }
     }
 }
