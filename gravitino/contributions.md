@@ -32,6 +32,10 @@
 
 - Added Helm chart support ([#56](https://github.com/apache/gravitino-playground/pull/56)) and CI checks ([#111](https://github.com/apache/gravitino-playground/pull/111)) to Gravitino Playground, enabling users to deploy and manage Gravitino in Kubernetes environments and ensuring code quality.
 
+## **Others**
+
+- Review other contributors' PRs and issues, providing feedback and suggestions to improve code quality and project direction.
+
 ## **Summary**
 
 My contributions span infrastructure, developer tooling, CI/CD, user experience, and documentation. I am proficient in a wide range of programming languages and tooling, which has enabled me to proactively identify bottlenecks and implement robust solutions across different areas of the project. By leveraging my diverse technical skill set, I have improved both the developer and user experience, directly increasing the reliability, performance, and accessibility of Gravitino and its ecosystem.
