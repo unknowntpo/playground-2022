@@ -11,6 +11,7 @@ HeroRouter = APIRouter(prefix="/v1/heroes", tags=["item"])
 
 def get_session():
     with Session(engine) as session:
+        print(f" in get session: engine: {engine}")
         yield session
 
 
@@ -30,6 +31,7 @@ async def read_heroes(session: SessionDep) -> list[Hero]:
     rows = session.exec(select(Hero)).all()
     # row has type sqlalchemy.engine.row.Row, we need to get the Hero object from row._mapping
     return [row._mapping["Hero"] for row in rows]
+
 
 @HeroRouter.get("/heroes/{hero_id}", response_model=Hero)
 def read_hero(hero_id: int, session: SessionDep) -> Hero:
