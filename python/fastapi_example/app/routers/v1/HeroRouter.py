@@ -1,3 +1,4 @@
+import http
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
@@ -18,7 +19,7 @@ def get_session():
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
-@HeroRouter.post("/heroes/", response_model=Hero)
+@HeroRouter.post("/heroes/", response_model=Hero, status_code=http.HTTPStatus.CREATED)
 def create_hero(hero: Hero, session: SessionDep) -> Hero:
     session.add(hero)
     session.commit()
