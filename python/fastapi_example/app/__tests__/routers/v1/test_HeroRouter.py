@@ -11,7 +11,7 @@ from app.entities.item import Item
 from app.infra.engine import engine
 from app.main import app
 from app.routers.v1.HeroRouter import get_session
-
+from app.__tests__.utils.utils import trunk_all_tables
 
 # Create a fixture that will be used for all tests
 # Use `with` to use TestClient as a context manager
@@ -21,12 +21,8 @@ def client():
         yield client
 
 @pytest.fixture(autouse=True)
-def truncate_db():
-    # Here you should add your database cleanup logic
-    # For example, if you're using SQLAlchemy:
-    with Session(engine) as session:
-        session.query(Hero).delete()
-        session.commit()
+def before_each():
+    trunk_all_tables()
 
 def test_HeroRouter_get(client):
     hero0 = Hero(name="Car", secret_name="Carl", age=40)
