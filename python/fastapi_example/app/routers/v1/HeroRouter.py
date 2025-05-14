@@ -19,7 +19,7 @@ def get_session():
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
-@HeroRouter.post("/heroes/", response_model=Hero, status_code=http.HTTPStatus.CREATED)
+@HeroRouter.post("", response_model=Hero, status_code=http.HTTPStatus.CREATED)
 def create_hero(hero: Hero, session: SessionDep) -> Hero:
     session.add(hero)
     session.commit()
@@ -27,14 +27,14 @@ def create_hero(hero: Hero, session: SessionDep) -> Hero:
     return hero
 
 
-@HeroRouter.get("/heroes/")
+@HeroRouter.get("")
 async def read_heroes(session: SessionDep) -> list[Hero]:
     rows = session.exec(select(Hero)).all()
     # row has type sqlalchemy.engine.row.Row, we need to get the Hero object from row._mapping
     return [row._mapping["Hero"] for row in rows]
 
 
-@HeroRouter.get("/heroes/{hero_id}", response_model=Hero)
+@HeroRouter.get("/{hero_id}", response_model=Hero)
 def read_hero(hero_id: int, session: SessionDep) -> Hero:
     hero = session.get(Hero, hero_id)
     if not hero:
@@ -42,7 +42,7 @@ def read_hero(hero_id: int, session: SessionDep) -> Hero:
     return hero
 
 
-@HeroRouter.delete("/heroes/{hero_id}", response_model=dict)
+@HeroRouter.delete("/{hero_id}", response_model=dict)
 def delete_hero(hero_id: int, session: SessionDep):
     hero = session.get(Hero, hero_id)
     if not hero:

@@ -26,19 +26,16 @@ def before_each():
 
 def test_HeroRouter_get(client):
     hero0 = Hero(name="Car", secret_name="Carl", age=40)
-    response = client.post("/v1/heroes/heroes/", json=hero0.model_dump())
+    response = client.post("/v1/heroes", json=hero0.model_dump())
     assert response.status_code == http.HTTPStatus.CREATED
 
     hero1 = Hero(name="Batman", secret_name="Robin", age=35)
-    response = client.post("/v1/heroes/heroes/", json=hero1.model_dump())
+    response = client.post("/v1/heroes", json=hero1.model_dump())
     assert response.status_code == http.HTTPStatus.CREATED
 
-    response = client.get(f"/v1/heroes/heroes/")
-    assert response.status_code == 200
-    # FIXME:
-    # should exclude id field
-    # route should not have two heroes
-    # pytest, pycharm, should have same test result (TEST=True should be set)
+    # Get heroes and check response
+    response = client.get(f"/v1/heroes")
+    assert response.status_code == http.HTTPStatus.OK
     heroes = response.json()
     assert len(heroes) == 2
     assert heroes[0]["name"] == hero0.name
