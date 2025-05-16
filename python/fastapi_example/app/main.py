@@ -8,6 +8,7 @@ from sqlmodel import Session, SQLModel
 from app.infra.engine import create_db_and_tables
 from app.entities.hero import Hero
 from app.entities.item import Item
+from app.routers.v1.ChatRouter import ChatRouter
 from app.routers.v1.HeroRouter import HeroRouter
 from app.routers.v1.ItemRouter import ItemRouter
 from app.routers.v1.healthz import HealthzRouter
@@ -24,6 +25,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(HealthzRouter)
 app.include_router(ItemRouter)
 app.include_router(HeroRouter)
+app.include_router(ChatRouter)
 
 class User(BaseModel):
     name: constr(max_length=15)
