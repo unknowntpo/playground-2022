@@ -3,7 +3,7 @@ from typing import Union
 from fastapi import APIRouter, status
 from pydantic import BaseModel
 from starlette.responses import HTMLResponse
-from starlette.websockets import WebSocket
+from starlette.websockets import WebSocket, WebSocketDisconnect
 
 from app.entities.item import Item
 
@@ -18,7 +18,7 @@ class CreateItemResponse(BaseModel):
     item_id: int
 
 
-ChatRouter: APIRouter = APIRouter(prefix="/v1/chat", tags=["item"])
+ChatRouter: APIRouter = APIRouter(prefix="/v1/chat", tags=["chat"])
 
 """
 Reference:
@@ -68,6 +68,10 @@ async def get():
 @ChatRouter.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    while True:
-        data = await websocket.receive_text()
-        await websocket.send_text(f"Message text was: {data}")
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await websocket.send_text(f"Message text was: {data}")
+    except WebSocketDisconnect:
+        print("Disconnected")
+
