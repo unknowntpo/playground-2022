@@ -2,7 +2,7 @@ from typing import Union, Annotated
 
 from fastapi import APIRouter, status, Depends
 from pydantic import BaseModel
-from sqlmodel import Session
+from sqlmodel import Session, select
 from starlette.responses import HTMLResponse
 from starlette.websockets import WebSocket, WebSocketDisconnect
 
@@ -12,6 +12,9 @@ from app.infra.engine import engine
 
 
 class ChatMessageCreateRequest(ChatMessageBase):
+    pass
+
+class ChatMessageResponse(ChatMessage):
     pass
 
 ChatRouter: APIRouter = APIRouter(prefix="/v1/chat", tags=["chat"])
@@ -65,6 +68,16 @@ html = """
 @ChatRouter.get("/")
 async def get():
     return HTMLResponse(html)
+
+@ChatRouter.get("/messages", response_model=list[ChatMessageResponse])
+async def read_messages(session: SessionDep) -> list[ChatMessageResponse]:
+    """
+    get all historical messages
+    TODO: get all messages by chatroom id ?
+    """
+
+    msgs = session.exec(select(ChatMessage)).all()
+    return [ChatMessageResponse.model_validate(msg) for msg in msgs]
 
 
 @ChatRouter.websocket("/ws")
