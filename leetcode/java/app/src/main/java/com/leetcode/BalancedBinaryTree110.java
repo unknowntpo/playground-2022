@@ -52,5 +52,27 @@ public class BalancedBinaryTree110 {
             }
             return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
         }
+
+        public boolean isBalanced2(TreeNode root) {
+            return depth(root) != -1;
+        }
+
+        public int depth(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+            int leftHeight = depth(root.left);
+            if (leftHeight == -1) {
+                return -1;
+            }
+            int rightHeight = depth(root.right);
+            if (rightHeight == -1) {
+                return -1;
+            }
+            if (Math.abs(leftHeight - rightHeight) > 1) {
+                return -1;
+            }
+            return 1 + Math.max(leftHeight, rightHeight);
+        }
     }
 }

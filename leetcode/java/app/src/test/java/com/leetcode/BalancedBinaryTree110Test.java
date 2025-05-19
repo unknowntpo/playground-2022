@@ -7,6 +7,8 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 @RunWith(Parameterized.class)
 public class BalancedBinaryTree110Test extends TestCase {
@@ -36,9 +38,18 @@ public class BalancedBinaryTree110Test extends TestCase {
     @Test
     public void test() {
         BalancedBinaryTree110.Solution solution = new BalancedBinaryTree110.Solution();
+        Map<String, Function<BinaryTree.TreeNode, Boolean>> fns = Map.of(
+                "solution::isBalanced",
+                solution::isBalanced,
+                "solution::isBalanced2",
+                solution::isBalanced2
+        );
         BinaryTree tree = BinaryTree.of(this.tree);
-        boolean got = solution.isBalanced(tree.getRoot());
-        assertEquals(want, got);
+        fns.forEach((methodName, method) -> {
+            System.out.printf("Calling method %s\n", methodName);
+            boolean got = method.apply(tree.getRoot());
+            assertEquals(want, got);
+        });
     }
 }
 
