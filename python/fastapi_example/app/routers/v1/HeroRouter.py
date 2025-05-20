@@ -36,6 +36,7 @@ def create_hero(req: HeroCreateRequest, session: SessionDep) -> HeroResponse:
 @HeroRouter.get("")
 async def read_heroes(session: SessionDep) -> list[HeroResponse]:
     rows = session.exec(select(Hero)).all()
+    print(type(rows[0]))
     # row has type sqlalchemy.engine.row.Row, we need to get the Hero object from row._mapping
     return [HeroResponse(**row._mapping["Hero"].model_dump()) for row in rows]
 
