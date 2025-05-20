@@ -11,12 +11,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 @RunWith(Parameterized.class)
-public class BalancedBinaryTree110Test extends TestCase {
+public class BinaryTreeRightSideView199Test extends TestCase {
 	private final String name;
 	private final List<Integer> tree;
 	private final boolean want;
 
-	public BalancedBinaryTree110Test(String name, List<Integer> left, boolean want) {
+	public BinaryTreeRightSideView199Test(String name, List<Integer> left, boolean want) {
 		this.name = name;
 		this.tree = left;
 		this.want = want;
