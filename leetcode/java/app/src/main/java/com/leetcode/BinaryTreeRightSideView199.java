@@ -1,6 +1,12 @@
 package com.leetcode;
 
 import com.leetcode.BinaryTree.TreeNode;
+import com.sun.source.tree.Tree;
+
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -34,42 +40,36 @@ public class BinaryTreeRightSideView199 {
      * }
      */
     static class Solution {
-        public boolean isBalanced(TreeNode root) {
+        public List<Integer> rightSideView(TreeNode root) {
             if (root == null) {
-                return true;
+                return new ArrayList<>();
             }
-            int leftHeight = maxDepth(root.left);
-            int rightHeight = maxDepth(root.right);
-            return Math.abs(leftHeight - rightHeight) <= 1 && isBalanced(root.left) && isBalanced(root.right);
-        }
+            Deque<TreeNode> nodesInLayer = new LinkedList<>();
+            nodesInLayer.add(root);
 
-        public int maxDepth(TreeNode root) {
-            if (root == null) {
-                return 0;
-            }
-            return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
-        }
+            List<Integer> results = new ArrayList<>();
 
-        public boolean isBalanced2(TreeNode root) {
-            return depth(root) != -1;
-        }
+            Deque<TreeNode> tempList = new LinkedList<>();
+            while (!nodesInLayer.isEmpty()) {
+                TreeNode node = nodesInLayer.pop();
 
-        public int depth(TreeNode root) {
-            if (root == null) {
-                return 0;
+                if (node.left != null) {
+                    tempList.add(node.left);
+                }
+                if (node.right != null) {
+                    tempList.add(node.right);
+                }
+
+                // if is last in layer, means it's the right side view
+                if (nodesInLayer.isEmpty()) {
+                    results.add(node.val);
+                    Deque<TreeNode> tmp = nodesInLayer;
+                    nodesInLayer = tempList;
+                    tempList = tmp;
+                }
             }
-            int leftHeight = depth(root.left);
-            if (leftHeight == -1) {
-                return -1;
-            }
-            int rightHeight = depth(root.right);
-            if (rightHeight == -1) {
-                return -1;
-            }
-            if (Math.abs(leftHeight - rightHeight) > 1) {
-                return -1;
-            }
-            return 1 + Math.max(leftHeight, rightHeight);
+
+            return results;
         }
     }
 }
