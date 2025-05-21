@@ -39,7 +39,9 @@ public class BinaryTreeRightSideView199Test extends TestCase {
     public void test() {
         BinaryTreeRightSideView199.Solution solution = new BinaryTreeRightSideView199.Solution();
         Map<String, Function<BinaryTree.TreeNode, List<Integer>>> fns = Map.of(
-                "solution::rightSideView", solution::rightSideView);
+                "solution::rightSideView", solution::rightSideView,
+                "solution::rightSideView2", solution::rightSideView2
+                );
         BinaryTree tree = BinaryTree.of(this.tree);
         fns.forEach((methodName, method) -> {
             System.out.printf("Calling method %s\n", methodName);

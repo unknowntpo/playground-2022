@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 
 /**
@@ -68,6 +71,28 @@ public class BinaryTreeRightSideView199 {
                     tempList = tmp;
                 }
             }
+
+            return results;
+        }
+
+        public List<Integer> rightSideView2(TreeNode root) {
+            ArrayList<Integer> results = new ArrayList<>();
+
+            BiConsumer<TreeNode, Integer>[] fn = new BiConsumer[1];
+
+            // FIXME: fn interface with multi args
+            fn[0] = (node, depth) -> {
+                if (node == null) {
+                    return;
+                }
+                if (depth == results.size()) {
+                    results.add(node.val);
+                }
+                fn[0].accept(node.right, depth + 1);
+                fn[0].accept(node.left, depth + 1);
+            };
+
+            fn[0].accept(root, 0);
 
             return results;
         }
