@@ -40,51 +40,72 @@ public class PartitionEqualSubsetSum416 {
             // dfs(i, target) = dfs(i - 1, target - nums[i]) + dfs(i-1, target)
             // dfs(-1) = 0
 
-            BiFunction<Integer, Integer, Integer>[] dfs = new BiFunction[1];
+            // dfs[i][target] = dfs(
+
+            BiFunction<Integer, Integer, Boolean>[] dfs = new BiFunction[1];
             dfs[0] = (i, target) -> {
                 if (i < 0) {
-                    return 0;
+                    return false;
                 }
                 if (target == 0) {
-                    return 1;
+                    return true;
                 }
+                // verify: when i < 0 then target might be 0 ?
+                // FIXME: fix condition
 
-                return dfs[0].apply(i - 1, target - nums[i]) + dfs[0].apply(i-1, target);
+                return dfs[0].apply(i - 1, target - nums[i]) || dfs[0].apply(i - 1, target);
             };
 
-            return dfs[0].apply(nums.length - 1, sum) > 0;
-       }
+            return dfs[0].apply(nums.length - 1, sum);
+        }
 
         public boolean canPartition2DArray(int[] nums) {
+            // dfs(i, target): from [0, i], sum of them == target
+            // dfs(i, target) = dfs(i - 1, target - nums[i]) or dfs(i-1, target)
+            // dfs(-1) = 0
+
+            // dfs[i][target] = dfs[i-1][target-nums[i]] || dfs[i-1][target]
+            // i -> i + 1
+            // dfs[0][0] = 1
+            // i from 1 to n
+            // dfs[i][target] = dfs[i-1][target-nums[i-1]] || dfs[i-1][target]
+            // [1, 3, 4]
+            // n = 3, sum = 4
+            // [1][][][][]
+            // [0][1][0][0][0]
+            // [0][0][0][0][1]
+            // [][][][][]
+
+
+            // [1,1]
+            // n = 2
+            // [1][][]
+            // [][][]
+            // [][][]
+            int n = nums.length;
             int sum = Arrays.stream(nums).sum();
             if (sum % 2 != 0) {
                 return false;
             }
             sum = sum / 2;
 
-            // dfs(i, target): from [0, i], num of ways to pick numbers so that sum of them == target
-            // dfs(i, target) = dfs(i - 1, target - nums[i]) + dfs(i-1, target)
-            // dfs(-1) = 0
-            int n = nums.length;
-            int[][] dfs = new int[n + 1][sum + 1];
+            boolean[][] dfs = new boolean[n + 1][sum + 1];
+            dfs[0][0] = true;
 
             for (int i = 1; i <= n; i++) {
-                dfs[i][sum]
+                for (int j = 0; j <= sum; j++) {
+                    dfs[i][j] = j >= nums[i-1] && dfs[i-1][j-nums[i-1]] || dfs[i-1][j];
+                }
             }
 
-            BiFunction<Integer, Integer, Integer>[] dfs = new BiFunction[1];
-            dfs[0] = (i, target) -> {
-                if (i < 0) {
-                    return 0;
+            for (boolean[] arr: dfs) {
+                for(boolean b: arr) {
+                    System.out.printf(" " +  b + " ");
                 }
-                if (target == 0) {
-                    return 1;
-                }
+                System.out.println();
+            }
 
-                return dfs[0].apply(i - 1, target - nums[i]) + dfs[0].apply(i-1, target);
-            };
-
-            return dfs[0].apply(nums.length - 1, sum) > 0;
+            return dfs[n][sum];
         }
     }
 }

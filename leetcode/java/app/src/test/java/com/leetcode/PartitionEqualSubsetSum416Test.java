@@ -28,7 +28,9 @@ public class PartitionEqualSubsetSum416Test extends TestCase {
                 new Object[]{"two - true", new int[]{1, 1}, true},
                 new Object[]{"three - true", new int[]{1, 2, 3}, true},
                 new Object[]{"three - false", new int[]{4, 2, 1}, false},
-                new Object[]{"four - true", new int[]{4, 1, 2, 5}, true}
+                new Object[]{"four - true", new int[]{4, 1, 2, 5}, true},
+                new Object[]{"sum is even but can not partition", new int[]{1, 4, 5}, true},
+                new Object[]{"Leetcode testcase 136", new int[]{1, 5, 11, 5}, true}
         );
     }
 
@@ -36,7 +38,8 @@ public class PartitionEqualSubsetSum416Test extends TestCase {
     public void test() {
         PartitionEqualSubsetSum416.Solution solution = new PartitionEqualSubsetSum416.Solution();
         Map<String, Function<int[], Boolean>> fns = Map.of(
-                "solution::canPartition", solution::canPartition
+                "solution::canPartition", solution::canPartition,
+                "solution::canPartition2DArray", solution::canPartition2DArray
         );
         fns.forEach((methodName, method) -> {
             System.out.printf("Calling method %s\n", methodName);
