@@ -39,7 +39,8 @@ public class PartitionEqualSubsetSum416Test extends TestCase {
         PartitionEqualSubsetSum416.Solution solution = new PartitionEqualSubsetSum416.Solution();
         Map<String, Function<int[], Boolean>> fns = Map.of(
                 "solution::canPartition", solution::canPartition,
-                "solution::canPartition2DArray", solution::canPartition2DArray
+                "solution::canPartition2DArray", solution::canPartition2DArray,
+                "solution::canPartition1DArray", solution::canPartition1DArray
         );
         fns.forEach((methodName, method) -> {
             System.out.printf("Calling method %s\n", methodName);

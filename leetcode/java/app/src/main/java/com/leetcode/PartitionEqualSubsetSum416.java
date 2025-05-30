@@ -94,18 +94,59 @@ public class PartitionEqualSubsetSum416 {
 
             for (int i = 1; i <= n; i++) {
                 for (int j = 0; j <= sum; j++) {
-                    dfs[i][j] = j >= nums[i-1] && dfs[i-1][j-nums[i-1]] || dfs[i-1][j];
+                    dfs[i][j] = j >= nums[i - 1] && dfs[i - 1][j - nums[i - 1]] || dfs[i - 1][j];
                 }
             }
 
-            for (boolean[] arr: dfs) {
-                for(boolean b: arr) {
-                    System.out.printf(" " +  b + " ");
+            for (boolean[] arr : dfs) {
+                for (boolean b : arr) {
+                    System.out.printf(" " + b + " ");
                 }
                 System.out.println();
             }
 
             return dfs[n][sum];
         }
+
+        public boolean canPartition1DArray(int[] nums) {
+            int n = nums.length;
+            int sum = Arrays.stream(nums).sum();
+            if (sum % 2 != 0) {
+                return false;
+            }
+            sum = sum / 2;
+
+            boolean[] dfs = new boolean[sum + 1];
+            dfs[0] = true;
+
+            for (int i = 1; i <= n; i++) {
+                for (int j = sum; j >= 0; j--) {
+                    dfs[j] = (j >= nums[i - 1] && dfs[j - nums[i - 1]]) || dfs[j];
+                }
+            }
+
+            return dfs[sum];
+        }
+
+//        public boolean canPartitionBitset(int[] nums) {
+//            int n = nums.length;
+//            int sum = Arrays.stream(nums).sum();
+//            if (sum % 2 != 0) {
+//                return false;
+//            }
+//            sum = sum / 2;
+//
+//            int dfs = 1;
+////            boolean[] dfs = new boolean[sum + 1];
+////            dfs[0] = true;
+//
+//            for (int i = 1; i <= n; i++) {
+//                for (int j = sum; j >= 0; j--) {
+//                    dfs[j] = (j >= nums[i - 1] && dfs[j - nums[i - 1]]) || dfs[j];
+//                }
+//            }
+//
+//            return dfs[sum];
+//        }
     }
 }
