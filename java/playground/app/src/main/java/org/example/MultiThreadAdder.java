@@ -13,9 +13,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class MultiThreadAdder {
     private static final int WORKER_COUNT = 8;
 
-    public int add(int limit) {
+    public int addWithLock(int limit) {
         final var cnt = new int[]{0};
 
+        var counter = new AtomicInteger(0);
         Lock lock = new ReentrantLock();
 
         try (var service = Executors.newCachedThreadPool()) {
@@ -44,5 +45,36 @@ public class MultiThreadAdder {
         }
 
         return cnt[0];
+    }
+
+    public int add(int limit) {
+        final var cnt = new int[]{0};
+
+        var counter = new AtomicInteger(0);
+
+        try (var service = Executors.newCachedThreadPool()) {
+            List<Future> futures = new ArrayList<>();
+            for (int i = 0; i < WORKER_COUNT; i++) {
+                Future future = service.submit(() -> {
+                    while (true) {
+                        var v = counter.get();
+                        if (v >= limit) {
+                            break;
+                        }
+                        counter.compareAndSet(v, v+1);
+                    }
+                });
+
+                futures.add(future);
+            }
+
+            for (Future f: futures) {
+                f.get();
+            }
+        } catch (ExecutionException | InterruptedException e ) {
+            throw new RuntimeException(e);
+        }
+
+        return counter.get();
     }
 }
