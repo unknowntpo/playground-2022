@@ -6,6 +6,7 @@ package org.example;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Stack;
 
 public class App {
     public String getGreeting() {
@@ -20,6 +21,17 @@ public class App {
         map.put(2, 3);
         map.put(3, 4);
 
-        final Optional<Integer> max = map.values().stream().max(Integer::compareTo);;
+        map.merge(1, 3, (a, b) -> a + b);
+
+
+        Stack<Integer> stack = new Stack<>();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+
+
+        for (int i : stack) {
+            System.out.println(i);
+        }
     }
 }
