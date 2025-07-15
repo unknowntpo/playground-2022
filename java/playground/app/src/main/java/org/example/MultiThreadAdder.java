@@ -1,8 +1,11 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -37,10 +40,10 @@ public class MultiThreadAdder {
                 futures.add(future);
             }
 
-            for (Future f: futures) {
+            for (Future f : futures) {
                 f.get();
             }
-        } catch (ExecutionException | InterruptedException e ) {
+        } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
@@ -61,17 +64,19 @@ public class MultiThreadAdder {
                         if (v >= limit) {
                             break;
                         }
-                        counter.compareAndSet(v, v+1);
+                        counter.compareAndSet(v, v + 1);
                     }
                 });
 
                 futures.add(future);
             }
 
-            for (Future f: futures) {
+            var l = new ArrayList<>();
+
+            for (Future f : futures) {
                 f.get();
             }
-        } catch (ExecutionException | InterruptedException e ) {
+        } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
