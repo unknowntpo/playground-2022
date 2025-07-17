@@ -23,6 +23,11 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    // SLF4J facade with Log4j2 implementation
+    implementation("org.slf4j:slf4j-api:2.0.7")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -37,7 +42,13 @@ application {
     mainClass = "org.example.App"
 }
 
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+
+    // Show test output
+    testLogging {
+        showStandardStreams = true
+    }
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigInteger;
 
 class CacheInvocationHandlerTest {
-    private static void performanceTest(FibonacciCalculator calc) {
+    private static void performanceTest(FibCalculator calc) {
         System.out.println("\n=== Performance Test ===");
 
         int n = 35;
@@ -18,11 +18,14 @@ class CacheInvocationHandlerTest {
         long uncachedTime = System.currentTimeMillis() - start;
 
         System.out.printf("\nResults: %d, time elapsed: %d\n", res,  uncachedTime);
+
+        CacheStorage.printStats();
     }
 
     @Test
     public void testCache() {
-        var calc = new FibonacciCalculator();
+        FibonacciCalculator impl = new FibonacciCalculator();
+        FibCalculator calc = CacheFactory.createCachedProxy(impl, FibCalculator.class);
         // Test basic caching
         System.out.println("Testing automatic caching:");
         System.out.println("fib(10) = " + calc.fib(10));        // Computed and cached

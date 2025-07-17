@@ -2,8 +2,12 @@ package org.example;
 
 import java.math.BigInteger;
 
-public class FibonacciCalculator {
+public class FibonacciCalculator implements FibCalculator {
+    @Cache
     public BigInteger fib(int n) {
-        return BigInteger.valueOf(n);
+        if (n <= 1) {
+            return BigInteger.valueOf(n);
+        }
+        return fib(n-1).add(fib(n-2));
     }
 }
