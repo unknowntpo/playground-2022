@@ -4,7 +4,11 @@
 [versions]
 guava = "33.4.5-jre"
 junit-jupiter = "5.12.1"
+redisson = "3.27.0"
+dotenv = "3.0.0"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+redisson = { module = "org.redisson:redisson", version.ref = "redisson" }
+dotenv = { module = "io.github.cdimascio:dotenv-java", version.ref = "dotenv" }

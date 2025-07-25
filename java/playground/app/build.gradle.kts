@@ -24,6 +24,12 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
 
+    // Redis client
+    implementation(libs.redisson)
+    
+    // Environment variables from .env file
+    implementation(libs.dotenv)
+
     // SLF4J facade with Log4j2 implementation
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
