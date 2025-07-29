@@ -29,6 +29,9 @@ dependencies {
     
     // Environment variables from .env file
     implementation(libs.dotenv)
+    
+    // Client-side caching
+    implementation(libs.caffeine)
 
     // SLF4J facade with Log4j2 implementation
     implementation("org.slf4j:slf4j-api:2.0.7")
