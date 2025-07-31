@@ -18,7 +18,7 @@ public class ReddisonDemo {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         Config config = new Config();
         config.useSingleServer().setAddress(dotenv.get("REDIS_URL", "redis://localhost:6380"));
-        
+
         this.redisson = Redisson.create(config);
 
         // Initialize client-side cache with Caffeine
@@ -26,6 +26,12 @@ public class ReddisonDemo {
                 .maximumSize(1000)
                 .expireAfterWrite(Duration.ofMinutes(5))
                 .build();
+    }
+
+    static class testVi {
+        public static int test() {
+            return 1;
+        }
     }
 
     public void setString(String key, String value) {
