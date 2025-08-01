@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("me.champeau.jmh") version "0.7.2"
 }
 
 repositories {
@@ -26,10 +27,10 @@ dependencies {
 
     // Redis client
     implementation(libs.redisson)
-    
+
     // Environment variables from .env file
     implementation(libs.dotenv)
-    
+
     // Client-side caching
     implementation(libs.caffeine)
 
@@ -37,6 +38,14 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
     implementation("org.apache.logging.log4j:log4j-core:2.20.0")
+
+    // JMH benchmarking
+    implementation(libs.jmh.core)
+    annotationProcessor(libs.jmh.generator.annprocess)
+
+    // For IntelliJ JMH support
+    testImplementation(libs.jmh.core)
+    testAnnotationProcessor(libs.jmh.generator.annprocess)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

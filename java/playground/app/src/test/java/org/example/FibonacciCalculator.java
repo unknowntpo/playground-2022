@@ -1,5 +1,7 @@
 package org.example;
 
+import org.openjdk.jmh.annotations.Benchmark;
+
 import java.math.BigInteger;
 
 public class FibonacciCalculator implements FibCalculator {
