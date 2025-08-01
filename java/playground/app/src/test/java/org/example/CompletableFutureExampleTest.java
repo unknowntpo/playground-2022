@@ -7,6 +7,10 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -82,5 +86,16 @@ class CompletableFutureExampleTest {
         System.out.println("main thread interrupt hello thread");
         helloThread.interrupt();
         assertEquals(1, 1 + 1 - 1);
+    }
+
+    @Test
+    void testVirtualThread() throws ExecutionException, InterruptedException {
+        ExecutorService service = Executors.newVirtualThreadPerTaskExecutor();
+
+        var future = CompletableFuture.supplyAsync(()-> {
+            System.out.println("Hello");
+            return null;
+        }, service);
+        future.get();
     }
 }
