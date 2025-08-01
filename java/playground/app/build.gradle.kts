@@ -46,6 +46,9 @@ dependencies {
     // For IntelliJ JMH support
     testImplementation(libs.jmh.core)
     testAnnotationProcessor(libs.jmh.generator.annprocess)
+    
+    // Annotation processing for cache generation
+    implementation(libs.javapoet)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

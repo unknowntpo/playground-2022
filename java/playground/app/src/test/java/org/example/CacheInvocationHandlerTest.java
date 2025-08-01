@@ -24,8 +24,10 @@ class CacheInvocationHandlerTest {
 
     @Test
     public void testCache() {
-        FibonacciCalculator impl = new FibonacciCalculator();
-        FibCalculator calc = CacheFactory.createCachedProxy(impl, FibCalculator.class);
+        // Using annotation processor - no more manual proxy creation!
+//        FibCalculator calc = new FibonacciCalculatorCached(new FibonacciCalculator());
+        FibCalculator calc = new FibonacciCalculator();
+
         // Test basic caching
         System.out.println("Testing automatic caching:");
         System.out.println("fib(10) = " + calc.fib(10));        // Computed and cached
