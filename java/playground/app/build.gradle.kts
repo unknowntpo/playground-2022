@@ -58,9 +58,10 @@ java {
     }
 }
 
+
 application {
     // Define the main class for the application.
-    mainClass = "org.example.App"
+    mainClass = "org.example.BuilderExample"
 }
 
 
@@ -71,5 +72,37 @@ tasks.named<Test>("test") {
     // Show test output
     testLogging {
         showStandardStreams = true
+    }
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.addAll(listOf("-Xlint:processing"))
+}
+
+// Task to compile annotation processors first
+val compileProcessors by tasks.registering(JavaCompile::class) {
+    source = fileTree("src/main/java") {
+        include("**/AutoBuilder.java", "**/BuilderProcessor.java", "**/CacheProcessor.java", "**/Cache.java", "**/CacheEnabled.java")
+    }
+    destinationDirectory.set(layout.buildDirectory.dir("processor-classes"))
+    classpath = configurations.getByName("compileClasspath")
+    
+    options.compilerArgs.add("-proc:none") // Don't run annotation processing on processors themselves
+    
+    doLast {
+        // Copy service file
+        copy {
+            from("src/main/resources/META-INF")
+            into(layout.buildDirectory.dir("processor-classes/META-INF"))
+        }
+    }
+}
+
+tasks.named<JavaCompile>("compileJava") {
+    dependsOn(compileProcessors)
+    
+    doFirst {
+        // Add processor JAR to annotation processor path
+        options.annotationProcessorPath = files(layout.buildDirectory.dir("processor-classes")) + configurations.getByName("compileClasspath")
     }
 }
