@@ -4,18 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddDepositUsecase {
-    private Map<Long, Long> balances;
+    private final Map<Long, Long> balances;
 
     public AddDepositUsecase() {
-        this.balances = new HashMap<>(Map.of(1L, 0L, 2L, 0L));
+        this.balances = new HashMap<>();
     }
 
-    public long getDeposit(long userId) {
-        // TODO: user not exist
+    public long getDeposit(long userId) throws UserNotFoundException {
+        if (!this.balances.containsKey(userId)) {
+            throw new UserNotFoundException();
+        }
         return this.balances.get(userId);
     }
 
-    public void deposit(long userId, long l) {
+    public void deposit(long userId, long l) throws UserNotFoundException {
+        if (!this.balances.containsKey(userId)) {
+            throw new UserNotFoundException();
+        }
         this.balances.put(userId, this.balances.get(userId) + l);
+    }
+
+    public void createAccount(long userId) {
+        balances.putIfAbsent(userId, 0L);
     }
 }

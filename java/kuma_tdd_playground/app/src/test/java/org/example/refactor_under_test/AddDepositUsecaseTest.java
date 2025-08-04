@@ -8,9 +8,16 @@ class AddDepositUsecaseTest {
 
 
     @Test
-    void test_user_exist() {
+    void test_user_exist() throws UserNotFoundException {
         var usecase = new AddDepositUsecase();
         var userId = 1L;
+
+        assertThrows(UserNotFoundException.class, ()-> usecase.getDeposit(userId));
+        assertThrows(UserNotFoundException.class, ()-> usecase.deposit(userId, 10L));
+
+        usecase.createAccount(userId);
+        // create twice has no effect
+        assertDoesNotThrow(() -> usecase.createAccount(userId));
 
         assertEquals(0, usecase.getDeposit(userId));
         usecase.deposit(userId, 100);
@@ -20,7 +27,7 @@ class AddDepositUsecaseTest {
     }
 
     @Test
-    void test_two_users() {
+    void test_two_users() throws UserNotFoundException {
         var userId0 = 1L;
         var userId1 = 2L;
         var usecase = new AddDepositUsecase();
