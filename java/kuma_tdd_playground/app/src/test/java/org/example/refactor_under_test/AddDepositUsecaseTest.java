@@ -11,10 +11,11 @@ class AddDepositUsecaseTest {
     void test_user_exist() {
         var usecase = new AddDepositUsecase();
         var userId = 1L;
+
         assertEquals(0, usecase.getDeposit(userId));
-        usecase.deposit(1, 100);
+        usecase.deposit(userId, 100);
         assertEquals(100, usecase.getDeposit(userId));
-        usecase.deposit(1, 200);
+        usecase.deposit(userId, 200);
         assertEquals(300, usecase.getDeposit(userId));
     }
 
@@ -25,7 +26,7 @@ class AddDepositUsecaseTest {
         var usecase = new AddDepositUsecase();
         assertEquals(0, usecase.getDeposit(userId0));
         assertEquals(0, usecase.getDeposit(userId1));
-        usecase.deposit(1, 100);
+        usecase.deposit(userId0, 100);
         assertEquals(100, usecase.getDeposit(userId0));
         usecase.deposit(userId1, 200);
         assertEquals(200, usecase.getDeposit(userId1));
