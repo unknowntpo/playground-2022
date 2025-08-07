@@ -27,12 +27,10 @@ public class AddDepositUsecase {
     }
 
     private BankAccount findAccount(long userId) throws UserNotFoundException {
-        if (!this.balances.containsKey(userId)) {
-            throw new UserNotFoundException();
-        }
+        long deposit = getDeposit(userId);
 
         BankAccount account = new BankAccount();
-        account.setBalance(this.balances.get(userId));
+        account.setBalance(deposit);
         return account;
     }
 
