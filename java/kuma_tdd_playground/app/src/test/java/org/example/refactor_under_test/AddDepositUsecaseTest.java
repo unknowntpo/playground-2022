@@ -31,8 +31,12 @@ class AddDepositUsecaseTest {
         var userId0 = 1L;
         var userId1 = 2L;
         var usecase = new AddDepositUsecase();
+
+        usecase.createAccount(userId0);
+        usecase.createAccount(userId1);
         assertEquals(0, usecase.getDeposit(userId0));
         assertEquals(0, usecase.getDeposit(userId1));
+
         usecase.deposit(userId0, 100);
         assertEquals(100, usecase.getDeposit(userId0));
         usecase.deposit(userId1, 200);
