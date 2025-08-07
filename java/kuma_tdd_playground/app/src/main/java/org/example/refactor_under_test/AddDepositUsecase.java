@@ -18,7 +18,7 @@ public class AddDepositUsecase {
     }
 
     public void deposit(long userId, long l) throws UserNotFoundException {
-        BankAccount account = findAccount(userId);
+        BankAccount account = findBankAccount(userId);
 
         long newBalance = account.getBalance() + l;
         account.setBalance(newBalance);
@@ -26,7 +26,7 @@ public class AddDepositUsecase {
         this.balances.put(userId, account.getBalance());
     }
 
-    private BankAccount findAccount(long userId) throws UserNotFoundException {
+    private BankAccount findBankAccount(long userId) throws UserNotFoundException {
         long deposit = getDeposit(userId);
 
         BankAccount account = new BankAccount();
