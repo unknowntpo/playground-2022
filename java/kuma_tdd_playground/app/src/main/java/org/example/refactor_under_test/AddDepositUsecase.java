@@ -18,14 +18,22 @@ public class AddDepositUsecase {
     }
 
     public void deposit(long userId, long l) throws UserNotFoundException {
+        BankAccount account = findAccount(userId);
+
+        long newBalance = account.getBalance() + l;
+        account.setBalance(newBalance);
+
+        this.balances.put(userId, account.getBalance());
+    }
+
+    private BankAccount findAccount(long userId) throws UserNotFoundException {
         if (!this.balances.containsKey(userId)) {
             throw new UserNotFoundException();
         }
 
-        var currentBalance = this.balances.get(userId);
-        long newBalance = currentBalance + l;
-
-        this.balances.put(userId, newBalance);
+        BankAccount account = new BankAccount();
+        account.setBalance(this.balances.get(userId));
+        return account;
     }
 
     public void createAccount(long userId) {
