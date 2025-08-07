@@ -21,7 +21,11 @@ public class AddDepositUsecase {
         if (!this.balances.containsKey(userId)) {
             throw new UserNotFoundException();
         }
-        this.balances.put(userId, this.balances.get(userId) + l);
+
+        var currentBalance = this.balances.get(userId);
+        long newBalance = currentBalance + l;
+
+        this.balances.put(userId, newBalance);
     }
 
     public void createAccount(long userId) {
