@@ -1,0 +1,102 @@
+# Database Partitioning Examples - Justfile
+# Run PostgreSQL partitioning examples with Docker
+
+# Default recipe
+default:
+    @just --list
+
+# Start PostgreSQL container
+up:
+    docker-compose up -d
+    @echo "Waiting for PostgreSQL to be ready..."
+    @sleep 20
+    @docker-compose exec postgres pg_isready -U demo_user -d partitioning_demo
+
+# Stop and remove containers
+down:
+    docker-compose down
+
+# Stop containers and remove volumes (clean slate)
+clean:
+    docker-compose down -v
+    docker-compose rm -f
+
+# View container logs
+logs:
+    docker-compose logs -f postgres
+
+# Connect to PostgreSQL database
+connect:
+    docker-compose exec postgres psql -U demo_user -d partitioning_demo
+
+# Run a specific SQL script
+run-script script:
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -f /docker-entrypoint-initdb.d/{{script}}
+
+# Run all partitioning examples in order
+run-examples: up
+    @echo "🚀 Running all partitioning examples..."
+    @echo "📋 1/5 - Setup and cleanup..."
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -f /docker-entrypoint-initdb.d/01_setup.sql
+    @echo "📅 2/5 - Range partitioning (sales by quarters)..."
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -f /docker-entrypoint-initdb.d/02_range_partitioning.sql
+    @echo "🔀 3/5 - Hash partitioning (users by ID)..."
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -f /docker-entrypoint-initdb.d/03_hash_partitioning.sql
+    @echo "📋 4/5 - List partitioning (products by category)..."
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -f /docker-entrypoint-initdb.d/04_list_partitioning.sql
+    @echo "⚡ 5/5 - Performance demonstrations..."
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -f /docker-entrypoint-initdb.d/05_performance_demo.sql
+    @echo "✅ All examples completed! Connect with: just connect"
+
+# Run individual examples
+range-example: up
+    @echo "📅 Running range partitioning example..."
+    just run-script 01_setup.sql
+    just run-script 02_range_partitioning.sql
+
+hash-example: up
+    @echo "🔀 Running hash partitioning example..."
+    just run-script 01_setup.sql
+    just run-script 03_hash_partitioning.sql
+
+list-example: up
+    @echo "📋 Running list partitioning example..."
+    just run-script 01_setup.sql
+    just run-script 04_list_partitioning.sql
+
+# Performance testing with larger datasets
+performance-test: up
+    @echo "⚡ Running performance tests with larger datasets..."
+    just run-script 01_setup.sql
+    just run-script 02_range_partitioning.sql
+    just run-script 03_hash_partitioning.sql
+    @echo "📊 Populating with 10,000 records for performance testing..."
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -c "SELECT populate_sales_data(10000);"
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -c "SELECT populate_users_data(10000);"
+    just run-script 05_performance_demo.sql
+
+# Show partition information
+show-partitions:
+    @echo "📊 Showing partition information..."
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -c "\\dt+ *partition*"
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -c "SELECT schemaname, tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as size FROM pg_tables WHERE tablename LIKE '%partition%' OR tablename LIKE 'sales_%' OR tablename LIKE 'users_%' OR tablename LIKE 'products_%' ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;"
+
+# Show database status
+status:
+    @echo "🔍 Database status:"
+    docker-compose ps
+    @echo ""
+    @echo "📊 Database size:"
+    docker-compose exec -T postgres psql -U demo_user -d partitioning_demo -c "SELECT pg_size_pretty(pg_database_size('partitioning_demo'));"
+
+# Interactive demo mode
+demo: run-examples
+    @echo ""
+    @echo "🎯 Demo completed! You can now:"
+    @echo "  • Run 'just connect' to explore the database"
+    @echo "  • Run 'just show-partitions' to see partition info"
+    @echo "  • Run 'just performance-test' for performance comparison"
+    @echo "  • Check individual examples with 'just range-example', etc."
+
+# Reset and run fresh demo
+fresh-demo: clean demo
