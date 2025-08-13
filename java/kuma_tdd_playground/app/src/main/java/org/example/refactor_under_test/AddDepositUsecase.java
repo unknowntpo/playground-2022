@@ -12,16 +12,17 @@ public class AddDepositUsecase {
     }
 
     public long getDeposit(long userId) throws UserNotFoundException {
-        return bankAccountRepository.findBankAccount(userId).getBalance();
+        BankAccount bankAccount = bankAccountRepository.findBankAccount(userId).orElseThrow(UserNotFoundException::new);
+        return bankAccount.getBalance();
     }
 
     public void deposit(long userId, long l) throws UserNotFoundException {
-        BankAccount account = bankAccountRepository.findBankAccount(userId);
+        BankAccount bankAccount = bankAccountRepository.findBankAccount(userId).orElseThrow(UserNotFoundException::new);
 
-        long newBalance = account.getBalance() + l;
-        account.setBalance(newBalance);
+        long newBalance = bankAccount.getBalance() + l;
+        bankAccount.setBalance(newBalance);
 
-        bankAccountRepository.save(userId, account);
+        bankAccountRepository.save(userId, bankAccount);
     }
 
     public void createAccount(long userId) {

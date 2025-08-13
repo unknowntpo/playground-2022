@@ -2,6 +2,7 @@ package org.example.refactor_under_test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class BankAccountRepository {
     final Map<Long, Long> balances;
@@ -10,15 +11,16 @@ public class BankAccountRepository {
         this.balances = new HashMap<>();
     }
 
-    public BankAccount findBankAccount(long userId) throws UserNotFoundException {
+    public Optional<BankAccount> findBankAccount(long userId) {
         if (!this.balances.containsKey(userId)) {
-            throw new UserNotFoundException();
+            return Optional.empty();
         }
+
         long deposit = this.balances.get(userId);
 
         BankAccount account = new BankAccount();
         account.setBalance(deposit);
-        return account;
+        return Optional.of(account);
     }
 
     public void createAccount(long userId) {
