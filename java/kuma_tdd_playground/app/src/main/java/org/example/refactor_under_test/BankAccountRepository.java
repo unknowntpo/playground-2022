@@ -10,15 +10,11 @@ public class BankAccountRepository {
         this.balances = new HashMap<>();
     }
 
-    public long getDeposit(long userId) throws UserNotFoundException {
+    public BankAccount findBankAccount(long userId) throws UserNotFoundException {
         if (!this.balances.containsKey(userId)) {
             throw new UserNotFoundException();
         }
-        return this.balances.get(userId);
-    }
-
-    BankAccount findBankAccount(long userId) throws UserNotFoundException {
-        long deposit = getDeposit(userId);
+        long deposit = this.balances.get(userId);
 
         BankAccount account = new BankAccount();
         account.setBalance(deposit);

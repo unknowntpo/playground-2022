@@ -12,7 +12,7 @@ public class AddDepositUsecase {
     }
 
     public long getDeposit(long userId) throws UserNotFoundException {
-        return bankAccountRepository.getDeposit(userId);
+        return bankAccountRepository.findBankAccount(userId).getBalance();
     }
 
     public void deposit(long userId, long l) throws UserNotFoundException {
