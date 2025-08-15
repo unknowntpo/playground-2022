@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("me.champeau.jmh") version "0.7.2"
 }
 
 repositories {
@@ -29,7 +30,7 @@ dependencies {
     
     // JAX-RS with Jersey and Jetty
     implementation(libs.javax.jaxb.api)
-    implementation(libs.javax.ws.rs.api)
+    // Remove javax.ws.rs.api - Jersey 3.x provides Jakarta APIs
     implementation(libs.jersey.server)
     implementation(libs.jersey.container.jetty.http)
     implementation(libs.jersey.container.servlet)
@@ -41,6 +42,10 @@ dependencies {
     // JMH for benchmarking
     implementation(libs.jmh.core)
     annotationProcessor(libs.jmh.generator.annprocess)
+    
+    // JMH dependencies for jmh source set
+    jmhImplementation(libs.jmh.core)
+    jmhAnnotationProcessor(libs.jmh.generator.annprocess)
     
     // Testing
     testImplementation(libs.junit.jupiter)

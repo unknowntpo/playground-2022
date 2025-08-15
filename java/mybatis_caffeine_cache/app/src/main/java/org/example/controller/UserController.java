@@ -1,21 +1,21 @@
-package org.example.resource;
+package org.example.controller;
 
 import org.example.entity.User;
 import org.example.service.UserService;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/users")
+@Path("/api/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class UserResource {
+public class UserController {
 
     private final UserService userService;
 
-    public UserResource() {
+    public UserController() {
         this.userService = new UserService();
     }
 

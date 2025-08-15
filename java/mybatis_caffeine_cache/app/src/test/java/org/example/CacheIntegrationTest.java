@@ -212,6 +212,8 @@ public class CacheIntegrationTest {
 
         long duration = System.nanoTime() - startTime;
 
+        System.out.printf("duration: %d\n", duration);
+
         assertTrue(duration < 1_000_000_000L,
                 "100 repeated access should complete in less than 1 second (indicating cache is working)");
     }

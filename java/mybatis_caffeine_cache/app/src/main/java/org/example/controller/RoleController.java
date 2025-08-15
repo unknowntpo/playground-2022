@@ -1,21 +1,21 @@
-package org.example.resource;
+package org.example.controller;
 
 import org.example.entity.Role;
 import org.example.service.RoleService;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/roles")
+@Path("/api/roles")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class RoleResource {
+public class RoleController {
 
     private final RoleService roleService;
 
-    public RoleResource() {
+    public RoleController() {
         this.roleService = new RoleService();
     }
 
@@ -61,6 +61,12 @@ public class RoleResource {
                     .entity("Error retrieving roles: " + e.getMessage())
                     .build();
         }
+    }
+
+    @GET
+    @Path("/test")
+    public Response test() {
+        return Response.ok("Hello from RoleResource!").build();
     }
 
     @POST

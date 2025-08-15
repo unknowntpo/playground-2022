@@ -7,7 +7,7 @@ This project demonstrates the integration of MyBatis with Caffeine Cache for eff
 - **Entity Layer**: User and Role entities with many-to-many relationships
 - **Mapper Layer**: MyBatis mappers with Caffeine cache configuration
 - **Service Layer**: Business logic with manual session management
-- **Resource Layer**: JAX-RS REST endpoints
+- **Controller Layer**: JAX-RS REST endpoints
 - **Database**: MySQL with Docker Compose setup
 
 ## Features
@@ -61,7 +61,7 @@ The server will start on port 8080 with the following endpoints:
 ### 4. Run Benchmarks
 
 ```bash
-./gradlew test --tests="*Benchmark*"
+./gradlew jmh
 ```
 
 ## Cache Configuration
@@ -89,39 +89,81 @@ The database is initialized with:
 
 ## Benchmarks
 
-The JMH benchmarks demonstrate:
-- Cached vs non-cached performance
-- Cache hit ratios
-- Response time improvements with caching enabled
+### Performance Results
+
+JMH benchmark results comparing cached vs non-cached MyBatis operations:
+
+```
+Benchmark                                                  Mode  Cnt    Score     Error  Units
+RoleCacheBenchmark.cachedGetRoleByIdDifferent              avgt    5    0.565 ±   0.154  us/op
+RoleCacheBenchmark.cachedGetRoleByIdSame                   avgt    5    0.541 ±   0.112  us/op
+RoleCacheBenchmark.cachedGetRoleByIdWithUsersDifferent     avgt    5    0.570 ±   0.127  us/op
+RoleCacheBenchmark.cachedGetRoleByIdWithUsersSame          avgt    5    0.579 ±   0.146  us/op
+RoleCacheBenchmark.nonCachedGetRoleByIdDifferent           avgt    5  402.637 ± 180.168  us/op
+RoleCacheBenchmark.nonCachedGetRoleByIdSame                avgt    5  466.518 ± 258.894  us/op
+RoleCacheBenchmark.nonCachedGetRoleByIdWithUsersDifferent  avgt    5  482.195 ±  72.193  us/op
+RoleCacheBenchmark.nonCachedGetRoleByIdWithUsersSame       avgt    5  487.807 ± 169.932  us/op
+```
+
+### Key Performance Metrics
+
+- **Cache Hit Performance**: ~0.55-0.58 μs per operation
+- **Database Query Performance**: ~400-488 μs per operation
+- **Performance Improvement**: **700-900x faster** with cache enabled
+- **Cache Efficiency**: Consistent sub-microsecond response times regardless of query complexity
+
+### Benchmark Analysis
+
+1. **Cached Operations**: All cached queries perform consistently at ~0.5-0.6 μs
+2. **Non-Cached Operations**: Database queries take 400-500 μs (hitting MySQL)
+3. **Complex Queries**: JOIN queries with users show same cache performance benefits
+4. **Query Variations**: Both same-ID and different-ID patterns benefit equally from caching
+
+### Running Benchmarks
+
+```bash
+./gradlew jmh
+```
+
+The benchmarks demonstrate:
+- Cached vs non-cached performance comparison
+- Cache hit consistency across different query patterns
+- Dramatic response time improvements with Caffeine cache integration
 
 ## Project Structure
 
 ```
 app/src/main/java/org/example/
 ├── config/
-│   └── MyBatisConfig.java          # MyBatis and HikariCP configuration
+│   └── MyBatisConfig.java              # MyBatis and HikariCP configuration
 ├── entity/
-│   ├── User.java                   # User entity
-│   └── Role.java                   # Role entity
+│   ├── User.java                       # User entity
+│   └── Role.java                       # Role entity
 ├── mapper/
-│   ├── UserMapper.java             # User mapper interface
-│   └── RoleMapper.java             # Role mapper interface
+│   ├── UserMapper.java                 # User mapper interface
+│   ├── RoleMapper.java                 # Role mapper interface
+│   └── RoleMapperNonCached.java        # Non-cached mapper for benchmarks
 ├── service/
-│   ├── UserService.java            # User business logic
-│   └── RoleService.java            # Role business logic
-├── resource/
-│   ├── UserResource.java           # User REST endpoints
-│   └── RoleResource.java           # Role REST endpoints
-└── App.java                        # Main application class
+│   ├── UserService.java                # User business logic
+│   ├── RoleService.java                # Role business logic
+│   └── RoleServiceNonCached.java       # Non-cached service for benchmarks
+├── controller/
+│   ├── UserController.java             # User REST endpoints
+│   └── RoleController.java             # Role REST endpoints
+└── App.java                            # Main application class
 
 app/src/main/resources/
 ├── mapper/
-│   ├── UserMapper.xml              # User SQL mappings with cache
-│   └── RoleMapper.xml              # Role SQL mappings with cache
-├── mybatis-config.xml              # MyBatis configuration
-└── application.yml                 # Application configuration
+│   ├── UserMapper.xml                  # User SQL mappings with cache
+│   ├── RoleMapper.xml                  # Role SQL mappings with cache
+│   └── RoleMapperNonCached.xml         # Non-cached SQL mappings for benchmarks
+├── mybatis-config.xml                  # MyBatis configuration
+└── application.yml                     # Application configuration
+
+app/src/jmh/java/org/example/
+└── RoleCacheBenchmark.java             # JMH benchmarks
 
 app/src/test/java/org/example/
-├── CacheIntegrationTest.java       # Integration tests for cache behavior
-└── RoleCacheBenchmark.java         # JMH benchmarks
+├── AppTest.java                        # Basic application tests
+└── CacheIntegrationTest.java           # Integration tests for cache behavior
 ```

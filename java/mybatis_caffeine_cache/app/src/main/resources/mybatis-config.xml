@@ -44,5 +44,7 @@
     <mappers>
         <mapper class="org.example.mapper.UserMapper"/>
         <mapper class="org.example.mapper.RoleMapper"/>
+        <mapper class="org.example.mapper.RoleMapperNonCached"/>
+        <mapper resource="mapper/RoleMapperNonCached.xml"/>
     </mappers>
 </configuration>
