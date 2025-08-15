@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties>
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+    </properties>
+    
+    <settings>
+        <!-- Enable caching globally -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- Use actual parameter names -->
+        <setting name="useActualParamName" value="true"/>
+        <!-- Map underscore to camel case -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- Enable lazy loading -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias type="org.example.entity.User" alias="User"/>
+        <typeAlias type="org.example.entity.Role" alias="Role"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+                <property name="poolMaximumActiveConnections" value="10"/>
+                <property name="poolMaximumIdleConnections" value="5"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper class="org.example.mapper.UserMapper"/>
+        <mapper class="org.example.mapper.RoleMapper"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.mapper.UserMapper">
+
+    <!-- Caffeine Cache Configuration -->
+    <cache type="org.mybatis.caches.caffeine.CaffeineCache">
+        <property name="maximumSize" value="1000"/>
+        <property name="expireAfterWrite" value="300"/>
+        <property name="expireAfterAccess" value="60"/>
+    </cache>
+
+    <!-- Result Maps -->
+    <resultMap id="BaseUserResultMap" type="User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <resultMap id="UserWithRolesResultMap" type="User" extends="BaseUserResultMap">
+        <collection property="roles" ofType="Role">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="name"/>
+            <result column="role_description" property="description"/>
+            <result column="role_created_at" property="createdAt"/>
+            <result column="role_updated_at" property="updatedAt"/>
+        </collection>
+    </resultMap>
+
+    <!-- Select Statements -->
+    <select id="getUserById" resultMap="BaseUserResultMap" useCache="true">
+        SELECT id, name, email, created_at, updated_at
+        FROM users
+        WHERE id = #{id}
+    </select>
+
+    <select id="getUserByIdWithRoles" resultMap="UserWithRolesResultMap" useCache="true">
+        SELECT 
+            u.id, u.name, u.email, u.created_at, u.updated_at,
+            r.id as role_id, r.name as role_name, r.description as role_description,
+            r.created_at as role_created_at, r.updated_at as role_updated_at
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id
+        LEFT JOIN roles r ON ur.role_id = r.id
+        WHERE u.id = #{id}
+    </select>
+
+    <select id="getAllUsers" resultMap="BaseUserResultMap" useCache="true">
+        SELECT id, name, email, created_at, updated_at
+        FROM users
+        ORDER BY name
+    </select>
+
+    <select id="getUsersByRoleId" resultMap="BaseUserResultMap" useCache="true">
+        SELECT u.id, u.name, u.email, u.created_at, u.updated_at
+        FROM users u
+        INNER JOIN user_roles ur ON u.id = ur.user_id
+        WHERE ur.role_id = #{roleId}
+        ORDER BY u.name
+    </select>
+
+    <!-- Insert Statement -->
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+        INSERT INTO users (name, email)
+        VALUES (#{name}, #{email})
+    </insert>
+
+    <!-- Update Statement -->
+    <update id="updateUser" parameterType="User" flushCache="true">
+        UPDATE users
+        SET name = #{name}, email = #{email}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <!-- Delete Statement -->
+    <delete id="deleteUser" flushCache="true">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+    <!-- Remove user from all roles -->
+    <delete id="removeUserFromAllRoles" flushCache="true">
+        DELETE FROM user_roles WHERE user_id = #{userId}
+    </delete>
+
+</mapper>
