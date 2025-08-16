@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.jersey.container.jetty.http)
     implementation(libs.jersey.container.servlet)
     implementation(libs.jersey.media.json.jackson)
+    implementation(libs.jackson.datatype.jsr310)
     implementation(libs.jersey.inject.hk2)
     implementation(libs.jetty.server)
     implementation(libs.jetty.servlet)
@@ -50,6 +51,10 @@ dependencies {
     // Testing
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Logging
+    implementation("ch.qos.logback:logback-classic:1.4.14")
+    implementation("org.slf4j:slf4j-api:2.0.9")
 
     // This dependency is used by the application.
     implementation(libs.guava)

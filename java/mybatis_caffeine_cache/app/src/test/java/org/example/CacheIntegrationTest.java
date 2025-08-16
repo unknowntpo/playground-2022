@@ -219,6 +219,49 @@ public class CacheIntegrationTest {
     }
 
     @Test
+    public void testUpdateUserInfoInvalidatesRoleCache() {
+        // Find the admin role and get it with users to cache it
+        Role adminRole = roleService.getAllRoles().stream()
+                .filter(r -> "ADMIN".equals(r.getName()))
+                .findFirst().orElse(null);
+        assertNotNull(adminRole);
+
+        // Cache the role with users by fetching it
+        Role adminRoleWithUsersBefore = roleService.getRoleByIdWithUsers(adminRole.getId());
+        assertNotNull(adminRoleWithUsersBefore);
+        assertFalse(adminRoleWithUsersBefore.getUsers().isEmpty(), "Admin role should have users");
+
+        // Get the first user to update
+        User userToUpdate = adminRoleWithUsersBefore.getUsers().get(0);
+        String originalName = userToUpdate.getName();
+        String originalEmail = userToUpdate.getEmail();
+
+        // Update the user's information
+        String updatedName = originalName + " (Updated)";
+        String updatedEmail = "updated_" + originalEmail;
+        User updatedUser = new User(userToUpdate.getId(), updatedName, updatedEmail);
+
+        userService.updateUser(updatedUser);
+
+        // Fetch the role with users again - should reflect the updated user info due to cache invalidation
+        Role adminRoleWithUsersAfter = roleService.getRoleByIdWithUsers(adminRole.getId());
+        assertNotNull(adminRoleWithUsersAfter);
+
+        // Find the updated user in the role's users list
+        User foundUpdatedUser = adminRoleWithUsersAfter.getUsers().stream()
+                .filter(user -> user.getId().equals(userToUpdate.getId()))
+                .findFirst().orElse(null);
+
+        assertNotNull(foundUpdatedUser, "Updated user should still be in the role");
+        assertEquals(updatedName, foundUpdatedUser.getName(), "User name should be updated in role's users list");
+        assertEquals(updatedEmail, foundUpdatedUser.getEmail(), "User email should be updated in role's users list");
+
+        // Verify the old values are not present
+        assertNotEquals(originalName, foundUpdatedUser.getName(), "User name should not be the original value");
+        assertNotEquals(originalEmail, foundUpdatedUser.getEmail(), "User email should not be the original value");
+    }
+
+    @Test
     public void testMultipleUsersInRole() {
         List<Role> allRoles = roleService.getAllRoles();
 

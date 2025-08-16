@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.Server;
 import org.glassfish.jersey.jetty.JettyHttpContainerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.example.config.JacksonConfig;
 
 import jakarta.ws.rs.core.UriBuilder;
 import java.net.URI;
@@ -15,6 +16,7 @@ public class App {
             ResourceConfig config = new ResourceConfig();
             config.packages("org.example.controller");
             config.register(JacksonFeature.class);
+            config.register(JacksonConfig.class);
 
             // Debug: List registered resources
             System.out.println("Registered classes: " + config.getClasses());

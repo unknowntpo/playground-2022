@@ -57,6 +57,17 @@ public class UserService {
             UserMapper mapper = session.getMapper(UserMapper.class);
             mapper.updateUser(user);
             session.commit();
+            
+            // Clear the role cache since user info affects role-with-users queries
+            sqlSessionFactory.getConfiguration().getCache("org.example.mapper.RoleMapper").clear();
+        } catch (Exception e) {
+            // If cache clearing fails, log but don't fail the operation
+            System.err.println("Warning: Failed to clear cache: " + e.getMessage());
+            try (SqlSession session = sqlSessionFactory.openSession()) {
+                UserMapper mapper = session.getMapper(UserMapper.class);
+                mapper.updateUser(user);
+                session.commit();
+            }
         }
     }
 
