@@ -2,20 +2,22 @@ package org.example;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class DatabaseManager {
-    private String DB_FILE_PATH;
+    public String DB_FILE_PATH;
     private Logger LOG = LoggerFactory.getLogger(DatabaseManager.class);
     private String DB_URL;
-    private static final String DB_USER = "sa";
-    private static final String DB_PASSWORD = "";
+    private static final String DB_USER = "h2";
+    private static final String DB_PASSWORD = "h2";
 
     private Connection connection;
 
@@ -23,19 +25,29 @@ public class DatabaseManager {
         initializeDatabase();
     }
 
+    public DatabaseManager(String dbFileName) throws SQLException, IOException {
+        initializeDatabase(Optional.of(dbFileName));
+    }
+
     private void initializeDatabase() throws SQLException, IOException {
-        setDbFilePathAndDbUrl();
+        initializeDatabase(Optional.empty());
+    }
+
+    private void initializeDatabase(Optional<String> dbFileNameOpt) throws SQLException, IOException {
+        setDbFilePathAndDbUrl(dbFileNameOpt);
+        // Set max compact time to 10ms
+        System.setProperty("h2.maxCompactTime", "10");
         this.connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
         LOG.info("connection established, DB_FILE_PATH: {}, DB_URL: {}", DB_FILE_PATH, DB_URL);
 
         String createTableSQL = """
-            CREATE TABLE IF NOT EXISTS record (
-                id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                description TEXT
-            )
-            """;
+                CREATE TABLE IF NOT EXISTS record (
+                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(255) NOT NULL,
+                    description TEXT
+                )
+                """;
 
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(createTableSQL);
@@ -43,15 +55,23 @@ public class DatabaseManager {
     }
 
     private void setDbFilePathAndDbUrl() throws IOException {
+
+    }
+
+    private void setDbFilePathAndDbUrl(Optional<String> existedDbFilePath) throws IOException {
+        String dbFilePath;
         File dir = new File("/tmp/h2_tmp");
-        dir.mkdir();
+        if (existedDbFilePath.isEmpty()) {
+            dir.mkdir();
+            dbFilePath = dir.getAbsolutePath() + "/" + UUID.randomUUID() + ".mv.db";
+        } else {
+            dbFilePath = existedDbFilePath.get();
+        }
 
-        // Create unique database file with UUID
-        String dbFilePathNoSuffix = dir.getAbsolutePath() + "/" + UUID.randomUUID();
-        LOG.info("Database will be created at: {}.mv.db", dbFilePathNoSuffix);
-
-        this.DB_FILE_PATH = dbFilePathNoSuffix + ".mv.db";
-        this.DB_URL = String.format("jdbc:h2:file:%s;DB_CLOSE_DELAY=-1", dbFilePathNoSuffix);
+        this.DB_FILE_PATH = dbFilePath;
+        LOG.info("Database will be created at: {}", DB_FILE_PATH);
+        var pathNoSuffix = dbFilePath.substring(0, dbFilePath.lastIndexOf(".mv.db"));
+        this.DB_URL = String.format("jdbc:h2:file:%s;DB_CLOSE_DELAY=-1", pathNoSuffix);
     }
 
     public Record save(Record record) throws SQLException {
@@ -112,9 +132,9 @@ public class DatabaseManager {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new Record(
-                        rs.getLong("id"),
-                        rs.getString("name"),
-                        rs.getString("description")
+                            rs.getLong("id"),
+                            rs.getString("name"),
+                            rs.getString("description")
                     );
                 }
             }
@@ -132,9 +152,9 @@ public class DatabaseManager {
 
             while (rs.next()) {
                 records.add(new Record(
-                    rs.getLong("id"),
-                    rs.getString("name"),
-                    rs.getString("description")
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("description")
                 ));
             }
         }
@@ -160,5 +180,17 @@ public class DatabaseManager {
     public Long getDbFileSize() {
         var f = new File(DB_FILE_PATH);
         return f.length();
+    }
+
+    public void shutdown() throws SQLException {
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute("SHUTDOWN");
+        }
+    }
+
+    public void shutdownCompact() throws SQLException {
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute("SHUTDOWN COMPACT");
+        }
     }
 }

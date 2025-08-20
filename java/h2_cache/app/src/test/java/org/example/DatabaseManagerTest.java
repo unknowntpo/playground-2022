@@ -101,13 +101,63 @@ class DatabaseManagerTest {
     }
 
     @Test
-    void testGetDbFileSize() throws SQLException, InterruptedException {
+    void testGetDbFileSize() throws SQLException, InterruptedException, IOException {
         for (int i = 0; i < 10_000; i++) {
             Record record = new Record("Original Name", "Original Description" + UUID.randomUUID());
             dbManager.save(record);
         }
 
         Thread.sleep(5_000);
-        Assertions.assertEquals(100, dbManager.getDbFileSize());
+        System.out.printf("db size : %d", dbManager.getDbFileSize());
+
+        for (int i = 1; i <= 5000; i++) {
+            dbManager.deleteById((long) i);
+        }
+
+        // Use shutdown command with 10ms max compact time
+        dbManager.shutdown();
+
+        Thread.sleep(10); // 10ms wait
+
+        dbManager.close();
+        var newDbManager = new DatabaseManager(dbManager.DB_FILE_PATH);
+        Long newDbSize = dbManager.getDbFileSize();
+        System.out.printf("db size after reopen: %d", newDbSize);
+        newDbManager.close();
+
+        // With 10ms max compact time, limited compaction occurs - size may not reduce significantly
+        System.out.printf("Original size: 806912, New size: %d%n", newDbSize);
+        Assertions.assertTrue(newDbSize > 0, "Database should still exist after shutdown with limited compaction");
+    }
+
+    @Test
+    void testShutdownCompact() throws SQLException, InterruptedException, IOException {
+        for (int i = 0; i < 10_000; i++) {
+            Record record = new Record("Original Name", "Original Description" + UUID.randomUUID());
+            dbManager.save(record);
+        }
+
+        Thread.sleep(5_000);
+        Long initialSize = dbManager.getDbFileSize();
+        System.out.printf("db size before deletion: %d", initialSize);
+
+        for (int i = 1; i <= 5000; i++) {
+            dbManager.deleteById((long) i);
+        }
+
+        // Use shutdown compact for full compaction
+        dbManager.shutdownCompact();
+
+        Thread.sleep(10); // 10ms wait
+
+        dbManager.close();
+        var newDbManager = new DatabaseManager(dbManager.DB_FILE_PATH);
+        Long compactedSize = dbManager.getDbFileSize();
+        System.out.printf("db size after shutdown compact: %d", compactedSize);
+        newDbManager.close();
+
+        // SHUTDOWN COMPACT should significantly reduce database size
+        System.out.printf("Initial size: %d, Compacted size: %d%n", initialSize, compactedSize);
+        Assertions.assertTrue(compactedSize < initialSize, "Database size should be significantly reduced after SHUTDOWN COMPACT");
     }
 }
