@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.dto.PolicyRequest;
+import org.example.dto.PolicyFilter;
 import org.example.service.PolicyManagementService;
 
 import jakarta.ws.rs.*;
@@ -161,6 +162,46 @@ public class PolicyController {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("Error reloading policies: " + e.getMessage())
+                .build();
+        }
+    }
+    
+    @GET
+    @Path("/filtered")
+    public Response getFilteredPolicies(@QueryParam("subject") String subject,
+                                      @QueryParam("object") String object,
+                                      @QueryParam("action") String action) {
+        try {
+            PolicyFilter filter = new PolicyFilter(subject, object, action);
+            List<List<String>> policies = policyService.getFilteredPolicies(filter);
+            
+            Map<String, Object> result = new HashMap<>();
+            result.put("policies", policies);
+            result.put("filtered", policyService.isFiltered());
+            result.put("filter", filter);
+            
+            return Response.ok(result).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("Error retrieving filtered policies: " + e.getMessage())
+                .build();
+        }
+    }
+    
+    @POST
+    @Path("/load-filtered")
+    public Response loadFilteredPolicies(PolicyFilter filter) {
+        try {
+            policyService.loadFilteredPolicies(filter);
+            
+            String message = filter == null || filter.isEmpty() ? 
+                "All policies loaded successfully" : 
+                "Filtered policies loaded successfully";
+            
+            return Response.ok(message).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("Error loading filtered policies: " + e.getMessage())
                 .build();
         }
     }

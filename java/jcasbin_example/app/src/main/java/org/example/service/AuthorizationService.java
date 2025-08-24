@@ -3,6 +3,8 @@ package org.example.service;
 import org.casbin.adapter.JDBCAdapter;
 import org.casbin.jcasbin.main.Enforcer;
 import org.example.config.DatabaseConfig;
+import org.example.dto.PolicyFilter;
+import org.example.filter.JCasbinFilter;
 import java.util.List;
 
 public class AuthorizationService {
@@ -74,6 +76,20 @@ public class AuthorizationService {
     public void reloadPolicy() {
         enforcer.loadPolicy();
     }
+    
+    public void loadFilteredPolicy(PolicyFilter filter) {
+        if (filter == null || filter.isEmpty()) {
+            enforcer.loadPolicy();
+        } else {
+            try {
+                JCasbinFilter jcasbinFilter = new JCasbinFilter(filter);
+                // Pass the String array directly as the filter
+                enforcer.loadFilteredPolicy(jcasbinFilter.getFilterValues());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load filtered policy", e);
+            }
+        }
+    }
 
     public List<List<String>> getAllPolicies() {
         return enforcer.getPolicy();
@@ -81,5 +97,19 @@ public class AuthorizationService {
 
     public List<List<String>> getAllRoles() {
         return enforcer.getGroupingPolicy();
+    }
+    
+    public List<List<String>> getFilteredPolicies(PolicyFilter filter) {
+        if (filter == null || filter.isEmpty()) {
+            return getAllPolicies();
+        }
+        
+        // Load filtered policies and return them
+        loadFilteredPolicy(filter);
+        return getAllPolicies();
+    }
+    
+    public boolean isFiltered() {
+        return enforcer.isFiltered();
     }
 }

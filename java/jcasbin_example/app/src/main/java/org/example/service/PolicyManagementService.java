@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.dto.PolicyFilter;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -36,5 +37,17 @@ public class PolicyManagementService {
     
     public void reloadPolicies() {
         authService.reloadPolicy();
+    }
+    
+    public void loadFilteredPolicies(PolicyFilter filter) {
+        authService.loadFilteredPolicy(filter);
+    }
+    
+    public List<List<String>> getFilteredPolicies(PolicyFilter filter) {
+        return authService.getFilteredPolicies(filter);
+    }
+    
+    public boolean isFiltered() {
+        return authService.isFiltered();
     }
 }
