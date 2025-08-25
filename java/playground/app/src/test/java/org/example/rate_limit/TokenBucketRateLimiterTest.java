@@ -15,4 +15,18 @@ class TokenBucketRateLimiterTest {
         assertTrue(limiter.getToken().isEmpty());
         assertFalse(limiter.hasToken());
     }
+    
+    @Test
+    void testGetTokenSync() throws InterruptedException {
+        var limiter = new TokenBucketRateLimiter(3);
+        
+        // First few should succeed immediately
+        assertNotNull(limiter.getTokenSync());
+        assertNotNull(limiter.getTokenSync());
+        assertNotNull(limiter.getTokenSync());
+        
+        // This would block indefinitely since no tokens are available
+        // So we test the timeout version instead
+        assertThrows(RuntimeException.class, () -> limiter.getTokenSync(50));
+    }
 }

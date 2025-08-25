@@ -49,6 +49,10 @@ dependencies {
     
     // Annotation processing for cache generation
     implementation(libs.javapoet)
+    
+    // Tablesaw for data analysis and plotting
+    implementation(libs.tablesaw.core)
+    implementation(libs.tablesaw.jsplot)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

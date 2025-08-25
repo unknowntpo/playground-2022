@@ -9,6 +9,7 @@ dotenv = "3.0.0"
 caffeine = "3.1.8"
 jmh = "1.37"
 javapoet = "1.13.0"
+tablesaw = "0.43.0"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
@@ -19,3 +20,5 @@ caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "c
 jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmh" }
 jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmh" }
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
+tablesaw-core = { module = "tech.tablesaw:tablesaw-core", version.ref = "tablesaw" }
+tablesaw-jsplot = { module = "tech.tablesaw:tablesaw-jsplot", version.ref = "tablesaw" }
