@@ -23,7 +23,9 @@ public class TokenBucketRateLimiter {
     }
 
     public Long getTokenSync() throws InterruptedException {
-        while (!hasToken()) {}
+        while (!hasToken()) {
+            Thread.sleep(1);
+        }
         return getToken().orElseThrow(); // Should always succeed since we checked hasToken()
     }
 
@@ -33,7 +35,7 @@ public class TokenBucketRateLimiter {
             if (System.currentTimeMillis() - startTime > timeoutMs) {
                 throw new RuntimeException("Timeout waiting for token after " + timeoutMs + "ms");
             }
-            Thread.sleep(10);
+            Thread.sleep(1);
         }
         return getToken().orElseThrow();
     }
