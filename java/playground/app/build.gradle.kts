@@ -53,6 +53,9 @@ dependencies {
     // Tablesaw for data analysis and plotting
     implementation(libs.tablesaw.core)
     implementation(libs.tablesaw.jsplot)
+    
+    // Jackson for JSON serialization
+    implementation(libs.jackson.databind)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
