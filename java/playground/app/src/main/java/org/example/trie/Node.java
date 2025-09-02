@@ -10,6 +10,15 @@ import java.util.Map;
 public class Node {
     @JsonProperty
     private boolean isEnd;
+
+    public char getValue() {
+        return value;
+    }
+
+    public void setValue(char value) {
+        this.value = value;
+    }
+
     @JsonProperty
     private char value;
     @JsonProperty
