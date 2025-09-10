@@ -23,11 +23,12 @@
     }
   },
   "include": [
-    "src/**/*.ts",
-    "vitest.config.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "test",
+    "vitest.config.ts"
   ]
 }
