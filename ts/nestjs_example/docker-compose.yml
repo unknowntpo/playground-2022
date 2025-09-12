@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: todo_dev
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d todo_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  postgres_test:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: todo_test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d todo_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6381:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis_test:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_test_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  postgres_data:
+  postgres_test_data:
+  redis_data:
+  redis_test_data:
