@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsOptional, IsPositive, Max, Min, IsBoolean } from 'class-validator';
+import { IsOptional, IsPositive, Max, Min, IsBoolean, IsIn } from 'class-validator';
+import { TodoPriority } from '@/todos/entities/todo.entity';
 
 export class PaginationQueryDto {
   @ApiProperty({
@@ -40,4 +41,14 @@ export class PaginationQueryDto {
   @Type(() => Boolean)
   @IsBoolean()
   completed?: boolean;
+
+  @ApiProperty({
+    description: 'Filter by priority level',
+    enum: TodoPriority,
+    example: TodoPriority.MEDIUM,
+    required: false,
+  })
+  @IsOptional()
+  @IsIn(Object.values(TodoPriority))
+  priority?: TodoPriority;
 }

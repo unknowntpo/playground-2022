@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Put,
+  Patch,
   Param,
   Delete,
   Query,
@@ -68,6 +68,13 @@ export class TodosController {
     description: 'Filter by completion status',
     example: false,
   })
+  @ApiQuery({
+    name: 'priority',
+    required: false,
+    enum: ['low', 'medium', 'high'],
+    description: 'Filter by priority level',
+    example: 'medium',
+  })
   @ApiResponse({
     status: 200,
     description: 'List of todos with pagination metadata',
@@ -98,8 +105,8 @@ export class TodosController {
     return this.todosService.findOne(id);
   }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Update a todo' })
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update a todo partially' })
   @ApiParam({
     name: 'id',
     type: 'string',

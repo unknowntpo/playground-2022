@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Todo } from '@/todos/entities/todo.entity';
 import { CreateTodoDto } from '@/todos/dto/create-todo.dto';
@@ -9,8 +8,8 @@ import { PaginationQueryDto } from '@/todos/dto/pagination-query.dto';
 @Injectable()
 export class TodosService {
   constructor(
-    @InjectRepository(Todo)
-    private readonly todoRepository: Repository<Todo>,
+    @Inject('TODO_REPOSITORY')
+    private todoRepository: Repository<Todo>,
   ) {}
 
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
@@ -19,7 +18,7 @@ export class TodosService {
   }
 
   async findAll(query: PaginationQueryDto) {
-    const { page = 1, limit = 10, completed } = query;
+    const { page = 1, limit = 10, completed, priority } = query;
     const offset = (page - 1) * limit;
 
     const queryBuilder = this.todoRepository.createQueryBuilder('todo');
@@ -28,21 +27,24 @@ export class TodosService {
       queryBuilder.where('todo.completed = :completed', { completed });
     }
 
-    queryBuilder
-      .orderBy('todo.createdAt', 'DESC')
-      .skip(offset)
-      .take(limit);
+    if (priority !== undefined) {
+      if (completed !== undefined) {
+        queryBuilder.andWhere('todo.priority = :priority', { priority });
+      } else {
+        queryBuilder.where('todo.priority = :priority', { priority });
+      }
+    }
+
+    queryBuilder.orderBy('todo.createdAt', 'DESC').skip(offset).take(limit);
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
     return {
       data,
-      meta: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     };
   }
 
