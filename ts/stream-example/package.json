@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build && node ./dist/index.js",
+    "start:transform_example": "tsx ./src/transform_example.ts",
     "start:readAndWrite": "tsx src/readAndWrite.ts",
     "start:flowControl": "tsx src/flowControl.ts",
     "start:multiWorker": "tsx src/multiWorker.ts",
