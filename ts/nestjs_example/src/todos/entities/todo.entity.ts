@@ -27,7 +27,7 @@ export class Todo {
     example: 'Complete project documentation',
     maxLength: 255,
   })
-  @Column({ length: 255 })
+  @Column({ type: 'text', nullable: false, length: 255 })
   title: string;
 
   @ApiProperty({

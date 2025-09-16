@@ -1,47 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DataSource } from 'typeorm';
-import { describe, beforeEach, it, expect, afterEach, beforeAll, afterAll } from 'vitest';
+import { ConfigModule } from '@nestjs/config';
+import { DataSource, Repository } from 'typeorm';
+import { describe, beforeEach, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 
 import configuration from '@/config/configuration';
-import { getDatabaseConfig } from '@/config/database.config';
 import { TodosModule } from '@/todos/todos.module';
-import { Todo } from '@/todos/entities/todo.entity';
+import { Todo } from '@/todos/entities/todo.entity.ts';
 import { ValidationPipe } from '@nestjs/common';
 
 describe('TodosController (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
-  let todoRepository: any;
+  let todoRepository: Repository<Todo>;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          load: [configuration],
-          envFilePath: ['.env.test'],
-        }),
-        TypeOrmModule.forRootAsync({
-          imports: [ConfigModule],
-          useFactory: getDatabaseConfig,
-          inject: [ConfigService],
-        }),
-        TodosModule,
-      ],
+      imports: [ConfigModule.forRoot({ load: [configuration] }), TodosModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     // Add global validation pipe
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-    }));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        forbidNonWhitelisted: true,
+      }),
+    );
 
     await app.init();
 
@@ -80,7 +68,9 @@ describe('TodosController (e2e)', () => {
       expect(response.body).toHaveProperty('updatedAt');
 
       // Verify it was saved in database
-      const savedTodo = await todoRepository.findOne({ where: { id: response.body.id } });
+      const savedTodo = await todoRepository.findOne({
+        where: { id: response.body.id },
+      });
       expect(savedTodo).toBeDefined();
       expect(savedTodo.title).toBe(createTodoDto.title);
     });
@@ -146,7 +136,9 @@ describe('TodosController (e2e)', () => {
         .send(invalidDto)
         .expect(400);
 
-      expect(response.body.message).toContain('priority must be one of the following values: low, medium, high');
+      expect(response.body.message).toContain(
+        'priority must be one of the following values: low, medium, high',
+      );
     });
 
     it('should return 400 when dueDate is invalid format', async () => {
@@ -162,7 +154,9 @@ describe('TodosController (e2e)', () => {
         .send(invalidDto)
         .expect(400);
 
-      expect(response.body.message).toContain('dueDate must be a valid ISO 8601 date string');
+      expect(response.body.message).toContain(
+        'dueDate must be a valid ISO 8601 date string',
+      );
     });
   });
 
@@ -285,17 +279,21 @@ describe('TodosController (e2e)', () => {
         .get('/todos/invalid-uuid')
         .expect(400);
 
-      expect(response.body.message).toContain('Validation failed (uuid is expected)');
+      expect(response.body.message).toContain(
+        'Validation failed (uuid is expected)',
+      );
     });
 
     it('should return 404 for non-existent todo', async () => {
       const nonExistentId = '123e4567-e89b-12d3-a456-426614174000';
-      
+
       const response = await request(app.getHttpServer())
         .get(`/todos/${nonExistentId}`)
         .expect(404);
 
-      expect(response.body.message).toBe(`Todo with ID ${nonExistentId} not found`);
+      expect(response.body.message).toBe(
+        `Todo with ID ${nonExistentId} not found`,
+      );
     });
   });
 
@@ -332,7 +330,9 @@ describe('TodosController (e2e)', () => {
       expect(response.body.priority).toBe(createdTodo.priority); // Unchanged
 
       // Verify in database
-      const updatedTodo = await todoRepository.findOne({ where: { id: createdTodo.id } });
+      const updatedTodo = await todoRepository.findOne({
+        where: { id: createdTodo.id },
+      });
       expect(updatedTodo.title).toBe(updateDto.title);
       expect(updatedTodo.completed).toBe(updateDto.completed);
     });
@@ -382,7 +382,9 @@ describe('TodosController (e2e)', () => {
         .send(updateDto)
         .expect(400);
 
-      expect(response.body.message).toContain('Validation failed (uuid is expected)');
+      expect(response.body.message).toContain(
+        'Validation failed (uuid is expected)',
+      );
     });
 
     it('should return 404 for non-existent todo', async () => {
@@ -394,7 +396,9 @@ describe('TodosController (e2e)', () => {
         .send(updateDto)
         .expect(404);
 
-      expect(response.body.message).toBe(`Todo with ID ${nonExistentId} not found`);
+      expect(response.body.message).toBe(
+        `Todo with ID ${nonExistentId} not found`,
+      );
     });
   });
 
@@ -419,7 +423,9 @@ describe('TodosController (e2e)', () => {
         .expect(204);
 
       // Verify it was deleted from database
-      const deletedTodo = await todoRepository.findOne({ where: { id: createdTodo.id } });
+      const deletedTodo = await todoRepository.findOne({
+        where: { id: createdTodo.id },
+      });
       expect(deletedTodo).toBeNull();
     });
 
@@ -428,7 +434,9 @@ describe('TodosController (e2e)', () => {
         .delete('/todos/invalid-uuid')
         .expect(400);
 
-      expect(response.body.message).toContain('Validation failed (uuid is expected)');
+      expect(response.body.message).toContain(
+        'Validation failed (uuid is expected)',
+      );
     });
 
     it('should return 404 for non-existent todo', async () => {
@@ -438,7 +446,9 @@ describe('TodosController (e2e)', () => {
         .delete(`/todos/${nonExistentId}`)
         .expect(404);
 
-      expect(response.body.message).toBe(`Todo with ID ${nonExistentId} not found`);
+      expect(response.body.message).toBe(
+        `Todo with ID ${nonExistentId} not found`,
+      );
     });
   });
 
@@ -456,7 +466,9 @@ describe('TodosController (e2e)', () => {
         .send(invalidDto)
         .expect(400);
 
-      expect(response.body.message).toContain('property extraField should not exist');
+      expect(response.body.message).toContain(
+        'property extraField should not exist',
+      );
     });
 
     it('should handle very long title validation', async () => {
@@ -471,7 +483,9 @@ describe('TodosController (e2e)', () => {
         .send(invalidDto)
         .expect(400);
 
-      expect(response.body.message).toContain('title must be shorter than or equal to 255 characters');
+      expect(response.body.message).toContain(
+        'title must be shorter than or equal to 255 characters',
+      );
     });
   });
 });

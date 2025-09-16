@@ -3,7 +3,11 @@ import { resolve } from 'path';
 import swc from 'unplugin-swc';
 
 export default defineConfig({
-  plugins: [swc.vite()],
+  /**
+   * Enable this will cause:
+   * TypeError: Unknown file extension ".ts" for /Users/unknowntpo/repo/unknowntpo/playground-2022/ts/nestjs_example/src/todos/entities/todo.entity.ts
+   */
+  // plugins: [swc.vite()],
   test: {
     globals: true,
     environment: 'node',
