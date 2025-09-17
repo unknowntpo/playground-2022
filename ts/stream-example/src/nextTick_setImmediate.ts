@@ -73,3 +73,14 @@ setTimeout(() => {
     goodAsyncAPI(true, (data) => console.log('GOOD API Callback received:', data));
     console.log('After calling goodAsyncAPI with cache');
 }, 200);
+
+setTimeout(() => {
+    console.log('\n--- nextTick vs Promise priority ---');
+
+    process.nextTick(() => console.log('1. nextTick'));
+    Promise.resolve().then(() => console.log('2. Promise'));
+    process.nextTick(() => console.log('3. nextTick 2'));
+    Promise.resolve().then(() => console.log('4. Promise 2'));
+
+    console.log('5. Synchronous');
+}, 300);
