@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import configuration from '@/config/configuration';
+import { Todo } from '@/todos/entities/todo.entity';
 
 /**
  * Ref:
@@ -16,7 +17,7 @@ export const databaseProviders = [
         username: configuration().database.username || 'dev',
         password: configuration().database.password || 'dev123',
         database: configuration().database.database || 'todos',
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        entities: [Todo],
         synchronize: true,
       });
 

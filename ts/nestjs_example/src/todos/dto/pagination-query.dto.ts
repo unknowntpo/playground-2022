@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsOptional, IsPositive, Max, Min, IsBoolean, IsIn } from 'class-validator';
+import {
+  IsOptional,
+  IsPositive,
+  Max,
+  Min,
+  IsBoolean,
+  IsIn,
+} from 'class-validator';
 import { TodoPriority } from '@/todos/entities/todo.entity';
 
 export class PaginationQueryDto {

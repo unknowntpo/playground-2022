@@ -27,7 +27,7 @@ export class Todo {
     example: 'Complete project documentation',
     maxLength: 255,
   })
-  @Column({ type: 'text', nullable: false, length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: false })
   title: string;
 
   @ApiProperty({
@@ -44,7 +44,7 @@ export class Todo {
     example: false,
     default: false,
   })
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   completed: boolean;
 
   @ApiProperty({

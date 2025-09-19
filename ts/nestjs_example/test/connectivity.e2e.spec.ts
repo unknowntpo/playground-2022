@@ -1,9 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
-import { describe, beforeEach, it, expect, afterEach } from 'vitest';
+import {
+  describe,
+  beforeAll,
+  beforeEach,
+  it,
+  expect,
+  afterEach,
+  afterAll,
+} from 'vitest';
 import { Redis } from 'ioredis';
 
 import configuration from '@/config/configuration';
@@ -24,7 +35,11 @@ describe('Database and Redis Connectivity (e2e)', () => {
         }),
         TypeOrmModule.forRootAsync({
           imports: [ConfigModule],
-          useFactory: getDatabaseConfig,
+          useFactory: (configService: ConfigService) => ({
+            ...getDatabaseConfig(configService),
+            synchronize: true, // Enable synchronize for tests to auto-create tables
+            dropSchema: false, // Don't drop schema between tests
+          }),
           inject: [ConfigService],
         }),
         TypeOrmModule.forFeature([Todo]),
@@ -42,10 +57,10 @@ describe('Database and Redis Connectivity (e2e)', () => {
   });
 
   describe('Database Connectivity', () => {
-    it('should connect to PostgreSQL database successfully', async () => {
+    it('should connect to PostgreSQL database successfully', () => {
       expect(dataSource.isInitialized).toBe(true);
       expect(dataSource.options.type).toBe('postgres');
-      expect(dataSource.options.database).toBe('todo_test');
+      expect(dataSource.options.database).toBe('todo_dev'); // Using todo_dev as configured in .env.test
     });
 
     it('should be able to query the database', async () => {

@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { Todo } from '@/todos/entities/todo.entity';
 
 export const getDatabaseConfig = (
   configService: ConfigService,
@@ -10,9 +11,8 @@ export const getDatabaseConfig = (
   username: configService.get<string>('database.username'),
   password: configService.get<string>('database.password'),
   database: configService.get<string>('database.database'),
-  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+  entities: [Todo],
   synchronize: false, // Always false in production - use migrations instead
   logging: configService.get<string>('nodeEnv') === 'development',
-  autoLoadEntities: true,
+  autoLoadEntities: false, // Disable auto-loading to prevent ESM conflicts
 });

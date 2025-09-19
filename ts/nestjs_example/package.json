@@ -4,8 +4,8 @@
   "description": "",
   "author": "",
   "private": true,
-  "type": "module",
   "license": "UNLICENSED",
+  "type": "commonjs",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
