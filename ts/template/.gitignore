@@ -107,3 +107,4 @@ storybook-static
 
 # Keep gitkeep files
 !.gitkeep
+downloads/
