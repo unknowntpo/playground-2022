@@ -26,12 +26,7 @@ class UrlDownloader {
         return this.doneTasks;
     }
 
-    private allocateWorkers() {
-        return;
-    }
-
     async doTasks() {
-        this.allocateWorkers();
         for (const task of this.tasks) {
             task.do();
             this.doneTasks.push(task);
