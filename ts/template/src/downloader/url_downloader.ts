@@ -21,7 +21,8 @@ class UrlDownloader {
     }
 
     public addTask(task: Task) {
-        this.tasks.push(task);
+        // defensive copying
+        this.tasks.push({...task});
     }
 
     getDoneTask() {
