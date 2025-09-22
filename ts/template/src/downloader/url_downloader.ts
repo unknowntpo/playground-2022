@@ -3,15 +3,41 @@ interface Task {
     id: number
     name: string,
     url: string,
+
+    // TODO: exception handling
+    do: () => void;
 }
 
-class Downloader {
+/**
+ * init all tasks, including subtasks, and after resolving them, done is set to true
+ */
+class Url_downloader {
+    private tasks: Task[] = [];
+    private done: boolean = false;
+    private doneTasks: Task[] = [];
+
     constructor() {
     }
 
-    public async addTask() {}
+    public addTask(task: Task) {
+        this.tasks.push(task);
+    }
 
+    getDoneTask() {
+        return this.doneTasks;
+    }
 
+    private allocateWorkers() {
+        return;
+    }
+
+    async doTasks() {
+        this.allocateWorkers();
+        for (const task of this.tasks) {
+            task.do();
+            this.doneTasks.push(task);
+        }
+    }
 }
 
-export {Downloader};
+export {Url_downloader};

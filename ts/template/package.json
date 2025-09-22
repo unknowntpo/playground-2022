@@ -33,6 +33,7 @@
     "hono": "^4.6.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.11.1",
     "@types/node": "^22.5.5",
     "@typescript-eslint/eslint-plugin": "^8.7.0",
     "@typescript-eslint/parser": "^8.7.0",
