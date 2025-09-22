@@ -11,9 +11,8 @@ interface Task {
 /**
  * init all tasks, including subtasks, and after resolving them, done is set to true
  */
-class Url_downloader {
+class UrlDownloader {
     private tasks: Task[] = [];
-    private done: boolean = false;
     private doneTasks: Task[] = [];
 
     constructor() {
@@ -40,4 +39,4 @@ class Url_downloader {
     }
 }
 
-export {Url_downloader};
+export {UrlDownloader};

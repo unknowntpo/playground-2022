@@ -1,8 +1,8 @@
-import {Url_downloader} from "../../src/downloader/url_downloader";
+import {UrlDownloader} from "../../src/downloader/url_downloader";
 
 describe('url_downloader', () => {
     it('can download file', async () => {
-        const downloader = new Url_downloader();
+        const downloader = new UrlDownloader();
         const task = {
             id: 0,
             name: 'cat.image',
