@@ -1,6 +1,7 @@
 import {UrlDownloader} from "../../src/downloader/url_downloader";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import {expect} from "vitest";
 
 describe('url_downloader', () => {
     it('can download file', async () => {
@@ -9,17 +10,16 @@ describe('url_downloader', () => {
             id: 0,
             name: 'cat.image',
             url: 'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-            do: () => {
-                console.log("task id[0] are resolving...");
-                console.log("done");
-                return;
-            }
         };
         downloader.addTask(task);
         await downloader.doTasks();
 
-        expect(downloader.getDoneTask()).toStrictEqual([task]);
-        const stat = await fs.promises.stat(path.join("./downloads", task.name));
+        const doneTask = downloader.getDoneTask()[0];
+        const {filePath, ...taskWithoutFilePath} = doneTask;
+        expect(taskWithoutFilePath).toStrictEqual(task);
+        expect(doneTask.filePath).toBeDefined();
+
+        const stat = await fs.promises.stat(path.resolve(doneTask.filePath!));
         expect(stat.isFile()).toBe(true);
     })
 });

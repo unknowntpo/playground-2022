@@ -7,9 +7,7 @@ interface Task {
     id: number
     name: string,
     url: string,
-
-    // TODO: exception handling
-    do: () => void;
+    filePath?: string;
 }
 
 /**
@@ -30,7 +28,7 @@ class UrlDownloader {
         return this.doneTasks;
     }
 
-    async download(task: Task) {
+    async download(task: Task): Promise<Task> {
         const url = new URL(task.url);
         const resp = await fetch(url);
         if (!resp.body) {
@@ -47,6 +45,8 @@ class UrlDownloader {
         const outputStream = fs.createWriteStream(filePath);
 
         await pipeline(dataStream, outputStream);
+
+        return {...task, filePath};
     }
 
     private async createOutputDir() {
@@ -59,7 +59,7 @@ class UrlDownloader {
         if (!contentType) return null;
 
         const mimeToExt: Record<string, string> = {
-            'image/jpeg': 'jpg',
+            'image/jpeg': 'jpeg',
             'image/jpg': 'jpg',
             'image/png': 'png',
             'image/gif': 'gif',
@@ -76,9 +76,9 @@ class UrlDownloader {
         await this.createOutputDir();
         for (const task of this.tasks) {
             console.log(`taskID: [${task.id}] downloading ${task.name}, url ${task.url}`);
-            await this.download(task);
-            console.log(`${task.name} is downloaded.`);
-            this.doneTasks.push(task);
+            const doneTask = await this.download(task);
+            console.log(`${doneTask.name} is downloaded.`);
+            this.doneTasks.push(doneTask);
         }
     }
 }
