@@ -11,6 +11,7 @@ jmh = "1.37"
 javapoet = "1.13.0"
 tablesaw = "0.43.0"
 jackson = "2.15.2"
+zookeeper = "3.9.1"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
@@ -24,3 +25,4 @@ javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 tablesaw-core = { module = "tech.tablesaw:tablesaw-core", version.ref = "tablesaw" }
 tablesaw-jsplot = { module = "tech.tablesaw:tablesaw-jsplot", version.ref = "tablesaw" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+zookeeper = { module = "org.apache.zookeeper:zookeeper", version.ref = "zookeeper" }

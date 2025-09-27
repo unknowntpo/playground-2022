@@ -56,6 +56,9 @@ dependencies {
     
     // Jackson for JSON serialization
     implementation(libs.jackson.databind)
+
+    // ZooKeeper for distributed coordination
+    implementation(libs.zookeeper)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
