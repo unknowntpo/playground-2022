@@ -29,28 +29,42 @@ class GitHubTrendingService:
         if language:
             params["l"] = language
 
+        logger.info(f"Fetching trending repositories from {url} with params: {params}")
+
         try:
+            logger.info("Making HTTP request to GitHub trending page")
             response = self.session.get(url, params=params, timeout=30)
+            logger.info(f"Response status code: {response.status_code}")
             response.raise_for_status()
 
+            logger.info("Parsing HTML content with BeautifulSoup")
             soup = BeautifulSoup(response.content, 'html.parser')
             repositories = []
 
-            repo_articles = soup.find_all('article', class_='Box-row')[:limit]
+            repo_articles = soup.find_all('article', class_='Box-row')
+            logger.info(f"Found {len(repo_articles)} repository articles on page")
 
-            for article in repo_articles:
+            limited_articles = repo_articles[:limit]
+            logger.info(f"Processing first {len(limited_articles)} articles")
+
+            for i, article in enumerate(limited_articles):
+                logger.debug(f"Processing article {i+1}/{len(limited_articles)}")
                 repo_data = self._extract_repository_data(article)
                 if repo_data:
                     repositories.append(repo_data)
+                    logger.debug(f"Successfully extracted data for {repo_data.get('name', 'unknown')}")
+                else:
+                    logger.warning(f"Failed to extract data from article {i+1}")
 
             logger.info(f"Successfully fetched {len(repositories)} trending repositories")
             return repositories
 
         except requests.RequestException as e:
-            logger.error(f"Error fetching trending repositories: {e}")
+            logger.error(f"HTTP request error: {e}")
             raise
         except Exception as e:
             logger.error(f"Unexpected error parsing repositories: {e}")
+            logger.exception("Full exception traceback:")
             raise
 
     def _extract_repository_data(self, article) -> Optional[Dict]:
