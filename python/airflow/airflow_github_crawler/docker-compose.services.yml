@@ -1,0 +1,89 @@
+services:
+  # MinIO S3-compatible object storage
+  minio:
+    image: minio/minio:latest
+    container_name: github-crawler-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+      MINIO_DEFAULT_BUCKETS: github-trending
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - github-crawler
+
+  # MinIO Client for bucket initialization
+  minio-init:
+    image: minio/mc:latest
+    container_name: github-crawler-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set minio http://minio:9000 minioadmin minioadmin123;
+      mc mb minio/github-trending --ignore-existing;
+      mc policy set public minio/github-trending;
+      echo 'MinIO bucket initialized successfully';
+      "
+    networks:
+      - github-crawler
+
+  # FastAPI service (future)
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: github-crawler-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin123
+      - MINIO_BUCKET=github-trending
+      - MINIO_SECURE=false
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - github-crawler
+    profiles:
+      - api
+
+  # Streamlit dashboard (future)
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/streamlit/Dockerfile
+    container_name: github-crawler-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://api:8000
+    depends_on:
+      - api
+    networks:
+      - github-crawler
+    profiles:
+      - dashboard
+
+volumes:
+  minio-data:
+    driver: local
+
+networks:
+  github-crawler:
+    driver: bridge
+    external: false
