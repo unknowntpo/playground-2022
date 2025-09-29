@@ -21,7 +21,7 @@ class CommandlineTest {
         var rootCommand = new RootCommand();
         var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
 
-        var args = new String[]{"hello"};
+        var args = new String[]{"cli", "hello"};
         cmd.execute(args);
 
         assertEquals("how are you",buf.toString());
