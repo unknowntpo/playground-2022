@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import java.io.InvalidClassException;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Commandline {
     public static class Builder {
@@ -30,27 +31,35 @@ public class Commandline {
                     // now we have only
                     // cli hello
                     var cmd = args[1];
-                    var command = findCmd(cmd);
+                    if (cmd.equals("hello")) {
+                        var subCommands = Arrays.stream(getCommandSpec(this.rootCommand).subCommands())
+                                .map(clazz -> {
+                                    try {
+                                        return clazz.getDeclaredConstructor().newInstance();
+                                    } catch (Exception e) {
+                                        throw new RuntimeException("Failed to instantiate: " + clazz, e);
+                                    }
+                                }).toList();
+                        Command helloCommand = subCommands
+                                .stream()
+                                .filter(command -> Objects.equals(getCommandSpec(command).name(), "hello"))
+                                .toList()
+                                .getFirst();
+                        helloCommand.execute(this.outputBuffer);
+                    }
             }
 
 
         }
+    }
 
-        private Command findCmd(String cmd) {
-            var command = rootCommand;
-            if (!command.getClass().isAnnotationPresent(CommandSpec.class)) {
-                // FIXME: how to represent a ocmmnad wwhich has no annotation ?
-                throw new InvalidParameterException("Command should have CommandSpec annotation");
-            }
-            var specs = Arrays.stream(command.getClass().getAnnotations())
-                    .filter(anno -> anno instanceof CommandSpec)
-                    .map(anno -> (CommandSpec) anno).toList();
-            // TODO: write command name in exception msg
-            Preconditions.checkArgument(specs.size() == 1, "Command should only have 1 spec");
-
-            var subCommands = specs.getFirst().subCommands();
-            // FIXME: how to get names of command ? can we add name() method in interface ?
-            return null;
-        }
+    private static CommandSpec getCommandSpec(Command command) {
+        var specs = Arrays.stream(command.getClass().getAnnotations())
+                .filter(anno -> anno instanceof CommandSpec)
+                .map(anno -> (CommandSpec) anno).toList();
+        // TODO: write command name in exception msg
+        Preconditions.checkArgument(specs.size() == 1, "Command should only have 1 spec");
+        var spec = specs.getFirst();
+        return spec;
     }
 }
