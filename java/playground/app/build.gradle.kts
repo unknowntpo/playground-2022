@@ -91,14 +91,15 @@ tasks.withType<JavaCompile> {
 
 // Task to compile annotation processors first
 val compileProcessors by tasks.registering(JavaCompile::class) {
-    source = fileTree("src/main/java") {
+    val processorFiles = layout.projectDirectory.dir("src/main/java").asFileTree.matching {
         include("**/AutoBuilder.java", "**/BuilderProcessor.java", "**/CacheProcessor.java", "**/Cache.java", "**/CacheEnabled.java")
     }
+    source = processorFiles
     destinationDirectory.set(layout.buildDirectory.dir("processor-classes"))
-    classpath = configurations.getByName("compileClasspath")
-    
+    classpath = configurations.compileClasspath.get()
+
     options.compilerArgs.add("-proc:none") // Don't run annotation processing on processors themselves
-    
+
     doLast {
         // Copy service file
         copy {
@@ -110,9 +111,6 @@ val compileProcessors by tasks.registering(JavaCompile::class) {
 
 tasks.named<JavaCompile>("compileJava") {
     dependsOn(compileProcessors)
-    
-    doFirst {
-        // Add processor JAR to annotation processor path
-        options.annotationProcessorPath = files(layout.buildDirectory.dir("processor-classes")) + configurations.getByName("compileClasspath")
-    }
+
+    options.annotationProcessorPath = files(compileProcessors.flatMap { it.destinationDirectory }) + configurations.compileClasspath.get()
 }
