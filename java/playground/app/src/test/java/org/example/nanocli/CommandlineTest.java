@@ -49,7 +49,7 @@ class CommandlineTest {
         var rootCommand = new RootCommand();
         var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
 
-        var args = new String[]{"cli", "-h"};
+        var args = new String[]{"cli", "--help"};
         cmd.execute(args);
 
         assertEquals("""

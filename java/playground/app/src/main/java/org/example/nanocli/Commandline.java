@@ -3,9 +3,11 @@ package org.example.nanocli;
 import com.google.common.base.Preconditions;
 
 import java.io.InvalidClassException;
+import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Commandline {
     public static class Builder {
@@ -26,8 +28,14 @@ public class Commandline {
             switch (args.length) {
                 case 1:
                     // display help message
+                    displayHelpMessage(this.rootCommand, this.outputBuffer);
                     break;
                 default:
+                    // cli --help
+                    if (args.length == 2 && args[1].equals("--help")) {
+                        displayHelpMessage(this.rootCommand, this.outputBuffer);
+                        break;
+                    }
                     // now we have only
                     // cli hello
                     var cmd = args[1];
@@ -48,8 +56,54 @@ public class Commandline {
                         helloCommand.execute(this.outputBuffer);
                     }
             }
+        }
 
+        /**
+         * Displays the help message for the CLI tool.
+         * <p>
+         * Format:
+         * <pre>
+         * Usage:  cli [OPTIONS] COMMAND
+         *
+         * A simple CLI tool
+         *
+         * Commands:
+         *   hello       Print greeting message
+         * </pre>
+         */
+        private static void displayHelpMessage(Command rootCommand, StringBuffer outputBuffer) {
+            CommandSpec spec = getCommandSpec(rootCommand);
 
+            var subCommands = Arrays.stream(spec.subCommands()).map(clazz -> {
+                try {
+                    return clazz.getDeclaredConstructor().newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to instantiate: " + clazz, e);
+                }
+            }).toList();
+
+            var subCommandInfos = subCommands.stream().map(command -> {
+                var subSpec = getCommandSpec(command);
+                return new CommandInfo(subSpec.name(), subSpec.description());
+            });
+
+            var subCommandInfoStrs = subCommandInfos
+                .map(info -> String.format("  %-12s%s", info.name(), info.description()))
+                    .collect(Collectors.joining("\n"));
+
+            String usageStr = """
+                    Usage:  %s [OPTIONS] COMMAND
+                    
+                    %s
+                    
+                    Commands:
+                    %s
+                    """.formatted(spec.name(), spec.description(), subCommandInfoStrs);
+
+            outputBuffer.append(usageStr);
+        }
+
+        private record CommandInfo(Object name, String description) {
         }
     }
 
