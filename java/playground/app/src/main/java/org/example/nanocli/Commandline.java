@@ -13,8 +13,12 @@ public class Commandline {
     public static class Builder {
         private StringBuffer outputBuffer;
         private Command rootCommand;
+        private CommandTree commandTree;
 
         public Builder withCommand(Command root) {
+            if (root == null) {
+                throw new IllegalArgumentException("root command cannot be null");
+            }
             this.rootCommand = root;
             return this;
         }
@@ -25,6 +29,7 @@ public class Commandline {
         }
 
         public void execute(String[] args) {
+            this.commandTree = CommandTree.from(this.rootCommand);
             switch (args.length) {
                 case 1:
                     // display help message
