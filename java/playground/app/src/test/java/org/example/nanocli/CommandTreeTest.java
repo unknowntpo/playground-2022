@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @CommandSpec(
         name = "run",
         description = "Create and run a new container from an image"
@@ -43,6 +45,20 @@ class CommandTreeTest {
     void testBuildCommandTree() {
         var rootCommand = new DockerCommand();
         var commandTree = CommandTree.from(rootCommand);
-        commandTree.getSubCommands() = List.of(new RunCommand(), new ExecCommand());
+        var root = commandTree.root();
+        assertEquals("docker", root.name());
+        assertEquals("A self-sufficient runtime for containers", root.description());
+        assertEquals(List.of(
+                new CommandTree.Node(
+                        "run",
+                        "Create and run a new container from an image",
+                        List.of()
+                ),
+                new CommandTree.Node(
+                        "exec",
+                        "Execute a command in a running container",
+                        List.of()
+                )
+        ), root.subCommands());
     }
 }

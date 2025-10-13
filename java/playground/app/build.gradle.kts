@@ -59,6 +59,12 @@ dependencies {
 
     // ZooKeeper for distributed coordination
     implementation(libs.zookeeper)
+
+    // Lombok
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
