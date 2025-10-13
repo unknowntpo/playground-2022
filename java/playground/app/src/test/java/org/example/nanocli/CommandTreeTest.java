@@ -2,9 +2,7 @@ package org.example.nanocli;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @CommandSpec(
         name = "run",
@@ -46,19 +44,27 @@ class CommandTreeTest {
         var rootCommand = new DockerCommand();
         var commandTree = CommandTree.from(rootCommand);
         var root = commandTree.root();
-        assertEquals("docker", root.name());
-        assertEquals("A self-sufficient runtime for containers", root.description());
-        assertEquals(List.of(
-                new CommandTree.Node(
-                        "run",
-                        "Create and run a new container from an image",
-                        List.of()
-                ),
-                new CommandTree.Node(
-                        "exec",
-                        "Execute a command in a running container",
-                        List.of()
-                )
-        ), root.subCommands());
+
+        assertThat(root)
+                .extracting("name", "description")
+                .containsExactly("docker", "A self-sufficient runtime for containers");
+
+        assertThat(root.subCommands())
+                .hasSize(2)
+                .satisfiesExactly(
+                        runNode -> {
+                            assertThat(runNode.name()).isEqualTo("run");
+                            assertThat(runNode.description()).isEqualTo("Create and run a new container from an image");
+                            assertThat(runNode.command()).isInstanceOf(RunCommand.class);
+                            assertThat(runNode.subCommands()).isEmpty();
+                        },
+                        execNode -> {
+                            assertThat(execNode.name()).isEqualTo("exec");
+                            assertThat(execNode.description()).isEqualTo("Execute a command in a running container");
+                            assertThat(execNode.command()).isInstanceOf(ExecCommand.class);
+                            assertThat(execNode.subCommands()).isEmpty();
+                        }
+                );
+
     }
 }

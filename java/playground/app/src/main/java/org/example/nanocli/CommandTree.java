@@ -18,7 +18,7 @@ public record CommandTree(Node root) {
         return new CommandTree(root);
     }
 
-    record Node(String name, String description, List<Node> subCommands) {
+    record Node(String name, String description, List<Node> subCommands, Command command) {
         public static Node from(Command rootCommand) {
             var spec = getCommandSpec(rootCommand);
             var subCommands = Arrays.stream(spec.subCommands()).map(
@@ -34,7 +34,7 @@ public record CommandTree(Node root) {
             ).toList();
 
             // build Node from subCommands
-            return new Node(spec.name(), spec.description(), subCommands);
+            return new Node(spec.name(), spec.description(), subCommands, rootCommand);
         }
 
         private static CommandSpec getCommandSpec(Command command) {

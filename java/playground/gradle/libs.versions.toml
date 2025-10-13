@@ -13,6 +13,7 @@ tablesaw = "0.43.0"
 jackson = "2.15.2"
 zookeeper = "3.9.1"
 lombok = "1.18.34"
+assertj = "3.24.2"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
@@ -28,3 +29,4 @@ tablesaw-jsplot = { module = "tech.tablesaw:tablesaw-jsplot", version.ref = "tab
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 zookeeper = { module = "org.apache.zookeeper:zookeeper", version.ref = "zookeeper" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }

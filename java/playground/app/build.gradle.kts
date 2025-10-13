@@ -65,6 +65,9 @@ dependencies {
     annotationProcessor(libs.lombok)
     testCompileOnly(libs.lombok)
     testAnnotationProcessor(libs.lombok)
+
+    // AssertJ
+    testImplementation(libs.assertj.core)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
