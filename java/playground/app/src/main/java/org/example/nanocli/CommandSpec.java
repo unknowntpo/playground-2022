@@ -8,4 +8,5 @@ public @interface CommandSpec {
     String name();
     Class<? extends Command>[] subCommands() default {};
     String description();
+    OptionSpec[] options() default {};
 }

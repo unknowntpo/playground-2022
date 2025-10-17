@@ -12,9 +12,23 @@ import static org.junit.jupiter.api.Assertions.*;
         description = "Print greeting message"
 )
 class HelloCommand implements Command {
+    @OptionSpec(name = "-c", description = "case of output (upper or lower), default is lower")
+    String letterCase;
+
     @Override
     public void execute(StringBuffer buf) {
-        buf.append("how are you");
+        String howAreYou = "how are you";
+
+        if (letterCase != null) {
+            if (letterCase.equalsIgnoreCase("lower")) {
+            } else if (letterCase.equalsIgnoreCase("upper")) {
+                howAreYou = howAreYou.toUpperCase();
+            } else {
+                throw new IllegalArgumentException("Invalid letter case");
+            }
+        }
+
+        buf.append(howAreYou);
     }
 }
 
@@ -40,7 +54,46 @@ class CommandlineTest {
         var args = new String[]{"cli", "hello"};
         cmd.execute(args);
 
+        // if -w capital is specified, then return capitalized words
         assertEquals("how are you", buf.toString());
+    }
+
+    @Test
+    void testOption() {
+        {
+            var buf = new StringBuffer();
+            var rootCommand = new RootCommand();
+            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+
+            var args = new String[]{"cli", "hello", "-c", "upper"};
+            cmd.execute(args);
+
+            // if -w capital is specified, then return capitalized words
+            assertEquals("HOW ARE YOU", buf.toString());
+        }
+
+        // lower
+        {
+            var buf = new StringBuffer();
+            var rootCommand = new RootCommand();
+            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+
+            var args = new String[]{"cli", "hello", "-c", "lower"};
+            cmd.execute(args);
+
+            // if -w capital is specified, then return capitalized words
+            assertEquals("HOW ARE YOU", buf.toString());
+        }
+
+        // invalid
+        {
+            var buf = new StringBuffer();
+            var rootCommand = new RootCommand();
+            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+
+            var args = new String[]{"cli", "hello", "-c", "invalid"};
+            assertThrows(IllegalArgumentException.class, () -> cmd.execute(args));
+        }
     }
 
     @Test
@@ -48,6 +101,9 @@ class CommandlineTest {
         var buf = new StringBuffer();
         var rootCommand = new RootCommand();
         var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+        // docker -p terx -c dfd run -x abc -b abc
+//        Usage:  docker [OPTIONS] COMMAND [ARG...]
+
 
         var args = new String[]{"cli", "--help"};
         cmd.execute(args);
