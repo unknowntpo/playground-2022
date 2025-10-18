@@ -1,8 +1,6 @@
 package org.example.nanocli;
 
 import com.google.common.base.Preconditions;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,20 +11,23 @@ public record CommandTree(Node root) {
         if (rootCommand == null) {
             throw new IllegalArgumentException("rootCommand cannot be null");
         }
-        var root = Node.from(rootCommand);
+        var root = Node.of(rootCommand);
 //        var root = Node.from();
         return new CommandTree(root);
     }
 
-    record Node(String name, String description, List<Node> subCommands, Command command) {
-        public static Node from(Command rootCommand) {
+    record Node(String name, String description, List<Option> options, List<Node> subCommands, Command command) {
+        public static Node of(Command rootCommand) {
             var spec = getCommandSpec(rootCommand);
+            var optionSpecs = getOptionSpecsFromCommand(rootCommand);
+            // inject option into rootCommand
+            var options = optionSpecs.stream().map(Option::of).toList();
             var subCommands = Arrays.stream(spec.subCommands()).map(
                     clazz -> {
                         try {
                             // init new instance of command from clazz, and build a Node.
                             Command command = clazz.getDeclaredConstructor().newInstance();
-                            return Node.from(command);
+                            return Node.of(command);
                         } catch (Exception e) {
                             throw new RuntimeException("Failed to instantiate: " + clazz, e);
                         }
@@ -34,7 +35,12 @@ public record CommandTree(Node root) {
             ).toList();
 
             // build Node from subCommands
-            return new Node(spec.name(), spec.description(), subCommands, rootCommand);
+            return new Node(spec.name(), spec.description(), options, subCommands, rootCommand);
+        }
+
+        private static List<OptionSpec> getOptionSpecsFromCommand(Command command) {
+            return Arrays.stream(command.getClass().getAnnotations()).filter(
+                    anno -> anno instanceof OptionSpec).map(anno -> (OptionSpec) anno).toList();
         }
 
         private static CommandSpec getCommandSpec(Command command) {
@@ -45,6 +51,14 @@ public record CommandTree(Node root) {
             Preconditions.checkArgument(specs.size() == 1, "Command should only have 1 spec");
             var spec = specs.getFirst();
             return spec;
+        }
+    }
+
+    record Option(String name, String description) {
+
+        public static Option of(OptionSpec spec) {
+            // FIXME: impl
+            return new Option("helol", "world");
         }
     }
 }
