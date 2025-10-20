@@ -2,6 +2,8 @@ package org.example.nanocli;
 
 import com.google.common.base.Preconditions;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,8 +41,21 @@ public record CommandTree(Node root) {
         }
 
         private static List<OptionSpec> getOptionSpecsFromCommand(Command command) {
-            return Arrays.stream(command.getClass().getAnnotations()).filter(
-                    anno -> anno instanceof OptionSpec).map(anno -> (OptionSpec) anno).toList();
+            List<OptionSpec> specs = new ArrayList<>();
+            var fields = command.getClass().getDeclaredFields();
+            for (final var field : fields) {
+                System.out.println("field: " + field.getName());
+                System.out.println("field type: " + field.getType());
+                System.out.println("field anno: " + Arrays.stream(field.getAnnotations()).map(Annotation::toString));
+                var annotations = field.getDeclaredAnnotations();
+                List<OptionSpec> annos = Arrays.stream(annotations)
+                        .filter(anno -> anno.annotationType().equals(OptionSpec.class))
+                        .map(anno -> (OptionSpec) anno)
+                        .toList();
+                specs.addAll(annos);
+            }
+
+            return specs;
         }
 
         private static CommandSpec getCommandSpec(Command command) {
@@ -55,10 +70,8 @@ public record CommandTree(Node root) {
     }
 
     record Option(String name, String description) {
-
         public static Option of(OptionSpec spec) {
-            // FIXME: impl
-            return new Option("helol", "world");
+            return new Option(spec.name(), spec.description());
         }
     }
 }
