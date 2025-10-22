@@ -49,7 +49,7 @@ class CommandlineTest {
     void testBasic() {
         var buf = new StringBuffer();
         var rootCommand = new RootCommand();
-        var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+        var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf).build();
 
         var args = new String[]{"cli", "hello"};
         cmd.execute(args);
@@ -63,7 +63,7 @@ class CommandlineTest {
         {
             var buf = new StringBuffer();
             var rootCommand = new RootCommand();
-            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf).build();
 
             var args = new String[]{"cli", "hello", "-c", "upper"};
             cmd.execute(args);
@@ -76,7 +76,7 @@ class CommandlineTest {
         {
             var buf = new StringBuffer();
             var rootCommand = new RootCommand();
-            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf).build();
 
             var args = new String[]{"cli", "hello", "-c", "lower"};
             cmd.execute(args);
@@ -89,7 +89,7 @@ class CommandlineTest {
         {
             var buf = new StringBuffer();
             var rootCommand = new RootCommand();
-            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf).build();
 
             var args = new String[]{"cli", "hello", "-c", "invalid"};
             assertThrows(IllegalArgumentException.class, () -> cmd.execute(args));
@@ -100,7 +100,7 @@ class CommandlineTest {
     void testBasicHelpMessage() {
         var buf = new StringBuffer();
         var rootCommand = new RootCommand();
-        var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf);
+        var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf).build();
         // docker -p terx -c dfd run -x abc -b abc
 //        Usage:  docker [OPTIONS] COMMAND [ARG...]
 

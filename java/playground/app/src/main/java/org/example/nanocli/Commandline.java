@@ -11,6 +11,99 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Commandline {
+    private Command rootCommand;
+    private CommandTree commandTree;
+    private StringBuffer outputBuffer;
+
+    public Commandline(Command rootCommand, CommandTree commandTree, StringBuffer outputBuffer) {
+        this.rootCommand = rootCommand;
+        this.commandTree = commandTree;
+        this.outputBuffer = outputBuffer;
+    }
+
+    public void execute(String[] args) {
+        this.commandTree = CommandTree.from(this.rootCommand);
+            /*
+docker -c orbstack run -p 8080:8080 -v $(pwd):/app/mnt
+
+    docker
+    -c run
+orbstack -p -v
+        xxx   yyy
+
+cmda pos1 pos2 cmdb -o 1 -b 2
+
+
+    pos1
+    pos2
+cmda
+    cmdb
+
+             */
+        switch (args.length) {
+            case 1:
+                // display help message
+                displayHelpMessage(this.commandTree.root(), this.outputBuffer);
+                break;
+            default:
+                // cli --help
+                if (args.length == 2 && args[1].equals("--help")) {
+                    displayHelpMessage(this.commandTree.root(), this.outputBuffer);
+                    break;
+                }
+                // now we have only
+                // cli hello
+                var cmd = args[1];
+                if (cmd.equals("hello")) {
+                    CommandTree.Node helloNode = this.commandTree
+                            .root()
+                            .subCommands()
+                            .stream()
+                            .filter(command -> command.name().equals("hello"))
+                            .findFirst()
+                            .orElseThrow(() -> new NoSuchElementException("hello command should be present"));
+                    helloNode.command().execute(this.outputBuffer);
+                }
+        }
+    }
+
+
+    /**
+     * Displays the help message for the CLI tool.
+     * <p>
+     * Format:
+     * <pre>
+     * Usage:  cli [OPTIONS] COMMAND
+     *
+     * A simple CLI tool
+     *
+     * Commands:
+     *   hello       Print greeting message
+     * </pre>
+     */
+    private static void displayHelpMessage(CommandTree.Node node, StringBuffer outputBuffer) {
+        var subCommandInfos = node.subCommands().stream().map(subNode -> new CommandInfo(subNode.name(), subNode.description()));
+
+        var subCommandInfoStrs = subCommandInfos
+                .map(info -> String.format("  %-12s%s", info.name(), info.description()))
+                .collect(Collectors.joining("\n"));
+
+        String usageStr = """
+                Usage:  %s [OPTIONS] COMMAND
+                
+                %s
+                
+                Commands:
+                %s
+                """.formatted(node.name(), node.description(), subCommandInfoStrs);
+
+        outputBuffer.append(usageStr);
+    }
+
+    private record CommandInfo(Object name, String description) {
+    }
+
+
     public static class Builder {
         private StringBuffer outputBuffer;
         private Command rootCommand;
@@ -29,68 +122,10 @@ public class Commandline {
             return this;
         }
 
-        public void execute(String[] args) {
-            this.commandTree = CommandTree.from(this.rootCommand);
-            switch (args.length) {
-                case 1:
-                    // display help message
-                    displayHelpMessage(this.commandTree.root(), this.outputBuffer);
-                    break;
-                default:
-                    // cli --help
-                    if (args.length == 2 && args[1].equals("--help")) {
-                        displayHelpMessage(this.commandTree.root(), this.outputBuffer);
-                        break;
-                    }
-                    // now we have only
-                    // cli hello
-                    var cmd = args[1];
-                    if (cmd.equals("hello")) {
-                        CommandTree.Node helloNode = this.commandTree
-                                .root()
-                                .subCommands()
-                                .stream()
-                                .filter(command -> command.name().equals("hello"))
-                                .findFirst()
-                                .orElseThrow(() -> new NoSuchElementException("hello command should be present"));
-                        helloNode.command().execute(this.outputBuffer);
-                    }
-            }
+        public Commandline build() {
+            return new Commandline(rootCommand, commandTree, outputBuffer);
         }
 
-        /**
-         * Displays the help message for the CLI tool.
-         * <p>
-         * Format:
-         * <pre>
-         * Usage:  cli [OPTIONS] COMMAND
-         *
-         * A simple CLI tool
-         *
-         * Commands:
-         *   hello       Print greeting message
-         * </pre>
-         */
-        private static void displayHelpMessage(CommandTree.Node node, StringBuffer outputBuffer) {
-            var subCommandInfos = node.subCommands().stream().map(subNode -> new CommandInfo(subNode.name(), subNode.description()));
 
-            var subCommandInfoStrs = subCommandInfos
-                    .map(info -> String.format("  %-12s%s", info.name(), info.description()))
-                    .collect(Collectors.joining("\n"));
-
-            String usageStr = """
-                    Usage:  %s [OPTIONS] COMMAND
-                    
-                    %s
-                    
-                    Commands:
-                    %s
-                    """.formatted(node.name(), node.description(), subCommandInfoStrs);
-
-            outputBuffer.append(usageStr);
-        }
-
-        private record CommandInfo(Object name, String description) {
-        }
     }
 }
