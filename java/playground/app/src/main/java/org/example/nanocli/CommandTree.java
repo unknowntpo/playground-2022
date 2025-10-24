@@ -25,6 +25,7 @@ public record CommandTree(Node root) {
             // inject option into rootCommand
             var options = optionSpecs.stream().map(Option::of).toList();
             var subCommands = Arrays.stream(spec.subCommands()).map(
+                    // FIXME: make sure subCommands are unique
                     clazz -> {
                         try {
                             // init new instance of command from clazz, and build a Node.
@@ -41,6 +42,7 @@ public record CommandTree(Node root) {
         }
 
         private static List<OptionSpec> getOptionSpecsFromCommand(Command command) {
+            // FIXME: get option value type using reflect, and add to Option
             List<OptionSpec> specs = new ArrayList<>();
             var fields = command.getClass().getDeclaredFields();
             for (final var field : fields) {
@@ -69,6 +71,7 @@ public record CommandTree(Node root) {
         }
     }
 
+    // FIXME: add value as any
     record Option(String name, String description) {
         public static Option of(OptionSpec spec) {
             return new Option(spec.name(), spec.description());

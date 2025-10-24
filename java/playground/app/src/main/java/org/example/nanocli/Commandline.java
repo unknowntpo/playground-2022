@@ -5,9 +5,13 @@ import com.google.common.base.Preconditions;
 import java.io.InvalidClassException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class Commandline {
@@ -23,23 +27,9 @@ public class Commandline {
 
     public void execute(String[] args) {
         this.commandTree = CommandTree.from(this.rootCommand);
-            /*
-docker -c orbstack run -p 8080:8080 -v $(pwd):/app/mnt
 
-    docker
-    -c run
-orbstack -p -v
-        xxx   yyy
+        parseArgs(args, this.commandTree);
 
-cmda pos1 pos2 cmdb -o 1 -b 2
-
-
-    pos1
-    pos2
-cmda
-    cmdb
-
-             */
         switch (args.length) {
             case 1:
                 // display help message
@@ -65,6 +55,58 @@ cmda
                     helloNode.command().execute(this.outputBuffer);
                 }
         }
+    }
+
+                /*
+docker -c orbstack run -p 8080:8080 -v $(pwd):/app/mnt
+
+    docker
+    -c run
+orbstack -p -v
+        xxx   yyy
+
+cmda pos1 pos2 cmdb -o 1 -b 2
+
+
+    pos1
+    pos2
+cmda
+    cmdb
+
+             */
+
+    /**
+     * Parse and inject args into commandTree.
+     * @param args
+     * @param commandTree
+     */
+    static void parseArgs(String[] args, CommandTree commandTree) {
+        // FIXME: should handle empty args, display help message
+        if (args.length == 1) {
+            // TODO: should display help message
+            return;
+        }
+        var cliName = args[0];
+        //
+        // args = {"cli", "hello", "-c", "upper"};
+        Queue<String> argsQueue = new ArrayDeque<>(List.of(args));
+        // pop cli
+        argsQueue.poll();
+        CommandTree.Node curNode = commandTree.root();
+        while (!argsQueue.isEmpty()) {
+            String arg = argsQueue.poll();
+            CommandTree.Node target = curNode
+                    .subCommands()
+                    .stream()
+                    .filter(command -> command.name().equals(arg))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException(String.format("%s: unknown command: %s %s", cliName, cliName, arg)));
+            // target found
+
+
+
+        }
+
     }
 
 

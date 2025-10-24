@@ -1,5 +1,6 @@
 package org.example.nanocli;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -116,5 +117,23 @@ class CommandlineTest {
                 Commands:
                   hello       Print greeting message
                 """, buf.toString());
+    }
+
+    @Test
+    void testParseArgs() {
+        var cmd = new RootCommand();
+        var commandTree = CommandTree.from(cmd);
+        var args = new String[]{"cli", "hello", "-c", "upper"};
+        Commandline.parseArgs(args, commandTree);
+        
+        assertEquals(commandTree.root().subCommands().size(), 1);
+        
+        var helloCommandNode = commandTree.root().subCommands().getFirst();
+        assertInstanceOf(HelloCommand.class, helloCommandNode.command());
+
+        var helloCommand = ((HelloCommand) helloCommandNode.command());
+
+        // should inject value of letterCase into helloCommand instance;
+        Assertions.assertEquals("upper", helloCommand.letterCase);
     }
 }
