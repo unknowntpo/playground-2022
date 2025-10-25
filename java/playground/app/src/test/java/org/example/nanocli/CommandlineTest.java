@@ -71,6 +71,8 @@ class CommandlineTest {
 
             // if -w capital is specified, then return capitalized words
             assertEquals("HOW ARE YOU", buf.toString());
+
+            // FIXME: should test option with multiple value or no value
         }
 
         // lower
@@ -125,9 +127,9 @@ class CommandlineTest {
         var commandTree = CommandTree.from(cmd);
         var args = new String[]{"cli", "hello", "-c", "upper"};
         Commandline.parseArgs(args, commandTree);
-        
+
         assertEquals(commandTree.root().subCommands().size(), 1);
-        
+
         var helloCommandNode = commandTree.root().subCommands().getFirst();
         assertInstanceOf(HelloCommand.class, helloCommandNode.command());
 
@@ -135,5 +137,17 @@ class CommandlineTest {
 
         // should inject value of letterCase into helloCommand instance;
         Assertions.assertEquals("upper", helloCommand.letterCase);
+    }
+
+    @Test
+    void testRemoveDash() {
+        {
+            var arg0 = "--option";
+            assertEquals("option", Commandline.removeDash(arg0));
+        }
+        {
+            var arg0 = "-option";
+            assertEquals("option", Commandline.removeDash(arg0));
+        }
     }
 }

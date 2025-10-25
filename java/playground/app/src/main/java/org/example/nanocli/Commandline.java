@@ -95,6 +95,26 @@ cmda
         CommandTree.Node curNode = commandTree.root();
         while (!argsQueue.isEmpty()) {
             String arg = argsQueue.poll();
+            if (arg.contains("--") || arg.contains("-") ) {
+                // if is option, parse it, match with curNode
+                var optionStr = removeDash(arg);
+                var option = curNode.options()
+                        .stream()
+                        .filter(opt -> opt.name().equals(optionStr))
+                        .findFirst().orElseThrow(
+                                () -> new InvalidParameterException(String.format("option %s not found in command %s", arg, curNode.name()))
+                        );
+                // determin this option has value or not
+                // now, just match single value option
+                if (argsQueue.isEmpty()) {
+                    throw new IllegalArgumentException(String.format("value of option %s not found in command %s", arg, curNode.name()));
+                }
+                curNode.setOption(optionStr, argsQueue.poll());
+            }
+
+
+            // if is command, parse it , set curNode, continue
+
             CommandTree.Node target = curNode
                     .subCommands()
                     .stream()
@@ -107,6 +127,14 @@ cmda
 
         }
 
+    }
+
+    static String removeDash(String arg) {
+        while (arg.startsWith("-")) {
+            arg = arg.substring(1);
+        }
+
+        return arg;
     }
 
 

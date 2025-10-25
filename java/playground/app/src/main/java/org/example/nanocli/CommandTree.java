@@ -69,6 +69,23 @@ public record CommandTree(Node root) {
             var spec = specs.getFirst();
             return spec;
         }
+
+        public void setOption(String optionStr, String poll) {
+            // we have checked that argStr is in command
+            var optionField = Arrays.stream(command.getClass().getDeclaredFields())
+                    .filter(field -> field.getName().equals(optionStr))
+                    .findFirst()
+                    .orElseThrow(
+                            () -> new IllegalArgumentException(String.format("option not found in Command %s", this.name()))
+                    );
+            optionField.setAccessible(true);
+            switch (optionField.getType()) {
+                case Class<String>:
+            }
+
+
+
+        }
     }
 
     // FIXME: add value as any
