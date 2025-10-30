@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: keel-demo
+  namespace: keel-demo
+  labels:
+    app: keel-demo
+spec:
+  selector:
+    app: keel-demo
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
