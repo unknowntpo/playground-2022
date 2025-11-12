@@ -122,7 +122,7 @@ class CommandlineTest {
     }
 
     @Test
-    void testParseArgs() {
+    void testParseArgs() throws IllegalAccessException {
         var cmd = new RootCommand();
         var commandTree = CommandTree.from(cmd);
         var args = new String[]{"cli", "hello", "-c", "upper"};

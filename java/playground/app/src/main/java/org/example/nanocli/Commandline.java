@@ -28,7 +28,11 @@ public class Commandline {
     public void execute(String[] args) {
         this.commandTree = CommandTree.from(this.rootCommand);
 
-        parseArgs(args, this.commandTree);
+        try {
+            parseArgs(args, this.commandTree);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("failed to parse arguments", e);
+        }
 
         switch (args.length) {
             case 1:
@@ -80,7 +84,7 @@ cmda
      * @param args
      * @param commandTree
      */
-    static void parseArgs(String[] args, CommandTree commandTree) {
+    static void parseArgs(String[] args, CommandTree commandTree) throws IllegalAccessException {
         // FIXME: should handle empty args, display help message
         if (args.length == 1) {
             // TODO: should display help message
@@ -109,9 +113,8 @@ cmda
                 if (argsQueue.isEmpty()) {
                     throw new IllegalArgumentException(String.format("value of option %s not found in command %s", arg, curNode.name()));
                 }
-                curNode.setOption(optionStr, argsQueue.poll());
+                curNode.setOption(option, optionStr, argsQueue.poll());
             }
-
 
             // if is command, parse it , set curNode, continue
 

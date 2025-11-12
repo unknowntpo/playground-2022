@@ -3,6 +3,7 @@ package org.example.nanocli;
 import com.google.common.base.Preconditions;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,9 +22,10 @@ public record CommandTree(Node root) {
     record Node(String name, String description, List<Option> options, List<Node> subCommands, Command command) {
         public static Node of(Command rootCommand) {
             var spec = getCommandSpec(rootCommand);
-            var optionSpecs = getOptionSpecsFromCommand(rootCommand);
+            var options = getOptionsFromCommand(rootCommand);
             // inject option into rootCommand
-            var options = optionSpecs.stream().map(Option::of).toList();
+            // FIXME: should put optionField into Option, so we can set value in parse stage.
+//            var options = optionSpecs.stream().map(Option::of).toList();
             var subCommands = Arrays.stream(spec.subCommands()).map(
                     // FIXME: make sure subCommands are unique
                     clazz -> {
@@ -41,23 +43,25 @@ public record CommandTree(Node root) {
             return new Node(spec.name(), spec.description(), options, subCommands, rootCommand);
         }
 
-        private static List<OptionSpec> getOptionSpecsFromCommand(Command command) {
+        private static List<Option> getOptionsFromCommand(Command command) {
             // FIXME: get option value type using reflect, and add to Option
-            List<OptionSpec> specs = new ArrayList<>();
+            List<Option> options = new ArrayList<>();
             var fields = command.getClass().getDeclaredFields();
             for (final var field : fields) {
                 System.out.println("field: " + field.getName());
                 System.out.println("field type: " + field.getType());
                 System.out.println("field anno: " + Arrays.stream(field.getAnnotations()).map(Annotation::toString));
                 var annotations = field.getDeclaredAnnotations();
-                List<OptionSpec> annos = Arrays.stream(annotations)
+                // FIXME: should ban multiple OptionSpec in same field
+                var specInField = Arrays.stream(annotations)
                         .filter(anno -> anno.annotationType().equals(OptionSpec.class))
                         .map(anno -> (OptionSpec) anno)
-                        .toList();
-                specs.addAll(annos);
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("should have 1 OptionSpec"));
+               options.add(Option.of(command, field, specInField));
             }
 
-            return specs;
+            return options;
         }
 
         private static CommandSpec getCommandSpec(Command command) {
@@ -70,28 +74,27 @@ public record CommandTree(Node root) {
             return spec;
         }
 
-        public void setOption(String optionStr, String poll) {
-            // we have checked that argStr is in command
-            var optionField = Arrays.stream(command.getClass().getDeclaredFields())
-                    .filter(field -> field.getName().equals(optionStr))
-                    .findFirst()
-                    .orElseThrow(
-                            () -> new IllegalArgumentException(String.format("option not found in Command %s", this.name()))
-                    );
-            optionField.setAccessible(true);
-            switch (optionField.getType()) {
-                case Class<String>:
+        // optionKey = "-c", value: "hello"
+        public void setOption(Option option, String optionKey, String value) throws IllegalAccessException {
+//            // we have checked that argStr is in command
+//            var option = getOptionsFromCommand(command)
+//                    .stream()
+//                    .filter(spec -> spec.name().equals(optionKey))
+//                    .findFirst()
+//                    .orElseThrow(
+//                            () -> new IllegalArgumentException(String.format("option not found in Command %s", this.name()))
+//                    );
+            option.field.setAccessible(true);
+            if (option.field.getType() == String.class) {
+                option.field.set(option.command, value);
             }
-
-
-
         }
     }
 
     // FIXME: add value as any
-    record Option(String name, String description) {
-        public static Option of(OptionSpec spec) {
-            return new Option(spec.name(), spec.description());
+    record Option(Command command, Field field, String name, String description) {
+        public static Option of(Command command, Field field, OptionSpec spec) {
+            return new Option(command, field, spec.name(), spec.description());
         }
     }
 }
