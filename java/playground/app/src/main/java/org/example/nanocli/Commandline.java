@@ -47,6 +47,7 @@ public class Commandline {
                 }
                 // now we have only
                 // cli hello
+                // FIXME: Avoid hard-coding logic
                 var cmd = args[1];
                 if (cmd.equals("hello")) {
                     CommandTree.Node helloNode = this.commandTree
@@ -81,6 +82,7 @@ cmda
 
     /**
      * Parse and inject args into commandTree.
+     *
      * @param args
      * @param commandTree
      */
@@ -99,35 +101,31 @@ cmda
         CommandTree.Node curNode = commandTree.root();
         while (!argsQueue.isEmpty()) {
             String arg = argsQueue.poll();
-            if (arg.contains("--") || arg.contains("-") ) {
+            if (arg.contains("--") || arg.contains("-")) {
                 // if is option, parse it, match with curNode
-                var optionStr = removeDash(arg);
+                var optionStr = arg;
+                String curNodeName = curNode.name();
                 var option = curNode.options()
                         .stream()
                         .filter(opt -> opt.name().equals(optionStr))
                         .findFirst().orElseThrow(
-                                () -> new InvalidParameterException(String.format("option %s not found in command %s", arg, curNode.name()))
+                                () -> new InvalidParameterException(String.format("option %s not found in command %s", arg, curNodeName))
                         );
-                // determin this option has value or not
+                // FIXME: determine number of values in this option (0..n). Now only support single value.
                 // now, just match single value option
                 if (argsQueue.isEmpty()) {
                     throw new IllegalArgumentException(String.format("value of option %s not found in command %s", arg, curNode.name()));
                 }
                 curNode.setOption(option, optionStr, argsQueue.poll());
+            } else {
+                // if is command, parse it , set curNode, continue
+                curNode = curNode
+                        .subCommands()
+                        .stream()
+                        .filter(command -> command.name().equals(arg))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException(String.format("%s: unknown command: %s %s", cliName, cliName, arg)));
             }
-
-            // if is command, parse it , set curNode, continue
-
-            CommandTree.Node target = curNode
-                    .subCommands()
-                    .stream()
-                    .filter(command -> command.name().equals(arg))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException(String.format("%s: unknown command: %s %s", cliName, cliName, arg)));
-            // target found
-
-
-
         }
 
     }

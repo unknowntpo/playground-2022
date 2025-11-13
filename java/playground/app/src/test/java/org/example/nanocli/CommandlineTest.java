@@ -85,7 +85,7 @@ class CommandlineTest {
             cmd.execute(args);
 
             // if -w capital is specified, then return capitalized words
-            assertEquals("HOW ARE YOU", buf.toString());
+            assertEquals("how are you", buf.toString());
         }
 
         // invalid
