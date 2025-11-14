@@ -128,12 +128,12 @@ class CommandlineTest {
         var args = new String[]{"cli", "hello", "-c", "upper"};
         Commandline.parseArgs(args, commandTree);
 
-        assertEquals(commandTree.root().subCommands().size(), 1);
+        assertEquals(commandTree.root().getSubCommands().size(), 1);
 
-        var helloCommandNode = commandTree.root().subCommands().getFirst();
-        assertInstanceOf(HelloCommand.class, helloCommandNode.command());
+        var helloCommandNode = commandTree.root().getSubCommands().getFirst();
+        assertInstanceOf(HelloCommand.class, helloCommandNode.getCommand());
 
-        var helloCommand = ((HelloCommand) helloCommandNode.command());
+        var helloCommand = ((HelloCommand) helloCommandNode.getCommand());
 
         // should inject value of letterCase into helloCommand instance;
         Assertions.assertEquals("upper", helloCommand.letterCase);

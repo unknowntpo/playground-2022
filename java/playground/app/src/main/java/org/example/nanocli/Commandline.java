@@ -34,6 +34,9 @@ public class Commandline {
             throw new RuntimeException("failed to parse arguments", e);
         }
 
+        this.commandTree.execute(this.outputBuffer);
+
+        /*
         switch (args.length) {
             case 1:
                 // display help message
@@ -60,6 +63,7 @@ public class Commandline {
                     helloNode.command().execute(this.outputBuffer);
                 }
         }
+        */
     }
 
                 /*
@@ -104,8 +108,8 @@ cmda
             if (arg.contains("--") || arg.contains("-")) {
                 // if is option, parse it, match with curNode
                 var optionStr = arg;
-                String curNodeName = curNode.name();
-                var option = curNode.options()
+                String curNodeName = curNode.getName();
+                var option = curNode.getOptions()
                         .stream()
                         .filter(opt -> opt.name().equals(optionStr))
                         .findFirst().orElseThrow(
@@ -114,17 +118,18 @@ cmda
                 // FIXME: determine number of values in this option (0..n). Now only support single value.
                 // now, just match single value option
                 if (argsQueue.isEmpty()) {
-                    throw new IllegalArgumentException(String.format("value of option %s not found in command %s", arg, curNode.name()));
+                    throw new IllegalArgumentException(String.format("value of option %s not found in command %s", arg, curNode.getName()));
                 }
                 curNode.setOption(option, optionStr, argsQueue.poll());
             } else {
                 // if is command, parse it , set curNode, continue
                 curNode = curNode
-                        .subCommands()
+                        .getSubCommands()
                         .stream()
-                        .filter(command -> command.name().equals(arg))
+                        .filter(command -> command.getName().equals(arg))
                         .findFirst()
                         .orElseThrow(() -> new IllegalArgumentException(String.format("%s: unknown command: %s %s", cliName, cliName, arg)));
+                curNode.setShouldExecute(true);
             }
         }
 
@@ -153,7 +158,7 @@ cmda
      * </pre>
      */
     private static void displayHelpMessage(CommandTree.Node node, StringBuffer outputBuffer) {
-        var subCommandInfos = node.subCommands().stream().map(subNode -> new CommandInfo(subNode.name(), subNode.description()));
+        var subCommandInfos = node.getSubCommands().stream().map(subNode -> new CommandInfo(subNode.getName(), subNode.getDescription()));
 
         var subCommandInfoStrs = subCommandInfos
                 .map(info -> String.format("  %-12s%s", info.name(), info.description()))
@@ -161,12 +166,12 @@ cmda
 
         String usageStr = """
                 Usage:  %s [OPTIONS] COMMAND
-                
+
                 %s
-                
+
                 Commands:
                 %s
-                """.formatted(node.name(), node.description(), subCommandInfoStrs);
+                """.formatted(node.getName(), node.getDescription(), subCommandInfoStrs);
 
         outputBuffer.append(usageStr);
     }

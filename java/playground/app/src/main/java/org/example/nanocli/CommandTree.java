@@ -1,6 +1,7 @@
 package org.example.nanocli;
 
 import com.google.common.base.Preconditions;
+import lombok.Data;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -19,7 +20,38 @@ public record CommandTree(Node root) {
         return new CommandTree(root);
     }
 
-    record Node(String name, String description, List<Option> options, List<Node> subCommands, Command command) {
+    public void execute(StringBuffer outputBuffer) {
+        // execute command based on CommandTree.
+        Node curNode = this.root;
+        while (!curNode.getSubCommands().isEmpty()) {
+            curNode = curNode
+                    .getSubCommands()
+                    .stream()
+                    .filter(Node::getShouldExecute)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("should have at one and only one subcommand"));
+        }
+        curNode.command.execute(outputBuffer);
+    }
+
+    @Data
+    static class Node {
+        private String name;
+        private String description;
+        private List<Option> options;
+        private List<Node> subCommands;
+        private Command command;
+        private Boolean shouldExecute;
+
+        public Node(String name, String description, List<Option> options, List<Node> subCommands, Command command, Boolean shouldExecute) {
+            this.name = name;
+            this.description = description;
+            this.options = options;
+            this.subCommands = subCommands;
+            this.command = command;
+            this.shouldExecute = shouldExecute;
+        }
+
         public static Node of(Command rootCommand) {
             var spec = getCommandSpec(rootCommand);
             var options = getOptionsFromCommand(rootCommand);
@@ -40,7 +72,7 @@ public record CommandTree(Node root) {
             ).toList();
 
             // build Node from subCommands
-            return new Node(spec.name(), spec.description(), options, subCommands, rootCommand);
+            return new Node(spec.name(), spec.description(), options, subCommands, rootCommand, false);
         }
 
         private static List<Option> getOptionsFromCommand(Command command) {

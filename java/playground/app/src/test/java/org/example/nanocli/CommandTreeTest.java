@@ -49,20 +49,20 @@ class CommandTreeTest {
                 .extracting("name", "description")
                 .containsExactly("docker", "A self-sufficient runtime for containers");
 
-        assertThat(root.subCommands())
+        assertThat(root.getSubCommands())
                 .hasSize(2)
                 .satisfiesExactly(
                         runNode -> {
-                            assertThat(runNode.name()).isEqualTo("run");
-                            assertThat(runNode.description()).isEqualTo("Create and run a new container from an image");
-                            assertThat(runNode.command()).isInstanceOf(RunCommand.class);
-                            assertThat(runNode.subCommands()).isEmpty();
+                            assertThat(runNode.getName()).isEqualTo("run");
+                            assertThat(runNode.getDescription()).isEqualTo("Create and run a new container from an image");
+                            assertThat(runNode.getCommand()).isInstanceOf(RunCommand.class);
+                            assertThat(runNode.getSubCommands()).isEmpty();
                         },
                         execNode -> {
-                            assertThat(execNode.name()).isEqualTo("exec");
-                            assertThat(execNode.description()).isEqualTo("Execute a command in a running container");
-                            assertThat(execNode.command()).isInstanceOf(ExecCommand.class);
-                            assertThat(execNode.subCommands()).isEmpty();
+                            assertThat(execNode.getName()).isEqualTo("exec");
+                            assertThat(execNode.getDescription()).isEqualTo("Execute a command in a running container");
+                            assertThat(execNode.getCommand()).isInstanceOf(ExecCommand.class);
+                            assertThat(execNode.getSubCommands()).isEmpty();
                         }
                 );
 
