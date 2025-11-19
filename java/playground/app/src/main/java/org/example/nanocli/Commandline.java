@@ -1,18 +1,9 @@
 package org.example.nanocli;
 
-import com.google.common.base.Preconditions;
-
-import java.io.InvalidClassException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 public class Commandline {
     private Command rootCommand;
@@ -108,6 +99,11 @@ cmda
             if (arg.contains("--") || arg.contains("-")) {
                 // if is option, parse it, match with curNode
                 var optionStr = arg;
+                if (optionStr.equals("--help") || optionStr.equals("-h")) {
+                    // FIXME: should display help message
+                    curNode.setShouldDisplayHelpMessage(true);
+                    continue;
+                }
                 String curNodeName = curNode.getName();
                 var option = curNode.getOptions()
                         .stream()
@@ -118,6 +114,7 @@ cmda
                 // FIXME: determine number of values in this option (0..n). Now only support single value.
                 // now, just match single value option
                 if (argsQueue.isEmpty()) {
+                    // FIXME: should display help message
                     throw new IllegalArgumentException(String.format("value of option %s not found in command %s", arg, curNode.getName()));
                 }
                 curNode.setOption(option, optionStr, argsQueue.poll());
@@ -141,42 +138,6 @@ cmda
         }
 
         return arg;
-    }
-
-
-    /**
-     * Displays the help message for the CLI tool.
-     * <p>
-     * Format:
-     * <pre>
-     * Usage:  cli [OPTIONS] COMMAND
-     *
-     * A simple CLI tool
-     *
-     * Commands:
-     *   hello       Print greeting message
-     * </pre>
-     */
-    private static void displayHelpMessage(CommandTree.Node node, StringBuffer outputBuffer) {
-        var subCommandInfos = node.getSubCommands().stream().map(subNode -> new CommandInfo(subNode.getName(), subNode.getDescription()));
-
-        var subCommandInfoStrs = subCommandInfos
-                .map(info -> String.format("  %-12s%s", info.name(), info.description()))
-                .collect(Collectors.joining("\n"));
-
-        String usageStr = """
-                Usage:  %s [OPTIONS] COMMAND
-
-                %s
-
-                Commands:
-                %s
-                """.formatted(node.getName(), node.getDescription(), subCommandInfoStrs);
-
-        outputBuffer.append(usageStr);
-    }
-
-    private record CommandInfo(Object name, String description) {
     }
 
 

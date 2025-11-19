@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record CommandTree(Node root) {
     public static CommandTree from(Command rootCommand) {
@@ -29,7 +30,11 @@ public record CommandTree(Node root) {
                     .stream()
                     .filter(Node::getShouldExecute)
                     .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("should have at one and only one subcommand"));
+                    .orElseThrow(() -> new IllegalStateException("should have one and only one subcommand"));
+        }
+        if (curNode.shouldDisplayHelpMessage) {
+            displayHelpMessage(curNode, outputBuffer);
+            return;
         }
         curNode.command.execute(outputBuffer);
     }
@@ -42,14 +47,16 @@ public record CommandTree(Node root) {
         private List<Node> subCommands;
         private Command command;
         private Boolean shouldExecute;
+        private Boolean shouldDisplayHelpMessage;
 
-        public Node(String name, String description, List<Option> options, List<Node> subCommands, Command command, Boolean shouldExecute) {
+        public Node(String name, String description, List<Option> options, List<Node> subCommands, Command command, Boolean shouldExecute, Boolean shouldDisplayHelpMessage) {
             this.name = name;
             this.description = description;
             this.options = options;
             this.subCommands = subCommands;
             this.command = command;
             this.shouldExecute = shouldExecute;
+            this.shouldDisplayHelpMessage = shouldDisplayHelpMessage;
         }
 
         public static Node of(Command rootCommand) {
@@ -72,7 +79,7 @@ public record CommandTree(Node root) {
             ).toList();
 
             // build Node from subCommands
-            return new Node(spec.name(), spec.description(), options, subCommands, rootCommand, false);
+            return new Node(spec.name(), spec.description(), options, subCommands, rootCommand, false, false);
         }
 
         private static List<Option> getOptionsFromCommand(Command command) {
@@ -90,7 +97,7 @@ public record CommandTree(Node root) {
                         .map(anno -> (OptionSpec) anno)
                         .findFirst()
                         .orElseThrow(() -> new IllegalArgumentException("should have 1 OptionSpec"));
-               options.add(Option.of(command, field, specInField));
+                options.add(Option.of(command, field, specInField));
             }
 
             return options;
@@ -128,5 +135,40 @@ public record CommandTree(Node root) {
         public static Option of(Command command, Field field, OptionSpec spec) {
             return new Option(command, field, spec.name(), spec.description());
         }
+    }
+
+    private record CommandInfo(Object name, String description) {
+    }
+
+    /**
+     * Displays the help message for the CLI tool.
+     * <p>
+     * Format:
+     * <pre>
+     * Usage:  cli [OPTIONS] COMMAND
+     *
+     * A simple CLI tool
+     *
+     * Commands:
+     *   hello       Print greeting message
+     * </pre>
+     */
+    private static void displayHelpMessage(Node node, StringBuffer outputBuffer) {
+        var subCommandInfos = node.getSubCommands().stream().map(subNode -> new CommandInfo(subNode.getName(), subNode.getDescription()));
+
+        var subCommandInfoStrs = subCommandInfos
+                .map(info -> String.format("  %-12s%s", info.name(), info.description()))
+                .collect(Collectors.joining("\n"));
+
+        String usageStr = """
+                Usage:  %s [OPTIONS] COMMAND
+                
+                %s
+                
+                Commands:
+                %s
+                """.formatted(node.getName(), node.getDescription(), subCommandInfoStrs);
+
+        outputBuffer.append(usageStr);
     }
 }
