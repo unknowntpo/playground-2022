@@ -24,13 +24,14 @@ public record CommandTree(Node root) {
     public void execute(StringBuffer outputBuffer) {
         // execute command based on CommandTree.
         Node curNode = this.root;
-        while (!curNode.getSubCommands().isEmpty()) {
+        while (curNode
+                .getSubCommands()
+                .stream().anyMatch(Node::getShouldExecute)) {
             curNode = curNode
                     .getSubCommands()
                     .stream()
                     .filter(Node::getShouldExecute)
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("should have one and only one subcommand"));
+                    .findFirst().orElseThrow(() -> new IllegalStateException("should have at one and only one command that is executable"));
         }
         if (curNode.shouldDisplayHelpMessage) {
             displayHelpMessage(curNode, outputBuffer);
