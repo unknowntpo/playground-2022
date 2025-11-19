@@ -101,24 +101,40 @@ class CommandlineTest {
 
     @Test
     void testBasicHelpMessage() {
-        var buf = new StringBuffer();
-        var rootCommand = new RootCommand();
-        var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf).build();
-        // docker -p terx -c dfd run -x abc -b abc
-//        Usage:  docker [OPTIONS] COMMAND [ARG...]
+        {
+            var buf = new StringBuffer();
+            var rootCommand = new RootCommand();
+            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf).build();
 
+            var args = new String[]{"cli", "--help"};
+            cmd.execute(args);
 
-        var args = new String[]{"cli", "--help"};
-        cmd.execute(args);
+            assertEquals("""
+                    Usage:  cli [OPTIONS] COMMAND
+                    
+                    A simple CLI tool
+                    
+                    Commands:
+                      hello       Print greeting message
+                    """, buf.toString());
+        }
+        {
+            var buf = new StringBuffer();
+            var rootCommand = new RootCommand();
+            var cmd = new Commandline.Builder().withCommand(rootCommand).withOutputBuffer(buf).build();
 
-        assertEquals("""
-                Usage:  cli [OPTIONS] COMMAND
-                
-                A simple CLI tool
-                
-                Commands:
-                  hello       Print greeting message
-                """, buf.toString());
+            var args = new String[]{"cli", "hello", "--help"};
+            cmd.execute(args);
+
+            assertEquals("""
+                    Usage:  cli [OPTIONS] COMMAND
+                    
+                    A simple CLI tool
+                    
+                    Commands:
+                      hello       Print greeting message
+                    """, buf.toString());
+        }
     }
 
     @Test
