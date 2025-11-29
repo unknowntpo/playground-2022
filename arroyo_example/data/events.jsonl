@@ -1,0 +1,6 @@
+{"user_id": "user_1", "type": "login", "time": "2023-01-01T10:00:00.000Z"}
+{"user_id": "user_2", "type": "login", "time": "2023-01-01T10:00:01.000Z"}
+{"user_id": "user_1", "type": "click", "time": "2023-01-01T10:00:02.000Z"}
+{"user_id": "user_1", "type": "click", "time": "2023-01-01T10:00:03.000Z"}
+{"user_id": "user_2", "type": "click", "time": "2023-01-01T10:00:04.000Z"}
+{"user_id": "user_1", "type": "checkout", "time": "2023-01-01T10:00:06.000Z"}

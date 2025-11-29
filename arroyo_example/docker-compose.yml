@@ -1,0 +1,8 @@
+version: '3'
+services:
+  arroyo:
+    image: ghcr.io/arroyosystems/arroyo-single:latest
+    ports:
+      - "5115:5115"
+    volumes:
+      - ./data:/data
