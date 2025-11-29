@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
-@State(Scope.Benchmark)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @Warmup(iterations = 2, time = 1)
@@ -15,59 +14,75 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 public class ZeroCopyBenchmark {
 
-    private Path tempFile;
-    private static final int PORT_TRADITIONAL = 19001;
-    private static final int PORT_ZEROCOPY = 19002;
+    @State(Scope.Benchmark)
+    public static class ServerState {
+        Path tempFile;
+        ZeroCopyExample traditionalServer;
+        ZeroCopyExample zeroCopyServer;
+        static final int PORT_TRADITIONAL = 19001;
+        static final int PORT_ZEROCOPY = 19002;
 
-    @Setup(Level.Trial)
-    public void setup() throws IOException {
-        // Create 10MB test file
-        tempFile = Files.createTempFile("benchmark", ".dat");
-        byte[] data = new byte[10 * 1024 * 1024]; // 10MB
-        for (int i = 0; i < data.length; i++) {
-            data[i] = (byte) (i % 256);
+        @Setup(Level.Trial)
+        public void setupTrial() throws Exception {
+            // Create 100MB test file
+            tempFile = Files.createTempFile("benchmark", ".dat");
+            byte[] data = new byte[100 * 1024 * 1024]; // 100MB
+            for (int i = 0; i < data.length; i++) {
+                data[i] = (byte) (i % 256);
+            }
+            Files.write(tempFile, data);
+
+            // Start servers once
+            traditionalServer = new ZeroCopyExample();
+            traditionalServer.start(PORT_TRADITIONAL, tempFile, false);
+
+            zeroCopyServer = new ZeroCopyExample();
+            zeroCopyServer.start(PORT_ZEROCOPY, tempFile, true);
+
+            // Wait for servers to be ready
+            Thread.sleep(200);
         }
-        Files.write(tempFile, data);
+
+        @TearDown(Level.Trial)
+        public void tearDownTrial() throws IOException {
+            if (traditionalServer != null) {
+                traditionalServer.stop();
+            }
+            if (zeroCopyServer != null) {
+                zeroCopyServer.stop();
+            }
+            if (tempFile != null) {
+                Files.deleteIfExists(tempFile);
+            }
+        }
     }
 
-    @TearDown(Level.Trial)
-    public void tearDown() throws IOException {
-        if (tempFile != null) {
-            Files.deleteIfExists(tempFile);
+    @State(Scope.Thread)
+    public static class ClientState {
+        TestClient client;
+
+        @Setup(Level.Invocation)
+        public void setupClient() {
+            client = new TestClient();
+        }
+
+        @TearDown(Level.Invocation)
+        public void tearDownClient() throws IOException {
+            if (client != null) {
+                client.close();
+            }
         }
     }
 
     @Benchmark
-    public void traditionalFileTransfer() throws Exception {
-        ZeroCopyExample server = new ZeroCopyExample();
-        server.start(PORT_TRADITIONAL, tempFile, false);
-
-        // Wait for server to be ready
-        Thread.sleep(100);
-
-        try {
-            TestClient client = new TestClient();
-            client.connect("localhost", PORT_TRADITIONAL);
-            byte[] data = client.receiveFile();
-        } finally {
-            server.stop();
-        }
+    public byte[] traditionalFileTransfer(ServerState serverState, ClientState clientState) throws Exception {
+        clientState.client.connect("localhost", ServerState.PORT_TRADITIONAL);
+        return clientState.client.receiveFile();
     }
 
     @Benchmark
-    public void zeroCopyFileTransfer() throws Exception {
-        ZeroCopyExample server = new ZeroCopyExample();
-        server.start(PORT_ZEROCOPY, tempFile, true);
-
-        // Wait for server to be ready
-        Thread.sleep(100);
-
-        try {
-            TestClient client = new TestClient();
-            client.connect("localhost", PORT_ZEROCOPY);
-            byte[] data = client.receiveFile();
-        } finally {
-            server.stop();
-        }
+    public byte[] zeroCopyFileTransfer(ServerState serverState, ClientState clientState) throws Exception {
+        clientState.client.connect("localhost", ServerState.PORT_ZEROCOPY);
+        return clientState.client.receiveFile();
     }
 }

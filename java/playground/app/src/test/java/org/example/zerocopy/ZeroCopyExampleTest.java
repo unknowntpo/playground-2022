@@ -28,13 +28,17 @@ class ZeroCopyExampleTest {
 
         // Start server
         server.start(port, sourceFile, useZeroCopy);
+        Thread.sleep(100); // Wait for server to be ready
 
         TestClient client = new TestClient();
 
-        client.connect("localhost", port);
-        byte[] fileBytes = client.receiveFile();
-        server.stop();
-
-        assertEquals(expectedContent, new String(fileBytes));
+        try {
+            client.connect("localhost", port);
+            byte[] fileBytes = client.receiveFile();
+            assertEquals(expectedContent, new String(fileBytes));
+        } finally {
+            client.close();
+            server.stop();
+        }
     }
 }

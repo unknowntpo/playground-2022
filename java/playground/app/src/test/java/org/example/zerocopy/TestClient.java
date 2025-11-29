@@ -1,35 +1,36 @@
 package org.example.zerocopy;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 public class TestClient {
-    private String host;
-    private int port;
+    private Socket socket;
 
-    public void connect(String host, int port) {
-        this.host =  host;
-        this.port = port;
+    public void connect(String host, int port) throws IOException {
+        this.socket = new Socket(host, port);
     }
 
     /**
-     * Recieve file from tcp socket
+     * Receive file from tcp socket using length-prefix protocol
      */
     public byte[] receiveFile() throws IOException {
-        try (var socket = new Socket(this.host, this.port)) {
-            var in = socket.getInputStream();
-            var baos = new ByteArrayOutputStream();
+        var in = new DataInputStream(socket.getInputStream());
 
-            byte[] buffer = new byte[8192];
-            int bytesRead;
-            while ((bytesRead = in.read(buffer)) != -1) {
-                baos.write(buffer, 0, bytesRead);
-            }
-            return baos.toByteArray();
+        // Read 8-byte file size first (length-prefix)
+        long fileSize = in.readLong();
+
+        // Read exact file bytes
+        byte[] fileData = new byte[(int) fileSize];
+        in.readFully(fileData);
+
+        return fileData;
+    }
+
+    public void close() throws IOException {
+        if (socket != null && !socket.isClosed()) {
+            socket.close();
         }
     }
 }
