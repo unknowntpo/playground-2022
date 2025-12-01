@@ -55,3 +55,30 @@ run2-promise
 
     assert buf1.getvalue() == expected1
     assert buf2.getvalue() == expected2
+
+def test_nested_promises():
+    """Test that multiple run() calls don't share queues"""
+    buf = io.StringIO()
+
+    def f1():
+        buf.write('f1-start\n')
+        aio.Promise(f2)
+        buf.write('f1-end\n')
+
+    def f2():
+        buf.write('f2-start\n')
+        aio.Promise(lambda: buf.write('nested-promise\n'))
+        buf.write('f2-end\n')
+
+
+    # Run first event loop
+    aio.run(f1)
+
+    # Verify each run had isolated execution
+    expected = """f1-start
+f1-end
+f2-start
+f2-end
+nested-promise
+"""
+    assert buf.getvalue() == expected
