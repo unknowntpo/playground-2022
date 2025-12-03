@@ -3,7 +3,6 @@ version: '3.8'
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: flink_example_postgres
     environment:
       POSTGRES_USER: flinkuser
       POSTGRES_PASSWORD: flinkpass
@@ -29,7 +28,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: flink_example_redis
     ports:
       - "16379:6379"
     volumes:
@@ -45,7 +43,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: flink_example_pyflink_app
     ports:
       - "18081:8081"
     depends_on:

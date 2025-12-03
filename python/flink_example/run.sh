@@ -26,11 +26,11 @@ print_warning() {
     echo -e "${YELLOW}[WARNING]${NC} $1"
 }
 
-# Check if docker-compose is running
+# Check if docker-compose services are running
 print_info "Checking PostgreSQL..."
-if ! docker ps | grep -q flink_example_postgres; then
+if ! docker-compose ps --services --filter "status=running" | grep -q postgres; then
     print_info "Starting PostgreSQL..."
-    docker-compose up -d
+    docker-compose up -d postgres redis
     print_info "Waiting for PostgreSQL to be ready..."
     sleep 5
 else
@@ -38,7 +38,8 @@ else
 fi
 
 # Check PostgreSQL readiness
-if docker exec flink_example_postgres pg_isready -U flinkuser -d blogdb > /dev/null 2>&1; then
+POSTGRES_CONTAINER=$(docker-compose ps -q postgres)
+if [ -n "$POSTGRES_CONTAINER" ] && docker exec $POSTGRES_CONTAINER pg_isready -U flinkuser -d blogdb > /dev/null 2>&1; then
     print_success "PostgreSQL is ready"
 else
     print_warning "PostgreSQL is not ready yet. Please wait..."
@@ -67,7 +68,7 @@ case "${1:-all}" in
         echo "  - Flink WebUI: http://localhost:18081"
         echo ""
         echo "To view logs:"
-        echo "  docker logs -f flink_example_pyflink_app"
+        echo "  ./run.sh docker-logs"
         echo ""
         echo "To stop:"
         echo "  docker-compose down"
@@ -78,7 +79,7 @@ case "${1:-all}" in
 
     docker-logs)
         print_info "Tailing Flink application logs (Ctrl+C to exit)..."
-        docker logs -f flink_example_pyflink_app
+        docker-compose logs -f pyflink-app
         ;;
 
     load-generator)
@@ -107,46 +108,36 @@ case "${1:-all}" in
         ;;
 
     all)
-        print_info "Starting all services in background..."
+        print_info "Starting all services with Docker Compose..."
 
-        # Create logs directory
-        mkdir -p logs
+        # Check for JARs
+        if [ ! -d "lib" ] || [ -z "$(ls -A lib 2>/dev/null)" ]; then
+            print_info "JARs not found, downloading..."
+            ./download-jars.sh
+        else
+            print_success "JARs already exist in lib/"
+        fi
 
-        # Start load generator in background
-        print_info "Starting load generator (rate: ${2:-10} events/sec)..."
-        nohup uv run python load_generator.py --rate ${2:-10} > logs/load_generator.log 2>&1 &
-        LOAD_PID=$!
-        echo $LOAD_PID > logs/load_generator.pid
-        print_success "Load generator started (PID: $LOAD_PID)"
+        # Start all services with docker-compose
+        print_info "Building and starting all containers..."
+        docker-compose up --build -d
 
-        # Start Flink CDC pipeline in background
-        print_info "Starting Flink CDC pipeline..."
-        nohup uv run python flink_cdc_simple.py > logs/flink_cdc.log 2>&1 &
-        FLINK_PID=$!
-        echo $FLINK_PID > logs/flink_cdc.pid
-        print_success "Flink CDC pipeline started (PID: $FLINK_PID)"
-
-        # Wait a moment for services to initialize
-        print_info "Waiting 3 seconds for services to initialize..."
-        sleep 3
-
-        # Start dashboard in foreground
-        print_info "Starting Streamlit dashboard (foreground)..."
         print_success "All services started!"
         echo ""
         echo "Services running:"
-        echo "  - Load Generator: PID $LOAD_PID (logs/load_generator.log)"
-        echo "  - Flink CDC:      PID $FLINK_PID (logs/flink_cdc.log)"
-        echo "  - Dashboard:      Starting now..."
+        echo "  - PostgreSQL:  localhost:15432"
+        echo "  - Redis:       localhost:16379"
+        echo "  - Flink WebUI: http://localhost:18081"
         echo ""
-        echo "To stop all services: ./run.sh stop-all"
-        echo "To view logs: tail -f logs/*.log"
+        echo "To start load generator:"
+        echo "  ./run.sh load-generator [rate]"
         echo ""
-        echo "Press Ctrl+C to stop dashboard (background services will continue)"
+        echo "To view Flink logs:"
+        echo "  ./run.sh docker-logs"
         echo ""
-
-        # Start dashboard (will block here)
-        uv run streamlit run dashboard_redis.py
+        echo "To stop all services:"
+        echo "  docker-compose down"
+        echo ""
         ;;
 
     stop-all)
@@ -244,15 +235,15 @@ case "${1:-all}" in
         echo "Usage: $0 {docker|docker-logs|load-generator|flink-cdc|flink|dashboard|dashboard-pg|all|stop|stop-all|status|logs}"
         echo ""
         echo "Docker Commands (Recommended - with WebUI):"
-        echo "  docker                 - Build and start containerized Flink app (WebUI: http://localhost:18081)"
+        echo "  all                    - Start everything with Docker Compose (Postgres + Redis + Flink)"
+        echo "  docker                 - Start only Flink app container (WebUI: http://localhost:18081)"
         echo "  docker-logs            - Tail Flink container logs"
         echo ""
-        echo "Local Commands (Original - no WebUI):"
+        echo "Local Commands (Development - no WebUI):"
         echo "  load-generator [rate]  - Start load generator with optional rate (default: 10)"
         echo "  flink-cdc              - Start Flink CDC pipeline (local Python)"
         echo "  dashboard              - Start Streamlit dashboard (Redis mode)"
         echo "  dashboard-pg           - Start Streamlit dashboard (PostgreSQL mode)"
-        echo "  all [rate]             - Start all services (load gen + flink + dashboard)"
         echo ""
         echo "Management Commands:"
         echo "  stop                   - Stop Docker services"

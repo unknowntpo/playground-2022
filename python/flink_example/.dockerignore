@@ -9,8 +9,9 @@ __pycache__/
 env/
 venv/
 
-# Keep these for pip install
-!requirements.txt
+# Keep these for uv sync
+!pyproject.toml
+!uv.lock
 
 # Logs
 logs/
