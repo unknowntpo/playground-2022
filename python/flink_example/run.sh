@@ -47,6 +47,40 @@ fi
 
 # Check which component to run
 case "${1:-all}" in
+    docker)
+        print_info "Checking for required JAR files..."
+        if [ ! -d "lib" ] || [ -z "$(ls -A lib 2>/dev/null)" ]; then
+            print_info "JARs not found, downloading..."
+            ./download-jars.sh
+        else
+            print_success "JARs already exist in lib/"
+        fi
+
+        print_info "Building and starting containerized Flink application..."
+        docker-compose up --build -d pyflink-app
+
+        print_success "Flink application container started!"
+        echo ""
+        echo "Services running:"
+        echo "  - PostgreSQL:  localhost:15432"
+        echo "  - Redis:       localhost:16379"
+        echo "  - Flink WebUI: http://localhost:18081"
+        echo ""
+        echo "To view logs:"
+        echo "  docker logs -f flink_example_pyflink_app"
+        echo ""
+        echo "To stop:"
+        echo "  docker-compose down"
+        echo ""
+        echo "To start load generator (from host):"
+        echo "  ./run.sh load-generator"
+        ;;
+
+    docker-logs)
+        print_info "Tailing Flink application logs (Ctrl+C to exit)..."
+        docker logs -f flink_example_pyflink_app
+        ;;
+
     load-generator)
         print_info "Starting load generator..."
         uv run python load_generator.py --rate ${2:-10}
@@ -207,14 +241,20 @@ case "${1:-all}" in
         ;;
 
     *)
-        echo "Usage: $0 {load-generator|flink-cdc|flink|dashboard|dashboard-pg|all|stop|stop-all|status|logs}"
+        echo "Usage: $0 {docker|docker-logs|load-generator|flink-cdc|flink|dashboard|dashboard-pg|all|stop|stop-all|status|logs}"
         echo ""
-        echo "Commands:"
+        echo "Docker Commands (Recommended - with WebUI):"
+        echo "  docker                 - Build and start containerized Flink app (WebUI: http://localhost:18081)"
+        echo "  docker-logs            - Tail Flink container logs"
+        echo ""
+        echo "Local Commands (Original - no WebUI):"
         echo "  load-generator [rate]  - Start load generator with optional rate (default: 10)"
-        echo "  flink-cdc              - Start Flink CDC pipeline"
+        echo "  flink-cdc              - Start Flink CDC pipeline (local Python)"
         echo "  dashboard              - Start Streamlit dashboard (Redis mode)"
         echo "  dashboard-pg           - Start Streamlit dashboard (PostgreSQL mode)"
         echo "  all [rate]             - Start all services (load gen + flink + dashboard)"
+        echo ""
+        echo "Management Commands:"
         echo "  stop                   - Stop Docker services"
         echo "  stop-all               - Stop all background Python services"
         echo "  status                 - Show status of all services"

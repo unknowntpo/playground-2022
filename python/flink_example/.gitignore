@@ -34,6 +34,7 @@ logs/
 flink-checkpoints/
 flink-savepoints/
 .flink/
+lib/
 
 # OS
 .DS_Store

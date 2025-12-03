@@ -1,0 +1,57 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.env
+.venv/
+env/
+venv/
+
+# Keep these for pip install
+!requirements.txt
+
+# Logs
+logs/
+*.log
+*.pid
+
+# Data
+data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Documentation
+README.md
+*.md
+!CLAUDE.md
+
+# Test files
+test_*.py
+*_test.py
+
+# Other Python scripts (not needed in container)
+load_generator.py
+dashboard.py
+dashboard_redis.py
+flink_pipeline.py
+
+# Shell scripts
+run.sh
+*.sh
+!entrypoint.sh

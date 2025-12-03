@@ -12,17 +12,21 @@ from datetime import datetime
 from pyflink.table import EnvironmentSettings, TableEnvironment
 
 # Redis configuration
-REDIS_HOST = 'localhost'
-REDIS_PORT = 16379
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_PORT = int(os.getenv('REDIS_PORT', '16379'))
 REDIS_KEY_TOP_POSTS = 'trending:top10'
 REDIS_KEY_WINDOW_STATS = 'trending:window_stats'
+
+# PostgreSQL configuration
+POSTGRES_HOST = os.getenv('POSTGRES_HOST', 'localhost')
+POSTGRES_PORT = int(os.getenv('POSTGRES_PORT', '15432'))
 
 # Connect to Redis
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
 def create_cdc_source(t_env: TableEnvironment):
     """Create CDC source for view_events."""
-    ddl = """
+    ddl = f"""
         CREATE TABLE view_events_source (
             id BIGINT,
             post_id INT,
@@ -31,8 +35,8 @@ def create_cdc_source(t_env: TableEnvironment):
             WATERMARK FOR viewed_at AS viewed_at - INTERVAL '5' SECOND
         ) WITH (
             'connector' = 'postgres-cdc',
-            'hostname' = 'localhost',
-            'port' = '15432',
+            'hostname' = '{POSTGRES_HOST}',
+            'port' = '{POSTGRES_PORT}',
             'username' = 'flinkuser',
             'password' = 'flinkpass',
             'database-name' = 'blogdb',
@@ -47,7 +51,7 @@ def create_cdc_source(t_env: TableEnvironment):
 
 def create_posts_lookup(t_env: TableEnvironment):
     """Create posts lookup table using CDC for continuous updates."""
-    ddl = """
+    ddl = f"""
         CREATE TABLE posts_lookup (
             id INT PRIMARY KEY NOT ENFORCED,
             title VARCHAR,
@@ -55,8 +59,8 @@ def create_posts_lookup(t_env: TableEnvironment):
             created_at TIMESTAMP(3)
         ) WITH (
             'connector' = 'postgres-cdc',
-            'hostname' = 'localhost',
-            'port' = '15432',
+            'hostname' = '{POSTGRES_HOST}',
+            'port' = '{POSTGRES_PORT}',
             'username' = 'flinkuser',
             'password' = 'flinkpass',
             'database-name' = 'blogdb',
@@ -72,7 +76,7 @@ def create_posts_lookup(t_env: TableEnvironment):
 def create_result_sink(t_env: TableEnvironment):
     """Create sink for top posts results."""
     print("[DEBUG] Preparing sink DDL...", flush=True)
-    ddl = """
+    ddl = f"""
         CREATE TABLE top_posts_sink (
             window_end TIMESTAMP(3),
             post_id INT,
@@ -82,7 +86,7 @@ def create_result_sink(t_env: TableEnvironment):
             PRIMARY KEY (window_end, post_id) NOT ENFORCED
         ) WITH (
             'connector' = 'jdbc',
-            'url' = 'jdbc:postgresql://localhost:15432/blogdb',
+            'url' = 'jdbc:postgresql://{POSTGRES_HOST}:{POSTGRES_PORT}/blogdb',
             'table-name' = 'trending_posts',
             'username' = 'flinkuser',
             'password' = 'flinkpass'
@@ -132,8 +136,8 @@ def redis_updater():
     print("[INFO] Redis updater thread started")
 
     conn = psycopg2.connect(
-        host='localhost',
-        port=15432,
+        host=POSTGRES_HOST,
+        port=POSTGRES_PORT,
         database='blogdb',
         user='flinkuser',
         password='flinkpass'
@@ -235,7 +239,7 @@ def main():
     # Create tables
     print(f"[DEBUG] Connecting to PostgreSQL...", flush=True)
     import psycopg2
-    conn = psycopg2.connect(host='localhost', port=15432, database='blogdb', user='flinkuser', password='flinkpass')
+    conn = psycopg2.connect(host=POSTGRES_HOST, port=POSTGRES_PORT, database='blogdb', user='flinkuser', password='flinkpass')
     cursor = conn.cursor()
     print(f"[DEBUG] Creating results table...", flush=True)
     cursor.execute("""

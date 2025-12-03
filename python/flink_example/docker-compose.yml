@@ -41,38 +41,28 @@ services:
       timeout: 3s
       retries: 5
 
-  jobmanager:
-    image: flink:1.20-scala_2.12-java11
-    container_name: flink_example_jobmanager
+  pyflink-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flink_example_pyflink_app
     ports:
       - "18081:8081"
-    command: jobmanager
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 4
-    volumes:
-      - ./lib:/opt/flink/lib/custom
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081"]
       interval: 10s
       timeout: 5s
       retries: 5
-
-  taskmanager:
-    image: flink:1.20-scala_2.12-java11
-    container_name: flink_example_taskmanager
-    depends_on:
-      - jobmanager
-    command: taskmanager
-    environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 4
-    volumes:
-      - ./lib:/opt/flink/lib/custom
 
 volumes:
   postgres_data:
