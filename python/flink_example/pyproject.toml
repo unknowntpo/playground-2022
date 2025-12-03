@@ -1,0 +1,15 @@
+[project]
+name = "flink-example"
+version = "0.1.0"
+description = "Blog trending posts with Flink CDC"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "psycopg2-binary>=2.9.9",
+    "faker>=22.0.0",
+    "apache-flink>=1.20.0,<2.0.0",
+    "streamlit>=1.29.0",
+    "pandas>=2.0.0,<2.1.0",
+    "redis>=5.0.0",
+    "setuptools>=65.0.0",
+]
