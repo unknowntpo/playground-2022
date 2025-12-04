@@ -4,3 +4,7 @@ def test_taskqueue():
     _ = TaskQueue()
     assert 1 == 1
 
+def test_submit():
+    _ = TaskQueue()
+    assert 1 == 1
+
