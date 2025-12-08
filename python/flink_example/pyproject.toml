@@ -13,3 +13,13 @@ dependencies = [
     "redis>=5.0.0",
     "setuptools>=65.0.0",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_functions = ["test_*"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "ruff>=0.14.8",
+]

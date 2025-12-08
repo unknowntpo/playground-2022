@@ -70,7 +70,8 @@ def create_posts_lookup(t_env: TableEnvironment):
             'table-name' = 'posts',
             'slot.name' = 'flink_posts_slot',
             'decoding.plugin.name' = 'pgoutput'
-        )
+        
+)
     """
     t_env.execute_sql(ddl)
     print("[✓] Posts lookup created")
