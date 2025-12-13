@@ -39,20 +39,30 @@ async def publish_price_to_redis(tick: PriceTick):
         ts_score = datetime.fromisoformat(tick.timestamp).timestamp()
 
         # Set latest price
-        await r.set(KEY_LATEST_PRICE, json.dumps({
-            'price': tick.price,
-            'timestamp': tick.timestamp,
-            'change_pct': tick.change_percent,
-            'updated_at': datetime.utcnow().isoformat(),
-        }))
+        await r.set(
+            KEY_LATEST_PRICE,
+            json.dumps(
+                {
+                    "price": tick.price,
+                    "timestamp": tick.timestamp,
+                    "change_pct": tick.change_percent,
+                    "updated_at": datetime.utcnow().isoformat(),
+                }
+            ),
+        )
 
         # Add to sorted set (score = timestamp for ordering)
-        await r.zadd(KEY_PRICE_HISTORY, {
-            json.dumps({
-                'price': tick.price,
-                'timestamp': tick.timestamp,
-            }): ts_score
-        })
+        await r.zadd(
+            KEY_PRICE_HISTORY,
+            {
+                json.dumps(
+                    {
+                        "price": tick.price,
+                        "timestamp": tick.timestamp,
+                    }
+                ): ts_score
+            },
+        )
 
         # Trim history to last 500 entries
         await r.zremrangebyrank(KEY_PRICE_HISTORY, 0, -501)
