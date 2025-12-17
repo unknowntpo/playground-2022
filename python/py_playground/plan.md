@@ -11,3 +11,8 @@ queue interface
 - submit() -> id
 - wait(id)
 ```
+
+### MemTaskQueue 
+
+- what is Future vs Task ?
+- Python Protocol type ?
