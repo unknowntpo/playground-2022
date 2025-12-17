@@ -1,11 +1,18 @@
 # https://nightlies.apache.org/flink/flink-docs-master/docs/dev/python/table/intro_to_table_api/
+from ast import Mult
+from unittest import result
+from numpy import tensordot
+from pyflink.common import Row
+from pyflink.table.udf import AggregateFunction, udf
 import pytest
 import pandas as pd
 from pyflink.table import (
+    ScalarFunction,
     TableEnvironment,
     EnvironmentSettings,
 )
 from pyflink.table.expressions import col
+
 
 @pytest.fixture
 def t_env() -> TableEnvironment:
@@ -114,3 +121,51 @@ def test_pandas_source_to_sink(t_env: TableEnvironment):
     assert final_row[0] == 70000.0  # Avg Salary
     assert final_row[1] == 35.0  # Avg Age
 
+
+class MultBy2(ScalarFunction):
+    def eval(self, v):
+        return v * 2
+
+
+def test_custom_udf(t_env: TableEnvironment):
+    # t_env.execute_sql(
+    #     """
+    # CREATE TABLE datagen (
+    #     id INT,
+    #     data STRING
+    # ) WITH (
+    #     'connector' = 'datagen',
+    #     'fields.id.kind' = 'sequence',
+    #     'fields.id.start' = '1',
+    #     'fields.id.end' = '10'
+    # )
+    # """
+    # )
+
+    df = pd.DataFrame({"id": [1, 2, 3, 4], "data": [200, 400, 500, 600]})
+
+    src = t_env.from_pandas(df)
+    t_env.create_temporary_view("datagen", src)
+
+    t_env.execute_sql(
+        """
+    CREATE TABLE print (
+        id INT,
+        data INT
+    ) WITH (
+        'connector' = 'print'
+    ) 
+"""
+    )
+
+    t_env.create_temporary_function("mult_by_2", udf(MultBy2(), result_type="INT"))
+
+    results = (
+        t_env.sql_query("SELECT id, mult_by_2(data) FROM datagen").execute().collect()
+    )
+
+    result_list = sorted([tuple(row) for row in results], key=lambda r: r[0])
+
+    print(result_list)
+    assert len(result_list) == 4
+    assert result_list == [(1, 400), (2, 800), (3, 1000), (4, 1200)]
