@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from typing import Callable, Coroutine, Any
+from typing import Callable, Coroutine, Any, Protocol
 
 from py_playground.taskqueue import TaskQueue
 from py_playground.taskqueue.taskqueue import Task, Status
