@@ -50,7 +50,7 @@ wheels = [
 [[package]]
 name = "py-playground"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "pytest" },
     { name = "pytest-asyncio" },
