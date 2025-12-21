@@ -11,12 +11,12 @@ class Status(Enum):
     SUCCESS = "SUCCESS"
     FAILED = "FAILED"
 
-class Task(Protocol, Awaitable[Any]):
+class Task(Protocol):
     @property
     def status(self) -> Status: ...
     @status.setter
     def status(self, value: Status): ...
-    async def run(self): ...
+    def run(self): ...
 
 
 class TaskQueue(ABC):
@@ -25,13 +25,13 @@ class TaskQueue(ABC):
     """
 
     @abstractmethod
-    async def submit(self, *, fn: Callable) -> Task:
+    def submit(self, *, fn: Callable) -> Task:
         pass
 
     @abstractmethod
-    async def run(self):
+    def run(self):
         pass
 
     @abstractmethod
-    async def stop(self):
+    def stop(self):
         pass

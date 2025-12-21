@@ -1,18 +1,20 @@
 import asyncio
 import logging
+import os
+from concurrent.futures import Future
+from concurrent.futures.thread import ThreadPoolExecutor
+from queue import Queue
 from typing import Callable, Coroutine, Any, Protocol
 
 from py_playground.taskqueue import TaskQueue
 from py_playground.taskqueue.taskqueue import Task, Status
+from tests.unit.asyncio_example.test_asyncio_cancellation import worker
 
 class MemTask:
     def __init__(self, fn: Callable):
         self._fn = fn
         self._status = Status.INITIALIZED
-        self._future = asyncio.Future()
-
-    def __await__(self):
-        return self._future.__await__()
+        self._future = Future()
 
     @property
     def status(self) -> Status:
@@ -22,40 +24,37 @@ class MemTask:
     def status(self, value: Status):
         self._status = value
 
-    async def run(self):
+    def run(self):
         res = self._fn()
-        self._future.set_result(res)
 
 
 class MemTaskQueue(TaskQueue):
     def __init__(self):
-        self._queue = asyncio.Queue[MemTask]()
-        self._worker_task = None
+        self._queue = Queue()
+        self.executor = ThreadPoolExecutor(max_workers=os.cpu_count())
 
-    async def run(self):
-        self._worker_task = asyncio.create_task(self._worker())
+    def run(self):
+        self.executor.submit(self._worker)
 
-    async def submit(self, *, fn: Callable) -> Task:
+    def submit(self, *, fn: Callable) -> Task:
         t = MemTask(fn)
         t.status = Status.INITIALIZED
-        await self._queue.put(t)
+        self._queue.put(t)
         return t
 
-    async def _worker(self):
+    def _worker(self):
         try:
             while True:
-                task: MemTask = await self._queue.get()
+                task: MemTask = self._queue.get()
                 try:
                     task.status = Status.RUNNING
-                    result = await task.run()
+                    result = task.run()
                     task.status = Status.SUCCESS
                 except Exception as e:
-                    task.set_exception(e)
                     task.status = Status.FAILED
         except asyncio.CancelledError:
             logging.debug("worker got cancelled")
             pass
 
-    async def stop(self):
-        self._worker_task.cancel()
-        await self._worker_task
+    def stop(self, timeout=100):
+        self.executor.shutdown(True, cancel_futures=True)
