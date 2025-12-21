@@ -13,11 +13,11 @@ def test_futures_wait():
         buf.write("hello f2\n")
         return "result from f2"
 
-    executor = ThreadPoolExecutor()
-    tasks = [f1, f2]
-    futures = [executor.submit(f) for f in tasks]
+    with ThreadPoolExecutor() as executor:
+        tasks = [f1, f2]
+        futures = [executor.submit(f) for f in tasks]
 
-    for future in as_completed(futures):
-        result = future.result()
-        assert result.startswith("result from")
-    assert "hello f1\nhello f2\n" == buf.getvalue()
+        for future in as_completed(futures):
+            result = future.result()
+            assert result.startswith("result from")
+        assert "hello f1\nhello f2\n" == buf.getvalue()
