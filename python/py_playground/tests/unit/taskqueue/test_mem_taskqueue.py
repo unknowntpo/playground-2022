@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from concurrent.futures import as_completed
 from io import StringIO
 
 from py_playground.taskqueue.mem_taskqueue import MemTaskQueue
@@ -25,8 +26,9 @@ def test_submit_multiple():
         queue.submit(fn=add_content)
     ]
 
-    for t in tasks:
-        _ = t.result.get()
+    futures = [task.result() for task in tasks]
+    as_completed(futures)
+    queue.stop()
 
     assert x == 4
     assert content == "hellohello"

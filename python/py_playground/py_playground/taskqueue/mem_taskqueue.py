@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import os
-from concurrent.futures import Future
+from concurrent.futures import Future, CancelledError
 from concurrent.futures.thread import ThreadPoolExecutor
 from queue import Queue
 from typing import Callable, Coroutine, Any, Protocol
@@ -25,13 +25,15 @@ class MemTask:
         self._status = value
 
     def run(self):
-        res = self._fn()
+        return self._fn()
 
+    def result(self) -> Future:
+        return self._future
 
 class MemTaskQueue(TaskQueue):
     def __init__(self):
         self._queue = Queue()
-        self.executor = ThreadPoolExecutor(max_workers=os.cpu_count())
+        self.executor = ThreadPoolExecutor(max_workers=1)
 
     def run(self):
         self.executor.submit(self._worker)
@@ -45,16 +47,19 @@ class MemTaskQueue(TaskQueue):
     def _worker(self):
         try:
             while True:
-                task: MemTask = self._queue.get()
+                # FIXME: can we dont uset timeout here ?
+                task: MemTask = self._queue.get(timeout=0.1)
                 try:
                     task.status = Status.RUNNING
                     result = task.run()
                     task.status = Status.SUCCESS
+                    task.result().set_result(result)
                 except Exception as e:
                     task.status = Status.FAILED
-        except asyncio.CancelledError:
+                    task.result().set_exception(e)
+        except CancelledError:
             logging.debug("worker got cancelled")
             pass
 
-    def stop(self, timeout=100):
+    def stop(self):
         self.executor.shutdown(True, cancel_futures=True)

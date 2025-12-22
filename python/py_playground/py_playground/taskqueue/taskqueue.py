@@ -1,5 +1,6 @@
 from abc import ABC
 from abc import abstractmethod
+from concurrent.futures import Future
 from enum import Enum
 from typing import Callable, Protocol, TypeVar, Awaitable, Any
 
@@ -17,6 +18,7 @@ class Task(Protocol):
     @status.setter
     def status(self, value: Status): ...
     def run(self): ...
+    def result(self) -> Future: ...
 
 
 class TaskQueue(ABC):
