@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from concurrent.futures import as_completed
+from concurrent.futures import as_completed, wait
 from io import StringIO
 
 from py_playground.taskqueue.mem_taskqueue import MemTaskQueue
@@ -32,6 +32,20 @@ def test_submit_multiple():
 
     assert x == 4
     assert content == "hellohello"
+
+def test_should_return():
+    def fn() -> int:
+        return 3
+
+    queue = MemTaskQueue()
+    queue.run()
+    task = queue.submit(fn=fn)
+    future = task.result()
+    as_completed([future])
+
+    queue.stop()
+    assert future.result() == 3
+
 #
 # async def test_cancel():
 #     buf = StringIO()
