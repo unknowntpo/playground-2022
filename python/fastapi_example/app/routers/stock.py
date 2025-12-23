@@ -1,9 +1,11 @@
 import logging
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from pydantic import BaseModel
 
 router = APIRouter()
+
+db = {"AAPL": 3310.0, "TSLA": 200.4}
 
 
 class StockPricingResponse(BaseModel):
@@ -11,6 +13,10 @@ class StockPricingResponse(BaseModel):
 
 
 @router.get("/stock/pricing", response_model=StockPricingResponse)
-def get_stock_pricing(symbols: list[str] = None):
+async def get_stock_pricing(symbols: list[str] = Query(...)):
     logging.info(symbols)
-    return StockPricingResponse(symbols={"AAPL": 3310.0})
+    prices: dict[str, float] = {}
+    for symbol in symbols:
+        prices[symbol] = db.get(symbol)
+
+    return StockPricingResponse(symbols=prices)
