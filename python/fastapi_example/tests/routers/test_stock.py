@@ -7,6 +7,13 @@ client = TestClient(app)
 
 
 def test_get_stock_pricing():
-    resp = client.get("/stock/pricing", params={"symbols": ["TSLA", "AAPL"]})
+    symbol = "AAPL"
+    resp = client.get(f"/stock/pricing/{symbol}")
     assert http.client.OK == resp.status_code
-    assert {"symbols": {"TSLA": 200.4, "AAPL": 3310.0}} == resp.json()
+    assert {"symbol": {"name": "AAPL", "price": 3310.0}} == resp.json()
+
+
+def test_get_stock_pricing_not_found():
+    symbol = "NVDA"
+    resp = client.get(f"/stock/pricing/{symbol}")
+    assert http.client.NOT_FOUND == resp.status_code
