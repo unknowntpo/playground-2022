@@ -1,10 +1,9 @@
-import asyncio
 import logging
-from concurrent.futures import as_completed, wait
+import time
+from concurrent.futures import as_completed, wait, CancelledError
 from io import StringIO
 
 from py_playground.taskqueue.mem_taskqueue import MemTaskQueue
-from py_playground.taskqueue.taskqueue import TaskQueue
 
 def test_submit_multiple():
     queue = MemTaskQueue()
@@ -47,28 +46,20 @@ def test_should_return():
     assert future.result() == 3
 
 #
-# async def test_cancel():
-#     buf = StringIO()
-#
-#     async def fn():
-#         try:
-#             await asyncio.sleep(2)
-#             buf.write("hello")
-#         except asyncio.CancelledError:
-#             logging.warning("Task 1 cancelled")
-#
-#     logging.warning("Creating task...")
-#
-#     task1 = asyncio.create_task(fn())
-#     task1.cancel()
-#
-#     try:
-#         await task1  # Must await to run task
-#     except asyncio.CancelledError:
-#         logging.warning("Caught CancelledError")
-#
-#     print(f"\n=== Buffer: '{buf.getvalue()}' ===")
-#     assert buf.getvalue() == ""
+def test_cancel():
+    logging.info("Creating task...")
+    logging.warning("this is warning")
+
+    queue = MemTaskQueue()
+    queue.run()
+
+    tasks = [queue.submit(fn=lambda: time.sleep(0.5)) for _ in range(10)]
+    # cancel all tasks
+    queue.stop()
+
+    cancelled_count = sum(1 for t in tasks if t.result().cancelled())
+    assert cancelled_count > 0
+
 #
 # async def test_exception():
 #     def fn_exception():

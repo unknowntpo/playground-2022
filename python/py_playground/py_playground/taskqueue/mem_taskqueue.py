@@ -1,6 +1,5 @@
-import asyncio
 import logging
-import os
+import threading
 from concurrent.futures import Future, CancelledError
 from concurrent.futures.thread import ThreadPoolExecutor
 from queue import Queue
@@ -8,7 +7,6 @@ from typing import Callable, Coroutine, Any, Protocol
 
 from py_playground.taskqueue import TaskQueue
 from py_playground.taskqueue.taskqueue import Task, Status
-from tests.unit.asyncio_example.test_asyncio_cancellation import worker
 
 class MemTask:
     def __init__(self, fn: Callable):
@@ -32,6 +30,7 @@ class MemTask:
 
 class MemTaskQueue(TaskQueue):
     def __init__(self):
+        self._stop_event = threading.Event()
         self._queue = Queue()
         self.executor = ThreadPoolExecutor(max_workers=1)
 
@@ -46,7 +45,7 @@ class MemTaskQueue(TaskQueue):
 
     def _worker(self):
         try:
-            while True:
+            while not self._stop_event.is_set():
                 # FIXME: can we dont uset timeout here ?
                 task: MemTask = self._queue.get(timeout=0.1)
                 try:
@@ -57,9 +56,11 @@ class MemTaskQueue(TaskQueue):
                 except Exception as e:
                     task.status = Status.FAILED
                     task.result().set_exception(e)
+            logging.info("_stop_event received")
         except CancelledError:
             logging.debug("worker got cancelled")
             pass
 
     def stop(self):
+        self._stop_event.set()
         self.executor.shutdown(True, cancel_futures=True)
