@@ -1,12 +1,13 @@
 import logging
 import threading
-from concurrent.futures import Future, CancelledError
+from concurrent.futures import Future
 from concurrent.futures.thread import ThreadPoolExecutor
-from queue import Queue
-from typing import Callable, Coroutine, Any, Protocol
+from queue import Queue, Empty
+from typing import Callable
 
 from py_playground.taskqueue import TaskQueue
 from py_playground.taskqueue.taskqueue import Task, Status
+
 
 class MemTask:
     def __init__(self, fn: Callable):
@@ -28,6 +29,7 @@ class MemTask:
     def result(self) -> Future:
         return self._future
 
+
 class MemTaskQueue(TaskQueue):
     def __init__(self):
         self._stop_event = threading.Event()
@@ -47,7 +49,11 @@ class MemTaskQueue(TaskQueue):
         try:
             while not self._stop_event.is_set():
                 # FIXME: can we dont uset timeout here ?
-                task: MemTask = self._queue.get(timeout=0.1)
+                try:
+                    task: MemTask = self._queue.get(timeout=0.1)
+                except Empty:
+                    continue
+
                 try:
                     task.status = Status.RUNNING
                     result = task.run()
@@ -57,9 +63,19 @@ class MemTaskQueue(TaskQueue):
                     task.status = Status.FAILED
                     task.result().set_exception(e)
             logging.info("_stop_event received")
-        except CancelledError:
-            logging.debug("worker got cancelled")
-            pass
+            self._drain_and_cancel_queue()
+        except Exception as e:
+            logging.error(f"worker got exception: {e}")
+
+    def _drain_and_cancel_queue(self):
+        """Pop all queued tasks and mark them as cancelled."""
+        while True:
+            try:
+                task = self._queue.get_nowait()
+                task.status = Status.CANCELLED
+                task.result().cancel()
+            except Empty:
+                break
 
     def stop(self):
         self._stop_event.set()

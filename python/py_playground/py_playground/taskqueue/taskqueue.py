@@ -11,6 +11,7 @@ class Status(Enum):
     RUNNING = "RUNNING"
     SUCCESS = "SUCCESS"
     FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
 
 class Task(Protocol):
     @property
