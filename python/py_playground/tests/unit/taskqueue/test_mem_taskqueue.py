@@ -64,18 +64,22 @@ def test_cancel():
     assert cancelled_count > 0
 
 
-#
-# async def test_exception():
-#     def fn_exception():
-#         raise Exception("intended exception")
-#
-#     queue: TaskQueue = MemTaskQueue()
-#     await queue.run()
-#
-#     task = await queue.submit(fn_exception)
-#
-#     assert task._future.resul
-#
+
+def test_exception():
+    e = Exception("intended exception")
+    def fn_exception():
+        raise e
+
+    queue = MemTaskQueue()
+    queue.run()
+
+    task = queue.submit(fn=fn_exception)
+
+    future = task.result()
+    wait([future])
+    assert e == future.exception()
+
+
 #
 #
 #
