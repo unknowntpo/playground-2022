@@ -1,8 +1,8 @@
 import logging
 import time
-from concurrent.futures import wait
 
 from py_playground.taskqueue.mem_taskqueue import MemTaskQueue
+from py_playground.taskqueue.taskqueue import wait
 
 
 def test_submit_multiple():
@@ -35,6 +35,20 @@ def test_submit_multiple():
     assert content == "hellohello"
 
 
+def test_should_wait():
+    queue = MemTaskQueue()
+
+    def fn() -> int:
+        time.sleep(0.1)
+        return 3
+
+    queue.run()
+    t = queue.submit(fn=fn)
+    wait([t])
+    queue.stop()
+    assert 3 == t.result().result()
+
+
 def test_should_return():
     def fn() -> int:
         return 3
@@ -64,9 +78,9 @@ def test_cancel():
     assert cancelled_count > 0
 
 
-
 def test_exception():
     e = Exception("intended exception")
+
     def fn_exception():
         raise e
 

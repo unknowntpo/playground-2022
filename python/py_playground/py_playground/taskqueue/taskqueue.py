@@ -1,8 +1,9 @@
 from abc import ABC
 from abc import abstractmethod
 from concurrent.futures import Future
+from concurrent import futures
 from enum import Enum
-from typing import Callable, Protocol, TypeVar, Awaitable, Any
+from typing import Callable, Protocol, overload, runtime_checkable
 
 
 class Status(Enum):
@@ -13,11 +14,9 @@ class Status(Enum):
     FAILED = "FAILED"
     CANCELLED = "CANCELLED"
 
-class Task(Protocol):
-    @property
+
+class Task:
     def status(self) -> Status: ...
-    @status.setter
-    def status(self, value: Status): ...
     def run(self): ...
     def result(self) -> Future: ...
 
@@ -38,3 +37,17 @@ class TaskQueue(ABC):
     @abstractmethod
     def stop(self):
         pass
+
+
+@overload
+def wait(tasks: list[Task]) -> None: ...
+@overload
+def wait(tasks: list[Future]) -> None: ...
+def wait(tasks: list[Future] | list[Task]) -> None:
+    """
+    wait for task to be done.
+    """
+    if tasks and isinstance(tasks[0], Task):
+        futures.wait([t.result() for t in tasks])
+    else:
+        futures.wait(tasks)
