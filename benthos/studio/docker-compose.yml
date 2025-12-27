@@ -1,0 +1,8 @@
+version: '3.3'
+
+services:
+  benthos-studio-node:
+    image: jeffail/benthos
+    env_file:
+      - ./studio.env
+    command: [ 'studio', 'pull', '-s', 'session-ac04e127d6c84acd' ]

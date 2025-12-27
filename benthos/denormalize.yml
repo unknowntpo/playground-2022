@@ -1,0 +1,19 @@
+input:
+  file:
+    paths: ["./quiz.json"] # No default (required)
+    scanner:
+      lines: {}
+
+pipeline:
+  processors:
+    - bloblang: |
+        root = this
+        root.comments = this.comments.map_each(comment ->
+          let sub_comments = comment.sub_comments.map_each(sub_comment -> sub_comment).or([])
+          merge comment {
+            "sub_comments": sub_comments
+          }
+        )
+
+output:
+  type: stdout

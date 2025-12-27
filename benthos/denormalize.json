@@ -1,0 +1,20 @@
+{
+  "title": "My Blog Post",
+  "content": "This is the content of my blog post.",
+  "comments": [
+    {
+      "id": 1,
+      "text": "First comment",
+      "sub_comments": [
+        {
+          "id": 2,
+          "text": "Sub-comment of first comment"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "text": "Second comment"
+    }
+  ]
+}
