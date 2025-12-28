@@ -8,28 +8,6 @@ from typing import Callable
 from py_playground.taskqueue import TaskQueue
 from py_playground.taskqueue.taskqueue import Task, Status
 
-
-class MemTask:
-    def __init__(self, fn: Callable):
-        self._fn = fn
-        self._status = Status.INITIALIZED
-        self._future = Future()
-
-    @property
-    def status(self) -> Status:
-        return self._status
-
-    @status.setter
-    def status(self, value: Status):
-        self._status = value
-
-    def run(self):
-        return self._fn()
-
-    def result(self) -> Future:
-        return self._future
-
-
 class MemTaskQueue(TaskQueue):
     def __init__(self):
         self._stop_event = threading.Event()
@@ -40,7 +18,7 @@ class MemTaskQueue(TaskQueue):
         self.executor.submit(self._worker)
 
     def submit(self, *, fn: Callable) -> Task:
-        t = MemTask(fn)
+        t = Task(fn)
         t.status = Status.INITIALIZED
         self._queue.put(t)
         return t
@@ -50,7 +28,7 @@ class MemTaskQueue(TaskQueue):
             while not self._stop_event.is_set():
                 # FIXME: can we dont uset timeout here ?
                 try:
-                    task: MemTask = self._queue.get(timeout=0.1)
+                    task: Task = self._queue.get(timeout=0.1)
                 except Empty:
                     continue
 

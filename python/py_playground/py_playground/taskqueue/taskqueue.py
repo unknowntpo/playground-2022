@@ -1,9 +1,10 @@
+import time
 from abc import ABC
 from abc import abstractmethod
 from concurrent.futures import Future
 from concurrent import futures
 from enum import Enum
-from typing import Callable, Protocol, overload, runtime_checkable
+from typing import Callable, Protocol, overload, runtime_checkable, TypeVar, Generic
 
 
 class Status(Enum):
@@ -14,12 +15,27 @@ class Status(Enum):
     FAILED = "FAILED"
     CANCELLED = "CANCELLED"
 
+T = TypeVar("T")
 
-class Task:
-    def status(self) -> Status: ...
-    def run(self): ...
-    def result(self) -> Future: ...
+class Task(Generic[T]):
+    def __init__(self, fn: Callable):
+        self.fn = fn
+        self.status = Status.INITIALIZED
+        self._result: T | None = None
+    def run(self):
+        self._result = self.fn()
 
+    def is_done(self) -> bool:
+        return self.status in (Status.SUCCESS, Status.FAILED, Status.CANCELLED)
+
+    def result(self) -> T:
+        """
+        Block until status
+        :return:
+        """
+        while not self.is_done():
+            time.sleep(0.01)
+        return self._result
 
 class TaskQueue(ABC):
     """
