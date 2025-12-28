@@ -1,10 +1,17 @@
 import http.client
 import logging
+from typing import Annotated
+from sqlmodel import Session, select
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 
+from app.infras.database import get_session
+from app.repos.stock_repo import Stock
+
 router = APIRouter()
+
+SessionDep = Annotated[Session, Depends(get_session)]
 
 
 class SymbolData(BaseModel):
@@ -21,10 +28,10 @@ class SymbolNotFoundException(Exception):
 
 
 @router.get("/stock/pricing/{symbol}", response_model=StockPricingResponse)
-async def get_stock_pricing(symbol: str):
+async def get_stock_pricing(symbol: str, session: SessionDep):
     logging.info(f"got symbol: {symbol}")
     try:
-        price = await get_price(symbol)
+        price = await get_price(symbol, session)
         return StockPricingResponse(symbol=SymbolData(name=symbol, price=price))
     except SymbolNotFoundException:
         raise HTTPException(
@@ -34,11 +41,8 @@ async def get_stock_pricing(symbol: str):
         )
 
 
-db = {"AAPL": 3310.0, "TSLA": 200.4}
-
-
-async def get_price(symbol: str) -> float:
-    price = db.get(symbol)
-    if not price:
+async def get_price(symbol: str, session: Session) -> float:
+    stock = session.exec(select(Stock).where(Stock.symbol == symbol)).first()
+    if not stock:
         raise SymbolNotFoundException(f"symbol {symbol} not found")
-    return price
+    return stock.price
