@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, create_engine, Session
+from app.config import settings
 
-sqlite_filename = "database.db"
-sqlite_url = f"sqlite:///{sqlite_filename}"
+sqlite_url = f"sqlite:///{settings.sqlite_db_name}"
 
 connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, connect_args=connect_args)
