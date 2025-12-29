@@ -36,10 +36,10 @@ class MemTaskQueue(TaskQueue):
                     task.status = Status.RUNNING
                     result = task.run()
                     task.status = Status.SUCCESS
-                    task.result().set_result(result)
+                    task.set_result(result)
                 except Exception as e:
                     task.status = Status.FAILED
-                    task.result().set_exception(e)
+                    task.set_exception(e)
             logging.info("_stop_event received")
             self._drain_and_cancel_queue()
         except Exception as e:

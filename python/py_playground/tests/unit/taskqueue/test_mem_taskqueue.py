@@ -4,7 +4,6 @@ import time
 from py_playground.taskqueue.mem_taskqueue import MemTaskQueue
 from py_playground.taskqueue.taskqueue import wait
 
-
 def test_submit_multiple():
     queue = MemTaskQueue()
     queue.run()
@@ -46,7 +45,8 @@ def test_should_wait():
     t = queue.submit(fn=fn)
     wait([t])
     queue.stop()
-    assert 3 == t.result().result()
+    assert 3 == t.result()
+
 
 
 def test_should_return():
@@ -56,11 +56,10 @@ def test_should_return():
     queue = MemTaskQueue()
     queue.run()
     task = queue.submit(fn=fn)
-    future = task.result()
-    wait([future])
+    wait([task])
 
     queue.stop()
-    assert future.result() == 3
+    assert task.result() == 3
 
 
 def test_cancel():
@@ -92,10 +91,3 @@ def test_exception():
     future = task.result()
     wait([future])
     assert e == future.exception()
-
-
-#
-#
-#
-#
-#

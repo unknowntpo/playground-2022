@@ -21,21 +21,22 @@ class Task(Generic[T]):
     def __init__(self, fn: Callable):
         self.fn = fn
         self.status = Status.INITIALIZED
-        self._result: T | None = None
+        self._future = Future[T]()
     def run(self):
-        self._result = self.fn()
+        return self.fn()
 
     def is_done(self) -> bool:
         return self.status in (Status.SUCCESS, Status.FAILED, Status.CANCELLED)
 
-    def result(self) -> T:
-        """
-        Block until status
-        :return:
-        """
-        while not self.is_done():
-            time.sleep(0.01)
-        return self._result
+    def set_result(self, res: T):
+        self._future.set_result(res)
+
+    def set_exception(self, e: BaseException | None):
+        self._future.set_exception(e)
+
+    def result(self, timeout: float | None = None):
+        return self._future.result(timeout=timeout)
+
 
 class TaskQueue(ABC):
     """
@@ -55,15 +56,8 @@ class TaskQueue(ABC):
         pass
 
 
-@overload
-def wait(tasks: list[Task]) -> None: ...
-@overload
-def wait(tasks: list[Future]) -> None: ...
-def wait(tasks: list[Future] | list[Task]) -> None:
+def wait(tasks: list[Task]) -> None:
     """
-    wait for task to be done.
+    wait for tasks to be done.
     """
-    if tasks and isinstance(tasks[0], Task):
-        futures.wait([t.result() for t in tasks])
-    else:
-        futures.wait(tasks)
+    futures.wait([t._future for t in tasks])
