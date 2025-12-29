@@ -26,8 +26,7 @@ def test_submit_multiple():
         queue.submit(fn=add_content),
     ]
 
-    futures = [task.result() for task in tasks]
-    wait(futures)
+    wait(tasks)
     queue.stop()
 
     assert x == 4
@@ -73,7 +72,7 @@ def test_cancel():
     # cancel all tasks
     queue.stop()
 
-    cancelled_count = sum(1 for t in tasks if t.result().cancelled())
+    cancelled_count = sum(1 for t in tasks if t.cancelled())
     assert cancelled_count > 0
 
 
@@ -88,6 +87,5 @@ def test_exception():
 
     task = queue.submit(fn=fn_exception)
 
-    future = task.result()
-    wait([future])
-    assert e == future.exception()
+    wait([task])
+    assert e == task.exception()

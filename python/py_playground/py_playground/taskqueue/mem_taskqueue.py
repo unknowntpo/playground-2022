@@ -51,7 +51,7 @@ class MemTaskQueue(TaskQueue):
             try:
                 task = self._queue.get_nowait()
                 task.status = Status.CANCELLED
-                task.result().cancel()
+                task._future.cancel()
             except Empty:
                 break
 

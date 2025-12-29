@@ -37,6 +37,12 @@ class Task(Generic[T]):
     def result(self, timeout: float | None = None):
         return self._future.result(timeout=timeout)
 
+    def cancelled(self):
+        return self.status == Status.CANCELLED
+
+    def exception(self, timeout: float | None = None) -> BaseException | None:
+        return self._future.exception()
+
 
 class TaskQueue(ABC):
     """
