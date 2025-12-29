@@ -1,0 +1,22 @@
+# Airflow
+logs/
+airflow.db
+airflow-webserver.pid
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+
+# Config (auto-generated)
+config/airflow.cfg
