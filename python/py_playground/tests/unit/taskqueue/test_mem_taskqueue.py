@@ -1,8 +1,10 @@
+import io
 import logging
 import time
 
 from py_playground.taskqueue.mem_taskqueue import MemTaskQueue
 from py_playground.taskqueue.taskqueue import wait
+
 
 def test_submit_multiple():
     queue = MemTaskQueue()
@@ -33,6 +35,23 @@ def test_submit_multiple():
     assert content == "hellohello"
 
 
+def test_submit_lots_of_tasks():
+    queue = MemTaskQueue()
+    queue.run()
+
+    buf = io.StringIO()
+
+    def add_content():
+        nonlocal buf
+        buf.write("hello")
+
+    tasks = [queue.submit(fn=add_content) for _ in range(100)]
+
+    wait(tasks)
+    queue.stop()
+
+    assert len(buf.getvalue()) > 0
+
 def test_should_wait():
     queue = MemTaskQueue()
 
@@ -45,7 +64,6 @@ def test_should_wait():
     wait([t])
     queue.stop()
     assert 3 == t.result()
-
 
 
 def test_should_return():
