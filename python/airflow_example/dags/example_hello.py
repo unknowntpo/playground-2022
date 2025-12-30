@@ -2,17 +2,19 @@
 Example DAG for testing hot-reload.
 Edit this file and Tilt will sync it automatically.
 """
-from airflow import DAG
-from airflow.decorators import task
+
+from airflow.sdk import dag, task
 from datetime import datetime
 
-with DAG(
-    dag_id='hello_tilt',
+
+@dag(
+    dag_id="hello_tilt",
     start_date=datetime(2024, 1, 1),
-    schedule='@daily',
+    schedule="* * * * *",
     catchup=False,
-    tags=['example', 'tilt'],
-) as dag:
+    tags=["example", "tilt"],
+)
+def hello_tilt():
 
     @task
     def hello():
@@ -23,4 +25,8 @@ with DAG(
     def world(msg):
         print(f"World received: {msg}")
 
-    world(hello())
+    result = hello()
+    world(result)
+
+
+hello_tilt()
