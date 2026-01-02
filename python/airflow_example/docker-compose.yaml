@@ -16,16 +16,37 @@ services:
       interval: 5s
       retries: 5
 
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=ap-northeast-1
+    volumes:
+      - localstack-data:/var/lib/localstack
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      retries: 5
+
   airflow:
     image: apache/airflow:3.0.1
     depends_on:
       postgres:
+        condition: service_healthy
+      localstack:
         condition: service_healthy
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
       - AIRFLOW__CORE__LOAD_EXAMPLES=true
       - AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS=true
+      # LocalStack S3 config
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=ap-northeast-1
+      - AWS_ENDPOINT_URL=http://localstack:4566
     volumes:
       - ./dags:/opt/airflow/dags
       - ./plugins:/opt/airflow/plugins
@@ -42,3 +63,4 @@ services:
 
 volumes:
   postgres-data:
+  localstack-data:
