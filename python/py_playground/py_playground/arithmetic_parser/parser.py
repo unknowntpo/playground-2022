@@ -32,21 +32,33 @@ def record(func):
     @functools.wraps(func)
     def wrapper(*args, **kargs):
         try:
-            logging.info(f"before {func.__name__!r}, pos={args[0].pos!r}, kargs={kargs!r}")
+            logging.info(
+                f"before {func.__name__!r}, pos={args[0].pos!r}, kargs={kargs!r}"
+            )
             res = func(*args, **kargs)
             logging.info(f"after {func.__name__!r}, return={res}")
         except Exception as e:
             logging.exception(f"got exception during calling {func.__name!r}", e)
+
     return wrapper
 
+
 class Parser:
-    """
-    arithemetic parser
-    expr   → term ( ( "+" | "-" ) term )*
-    term   → factor ( ( "*" | "/" ) factor )*
-    factor → unary | NUMBER | "(" expr ")"
-    unary  → ( "-" | "+" )? factor
-    NUMBER → <any valid number string from lexer>
+    """Arithmetic expression parser using recursive descent.
+
+    Grammar (EBNF):
+        expr   → term ( ( "+" | "-" ) term )*
+        term   → factor ( ( "*" | "/" ) factor )*
+        factor → unary | NUMBER | "(" expr ")"
+        unary  → ( "-" | "+" )? factor
+        NUMBER → <any valid number string from lexer>
+
+    Examples:
+        expr:   "1 + 2", "3 + 4 - 5", "1"
+        term:   "2 * 3", "6 / 2 * 3", "7"
+        factor: "42", "(1 + 2)", "-5"
+        unary:  "-3", "+7", "9"
+        NUMBER: "123", "3.14", "0"
     """
 
     def __init__(self):
