@@ -1,3 +1,5 @@
+import functools
+import logging
 from decimal import Decimal
 from enum import Enum
 
@@ -6,12 +8,15 @@ class Type(Enum):
     Number = "number"
     Plus = "+"
     Minus = "-"
+    LeftParam = "("
+    RightParam = ")"
 
 
 class Token:
     def __init__(self, type: Type, value: str):
         self.type = type
         self.value = value
+
 
 """
 
@@ -21,6 +26,18 @@ class Token:
 
 class ParseError(Exception):
     pass
+
+
+def record(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kargs):
+        try:
+            logging.info(f"before {func.__name__!r}, pos={args[0].pos!r}, kargs={kargs!r}")
+            res = func(*args, **kargs)
+            logging.info(f"after {func.__name__!r}, return={res}")
+        except Exception as e:
+            logging.exception(f"got exception during calling {func.__name!r}", e)
+    return wrapper
 
 class Parser:
     """
@@ -37,25 +54,40 @@ class Parser:
         self.pos = 0
 
     def current(self) -> Token | None:
-        return self._tokens[self.pos] if len(self._tokens) > 0 and self.pos < len(self._tokens) else None
+        return (
+            self._tokens[self.pos]
+            if len(self._tokens) > 0 and self.pos < len(self._tokens)
+            else None
+        )
 
-    def parse(self, tokens: list[Token])-> Decimal:
+    @record
+    def parse(self, tokens: list[Token]) -> Decimal:
         self._tokens = tokens
         return self.term()
 
+    @record
     def term(self) -> Decimal:
         res = self.factor()
-        if (current := self.current()) and current is not None and current.type in (Type.Plus, Type.Minus):
+        if (
+            (current := self.current())
+            and current is not None
+            and current.type in (Type.Plus, Type.Minus)
+        ):
             rhr = self.term()
             res += rhr
         return res
 
+    @record
     def factor(self) -> Decimal:
         if self.current().type == Type.Number:
             return self.number()
+        elif self.current().type == Type.LeftParam:
+            # (expr)
+            raise NotImplementedError("todo: (expr)")
+        elif self.current().type in (Type.Plus, Type.Minus):
+            return self.unary()
 
-        return self.unary()
-
+    @record
     def number(self) -> Decimal:
         if self.current() is None:
             raise ParseError(f"current token should not be None, pos: {self.pos}")
@@ -63,4 +95,11 @@ class Parser:
         self.pos += 1
         return d
 
-
+    @record
+    def unary(self) -> Decimal:
+        # - 3
+        # x
+        neg = self.current() == Type.Minus
+        self.pos += 1
+        res = self.factor()
+        return -1 * res if neg else res
