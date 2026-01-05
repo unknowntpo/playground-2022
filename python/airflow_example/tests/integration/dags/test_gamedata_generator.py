@@ -20,3 +20,4 @@ def test_generate_event():
         len(list(filter(lambda e: e.type in [EventType.Kill, EventType.Death], events)))
         > 0
     )
+    assert len(list(filter(lambda e: e.player_id in ["1", "3"], events))) > 0
