@@ -1,5 +1,7 @@
 from decimal import Decimal
 
+import pytest
+
 from py_playground.arithmetic_parser.parser import Parser, Token, Type
 
 
@@ -8,9 +10,14 @@ def test_single_number():
     res: Decimal = p.parse([Token(type=Type.Number, value="2")])
     assert res == 2
 
-def test_add_two_numbers():
+# fmt:off
+@pytest.mark.parametrize("tokens,expected", [
+    pytest.param([Token(Type.Number, "2"), Token(Type.Plus, "+"), Token(Type.Number, "3")], 5, id="2+3"),
+    pytest.param([Token(Type.Number, "2"), Token(Type.Minus, "-"), Token(Type.Number, "3")], -1, id="2-3"),
+])
+# fmt:on
+def test_add_two_numbers(tokens, expected):
+
     p = Parser()
-    res: Decimal = p.parse([Token(type=Type.Number, value="2"), Token(type=Type.Plus, value="+"), Token(type=Type.Number, value="3")])
-    assert res == 5
-    res: Decimal = p.parse([Token(type=Type.Number, value="2"), Token(type=Type.Plus, value="-"), Token(type=Type.Number, value="3")])
-    assert res == -1
+    res: Decimal = p.parse(tokens)
+    assert res == expected

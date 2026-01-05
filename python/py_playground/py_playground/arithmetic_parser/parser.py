@@ -16,6 +16,10 @@ class Token:
     def __init__(self, type: Type, value: str):
         self.type = type
         self.value = value
+    def __repr__(self)-> str:
+        return f"Token(type={self.type},value={self.value})"
+
+
 
 
 """
@@ -36,9 +40,10 @@ def record(func):
                 f"before {func.__name__!r}, pos={args[0].pos!r}, kargs={kargs!r}"
             )
             res = func(*args, **kargs)
-            logging.info(f"after {func.__name__!r}, return={res}")
+            logging.info(f"after {func.__name__!r}, pos={args[0].pos!r}, return={res}")
+            return res
         except Exception as e:
-            logging.exception(f"got exception during calling {func.__name!r}", e)
+            logging.exception(f"got exception during calling {func.__name__!r}", e)
 
     return wrapper
 
@@ -74,6 +79,21 @@ class Parser:
 
     @record
     def parse(self, tokens: list[Token]) -> Decimal:
+        """
+        2 + 3
+        parse
+            - term
+                - factor
+                    - number
+                        - 2
+
+
+
+        :param tokens:
+        :return:
+        """
+        logging.info(f"parsing: {tokens}")
+
         self._tokens = tokens
         return self.term()
 
