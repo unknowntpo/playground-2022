@@ -1,6 +1,7 @@
 import functools
 import logging
 from decimal import Decimal
+from doctest import UnexpectedException
 from enum import Enum
 
 
@@ -46,6 +47,10 @@ def record(func):
             logging.exception(f"got exception during calling {func.__name__!r}", e)
 
     return wrapper
+
+
+class UnexpectedTokenException(Exception):
+    pass
 
 
 class Parser:
@@ -106,7 +111,13 @@ class Parser:
             and current.type in (Type.Plus, Type.Minus)
         ):
             rhr = self.term()
-            res += rhr
+            match current.type:
+                case Type.Plus:
+                    res += rhr
+                case Type.Minus:
+                    res -= rhr
+                case _:
+                    raise UnexpectedTokenException(f"unexpected token {current}")
         return res
 
     @record
