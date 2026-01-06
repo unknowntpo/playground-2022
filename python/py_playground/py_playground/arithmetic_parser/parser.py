@@ -85,31 +85,22 @@ class Parser:
     @record
     def parse(self, tokens: list[Token]) -> Decimal:
         """
-        2 + 3
-        parse
-            - term
-                - factor
-                    - number
-                        - 2
-
-
-
-        :param tokens:
-        :return:
         """
         logging.info(f"parsing: {tokens}")
 
         self._tokens = tokens
-        return self.term()
+        return self.expr()
 
     @record
-    def term(self) -> Decimal:
-        res = self.factor()
-        if (
-            (current := self.current())
-            and current is not None
-            and current.type in (Type.Plus, Type.Minus)
+    def expr(self) -> Decimal:
+        res = self.term()
+        while (
+                (current := self.current())
+                and current is not None
+                and current.type in (Type.Plus, Type.Minus)
         ):
+            logging.info(f"got {current.type} in expr() at pos={self.pos}")
+            self.pos += 1
             rhr = self.term()
             match current.type:
                 case Type.Plus:
@@ -120,6 +111,11 @@ class Parser:
                     raise UnexpectedTokenException(f"unexpected token {current}")
         return res
 
+
+    @record
+    def term(self) -> Decimal:
+        return self.factor()
+
     @record
     def factor(self) -> Decimal:
         if self.current().type == Type.Number:
@@ -128,6 +124,7 @@ class Parser:
             # (expr)
             raise NotImplementedError("todo: (expr)")
         elif self.current().type in (Type.Plus, Type.Minus):
+            logging.info(f"got plus or minus in factor")
             return self.unary()
 
     @record
@@ -135,6 +132,7 @@ class Parser:
         if self.current() is None:
             raise ParseError(f"current token should not be None, pos: {self.pos}")
         d = Decimal(self.current().value)
+        logging.info(f"in number(), got {d} at pos {self.pos}")
         self.pos += 1
         return d
 
