@@ -1,7 +1,6 @@
 import functools
 import logging
 from decimal import Decimal
-from doctest import UnexpectedException
 from enum import Enum
 
 
@@ -9,6 +8,8 @@ class Type(Enum):
     Number = "number"
     Plus = "+"
     Minus = "-"
+    Mult = "*"
+    Div = "/"
     LeftParam = "("
     RightParam = ")"
 
@@ -17,10 +18,9 @@ class Token:
     def __init__(self, type: Type, value: str):
         self.type = type
         self.value = value
-    def __repr__(self)-> str:
+
+    def __repr__(self) -> str:
         return f"Token(type={self.type},value={self.value})"
-
-
 
 
 """
@@ -84,8 +84,7 @@ class Parser:
 
     @record
     def parse(self, tokens: list[Token]) -> Decimal:
-        """
-        """
+        """ """
         logging.info(f"parsing: {tokens}")
 
         self._tokens = tokens
@@ -95,9 +94,9 @@ class Parser:
     def expr(self) -> Decimal:
         res = self.term()
         while (
-                (current := self.current())
-                and current is not None
-                and current.type in (Type.Plus, Type.Minus)
+            (current := self.current())
+            and current is not None
+            and current.type in (Type.Plus, Type.Minus)
         ):
             logging.info(f"got {current.type} in expr() at pos={self.pos}")
             self.pos += 1
@@ -111,10 +110,25 @@ class Parser:
                     raise UnexpectedTokenException(f"unexpected token {current}")
         return res
 
-
     @record
     def term(self) -> Decimal:
-        return self.factor()
+        res = self.factor()
+        while (
+            (current := self.current())
+            and current is not None
+            and current.type in (Type.Mult, Type.Div)
+        ):
+            logging.info(f"got {current.type} in term() at pos={self.pos}")
+            self.pos += 1
+            rhr = self.factor()
+            match current.type:
+                case Type.Mult:
+                    res *= rhr
+                case Type.Div:
+                    res /= rhr
+                case _:
+                    raise UnexpectedTokenException(f"unexpected token {current}")
+        return res
 
     @record
     def factor(self) -> Decimal:
@@ -124,7 +138,7 @@ class Parser:
             # (expr)
             raise NotImplementedError("todo: (expr)")
         elif self.current().type in (Type.Plus, Type.Minus):
-            logging.info(f"got plus or minus in factor")
+            logging.info("got plus or minus in factor")
             return self.unary()
 
     @record
