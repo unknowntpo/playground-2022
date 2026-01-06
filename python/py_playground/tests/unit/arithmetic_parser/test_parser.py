@@ -14,7 +14,7 @@ def test_single_number():
 @pytest.mark.parametrize("tokens,expected", [
     pytest.param([Token(Type.Number, "2"), Token(Type.Plus, "+"), Token(Type.Number, "3")], 5, id="2+3"),
     pytest.param([Token(Type.Number, "2"), Token(Type.Minus, "-"), Token(Type.Number, "3")], -1, id="2-3"),
-    pytest.param([Token(Type.Number, "2"), Token(Type.Minus, "-"), Token(Type.Number, "3"), Token(Type.Minus, "+"), Token(Type.Number, "1")], 0, id="2-3+1"),
+    pytest.param([Token(Type.Number, "2"), Token(Type.Minus, "-"), Token(Type.Number, "3"), Token(Type.Plus, "+"), Token(Type.Number, "1")], 0, id="2-3+1"),
     pytest.param([Token(Type.Number, "22"), Token(Type.Minus, "-"), Token(Type.Number, "3")], 19, id="22-3"),
 ])
 # fmt:on
