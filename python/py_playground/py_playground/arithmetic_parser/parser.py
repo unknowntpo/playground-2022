@@ -29,7 +29,6 @@ class Token:
 """
 
 
-
 def record(func):
     @functools.wraps(func)
     def wrapper(*args, **kargs):
@@ -50,8 +49,10 @@ def record(func):
 class UnexpectedTokenException(Exception):
     pass
 
+
 class ZeroDivisionException(UnexpectedTokenException):
     pass
+
 
 class Parser:
     """Arithmetic expression parser using recursive descent.
@@ -126,27 +127,40 @@ class Parser:
                     res *= rhr
                 case Type.Div:
                     if rhr == 0:
-                        raise ZeroDivisionException(f"can not divided by 0, res: {res}, rhr: {rhr}, pos: {self.pos}")
+                        raise ZeroDivisionException(
+                            f"can not divided by 0, res: {res}, rhr: {rhr}, pos: {self.pos}"
+                        )
                     res /= rhr
                 case _:
                     raise UnexpectedTokenException(f"unexpected token {current}")
         return res
 
     @record
-    def factor(self) -> Decimal:
-        if self.current().type == Type.Number:
+    def factor(self) -> Decimal | None:
+        if (current := self.current()) and current.type == Type.Number:
             return self.number()
-        elif self.current().type == Type.LeftParam:
+        elif current.type == Type.LeftParam:
             # (expr)
-            raise NotImplementedError("todo: (expr)")
-        elif self.current().type in (Type.Plus, Type.Minus):
-            logging.info("got plus or minus in factor")
+            logging.info(f"in factor(), got {current} at pos {self.pos}")
+            self.pos += 1
+            expr = self.expr()
+            if (current := self.current()) and current.type is not Type.RightParam:
+                raise UnexpectedTokenException(f"current should be {Type.RightParam} at pos {self.pos}, got {current}")
+            logging.info(f"in factor(), got {current} at pos {self.pos}")
+            self.pos += 1
+            return expr
+        elif current.type in (Type.Plus, Type.Minus):
+            logging.info(f"in factor(), got {current} at pos {self.pos}")
+            # FIXME: not tested
             return self.unary()
+        # FIXME: change all return sig to Decimal | None
 
     @record
     def number(self) -> Decimal:
         if self.current() is None:
-            raise UnexpectedTokenException(f"current token should not be None, pos: {self.pos}")
+            raise UnexpectedTokenException(
+                f"current token should not be None, pos: {self.pos}"
+            )
         d = Decimal(self.current().value)
         logging.info(f"in number(), got {d} at pos {self.pos}")
         self.pos += 1

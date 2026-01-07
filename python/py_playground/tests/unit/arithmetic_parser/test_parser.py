@@ -6,7 +6,6 @@ from py_playground.arithmetic_parser.parser import (
     Parser,
     Token,
     Type,
-    UnexpectedTokenException,
     ZeroDivisionException,
 )
 
@@ -15,6 +14,7 @@ def test_single_number():
     p = Parser()
     res: Decimal = p.parse([Token(type=Type.Number, value="2")])
     assert res == 2
+
 
 # fmt:off
 @pytest.mark.parametrize("tokens,expected", [
@@ -39,6 +39,24 @@ def test_add_and_subtract(tokens, expected):
 ])
 # fmt:on
 def test_mult_and_div(tokens, expected):
+
+    p = Parser()
+    if isinstance(expected, type) and issubclass(expected, Exception):
+        with pytest.raises(expected) as excinfo:
+            p.parse(tokens)
+        assert excinfo.type is expected
+    else:
+        res: Decimal = p.parse(tokens)
+        assert res == expected
+
+# fmt:off
+@pytest.mark.parametrize("tokens,expected", [
+    pytest.param([Token(Type.LeftParam, "("), Token(Type.Number, "2"), Token(Type.Plus, "+"), Token(Type.Number, "3"), Token(Type.RightParam, ")"), Token(Type.Mult, "*"), Token(Type.Number, "2")], 10, id="(2+3)*2"),
+    # FIXME: why thi works ?
+    pytest.param([Token(Type.LeftParam, "("), Token(Type.Number, "4"), Token(Type.Mult, "*"), Token(Type.LeftParam, "("), Token(Type.Number, "2"), Token(Type.Plus, "+"), Token(Type.Number, "3"), Token(Type.RightParam, ")"), Token(Type.RightParam, ")"), Token(Type.Mult, "*"), Token(Type.Number, "2")], 40, id="(4*(2+3))*2"),
+])
+# fmt:on
+def test_params(tokens, expected):
 
     p = Parser()
     if isinstance(expected, type) and issubclass(expected, Exception):
