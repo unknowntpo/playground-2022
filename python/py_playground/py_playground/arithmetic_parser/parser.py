@@ -29,9 +29,6 @@ class Token:
 """
 
 
-class ParseError(Exception):
-    pass
-
 
 def record(func):
     @functools.wraps(func)
@@ -44,7 +41,8 @@ def record(func):
             logging.info(f"after {func.__name__!r}, pos={args[0].pos!r}, return={res}")
             return res
         except Exception as e:
-            logging.exception(f"got exception during calling {func.__name__!r}", e)
+            logging.exception(f"got exception during calling {func.__name__!r}: {e}")
+            raise e
 
     return wrapper
 
@@ -52,6 +50,8 @@ def record(func):
 class UnexpectedTokenException(Exception):
     pass
 
+class ZeroDivisionException(UnexpectedTokenException):
+    pass
 
 class Parser:
     """Arithmetic expression parser using recursive descent.
@@ -125,6 +125,8 @@ class Parser:
                 case Type.Mult:
                     res *= rhr
                 case Type.Div:
+                    if rhr == 0:
+                        raise ZeroDivisionException(f"can not divided by 0, res: {res}, rhr: {rhr}, pos: {self.pos}")
                     res /= rhr
                 case _:
                     raise UnexpectedTokenException(f"unexpected token {current}")
@@ -144,7 +146,7 @@ class Parser:
     @record
     def number(self) -> Decimal:
         if self.current() is None:
-            raise ParseError(f"current token should not be None, pos: {self.pos}")
+            raise UnexpectedTokenException(f"current token should not be None, pos: {self.pos}")
         d = Decimal(self.current().value)
         logging.info(f"in number(), got {d} at pos {self.pos}")
         self.pos += 1
