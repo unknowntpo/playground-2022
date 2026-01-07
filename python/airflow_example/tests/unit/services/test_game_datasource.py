@@ -13,6 +13,6 @@ def test_fake_datasource():
         start=start,
         end=end,
     )
-    out_of_range_events = list(filter(lambda e: start <= datetime.fromtimestamp(e.timestamp) <= end, events))
+    out_of_range_events = list(filter(lambda e: not (start <= datetime.fromtimestamp(e.timestamp) <= end), events))
     assert len(events) > 0
-    assert out_of_range_events == 0
+    assert len(out_of_range_events) == 0

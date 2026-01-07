@@ -1,3 +1,4 @@
+from datetime import datetime
 from dataclasses import dataclass
 from enum import Enum
 
@@ -11,7 +12,8 @@ class EventType(Enum):
 class Event:
     player_id: str
     type: EventType
-
+    # FIXME: unix timestamp or datetime object ?
+    timestamp: float
 
 class GameDataGenerator:
     def __init__(
@@ -43,6 +45,7 @@ class GameDataGenerator:
         event = Event(
             player_id=self.game_ids[game_idx],
             type=self.types[type_idx],
+            timestamp=datetime.now().timestamp()
         )
         self.gen_cnt += 1
         return event
