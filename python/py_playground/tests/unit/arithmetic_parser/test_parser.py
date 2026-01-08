@@ -52,7 +52,6 @@ def test_mult_and_div(tokens, expected):
 # fmt:off
 @pytest.mark.parametrize("tokens,expected", [
     pytest.param([Token(Type.LeftParam, "("), Token(Type.Number, "2"), Token(Type.Plus, "+"), Token(Type.Number, "3"), Token(Type.RightParam, ")"), Token(Type.Mult, "*"), Token(Type.Number, "2")], 10, id="(2+3)*2"),
-    # FIXME: why thi works ?
     pytest.param([Token(Type.LeftParam, "("), Token(Type.Number, "4"), Token(Type.Mult, "*"), Token(Type.LeftParam, "("), Token(Type.Number, "2"), Token(Type.Plus, "+"), Token(Type.Number, "3"), Token(Type.RightParam, ")"), Token(Type.RightParam, ")"), Token(Type.Mult, "*"), Token(Type.Number, "2")], 40, id="(4*(2+3))*2"),
 ])
 # fmt:on

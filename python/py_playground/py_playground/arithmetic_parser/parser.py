@@ -84,7 +84,7 @@ class Parser:
         )
 
     @record
-    def parse(self, tokens: list[Token]) -> Decimal:
+    def parse(self, tokens: list[Token]) -> Decimal | None:
         """ """
         logging.info(f"parsing: {tokens}")
 
@@ -92,7 +92,7 @@ class Parser:
         return self.expr()
 
     @record
-    def expr(self) -> Decimal:
+    def expr(self) -> Decimal | None:
         res = self.term()
         while (
             (current := self.current())
@@ -112,7 +112,7 @@ class Parser:
         return res
 
     @record
-    def term(self) -> Decimal:
+    def term(self) -> Decimal | None:
         res = self.factor()
         while (
             (current := self.current())
@@ -151,12 +151,10 @@ class Parser:
             return expr
         elif current.type in (Type.Plus, Type.Minus):
             logging.info(f"in factor(), got {current} at pos {self.pos}")
-            # FIXME: not tested
             return self.unary()
-        # FIXME: change all return sig to Decimal | None
 
     @record
-    def number(self) -> Decimal:
+    def number(self) -> Decimal | None:
         if self.current() is None:
             raise UnexpectedTokenException(
                 f"current token should not be None, pos: {self.pos}"
@@ -167,7 +165,7 @@ class Parser:
         return d
 
     @record
-    def unary(self) -> Decimal:
+    def unary(self) -> Decimal | None:
         # - 3
         # x
         neg = self.current() == Type.Minus
