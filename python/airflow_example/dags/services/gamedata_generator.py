@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from dataclasses import dataclass
 from enum import Enum
 
@@ -15,9 +15,15 @@ class Event:
     # FIXME: unix timestamp or datetime object ?
     timestamp: float
 
+
 class GameDataGenerator:
     def __init__(
-        self, game_ids: list[str], types: list[EventType], num_events: int = 10
+        self,
+        game_ids: list[str],
+        types: list[EventType],
+        start: datetime,
+        end: datetime,
+        num_events: int = 10,
     ):
         min_events = len(game_ids) * len(types)
         if num_events < min_events:
@@ -26,6 +32,10 @@ class GameDataGenerator:
             )
         self.game_ids = game_ids
         self.types = types
+        self.start = start
+        self.end = end
+        total_duration = (end - start).total_seconds()
+        self.interval = total_duration / num_events if num_events > 0 else 0
         self.num_events = num_events
         self.gen_cnt = 0
 
@@ -45,7 +55,7 @@ class GameDataGenerator:
         event = Event(
             player_id=self.game_ids[game_idx],
             type=self.types[type_idx],
-            timestamp=datetime.now().timestamp()
+            timestamp=(self.start + timedelta(seconds=self.interval + self.gen_cnt)).timestamp(),
         )
         self.gen_cnt += 1
         return event
