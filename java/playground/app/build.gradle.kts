@@ -68,6 +68,9 @@ dependencies {
 
     // AssertJ
     testImplementation(libs.assertj.core)
+
+    implementation(libs.kafka.streams)
+    testImplementation(libs.kafka.streams.test)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
