@@ -8,7 +8,7 @@ from datetime import datetime
 
 
 @dag(
-    dag_id="hello_tilt",
+    dag_id="example_hello",
     start_date=datetime(2024, 1, 1),
     schedule="* * * * *",
     catchup=False,
@@ -24,6 +24,7 @@ def hello_tilt():
     @task
     def world(msg):
         print(f"World received: {msg}")
+        return msg
 
     result = hello()
     world(result)
