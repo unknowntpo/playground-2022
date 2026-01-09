@@ -10,8 +10,8 @@ class Type(Enum):
     Minus = "-"
     Mult = "*"
     Div = "/"
-    LeftParam = "("
-    RightParam = ")"
+    LeftParen = "("
+    RightParen = ")"
 
 
 class Token:
@@ -50,7 +50,7 @@ class UnexpectedTokenException(Exception):
     pass
 
 
-class ZeroDivisionException(UnexpectedTokenException):
+class ZeroDivisionException(Exception):
     pass
 
 
@@ -60,16 +60,14 @@ class Parser:
     Grammar (EBNF):
         expr   → term ( ( "+" | "-" ) term )*
         term   → factor ( ( "*" | "/" ) factor )*
-        factor → unary | NUMBER | "(" expr ")"
-        unary  → ( "-" | "+" )? factor
-        NUMBER → <any valid number string from lexer>
+        factor → NUMBER | "(" expr ")"
+        NUMBER → <any valid number string from lexer, including signed like "-2">
 
     Examples:
         expr:   "1 + 2", "3 + 4 - 5", "1"
         term:   "2 * 3", "6 / 2 * 3", "7"
         factor: "42", "(1 + 2)", "-5"
-        unary:  "-3", "+7", "9"
-        NUMBER: "123", "3.14", "0"
+        NUMBER: "123", "3.14", "-2"
     """
 
     def __init__(self):
@@ -87,8 +85,11 @@ class Parser:
     def parse(self, tokens: list[Token]) -> Decimal | None:
         """ """
         logging.info(f"parsing: {tokens}")
+        if len(tokens) == 0:
+            return Decimal(0)
 
         self._tokens = tokens
+        self.pos = 0
         return self.expr()
 
     @record
@@ -137,21 +138,25 @@ class Parser:
 
     @record
     def factor(self) -> Decimal | None:
-        if (current := self.current()) and current.type == Type.Number:
+        if (current := self.current()) and current is None:
+            raise UnexpectedTokenException(
+                f"current token should not be None, pos: {self.pos}"
+            )
+        elif current.type == Type.Number:
             return self.number()
-        elif current.type == Type.LeftParam:
+        elif current.type == Type.LeftParen:
             # (expr)
             logging.info(f"in factor(), got {current} at pos {self.pos}")
             self.pos += 1
             expr = self.expr()
-            if (current := self.current()) and current.type is not Type.RightParam:
-                raise UnexpectedTokenException(f"current should be {Type.RightParam} at pos {self.pos}, got {current}")
+            if (current := self.current()) and current.type is not Type.RightParen:
+                raise UnexpectedTokenException(
+                    f"current should be {Type.RightParen} at pos {self.pos}, got {current}"
+                )
             logging.info(f"in factor(), got {current} at pos {self.pos}")
             self.pos += 1
             return expr
-        elif current.type in (Type.Plus, Type.Minus):
-            logging.info(f"in factor(), got {current} at pos {self.pos}")
-            return self.unary()
+        raise UnexpectedTokenException(f"expect a {Type.RightParen} at pos {self.pos}, but got {self.current()}")
 
     @record
     def number(self) -> Decimal | None:
@@ -163,12 +168,3 @@ class Parser:
         logging.info(f"in number(), got {d} at pos {self.pos}")
         self.pos += 1
         return d
-
-    @record
-    def unary(self) -> Decimal | None:
-        # - 3
-        # x
-        neg = self.current() == Type.Minus
-        self.pos += 1
-        res = self.factor()
-        return -1 * res if neg else res
