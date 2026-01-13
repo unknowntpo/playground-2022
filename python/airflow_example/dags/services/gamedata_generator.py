@@ -1,19 +1,6 @@
 from datetime import datetime, timedelta
-from dataclasses import dataclass
-from enum import Enum
 
-
-class EventType(Enum):
-    Kill = "kill"
-    Death = "Death"
-
-
-@dataclass
-class Event:
-    player_id: str
-    type: EventType
-    # FIXME: unix timestamp or datetime object ?
-    timestamp: float
+from dags.services.game_event import EventType, Event
 
 
 class GameDataGenerator:
