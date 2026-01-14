@@ -1,6 +1,8 @@
 from datetime import datetime
 
 import polars as pl
+import pyarrow as pa
+import pyarrow.parquet as pq
 from pathlib import Path
 from typing import Protocol, Iterator, Self, Any
 
@@ -39,27 +41,32 @@ class FakeDataSource:
         self.end = end
         return self
 
+# Define schema based on Event fields
+SCHEMA = pa.schema([
+    ("player_id", pa.string()),
+    ("type", pa.string()),
+    ("timestamp", pa.float64()),
+])
+
 def write_parquet_from_generator(gen: GameDataGenerator, output_file: Path):
     max_batch_size = 10
     batch = []
+    writer = pq.ParquetWriter(output_file, SCHEMA)
 
     for event in gen:
         print(f"got event: {event}")
         if len(batch) >= max_batch_size:
-            flush_to_parquet(batch, output_file)
+            flush_to_parquet(batch, writer)
             batch = []
         batch.append(event.model_dump(mode="json"))
 
     if batch:
-        flush_to_parquet(batch, output_file)
+        flush_to_parquet(batch, writer)
 
-def flush_to_parquet(batch: list[Any], output_file: Path):
-    df = pl.DataFrame(batch)
-    if Path(output_file).exists():
-        existing = pl.read_parquet(output_file)
-        df = pl.concat([existing, df])
-        df.write_parquet(output_file)
-    else:
-        df.write_parquet(output_file)
+def flush_to_parquet(batch: list[Any], writer: pq.ParquetWriter):
+    table = pa.Table.from_pylist(batch)
+    writer.write_table(table)
+
+
 
 
