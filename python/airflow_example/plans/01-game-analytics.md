@@ -1,5 +1,15 @@
 # Game Player Event Pipeline
 
+## Tasks:
+- [ ] implement dag with fake data
+  - dag1: producer, fake kafka -> agg by date -> s3 parquet
+    - [x] implement FakeDataSource
+    - [ ] implement dag with test
+  - dag2: consumer: sensor detect new file in s3 -> duckdb query top 10 kd -> result parquet 
+    - [ ] play with sensor with example
+    - [ ] play with duckdb with fake data
+    - [ ] implement dag with tests
+
 ## Problem
 - Battle Royale game player stats
 - Events: kills, deaths per player
