@@ -2,11 +2,11 @@ import random
 from pathlib import Path
 
 import polars as pl
-from dags.services.game_datasource import (
+from dags.game_analytics.game_datasource import (
     FakeDataSource,
     write_parquet_from_generator,
 )
-from dags.services.game_event import EventType, Event
+from dags.game_analytics.game_event import EventType, Event
 from datetime import datetime
 
 

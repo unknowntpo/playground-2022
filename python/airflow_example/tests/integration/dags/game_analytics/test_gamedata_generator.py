@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from dags.services.gamedata_generator import GameDataGenerator
-from dags.services.game_event import EventType
+from dags.game_analytics.gamedata_generator import GameDataGenerator
+from dags.game_analytics.game_event import EventType
 
 def test_generate_event():
     """

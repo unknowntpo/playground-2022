@@ -194,4 +194,62 @@ def consume_events():
 - duckdb
 - polars
 - boto3
+- pyarrow
 - confluent-kafka (future)
+
+---
+
+## Airflow CLI Testing Commands
+
+### 1. Validate DAG Syntax
+```bash
+# Check for import errors
+docker compose exec airflow airflow dags list-import-errors
+
+# List DAGs
+docker compose exec airflow airflow dags list | grep game
+```
+
+### 2. Test Individual Tasks (dry run, no dependencies)
+```bash
+docker compose exec airflow airflow tasks test <dag_id> <task_id> <execution_date>
+
+# Example:
+docker compose exec airflow airflow tasks test game_data_injection consume_from_kafka 2025-01-15
+```
+
+### 3. Trigger Full DAG
+```bash
+# Trigger
+docker compose exec airflow airflow dags trigger game_data_injection
+
+# With specific date
+docker compose exec airflow airflow dags trigger game_data_injection --exec-date 2025-01-15
+
+# Check status
+docker compose exec airflow airflow dags list-runs -d game_data_injection
+```
+
+### 4. Debug
+```bash
+# Verbose
+docker compose exec airflow airflow tasks test game_data_injection consume_from_kafka 2025-01-15 -v
+
+# Logs
+docker compose exec airflow airflow tasks logs game_data_injection consume_from_kafka 2025-01-15
+```
+
+### 5. Verify S3 (LocalStack)
+```bash
+docker compose exec localstack awslocal s3 ls s3://game-analytics/events/
+```
+
+---
+
+## Testing Workflow
+
+1. `docker compose up -d`
+2. `docker compose exec airflow airflow dags list-import-errors`
+3. `docker compose exec airflow airflow tasks test game_data_injection consume_from_kafka 2025-01-15`
+4. `docker compose exec airflow airflow dags trigger game_data_injection`
+5. Check UI: http://localhost:8080

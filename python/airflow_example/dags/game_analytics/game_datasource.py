@@ -1,13 +1,12 @@
 from datetime import datetime
 
-import polars as pl
 import pyarrow as pa
 import pyarrow.parquet as pq
 from pathlib import Path
 from typing import Protocol, Iterator, Self, Any
 
-from dags.services.game_event import EventType, Event
-from dags.services.gamedata_generator import GameDataGenerator
+from game_analytics.game_event import EventType, Event
+from game_analytics.gamedata_generator import GameDataGenerator
 
 
 class GameDataSource(Protocol):

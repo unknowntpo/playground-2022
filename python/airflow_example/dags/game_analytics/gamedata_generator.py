@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from dags.services.game_event import EventType, Event
+from game_analytics.game_event import EventType, Event
 
 
 class GameDataGenerator:
