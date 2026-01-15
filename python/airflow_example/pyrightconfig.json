@@ -1,6 +1,7 @@
 {
   "include": ["dags", "src", "tests"],
   "exclude": ["**/__pycache__", "**/logs", "**/.git"],
+  "extraPaths": ["dags"],
   "venvPath": ".",
   "venv": ".venv",
   "pythonVersion": "3.12",

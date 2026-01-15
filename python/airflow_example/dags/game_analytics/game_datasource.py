@@ -24,8 +24,8 @@ class FakeDataSource:
 
     def _init_generator(self):
         self._generator = GameDataGenerator(
-            game_ids=["1", "2"],
-            types=[EventType.Kill, EventType.Death],
+            game_ids=self.game_ids,
+            types=self.types,
             num_events=self.num_events,
             start=self.start,
             end=self.end,

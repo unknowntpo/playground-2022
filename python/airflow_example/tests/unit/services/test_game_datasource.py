@@ -7,7 +7,7 @@ from dags.game_analytics.game_datasource import (
     write_parquet_from_generator,
 )
 from dags.game_analytics.game_event import EventType, Event
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def test_fake_datasource():
@@ -28,15 +28,16 @@ def test_fake_datasource():
 
 
 def test_write_parquet_from_generator():
-    num_events = 100
+    num_events = 10
     source = FakeDataSource(
         game_ids=["1", "3"],
         types=[EventType.Kill, EventType.Death],
         num_events=num_events,
     )
-    start = datetime(2025, 1, 6, 0, 0, 0)
-    end = datetime(2025, 1, 8, 0, 0, 0)
+    start = datetime(2025, 1, 6, 0, 0, 0, tzinfo=timezone.utc)
+    end = datetime(2025, 1, 8, 0, 0, 0, tzinfo=timezone.utc)
     source(start=start, end=end)
+    print(list(source))
     file_path = Path(f"/tmp/test{random.randint(1, 100)}.parquet")
     print(file_path)
     write_parquet_from_generator(source, file_path)

@@ -42,7 +42,7 @@ class GameDataGenerator:
         event = Event(
             player_id=self.game_ids[game_idx],
             type=self.types[type_idx],
-            timestamp=(self.start + timedelta(seconds=self.interval + self.gen_cnt)).timestamp(),
+            timestamp=(self.start + timedelta(seconds=self.interval * self.gen_cnt)).timestamp(),
         )
         self.gen_cnt += 1
         return event

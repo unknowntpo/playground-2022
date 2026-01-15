@@ -1,10 +1,9 @@
-from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel
 
 
-class EventType(Enum):
+class EventType(StrEnum):
     Kill = "kill"
     Death = "death"
 
