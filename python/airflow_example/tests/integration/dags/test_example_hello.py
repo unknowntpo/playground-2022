@@ -1,3 +1,4 @@
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -53,3 +54,24 @@ def test_task_execution(dagbag):
     assert world_result == "done"
 
 
+def test_dag_with_cli():
+    """Run full DAG test via CLI in Docker container.
+
+    This bypasses the Airflow 3.1+ dag.test() serialization bug by using CLI.
+    Requires docker compose to be running.
+    """
+    result = subprocess.run(
+        [
+            "docker", "compose", "exec", "-T", "airflow",
+            "airflow", "dags", "test", "example_hello", "2025-01-15"
+        ],
+        capture_output=True,
+        text=True,
+        cwd=str(PROJECT_ROOT),
+    )
+
+    print(result.stdout)
+    if result.stderr:
+        print(f"STDERR: {result.stderr}")
+
+    assert result.returncode == 0, f"DAG test failed: {result.stderr}"
