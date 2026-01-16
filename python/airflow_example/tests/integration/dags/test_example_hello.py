@@ -1,77 +1,61 @@
-import subprocess
-from pathlib import Path
+"""Integration tests for example_hello DAG using Airflow CLI.
 
-import pytest
-from airflow.models import DagBag
-
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent  # tests/integration/dags -> project root
-DAGS_FOLDER = PROJECT_ROOT / "dags"
-
-@pytest.fixture
-def dagbag():
-    dagbag = DagBag(dag_folder=DAGS_FOLDER, include_examples=False)
-    assert len(dagbag.import_errors) == 0, f"DAG import errors: {dagbag.import_errors}"
-    return dagbag
-
-def test_dag_loaded(dagbag):
-    """Test that the specific DAG is loaded correctly"""
-    print(dagbag.dags)
-    print(PROJECT_ROOT)
-    dag = dagbag.dags.get('example_hello')  # avoid DB query
-    assert dag is not None
-    assert dag.dag_id == 'example_hello'
-
-def test_dag_structure(dagbag):
-    dag = dagbag.dags.get("example_hello")  # avoid DB query
-
-    assert len(dag.tasks) == 2
-
-    task_ids = [task.task_id for task in dag.tasks]
-    assert "hello" in task_ids
-    assert "world" in task_ids
-
-    world_task = dag.get_task("world")
-    upstream_list = [t.task_id for t in world_task.upstream_list]
-    assert "hello" in upstream_list
-
-def test_task_execution(dagbag):
-    """Test task logic by calling underlying Python functions.
-
-    Note: dag.test() doesn't work in pytest due to Airflow 3.1+ serialization bug.
-    See: https://github.com/apache/airflow/issues/56657
-    Use `airflow dags test example_hello` from CLI for full integration test.
-    """
-    dag = dagbag.dags.get('example_hello')
-
-    hello_task = dag.get_task("hello")
-    world_task = dag.get_task("world")
-
-    # Test the actual Python functions
-    hello_result = hello_task.python_callable()
-    assert hello_result == "done"
-
-    world_result = world_task.python_callable(hello_result)
-    assert world_result == "done"
+Requires docker compose to be running.
+"""
+from tests.integration.utils.utils import run_airflow_cli
 
 
-def test_dag_with_cli():
+def test_dag_loaded():
+    """Test that DAG loads without import errors."""
+    result = run_airflow_cli(["airflow", "dags", "list-import-errors"])
+    assert result.returncode == 0, f"CLI failed: {result.stderr}"
+    # No import errors for example_hello
+    assert "example_hello" not in result.stdout, f"DAG has import errors: {result.stdout}"
+
+
+def test_dag_structure():
+    """Test DAG structure via CLI."""
+    # Check DAG exists in list
+    result = run_airflow_cli(["airflow", "dags", "list", "-o", "plain"])
+    assert result.returncode == 0, f"CLI failed: {result.stderr}"
+    assert "example_hello" in result.stdout
+
+    # Check tasks exist
+    result = run_airflow_cli(["airflow", "tasks", "list", "example_hello"])
+    assert result.returncode == 0, f"CLI failed: {result.stderr}"
+    assert "hello" in result.stdout
+    assert "world" in result.stdout
+
+
+def test_task_execution():
     """Run full DAG test via CLI in Docker container.
 
     This bypasses the Airflow 3.1+ dag.test() serialization bug by using CLI.
     Requires docker compose to be running.
     """
-    result = subprocess.run(
-        [
-            "docker", "compose", "exec", "-T", "airflow",
-            "airflow", "dags", "test", "example_hello", "2025-01-15"
-        ],
-        capture_output=True,
-        text=True,
-        cwd=str(PROJECT_ROOT),
-    )
-
-    print(result.stdout)
-    if result.stderr:
-        print(f"STDERR: {result.stderr}")
-
+    result = run_airflow_cli([
+        "airflow", "dags", "test", "example_hello", "2025-01-15"
+    ])
     assert result.returncode == 0, f"DAG test failed: {result.stderr}"
+
+
+def test_task_hello_with_cli():
+    """Test individual 'hello' task via CLI."""
+    result = run_airflow_cli([
+        "airflow", "tasks", "test", "example_hello", "hello", "2025-01-15"
+    ])
+    assert result.returncode == 0, f"Task test failed: {result.stderr}"
+    assert "Hello from Tilt!" in result.stdout
+
+
+def test_task_world_with_cli():
+    """Test individual 'world' task via CLI.
+
+    Note: tasks test runs without dependencies, so 'world' won't receive
+    the actual output from 'hello'. It will use default/None for 'msg'.
+    """
+    result = run_airflow_cli([
+        "airflow", "tasks", "test", "example_hello", "world", "2025-01-15"
+    ])
+    assert result.returncode == 0, f"Task test failed: {result.stderr}"
+    assert "World received:" in result.stdout
