@@ -14,14 +14,14 @@ from game_analytics.game_event import EventType, Event
 )
 def game_data_injection():
     @task
-    def get_from_kafka():
+    async def get_from_kafka():
         game_ids = [f"{i}" for i in range(10)]
         source = FakeDataSource(
             game_ids=game_ids, types=[EventType.Kill, EventType.Death], num_events=100,
         )
         start = datetime(2025, 1, 6, 0, 0, 0)
         end = datetime(2026, 1, 7, 0, 0, 0)
-        source(start=start, end=end)
+        await source(start=start, end=end)
         return [e.model_dump(mode="json") for e in source]
     @task
     def aggregate_by_date(events: list[Event]):
