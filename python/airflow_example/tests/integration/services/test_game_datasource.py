@@ -4,7 +4,6 @@ from game_analytics.game_datasource import FakeKafkaDataSource
 from game_analytics.game_event import EventType
 
 
-# TODO:
 async def test_kafka_datasource():
     num_events = 1000
     game_ids = [f"{i}" for i in range(10)]

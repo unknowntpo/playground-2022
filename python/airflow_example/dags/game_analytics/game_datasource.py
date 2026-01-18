@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from datetime import datetime
 
@@ -8,6 +9,7 @@ from pathlib import Path
 from typing import Protocol, Iterator, Self, Any, Callable, AsyncIterator
 
 from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
+from aiokafka.admin import AIOKafkaAdminClient, NewTopic
 from more_itertools.more import consumer
 from structlog.processors import CallsiteParameterAdder
 
@@ -55,6 +57,7 @@ class FakeKafkaDataSource:
         self.start: datetime | None = None
         self.end: datetime | None = None
         self.num_events = num_events
+        self.num_consumed_events = 0
         self.bootstrap_servers = bootstrap_servers
         self.topic_name = topic_name
 
@@ -68,9 +71,11 @@ class FakeKafkaDataSource:
         await self._init_kafka()
         await self._inject_data()
 
-        # FIXME: consume for at most xxx records
         async for msg in self.consumer:
             yield msg.value
+            self.num_consumed_events += 1
+            if self.num_consumed_events >= self.num_events:
+                break
 
     def _init_generator(self):
         self._generator = GameDataGenerator(
@@ -82,6 +87,7 @@ class FakeKafkaDataSource:
         )
 
     async def _init_kafka(self):
+        await self._reset_topic()
         value_serializer: Callable[[Event], dict] = lambda v: v.model_dump_json().encode("utf-8")
         self.producer = AIOKafkaProducer(bootstrap_servers=self.bootstrap_servers, value_serializer=value_serializer)
         await self.producer.start()
@@ -93,7 +99,17 @@ class FakeKafkaDataSource:
         for event in self._generator:
             await self.producer.send(self.topic_name, event)
 
-
+    async def _reset_topic(self):
+        admin = AIOKafkaAdminClient(bootstrap_servers=self.bootstrap_servers)
+        await admin.start()
+        try:
+            await admin.delete_topics([self.topic_name])
+            await asyncio.sleep(0.5)
+        except Exception as e:
+            logging.error(f"topic not exist: {e}")
+        await admin.create_topics([NewTopic(self.topic_name, 3, 2)])
+        await asyncio.sleep(0.5)
+        await admin.close()
 
 
 # Define schema based on Event fields
