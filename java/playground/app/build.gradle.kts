@@ -83,7 +83,14 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.BuilderExample"
+    mainClass = project.findProperty("mainClass") as String? ?: "org.example.BuilderExample"
+}
+
+tasks.register<JavaExec>("runKStream") {
+    group = "application"
+    description = "Runs the KStreamExample"
+    mainClass.set("org.example.kstream.KStreamExample")
+    classpath = sourceSets["main"].runtimeClasspath
 }
 
 

@@ -20,8 +20,8 @@ class KStreamExampleTest {
     @BeforeEach
     void setUp() {
         testDriver = new TopologyTestDriver(KStreamExample.buildTopology(), KStreamExample.getProps());
-        inputTopic = testDriver.createInputTopic("input-topic", Serdes.String().serializer(), Serdes.String().serializer());
-        outputTopic = testDriver.createOutputTopic("output-topic", Serdes.String().deserializer(), Serdes.Long().deserializer());
+        inputTopic = testDriver.createInputTopic(KStreamExample.INPUT_TOPIC, Serdes.String().serializer(), Serdes.String().serializer());
+        outputTopic = testDriver.createOutputTopic(KStreamExample.OUTPUT_TOPIC, Serdes.String().deserializer(), Serdes.Long().deserializer());
     }
 
     @AfterEach
