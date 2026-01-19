@@ -3,123 +3,64 @@ package org.example.concurrency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.function.IntConsumer;
 
 /**
  * https://leetcode.cn/problems/fizz-buzz-multithreaded/
- *
+ * <p>
  * No separate process thread - each thread self-determines if it's their turn.
  */
 class FizzBuzz {
     private static final Logger logger = LoggerFactory.getLogger(FizzBuzz.class);
 
     private final int n;
-    private final ReentrantLock lock;
-    private final Condition nextTurn;
-    private int current;
+    private CyclicBarrier barrier;
 
     public FizzBuzz(int n) {
         this.n = n;
-        this.lock = new ReentrantLock();
-        this.current = 1;
-        this.nextTurn = this.lock.newCondition();
+        this.barrier = new CyclicBarrier(4);
     }
 
     // printFizzBuzz.run() outputs "fizzbuzz".
-    public void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException {
-        /**
-         *
-
-         # will someone never got lock ?
-
-         for fizz:
-             acquire lock -> got current -> if >=n then return -> is fizz -> y -> print -> incr current -> release
-                                    -> n -> wait for next state_change
-
-
-
-
-             */
-        while (true) {
-            lock.lock();
-            try {
-                while (!isFizzbuzz(current)) {
-                    if (current >= n) return;
-                    this.nextTurn.await();
-                }
-                logger.info("fizzbuzz: {}", current);
+    public void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException, BrokenBarrierException {
+        for (int i = 1; i <= n; i++) {
+            if (isFizzbuzz(i)) {
                 printFizzBuzz.run();
-                current++;
-                this.nextTurn.signalAll();
-            } finally {
-                lock.unlock();
             }
+            barrier.await();
         }
-
     }
 
     // printFizz.run() outputs "fizz".
-    public void fizz(Runnable printFizz) throws InterruptedException {
-        while (true) {
-            lock.lock();
-            try {
-                while (!isFizzOnly(current)) {
-                    if (current >= n) return;
-                    this.nextTurn.await();
-                }
-                logger.info("fizz: {}", current);
+    public void fizz(Runnable printFizz) throws InterruptedException, BrokenBarrierException {
+        for (int i = 1; i <= n; i++) {
+            if (isFizzOnly(i)) {
                 printFizz.run();
-                current++;
-                this.nextTurn.signalAll();
-            } finally {
-                lock.unlock();
             }
+            barrier.await();
         }
-
     }
 
     // printBuzz.run() outputs "buzz".
-    public void buzz(Runnable printBuzz) throws InterruptedException {
-        while (true) {
-            lock.lock();
-            try {
-                while (!isBuzzOnly(current)) {
-                    if (current >= n) return;
-                    this.nextTurn.await();
-                }
-                logger.info("buzz: {}", current);
+    public void buzz(Runnable printBuzz) throws InterruptedException, BrokenBarrierException {
+        for (int i = 1; i <= n; i++) {
+            if (isBuzzOnly(i)) {
                 printBuzz.run();
-                current++;
-                this.nextTurn.signalAll();
-            } finally {
-                lock.unlock();
             }
+            barrier.await();
         }
-
-
     }
 
     // printNumber.accept(x) outputs "x", where x is an integer.
-    public void number(IntConsumer printNumber) throws InterruptedException {
-        while (true) {
-            lock.lock();
-            try {
-                while (!isNumber(current)) {
-                    if (current >= n) return;
-                    this.nextTurn.await();
-                }
-                logger.info("number: {}", current);
-                printNumber.accept(current);
-                current++;
-                this.nextTurn.signalAll();
-            } finally {
-                lock.unlock();
+    public void number(IntConsumer printNumber) throws InterruptedException, BrokenBarrierException {
+        for (int i = 1; i <= n; i++) {
+            if (isNumber(i)) {
+                printNumber.accept(i);
             }
+            barrier.await();
         }
-
     }
 
     // Helper methods to determine turn

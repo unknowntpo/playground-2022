@@ -19,28 +19,28 @@ class FizzBuzzTest {
         var t1 = new Thread(() -> {
             try {
                 fizzBuzz.fizz(() -> buf.add("fizz"));
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
         var t2 = new Thread(() -> {
             try {
                 fizzBuzz.buzz(() -> buf.add("buzz"));
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
         var t3 = new Thread(() -> {
             try {
                 fizzBuzz.fizzbuzz(() -> buf.add("fizzbuzz"));
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
         var t4 = new Thread(() -> {
             try {
                 fizzBuzz.number((i) -> buf.add(String.format("%d", i)));
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
