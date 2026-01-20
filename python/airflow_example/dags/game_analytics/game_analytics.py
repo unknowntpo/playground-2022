@@ -23,6 +23,7 @@ def game_data_injection():
         end = datetime(2026, 1, 7, 0, 0, 0)
         await source(start=start, end=end)
         return [e.model_dump(mode="json") for e in source]
+
     @task
     def aggregate_by_date(events: list[Event]):
         print(events)
@@ -36,9 +37,18 @@ def game_data_injection():
     res = aggregate_by_date(events)
     write_parquet_to_s3(res)
 
+# TODO: move into dag function
+async def consume_events():
+    source = FakeDataSource(
+        game_ids=["1", "3"], types=[EventType.Kill, EventType.Death], num_events=10
+    )
+    start = datetime(2025, 1, 6, 0, 0, 0)
+    end = datetime(2025, 1, 7, 0, 0, 0)
+    await source(start=start, end=end)
+    return list(source)
+
+
 game_data_injection()
-
-
 
 
 
