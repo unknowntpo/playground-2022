@@ -1,28 +1,41 @@
 import { check, sleep } from 'k6';
-import { Writer, Reader, Connection, SchemaRegistry, CODEC_SNAPPY } from 'k6/x/kafka';
-import encoding from 'k6/encoding';
+import { Writer, Reader, Connection, SchemaRegistry, SCHEMA_TYPE_STRING } from 'k6/x/kafka';
 
 // Configuration
 const brokers = ['kafka-1:9092', 'kafka-2:9092', 'kafka-3:9092'];
 const topic = 'upgrade-test-topic';
 
-// Initialize Kafka Writer
+// Initialize Kafka Writer with STRING serialization
 const writer = new Writer({
     brokers: brokers,
     topic: topic,
     autoCreateTopic: true,
 });
 
-// Initialize Kafka Reader
+// Initialize Kafka Reader with STRING deserialization
 const reader = new Reader({
     brokers: brokers,
     groupTopics: [topic],
     groupID: 'k6-consumer-group',
 });
 
+const schemaRegistry = new SchemaRegistry();
+
 export const options = {
-    vus: 1, // Start with 1 Virtual User to easily track message flow
-    duration: '1h', // Run for a long time to cover the rolling upgrade
+    scenarios: {
+        producer: {
+            executor: 'constant-vus',
+            vus: 1,
+            duration: '1h',
+            exec: 'producer',
+        },
+        consumer: {
+            executor: 'constant-vus',
+            vus: 1,
+            duration: '1h',
+            exec: 'consumer',
+        },
+    },
 };
 
 export function setup() {
@@ -31,7 +44,8 @@ export function setup() {
     console.log('Setup complete, starting test...');
 }
 
-export default function () {
+// Producer scenario
+export function producer() {
     const correlationId = `k6-${__VU}-${__ITER}`;
     const payload = JSON.stringify({
         ts: Date.now(),
@@ -39,35 +53,45 @@ export default function () {
         id: correlationId
     });
 
-    // 1. Produce Message
     try {
         writer.produce({
             messages: [{
-                key: encoding.b64encode(correlationId),
-                value: encoding.b64encode(payload),
+                key: schemaRegistry.serialize({ data: correlationId, schemaType: SCHEMA_TYPE_STRING }),
+                value: schemaRegistry.serialize({ data: payload, schemaType: SCHEMA_TYPE_STRING }),
             }],
         });
     } catch (e) {
         console.error(`[Producer Error] ${e}`);
     }
 
-    // 2. Consume Message
+    sleep(0.5);
+}
+
+// Consumer scenario
+export function consumer() {
     try {
-        const messages = reader.consume({ limit: 1 });
+        const messages = reader.consume({ limit: 10 });
         check(messages, {
-            'message received': (m) => m.length > 0,
-            'correct message content': (m) => {
+            'messages received': (m) => m.length > 0,
+            'messages have valid content': (m) => {
                 if (m.length === 0) return false;
-                const decoded = encoding.b64decode(m[0].value, 'std', 's');
-                return JSON.parse(decoded).id === correlationId;
+                for (const msg of m) {
+                    try {
+                        const value = schemaRegistry.deserialize({ data: msg.value, schemaType: SCHEMA_TYPE_STRING });
+                        const parsed = JSON.parse(value);
+                        if (parsed.id === undefined) return false;
+                    } catch {
+                        return false;
+                    }
+                }
+                return true;
             },
         });
     } catch (e) {
         console.error(`[Consumer Error] ${e}`);
     }
 
-    // Small delay to prevent flooding the logs
-    sleep(0.5);
+    sleep(0.1);
 }
 
 export function teardown() {

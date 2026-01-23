@@ -22,6 +22,7 @@ x-kafka-common: &kafka-common
 services:
   kafka-1:
     <<: *kafka-common
+    image: apache/kafka:4.0.0  # UPGRADED from 3.9.0
     container_name: kafka-1
     ports:
       - "19092:19092"
@@ -65,6 +66,8 @@ services:
   k6:
     image: mostafamoradian/xk6-kafka:1.2.0
     container_name: k6-load-test
+    # let it start over and over again for us to test rolling upgrade
+    restart: unless-stopped
     volumes:
       - ./k6:/scripts
     command: run /scripts/script.js
@@ -78,10 +81,56 @@ services:
       kafka-3:
         condition: service_healthy
 
+  # Kafka metrics exporter for Prometheus
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: kafka-exporter
+    command:
+      - --kafka.server=kafka-1:9092
+      - --kafka.server=kafka-2:9092
+      - --kafka.server=kafka-3:9092
+    ports:
+      - "9308:9308"
+    networks:
+      - kafka-net
+    depends_on:
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      kafka-3:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - kafka-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/grafana
+    networks:
+      - kafka-net
+
 volumes:
   kafka-1-data:
   kafka-2-data:
   kafka-3-data:
+  grafana-data:
 
 networks:
   kafka-net:
