@@ -2,7 +2,11 @@ package org.example.kstream;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
@@ -21,11 +25,12 @@ import java.util.stream.Collectors;
 public class KStreamExample {
     public static final String INPUT_TOPIC = "input-topic";
     public static final String OUTPUT_TOPIC = "output-topic";
+    private static int numRecords = 10000;
 
     public static Properties getProps() {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "groupby-example");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         return props;
@@ -70,6 +75,8 @@ public class KStreamExample {
         
         // Auto-create topics
         createTopicsIfNeeded(props);
+
+        produceRecordsToTopic();
         
         Topology topology = buildTopology();
 
@@ -93,5 +100,26 @@ public class KStreamExample {
                 System.exit(1);
             }
         }
+    }
+
+    private static void produceRecordsToTopic() {
+        try (var producer = new KafkaProducer<String, String>(getProducerProps())) {
+            for (int i = 0; i < numRecords / 2; i++) {
+                var record = new WcRecord("hello", "world");
+                producer.send(new ProducerRecord<>(INPUT_TOPIC, record.key(), record.value()));
+            }
+            for (int i = 0; i < numRecords / 2; i++) {
+                var record = new WcRecord("abc", "123");
+                producer.send(new ProducerRecord<>(INPUT_TOPIC, record.key(), record.value()));
+            }
+        }
+    }
+
+    private static Properties getProducerProps() {
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        return props;
     }
 }
