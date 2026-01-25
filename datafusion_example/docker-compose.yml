@@ -1,0 +1,13 @@
+services:
+  spark:
+    image: apache/datafusion-comet:0.5.0-spark3.4.3-scala2.12-java11
+    platform: linux/amd64
+    container_name: spark
+    hostname: spark
+    ports:
+      - "4040:4040"
+    volumes:
+      - ./scripts:/app/scripts
+      - ./data:/app/data
+    working_dir: /app
+    command: ["tail", "-f", "/dev/null"]
