@@ -93,7 +93,7 @@ mod tests {
     fn test_metrics_source_with_fake() {
         let source = MetricsSource::with_fake_metrics(50.0, 16_000_000_000, 8_000_000_000);
 
-        assert_eq!(source.cpu().usage, 50.0);
+        assert_eq!(source.cpu().avg_usage, 50.0);
         assert_eq!(source.mem().total, 16_000_000_000);
         assert_eq!(source.mem().used, 8_000_000_000);
         assert!(!source.disks().is_empty());
@@ -104,7 +104,7 @@ mod tests {
         let source = MetricsSource::with_real_metrics();
 
         // Should return valid values
-        assert!(source.cpu().usage >= 0.0 && source.cpu().usage <= 100.0);
+        assert!(source.cpu().avg_usage >= 0.0 && source.cpu().avg_usage <= 100.0);
         assert!(source.mem().total > 0);
         assert!(source.mem().used <= source.mem().total);
     }
@@ -114,13 +114,13 @@ mod tests {
         let mut source = MetricsSource::with_real_metrics();
 
         // Initial values
-        let initial_cpu = source.cpu().usage;
+        let initial_cpu = source.cpu().avg_usage;
 
         // Refresh
         source.refresh();
 
         // Should still be valid
-        assert!(source.cpu().usage >= 0.0 && source.cpu().usage <= 100.0);
+        assert!(source.cpu().avg_usage >= 0.0 && source.cpu().avg_usage <= 100.0);
 
         // Values might change (or not), but should be valid
         let _ = initial_cpu; // acknowledge we captured it

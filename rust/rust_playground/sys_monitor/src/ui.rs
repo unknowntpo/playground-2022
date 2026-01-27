@@ -11,18 +11,46 @@ use crate::metrics::{CpuInfo, DiskInfo, MemInfo};
 
 pub trait Drawable {
     fn draw(&self, frame: &mut Frame, area: Rect);
+    fn height(&self) -> u16;
 }
 
-// ============== CpuInfo Drawable ==============
+// ============== CpuInfo Drawable (per-core) ==============
 
 impl Drawable for CpuInfo {
     fn draw(&self, frame: &mut Frame, area: Rect) {
-        let gauge = Gauge::default()
-            .block(Block::default().title(" CPU ").borders(Borders::ALL))
-            .gauge_style(Style::default().fg(Color::Cyan))
-            .percent(self.usage as u16)
-            .label(format!("{:.1}%", self.usage));
-        frame.render_widget(gauge, area);
+        let rows: Vec<Row> = self
+            .cores
+            .iter()
+            .map(|core| {
+                let bar = create_bar(core.usage as u16, 20);
+                Row::new(vec![
+                    core.name.clone(),
+                    bar,
+                    format!("{:5.1}%", core.usage),
+                ])
+            })
+            .collect();
+
+        let table = Table::new(
+            rows,
+            [
+                Constraint::Length(8),    // Core name
+                Constraint::Length(22),   // Bar
+                Constraint::Length(8),    // Percent
+            ],
+        )
+        .block(
+            Block::default()
+                .title(format!(" CPU (avg: {:.1}%) ", self.avg_usage))
+                .borders(Borders::ALL),
+        );
+
+        frame.render_widget(table, area);
+    }
+
+    fn height(&self) -> u16 {
+        // 2 for borders + 1 per core
+        (self.cores.len() as u16).saturating_add(2).max(3)
     }
 }
 
@@ -37,8 +65,15 @@ impl Drawable for MemInfo {
             .block(Block::default().title(" Memory ").borders(Borders::ALL))
             .gauge_style(Style::default().fg(Color::Green))
             .percent(self.percent as u16)
-            .label(format!("{:.1} GB / {:.1} GB ({:.1}%)", used_gb, total_gb, self.percent));
+            .label(format!(
+                "{:.1} GB / {:.1} GB ({:.1}%)",
+                used_gb, total_gb, self.percent
+            ));
         frame.render_widget(gauge, area);
+    }
+
+    fn height(&self) -> u16 {
+        3
     }
 }
 
@@ -73,18 +108,23 @@ impl Drawable for Vec<DiskInfo> {
             ],
         )
         .header(
-            Row::new(vec!["Mount", "Used", "Total", "Usage", "%"])
-                .style(Style::default().bold()),
+            Row::new(vec!["Mount", "Used", "Total", "Usage", "%"]).style(Style::default().bold()),
         )
         .block(Block::default().title(" Disks ").borders(Borders::ALL));
 
         frame.render_widget(table, area);
+    }
+
+    fn height(&self) -> u16 {
+        // 2 for borders + 1 for header + 1 per disk
+        (self.len() as u16).saturating_add(3).max(5)
     }
 }
 
 // ============== Helper ==============
 
 fn create_bar(percent: u16, width: usize) -> String {
+    let percent = percent.min(100);
     let filled = (percent as usize * width) / 100;
     let empty = width - filled;
     format!("[{}{}]", "█".repeat(filled), "░".repeat(empty))
@@ -96,11 +136,11 @@ pub fn draw(frame: &mut Frame, items: &[&dyn Drawable]) {
     let constraints: Vec<Constraint> = items
         .iter()
         .enumerate()
-        .map(|(i, _)| {
+        .map(|(i, item)| {
             if i < items.len() - 1 {
-                Constraint::Length(3) // Fixed height for gauges
+                Constraint::Length(item.height())
             } else {
-                Constraint::Min(5) // Last item (disks) takes remaining space
+                Constraint::Min(item.height())
             }
         })
         .collect();
