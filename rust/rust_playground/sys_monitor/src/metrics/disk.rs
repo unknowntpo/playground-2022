@@ -96,7 +96,7 @@ impl Metric for DiskMetric {
     type Output = Vec<DiskInfo>;
 
     fn refresh(&mut self) {
-        self.disks.refresh();
+        self.disks.refresh(true);
         self.value = Self::collect_disk_info(&self.disks);
     }
 
