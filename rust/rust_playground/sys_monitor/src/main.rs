@@ -7,7 +7,7 @@ use crossterm::{
 };
 use ratatui::{backend::CrosstermBackend, Terminal};
 
-use sys_monitor::metrics::{CpuInfo, DiskInfo, MemInfo};
+use sys_monitor::metrics::MetricsSource;
 use sys_monitor::ui::{self, Drawable};
 
 fn main() -> io::Result<()> {
@@ -29,32 +29,20 @@ fn main() -> io::Result<()> {
 }
 
 fn run_app(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> io::Result<()> {
-    // Hardcoded data for now
-    let cpu_info = CpuInfo { usage: 45.5 };
-    let mem_info = MemInfo {
-        total: 16_000_000_000,
-        used: 10_400_000_000,
-        percent: 65.0,
-    };
-    let disk_info: Vec<DiskInfo> = vec![
-        DiskInfo {
-            name: "/".to_string(),
-            total: 500_000_000_000,
-            used: 350_000_000_000,
-            percent: 70.0,
-        },
-        DiskInfo {
-            name: "/home".to_string(),
-            total: 1_000_000_000_000,
-            used: 200_000_000_000,
-            percent: 20.0,
-        },
-    ];
+    // Use real system metrics
+    let mut source = MetricsSource::with_real_metrics();
 
     loop {
+        // Refresh metrics
+        source.refresh();
+
         // Draw UI
         terminal.draw(|frame| {
-            let items: Vec<&dyn Drawable> = vec![&cpu_info, &mem_info, &disk_info];
+            let cpu = source.cpu().clone();
+            let mem = source.mem().clone();
+            let disks = source.disks().clone();
+
+            let items: Vec<&dyn Drawable> = vec![&cpu, &mem, &disks];
             ui::draw(frame, &items);
         })?;
 
