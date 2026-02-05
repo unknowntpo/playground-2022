@@ -1,0 +1,23 @@
+[package]
+name = "arrow_example"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+arrow = "57"
+
+[[example]]
+name = "01_primitive_array"
+path = "examples/01_primitive_array.rs"
+
+[[example]]
+name = "02_string_array"
+path = "examples/02_string_array.rs"
+
+[[example]]
+name = "03_null_buffer"
+path = "examples/03_null_buffer.rs"
+
+[[example]]
+name = "04_struct_array"
+path = "examples/04_struct_array.rs"
